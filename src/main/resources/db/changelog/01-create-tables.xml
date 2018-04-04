@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="01" author="Rémy Halipré">
+
+        <comment>Création des tables et des contraintes du projet e-commerce.</comment>
+
+        <createTable tableName="produit"
+                     remarks="Une table qui contient tous les produits.">
+            <column name="reference_produit" type="varchar(100)">
+                <constraints nullable="false" unique="true" primaryKey="true"/>
+            </column>
+            <column name="nom" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="text"></column>
+            <column name="prix_HT" type="float">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="categorie"
+                     remarks="Une table qui contient toutes les catégories.">
+            <column name="nom_categorie" type="varchar(255)">
+                <constraints nullable="false" unique="true" primaryKey="true"/>
+            </column>
+            <column name="borne_gauche" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="borne_droit" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="level" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="produit_categorie"
+                     remarks="Une table qui fait un lien entre la table produit et categorie.">
+            <column name="reference_produit" type="varchar(255)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="nom_categorie" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="produit_categorie" baseColumnNames="nom_categorie"
+                                 constraintName="FK_idCategorie"
+                                 referencedTableName="categorie" referencedColumnNames="nom_categorie"/>
+
+        <addForeignKeyConstraint baseTableName="produit_categorie" baseColumnNames="nom_categorie"
+                                 constraintName="FK_referenceProduit"
+                                 referencedTableName="categorie" referencedColumnNames="nom_categorie"/>
+
+        <createTable tableName="photo"
+                     remarks="Une table qui contient toutes les photos.">
+            <column name="id_photo" type="serial">
+                <constraints nullable="false" unique="true" primaryKey="true"/>
+            </column>
+            <column name="url" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="reference_produit" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="photo" baseColumnNames="reference_produit"
+                                 constraintName="FK_idProduit"
+                                 referencedTableName="produit" referencedColumnNames="reference_produit"/>
+
+        <createTable tableName="type_caracteristique"
+                     remarks="Une table qui contient tous les types de caractéristiques.">
+            <column name="id_type_caracteristique" type="serial">
+                <constraints nullable="false" unique="true" primaryKey="true"/>
+            </column>
+            <column name="type" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="caracteristique"
+                     remarks="Une table qui contient toutes les caractéristiques.">
+            <column name="id_caracteristique" type="serial">
+                <constraints nullable="false" unique="true" primaryKey="true"/>
+            </column>
+            <column name="reference_produit" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id_type_caracteristique" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="valeur" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="caracteristique" baseColumnNames="id_type_caracteristique"
+                                 constraintName="FK_typeCaracteristique"
+                                 referencedTableName="type_caracteristique" referencedColumnNames="id_type_caracteristique"/>
+
+        <addForeignKeyConstraint baseTableName="caracteristique" baseColumnNames="reference_produit"
+                                 constraintName="FK_referenceProduit"
+                                 referencedTableName="produit" referencedColumnNames="reference_produit"/>
+    </changeSet>
+</databaseChangeLog>

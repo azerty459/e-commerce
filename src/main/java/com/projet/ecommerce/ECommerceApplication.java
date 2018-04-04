@@ -18,19 +18,4 @@ public class ECommerceApplication {
 		SpringApplication.run(ECommerceApplication.class, args);
 	}
 
-	@Bean(name = "dataSource")
-	public DriverManagerDataSource dataSource() {
-		DriverManagerDataSource dataSource = new DriverManagerDataSource();
-		dataSource.setUrl("jdbc:postgresql://localhost:5432/projet-e-commerce");
-		dataSource.setUsername("postgres");
-		dataSource.setPassword("azerty");
-
-		// schema init
-		Resource initSchema = new ClassPathResource("sql/schema.sql");
-		Resource initData = new ClassPathResource("sql/data.sql");
-		DatabasePopulator databasePopulator = new ResourceDatabasePopulator(initSchema, initData);
-		DatabasePopulatorUtils.execute(databasePopulator, dataSource);
-
-		return dataSource;
-	}
 }

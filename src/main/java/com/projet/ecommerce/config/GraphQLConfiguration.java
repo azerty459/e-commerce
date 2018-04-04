@@ -1,5 +1,7 @@
 package com.projet.ecommerce.config;
 
+import com.coxautodev.graphql.tools.SchemaParser;
+import com.coxautodev.graphql.tools.SchemaParserBuilder;
 import com.projet.ecommerce.graphQL.Mutation;
 import com.projet.ecommerce.graphQL.Query;
 import graphql.GraphQL;
