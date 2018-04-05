@@ -4,11 +4,11 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-    <include file="changelog/01-create-tables.xml" relativeToChangelogFile="true"/>
-    <include file="changelog/02-insert-categorie.xml" relativeToChangelogFile="true"/>
-    <include file="changelog/03-insert-produit.xml" relativeToChangelogFile="true"/>
-    <include file="changelog/04-insert-produit_categorie.xml" relativeToChangelogFile="true"/>
-    <include file="changelog/05-insert-type_caracteristique.xml" relativeToChangelogFile="true"/>
-    <include file="changelog/06-insert-caracteristique.xml" relativeToChangelogFile="true"/>
-    <include file="changelog/07-insert-photo.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/01-create-tables.sql" relativeToChangelogFile="true"/>
+    <include file="changelog/02-insert-categorie.sql" relativeToChangelogFile="true"/>
+    <include file="changelog/03-insert-produit.sql" relativeToChangelogFile="true"/>
+    <include file="changelog/04-insert-produit_categorie.sql" relativeToChangelogFile="true"/>
+    <include file="changelog/05-insert-type_caracteristique.sql" relativeToChangelogFile="true"/>
+    <include file="changelog/06-insert-caracteristique.sql" relativeToChangelogFile="true"/>
+    <include file="changelog/07-insert-photo.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>

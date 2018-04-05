@@ -4,6 +4,7 @@ import com.projet.ecommerce.entity.TypeCaracteristique;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -13,5 +14,5 @@ import java.util.List;
 @Repository
 public interface TypeCaracteristiqueRepository extends CrudRepository<TypeCaracteristique, Integer> {
 
-    List<TypeCaracteristique> findAll();
+    Collection<TypeCaracteristique> findAll();
 }

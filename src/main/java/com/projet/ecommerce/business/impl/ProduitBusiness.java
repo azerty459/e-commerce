@@ -6,6 +6,7 @@ import com.projet.ecommerce.repository.ProduitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,35 +18,24 @@ public class ProduitBusiness implements IProduitBusiness {
 
     /**
      * Ajoute un produit dans la base de données.
-     * @param referenceProduit Référence du produit
-     * @param description Description
-     * @param prixHT Prix hors taxe
+     * @param produit Objet Produit
      * @return l'objet produit crée
      */
     @Override
-    public Produit addProduit(String referenceProduit, String description, double prixHT) {
-        Produit produit = new Produit();
-        produit.setReferenceProduit(referenceProduit);
-        produit.setDescription(description);
-        produit.setPrixHT(prixHT);
+    public Produit addProduit(Produit produit) {
         produitRepository.save(produit);
         return produit;
     }
 
     /**
      * Modifie le produit dans la base de données
-     * @param referenceProduit Référence du produit à modifier
-     * @param description Description
-     * @param prixHT Prix hors taxe
+     * @param produit Objet Produit
      * @return l'objet produit modifié, null le produit à modifier n'est pas trouvée
      */
     @Override
-    public Produit updateProduit(String referenceProduit, String description, double prixHT) {
-        Optional<Produit> tempProduit = produitRepository.findById(referenceProduit);
+    public Produit updateProduit(Produit produit) {
+        Optional<Produit> tempProduit = produitRepository.findById(produit.getReferenceProduit());
         if(tempProduit.isPresent() == true){
-            Produit produit = tempProduit.get();
-            produit.setDescription(description);
-            produit.setPrixHT(prixHT);
             produitRepository.save(produit);
             return produit;
         }
@@ -69,7 +59,7 @@ public class ProduitBusiness implements IProduitBusiness {
      */
     @Override
     public List<Produit> getProduit() {
-        return produitRepository.findAll();
+        return new ArrayList<>(produitRepository.findAll());
     }
 
     /**

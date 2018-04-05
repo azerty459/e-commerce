@@ -16,9 +16,12 @@ public class Produit {
     private String referenceProduit;
 
     @Column
+    private String nom;
+
+    @Column
     private String description;
 
-    @Column(name = "prix_HT")
+    @Column(name = "prix_ht")
     private double prixHT;
 
     @ManyToMany
@@ -29,10 +32,10 @@ public class Produit {
     )
     private List<Categorie> categories;
 
-    @OneToMany(mappedBy = "produit", cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+    @OneToMany(mappedBy="produit", cascade = CascadeType.ALL , fetch = FetchType.LAZY)
     private List<Caracteristique> caracteristiques;
 
-    @OneToMany(mappedBy = "produit", cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+    @OneToMany(mappedBy="produit", fetch = FetchType.LAZY)
     private List<Photo> photos;
 
     /**
@@ -106,4 +109,46 @@ public class Produit {
     public List<Photo> getPhotos() {
         return photos;
     }
+
+    /**
+     *
+     * @param categories
+     */
+    public void setCategories(List<Categorie> categories) {
+        this.categories = categories;
+    }
+
+    /**
+     * Remplace la liste de caractéristiques par celui-ci mit en paramètre.
+     * @param caracteristiques La nouvelle liste de caractéristique du produit
+     */
+    public void setCaracteristiques(List<Caracteristique> caracteristiques) {
+        this.caracteristiques = caracteristiques;
+    }
+
+    /**
+     * Remplace la liste de photos par celui-ci mit en paramètre.
+     * @param photos La nouvelle liste de photo du produit
+     */
+    public void setPhotos(List<Photo> photos) {
+        this.photos = photos;
+    }
+
+    /**
+     * Retourne le nom du produit.
+     * @return le nom du produit
+     */
+    public String getNom() {
+        return nom;
+    }
+
+    /**
+     * Remplace le nom du produit par celui-ci mit en paramètre.
+     * @param nom Le nouveau nom du produit
+     */
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+
 }

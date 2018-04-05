@@ -8,6 +8,7 @@ import com.projet.ecommerce.entity.Produit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,7 +27,7 @@ public class Query implements GraphQLQueryResolver {
      * Retourne une liste contenant toutes les catégories liés à la table catégorie.
      * @return une liste de catégories
      */
-    public List<Categorie> getCategorie() {
+    public List<Categorie> getAllCategorie() {
         return categorieBusiness.getCategorie();
     }
 
@@ -34,7 +35,7 @@ public class Query implements GraphQLQueryResolver {
      * Retourne une liste contenant tous les produits liés à la table produit.
      * @return une liste de produits
      */
-    public List<Produit> getProduit() {
+    public List<Produit> getAllProduit() {
         return produitBusiness.getProduit();
     }
 

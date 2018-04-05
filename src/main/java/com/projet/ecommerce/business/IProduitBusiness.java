@@ -10,21 +10,17 @@ import java.util.List;
 public interface IProduitBusiness {
     /**
      * Méthode définissant l'ajout de produit.
-     * @param referenceProduit Référence du produit
-     * @param description Description
-     * @param prixHT Prix hors taxe
+     * @param produit Objet Produit
      * @return le produit créé
      */
-    Produit addProduit(String referenceProduit, String description, double prixHT);
+    Produit addProduit(Produit produit);
 
     /**
      * Méthode définissant la modification d'un produit.
-     * @param referenceProduit Référence du produit à modifier
-     * @param description Description
-     * @param prixHT Prix hors taxe
+     * @param produit Objet Produit
      * @return le produit modifié
      */
-    Produit updateProduit(String referenceProduit, String description, double prixHT);
+    Produit updateProduit(Produit produit);
 
     /**
      * Méthode définissant la suppression d'un produit.

@@ -35,9 +35,9 @@ public class ProduitBusinessTests {
 		produit.setReferenceProduit("A05A87");
 		produit.setDescription("joli produit");
 		produit.setPrixHT(8.7);
-		Mockito.when(produitBusiness.addProduit("A05A87", "joli produit", 8.7)).thenReturn(produit);
-		produitBusiness.addProduit("A05A87", "joli produit", 8.7);
-		Mockito.verify(produitBusiness, Mockito.times(1)).addProduit("A05A87", "joli produit", 8.7);
+		Mockito.when(produitBusiness.addProduit(produit)).thenReturn(produit);
+		produitBusiness.addProduit(produit);
+		Mockito.verify(produitBusiness, Mockito.times(1)).addProduit(produit);
 	}
 
 	@Test
@@ -74,8 +74,8 @@ public class ProduitBusinessTests {
 		produit.setReferenceProduit("A05A87");
 		produit.setDescription("joli produit");
 		produit.setPrixHT(8.7);
-		Mockito.when(produitBusiness.updateProduit("A05A87", "joli produit", 8.7)).thenReturn(produit);
-		Assert.assertNotNull(produitBusiness.updateProduit("A05A87", "joli produit", 8.7));
+		Mockito.when(produitBusiness.updateProduit(produit)).thenReturn(produit);
+		Assert.assertNotNull(produitBusiness.updateProduit(produit));
 	}
 
 	@Test

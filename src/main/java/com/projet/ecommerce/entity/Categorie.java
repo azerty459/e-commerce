@@ -54,7 +54,7 @@ public class Categorie {
 
     /**
      * Remplace l'indice de la borne gauche par celui-ci mit en paramètre.
-     * @param borneGauche Le nouvel  indice de la borne gauche
+     * @param borneGauche Le nouvel indice de la borne gauche
      */
     public void setBorneGauche(int borneGauche) {
         this.borneGauche = borneGauche;
@@ -70,7 +70,7 @@ public class Categorie {
 
     /**
      * Remplace l'indice de la borne droit par celui-ci mit en paramètre.
-     * @param borneDroit
+     * @param borneDroit Le nouvel indice de la borne droit
      */
     public void setBorneDroit(int borneDroit) {
         this.borneDroit = borneDroit;
@@ -98,5 +98,13 @@ public class Categorie {
      */
     public void setLevel(int level) {
         this.level = level;
+    }
+
+    /**
+     * Remplace la liste produit par celle-ci mit en paramètre.
+     * @param produits Une liste de produit
+     */
+    public void setProduits(List<Produit> produits) {
+        this.produits = produits;
     }
 }

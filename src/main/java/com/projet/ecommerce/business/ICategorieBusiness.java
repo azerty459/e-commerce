@@ -7,13 +7,10 @@ import java.util.List;
 public interface ICategorieBusiness {
     /**
      * Méthode définissant l'ajout d'une catégorie.
-     * @param nomCategorie Le nom de la catégorie.
-     * @param borneGauche La borne gauche de la catégorie.
-     * @param borneDroit La borne droit de la catégorie.
-     * @param level Le level de la catégorie.
+     * @param categorie Un objet de type Categorie
      * @return l'objet categorie créer
      */
-    Categorie addCategorie(String nomCategorie, int borneGauche, int borneDroit, int level);
+    Categorie addCategorie(Categorie categorie);
 
     /**
      * Méthode définissant le supprésion d'une catégorie.

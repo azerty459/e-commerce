@@ -6,6 +6,7 @@ import com.projet.ecommerce.repository.CategorieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,20 +18,12 @@ public class CategorieBusiness implements ICategorieBusiness {
 
     /**
      * Ajoute une catégorie dans la base de données.
-     * @param nomCategorie Le nom de la catégorie.
-     * @param borneGauche La borne gauche de l'entreprise.
-     * @param borneDroit La borne droit de l'entreprise.
+     * @param categorie Un objet de type Categorie
      * @return l'objet catégorie créé
      */
     @Override
-    public Categorie addCategorie(String nomCategorie, int borneGauche, int borneDroit, int level) {
-        Categorie categorie = new Categorie();
-        categorie.setNomCategorie(nomCategorie);
-        categorie.setBorneGauche(borneGauche);
-        categorie.setBorneDroit(borneDroit);
-        categorie.setLevel(level);
-        categorieRepository.save(categorie);
-        return categorie;
+    public Categorie addCategorie(Categorie categorie) {
+        return categorieRepository.save(categorie);
     }
 
     /**
@@ -40,7 +33,7 @@ public class CategorieBusiness implements ICategorieBusiness {
      */
     @Override
     public boolean deleteCategorie(String nomCategorie) {
-        categorieRepository.delete(categorieRepository.findById(nomCategorie).get());
+        categorieRepository.deleteById(nomCategorie);
         return true;
     }
 
@@ -50,7 +43,7 @@ public class CategorieBusiness implements ICategorieBusiness {
      */
     @Override
     public List<Categorie> getCategorie() {
-        return categorieRepository.findAll();
+        return new ArrayList<>(categorieRepository.findAll());
     }
 
     /**
@@ -61,7 +54,7 @@ public class CategorieBusiness implements ICategorieBusiness {
     @Override
     public Categorie getCategorieByID(String nomCategorie) {
         Optional<Categorie> categorie = categorieRepository.findById(nomCategorie);
-        if(categorie.isPresent() == true){
+        if(categorie.isPresent()){
             return categorie.get();
         }
         return null;

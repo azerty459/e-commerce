@@ -22,24 +22,20 @@ public class Mutation implements GraphQLMutationResolver {
 
     /**
      * Ajoute un produit.
-     * @param referenceProduit La référence du produit
-     * @param description Description du produit
-     * @param prixHT Prix hors taxe du produit
+     * @param produit Un objet de type Produit
      * @return le produit créé
      */
-    public Produit addProduit(String referenceProduit, String description, double prixHT) {
-        return produitBusiness.addProduit(referenceProduit, description, prixHT);
+    public Produit addProduit(Produit produit) {
+        return produitBusiness.addProduit(produit);
     }
 
     /**
      * Modifie le produit.
-     * @param referenceProduit Référence du produit à modifier
-     * @param description La nouvelle description du produit
-     * @param prixHT Le nouveau prix hors taxe du produit
+     * @param produit Un objet de type Produit
      * @return le produit modifié
      */
-    public Produit updateProduit(String referenceProduit, String description, double prixHT)  {
-        return produitBusiness.updateProduit(referenceProduit, description, prixHT);
+    public Produit updateProduit(Produit produit)  {
+        return produitBusiness.updateProduit(produit);
     }
 
     /**
@@ -53,14 +49,11 @@ public class Mutation implements GraphQLMutationResolver {
 
     /**
      * Ajouter une catégorie.
-     * @param nomCategorie Nom de la catégorie
-     * @param borneGauche La borne gauche de la catégorie
-     * @param borneDroit La borne droit de la catégorie
-     * @param level Level de la catégorie
+     * @param categorie Un objet de type catégorie
      * @return la catégorie créé
      */
-    public Categorie addCategorie(String nomCategorie, int borneGauche, int borneDroit, int level) {
-        return categorieBusiness.addCategorie(nomCategorie, borneGauche, borneDroit, level);
+    public Categorie addCategorie(Categorie categorie) {
+        return categorieBusiness.addCategorie(categorie);
     }
 
     /**

@@ -6,6 +6,7 @@ import com.projet.ecommerce.repository.TypeCaracteristiqueRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,7 +64,7 @@ public class CaracteristiqueTypeBusiness implements ICaracteristiqueTypeBusiness
      */
     @Override
     public List<TypeCaracteristique> getTypeCaracteristique() {
-        return TypecaracteristiqueRepository.findAll();
+        return new ArrayList<>(TypecaracteristiqueRepository.findAll());
     }
 
     /**

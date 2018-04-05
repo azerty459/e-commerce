@@ -7,6 +7,7 @@ import com.projet.ecommerce.repository.CaracteristiqueRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,8 +28,7 @@ public class CaracteristiqueBusiness implements ICaracteristiqueBusiness {
         Caracteristique caracteristique = new Caracteristique();
         caracteristique.setTypeCaracteristique(typeCaracteristique);
         caracteristique.setValeur(valeur);
-        caracteristiqueRepository.save(caracteristique);
-        return caracteristique;
+        return caracteristiqueRepository.save(caracteristique);
     }
 
     /**
@@ -68,7 +68,7 @@ public class CaracteristiqueBusiness implements ICaracteristiqueBusiness {
      */
     @Override
     public List<Caracteristique> getCaracteristique() {
-        return caracteristiqueRepository.findAll();
+        return new ArrayList<>(caracteristiqueRepository.findAll());
     }
 
     /**

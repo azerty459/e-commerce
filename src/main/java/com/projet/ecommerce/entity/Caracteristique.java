@@ -22,7 +22,7 @@ public class Caracteristique {
     @Column
     private String valeur;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reference_produit")
     private Produit produit;
 
@@ -64,21 +64,5 @@ public class Caracteristique {
      */
     public void setValeur(String valeur) {
         this.valeur = valeur;
-    }
-
-    /**
-     * Retourne l'objet produit lié à la caractéristique.
-     * @return l'objet produit
-     */
-    public Produit getProduit() {
-        return produit;
-    }
-
-    /**
-     * Remplace le produit lié à la caractéristique par l'objet Produit mit en paramètre.
-     * @param produit un objet
-     */
-    public void setProduit(Produit produit) {
-        this.produit = produit;
     }
 }

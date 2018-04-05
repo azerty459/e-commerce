@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Collection;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -23,30 +24,33 @@ public class CategorieRepositoryTests {
 	private static final Categorie TEMP_UPDATE = new Categorie();
 	private static final Categorie TEMP_GET = new Categorie();
 
-	private List<Categorie> tempList;
+	static {
+		TEMP_INSERT.setNomCategorie("Transport");
+		TEMP_INSERT.setBorneGauche(1);
+		TEMP_INSERT.setBorneDroit(8);
+
+		TEMP_DELETE.setNomCategorie("Aérien");
+		TEMP_DELETE.setBorneGauche(2);
+		TEMP_DELETE.setBorneDroit(7);
+
+		TEMP_GET.setNomCategorie("Avion");
+		TEMP_GET.setBorneGauche(3);
+		TEMP_GET.setBorneDroit(4);
+
+		TEMP_UPDATE.setNomCategorie("Fusée");
+		TEMP_UPDATE.setBorneGauche(5);
+		TEMP_UPDATE.setBorneDroit(6);
+	}
+
+	private Collection<Categorie> tempList;
 
 	@Autowired
 	private CategorieRepository categorieRepository;
 
-	@Before
-	public void init() {
-		this.TEMP_INSERT.setNomCategorie("Transport");
-		this.TEMP_INSERT.setBorneGauche(1);
-		this.TEMP_INSERT.setBorneDroit(8);
-		this.TEMP_DELETE.setNomCategorie("Aérien");
-		this.TEMP_DELETE.setBorneGauche(2);
-		this.TEMP_DELETE.setBorneDroit(7);
-		this.TEMP_GET.setNomCategorie("Avion");
-		this.TEMP_GET.setBorneGauche(3);
-		this.TEMP_GET.setBorneDroit(4);
-		this.TEMP_UPDATE.setNomCategorie("Fusée");
-		this.TEMP_UPDATE.setBorneGauche(5);
-		this.TEMP_UPDATE.setBorneDroit(6);
-	}
-
 	@Test
 	public void insertCategorie() {
-		Assert.assertNotNull(categorieRepository.save(this.TEMP_INSERT));
+		Categorie save = categorieRepository.save(this.TEMP_INSERT);
+		Assert.assertNotNull(save);
 		Categorie temp = categorieRepository.findById(TEMP_INSERT.getNomCategorie()).get();
 		Assert.assertNotNull(temp);
 	}
@@ -57,7 +61,6 @@ public class CategorieRepositoryTests {
 		Assert.assertEquals(0, this.tempList.size());
 		categorieRepository.save(this.TEMP_INSERT);
 		this.tempList = categorieRepository.findAll();
-		Assert.assertNotEquals(0, this.tempList.size());
 		Assert.assertEquals(1, this.tempList.size());
 	}
 
@@ -82,6 +85,7 @@ public class CategorieRepositoryTests {
 		this.TEMP_UPDATE.setBorneDroit(7);
 		this.TEMP_UPDATE.setNomCategorie("Test");
 		Assert.assertNotNull(categorieRepository.save(this.TEMP_UPDATE));
+
 		temp = categorieRepository.findById(TEMP_UPDATE.getNomCategorie()).get();
 		Assert.assertEquals(TEMP_UPDATE.getNomCategorie(), temp.getNomCategorie());
 		Assert.assertEquals(TEMP_UPDATE.getBorneDroit(), temp.getBorneDroit());
@@ -91,6 +95,7 @@ public class CategorieRepositoryTests {
 	@Test
 	public void deleteCategorie() {
 		Assert.assertNotNull(categorieRepository.save(this.TEMP_DELETE));
+
 		categorieRepository.delete(TEMP_DELETE);
 		Assert.assertFalse(categorieRepository.findById(TEMP_DELETE.getNomCategorie()).isPresent());
 	}

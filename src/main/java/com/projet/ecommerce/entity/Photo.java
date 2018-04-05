@@ -17,7 +17,7 @@ public class Photo {
     @Column
     private String url;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reference_produit")
     private Produit produit;
 
@@ -31,7 +31,7 @@ public class Photo {
 
     /**
      * Retourne l'url liée à la photo.
-     * @return
+     * @return l'url liée à la photo.
      */
     public String getUrl() {
         return url;
@@ -45,19 +45,6 @@ public class Photo {
         this.url = url;
     }
 
-    /**
-     * Retourne le produit lié à la photo.
-     * @return le produit lié à la photo
-     */
-    public Produit getProduit() {
-        return produit;
-    }
 
-    /**
-     * Remplace le produit lié à la photo par celui-ci mit en paramètre.
-     * @param produit Un objet de type Produit
-     */
-    public void setProduit(Produit produit) {
-        this.produit = produit;
-    }
+
 }
