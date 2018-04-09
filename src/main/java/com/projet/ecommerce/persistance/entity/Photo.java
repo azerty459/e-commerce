@@ -1,4 +1,4 @@
-package com.projet.ecommerce.entity;
+package com.projet.ecommerce.persistance.entity;
 
 import javax.persistence.*;
 
@@ -38,13 +38,19 @@ public class Photo {
     }
 
     /**
-     * Remplace l'url de la photo par celle mit en paramètre.
-     * @param url Une URL qui pointe vers la photo
+     * Remplace l'url de la photo par celle-ci mit en paramètre.
+     * @param url La nouvelle URL qui pointe vers la photo
      */
     public void setUrl(String url) {
         this.url = url;
     }
 
 
-
+    /**
+     * Remplace l'id de la photo par celui-ci mit en paramètre.
+     * @param idPhoto Le nouveau id de la photo
+     */
+    public void setIdPhoto(int idPhoto) {
+        this.idPhoto = idPhoto;
+    }
 }

@@ -1,4 +1,4 @@
-package com.projet.ecommerce.entity;
+package com.projet.ecommerce.persistance.entity;
 
 import javax.persistence.*;
 
@@ -27,18 +27,26 @@ public class TypeCaracteristique {
 
 
     /**
-     * Retourne le type de la caracteristique.
-     * @return le type de la caracteristique
+     * Retourne le type de la caractéristique.
+     * @return le type de la caractéristique
      */
     public String getType() {
         return type;
     }
 
     /**
-     * Modifie le type de la caracteristique.
-     * @param type
+     * Modifie le type de la caractéristique.
+     * @param type Le nouveau type de caractéristique.
      */
     public void setType(String type) {
         this.type = type;
+    }
+
+    /**
+     * Modifie l'id de TypeCaracteristique par celui-ci mit en paramètre.
+     * @param idTypeCaracteristique La nouvelle id du TypeCaracteristique.
+     */
+    public void setIdTypeCaracteristique(int idTypeCaracteristique) {
+        this.idTypeCaracteristique = idTypeCaracteristique;
     }
 }
