@@ -1,7 +1,7 @@
 package com.projet.ecommerce.business;
 
-import com.projet.ecommerce.persistance.entity.Photo;
-import com.projet.ecommerce.persistance.entity.Produit;
+import com.projet.ecommerce.entity.Photo;
+import com.projet.ecommerce.entity.Produit;
 
 import java.util.List;
 

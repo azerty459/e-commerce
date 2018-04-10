@@ -1,14 +1,15 @@
-package com.projet.ecommerce.business.dto;
+package com.projet.ecommerce.dto;
 
-import com.projet.ecommerce.persistance.entity.Categorie;
+import com.projet.ecommerce.entity.Categorie;
+import com.projet.ecommerce.entity.Produit;
 
+import javax.persistence.*;
 import java.util.List;
 
 public class CategorieDTO {
 
     private String nomCategorie;
-
-    private List<CategorieDTO> sousCategories;
+    private List<Categorie> sousCategories;
 
     public CategorieDTO() {}
 
@@ -20,11 +21,11 @@ public class CategorieDTO {
         this.nomCategorie = nomCategorie;
     }
 
-    public List<CategorieDTO> getSousCategories() {
+    public List<Categorie> getSousCategories() {
         return sousCategories;
     }
 
-    public void setSousCategories(List<CategorieDTO> sousCategories) {
+    public void setSousCategories(List<Categorie> sousCategories) {
         this.sousCategories = sousCategories;
     }
 }

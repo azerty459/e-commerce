@@ -1,7 +1,8 @@
-package com.projet.ecommerce.persistance.entity;
+package com.projet.ecommerce.entity;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Entité représentant la table categorie sous forme de classe.

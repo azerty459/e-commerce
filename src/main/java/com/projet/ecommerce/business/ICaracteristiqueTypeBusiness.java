@@ -1,6 +1,6 @@
 package com.projet.ecommerce.business;
 
-import com.projet.ecommerce.persistance.entity.TypeCaracteristique;
+import com.projet.ecommerce.entity.TypeCaracteristique;
 
 import java.util.List;
 

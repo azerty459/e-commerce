@@ -1,9 +1,9 @@
 package com.projet.ecommerce.business.impl;
 
 import com.projet.ecommerce.business.ICaracteristiqueBusiness;
-import com.projet.ecommerce.persistance.entity.Caracteristique;
-import com.projet.ecommerce.persistance.entity.TypeCaracteristique;
-import com.projet.ecommerce.persistance.repository.CaracteristiqueRepository;
+import com.projet.ecommerce.entity.Caracteristique;
+import com.projet.ecommerce.entity.TypeCaracteristique;
+import com.projet.ecommerce.repository.CaracteristiqueRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

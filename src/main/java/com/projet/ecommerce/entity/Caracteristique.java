@@ -1,6 +1,7 @@
-package com.projet.ecommerce.persistance.entity;
+package com.projet.ecommerce.entity;
 
 import javax.persistence.*;
+import java.util.Set;
 
 /**
  * Entité représentant la table caracteristique sous forme de classe.
