@@ -9,6 +9,7 @@ import java.util.List;
 public class ProduitTransformer {
 
     public static List<ProduitDTO> entityToDTO(List<Produit> produitCollection){
+        if (produitCollection == null) return null;
         List<ProduitDTO> produitDTOCollection = new ArrayList<>();
         for (Produit produit : produitCollection) {
             produitDTOCollection.add(entityToDTO(produit));
@@ -17,21 +18,20 @@ public class ProduitTransformer {
     }
 
     public static ProduitDTO entityToDTO(Produit produit){
-        if(produit != null){
-            ProduitDTO produitDTO = new ProduitDTO();
-            produitDTO.setReferenceProduit(produit.getReferenceProduit());
-            produitDTO.setNom(produit.getNom());
-            produitDTO.setDescription(produit.getDescription());
-            produitDTO.setPrixHT(produit.getPrixHT());
-            produitDTO.setCaracteristiques(CaracteristiqueTransformer.entityToDto(produit.getCaracteristiques()));
-            produitDTO.setPhotos(PhotoTransformer.entityToDto(produit.getPhotos()));
-            produitDTO.setCategories(CategorieTransformer.entityToDto(produit.getCategories()));
-            return produitDTO;
-        }
-        return null;
+        if(produit == null) return null;
+        ProduitDTO produitDTO = new ProduitDTO();
+        produitDTO.setReferenceProduit(produit.getReferenceProduit());
+        produitDTO.setNom(produit.getNom());
+        produitDTO.setDescription(produit.getDescription());
+        produitDTO.setPrixHT(produit.getPrixHT());
+        produitDTO.setCaracteristiques(CaracteristiqueTransformer.entityToDto(produit.getCaracteristiques()));
+        produitDTO.setPhotos(PhotoTransformer.entityToDto(produit.getPhotos()));
+        produitDTO.setCategories(CategorieTransformer.entityToDto(produit.getCategories()));
+        return produitDTO;
     }
 
     public static  List<Produit> dtoToEntity(List<ProduitDTO> produitDTOCollection){
+        if(produitDTOCollection == null) return null;
         List<Produit> produits = new ArrayList<>();
         for (ProduitDTO produitDTO : produitDTOCollection) {
             produits.add(dtoToEntity(produitDTO));
@@ -40,8 +40,9 @@ public class ProduitTransformer {
     }
 
     public static Produit dtoToEntity(ProduitDTO produitDTO){
+        if(produitDTO == null) return null;
         Produit produit = new Produit();
-        produit.setReferenceProduit(produit.getReferenceProduit());
+        produit.setReferenceProduit(produitDTO.getReferenceProduit());
         produit.setNom(produitDTO.getNom());
         produit.setDescription(produitDTO.getDescription());
         produit.setPrixHT(produitDTO.getPrixHT());
