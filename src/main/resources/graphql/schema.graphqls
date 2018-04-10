@@ -14,7 +14,7 @@ type Produit {
 type Query {
     getAllProduit: [Produit]!
     getProduitByID(referenceProduit: String!): Produit
-    getPrduitByCategorie(nomCategorie: String!): [Produit]!
+    getProduitByCategorie(nomCategorie: String!): [Produit]!
 
     getAllCategorie: [Categorie]!
     getCategorieByID(nomCategorie: String!): Categorie

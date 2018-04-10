@@ -3,7 +3,9 @@ package com.projet.ecommerce.business.impl;
 import com.projet.ecommerce.business.IProduitBusiness;
 import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.business.dto.transformer.ProduitTransformer;
+import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Produit;
+import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import com.projet.ecommerce.persistance.repository.ProduitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,9 @@ public class ProduitBusiness implements IProduitBusiness {
 
     @Autowired
     private ProduitRepository produitRepository;
+
+    @Autowired
+    private CategorieRepository categorieRepository;
 
     /**
      * Ajoute un produit dans la base de données.
@@ -74,5 +79,22 @@ public class ProduitBusiness implements IProduitBusiness {
     public ProduitDTO getProduitByID(String referenceProduit) {
         Optional<Produit> produit = produitRepository.findById(referenceProduit);
         return ProduitTransformer.entityToDTO(produit.orElse(null));
+    }
+
+    @Override
+    public List<ProduitDTO> getProduitByCategorie(String nomCategorie) {
+        Optional<Categorie> optionalCategorie = categorieRepository.findById(nomCategorie);
+        if(optionalCategorie.isPresent()) {
+            Categorie categorie = optionalCategorie.get();
+            List<Categorie> categorieList = new ArrayList<>(categorieRepository.findAll());
+            List<Produit> produitList = new ArrayList<>();
+            for (int i = 0; i < categorieList.size(); i++) {
+                if (categorie.getBorneGauche() <= categorieList.get(i).getBorneGauche() && categorie.getBorneDroit() >= categorieList.get(i).getBorneDroit()) {
+                    produitList.addAll(categorieList.get(i).getProduits());
+                }
+            }
+            return ProduitTransformer.entityToDTO(produitList);
+        }
+        return null;
     }
 }

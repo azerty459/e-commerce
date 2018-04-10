@@ -33,6 +33,10 @@ public class Query implements GraphQLQueryResolver {
         return produitBusiness.getProduitByID(referenceProduit);
     }
 
+    public List<ProduitDTO> getProduitByCategorie(String nomCategorie){
+        return produitBusiness.getProduitByCategorie(nomCategorie);
+    }
+
     public List<CategorieDTO> getAllCategorie() {
         System.out.println("nom: "+categorieBusiness.getCategorie().get(0).getNomCategorie());
         return categorieBusiness.getCategorie();

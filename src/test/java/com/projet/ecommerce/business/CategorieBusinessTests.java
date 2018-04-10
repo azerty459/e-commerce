@@ -1,4 +1,4 @@
-package com.projet.ecommerce.service;
+package com.projet.ecommerce.business;
 
 import com.projet.ecommerce.business.impl.CategorieBusiness;
 import com.projet.ecommerce.persistance.entity.Categorie;

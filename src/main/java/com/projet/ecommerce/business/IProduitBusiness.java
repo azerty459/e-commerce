@@ -43,4 +43,9 @@ public interface IProduitBusiness {
      * @return le produit rechercher
      */
     ProduitDTO getProduitByID(String referenceProduit);
+
+    /**
+     * Méthode définissant la recherche de plusieurs produit par le nom d'une catégorie.
+     */
+    List<ProduitDTO> getProduitByCategorie(String nomCategorie);
 }

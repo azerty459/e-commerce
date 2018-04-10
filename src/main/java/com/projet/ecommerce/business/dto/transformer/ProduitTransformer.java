@@ -1,6 +1,7 @@
 package com.projet.ecommerce.business.dto.transformer;
 
 import com.projet.ecommerce.business.dto.ProduitDTO;
+import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Produit;
 
 import java.util.ArrayList;

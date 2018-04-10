@@ -4,8 +4,6 @@ import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 import com.projet.ecommerce.business.ICategorieBusiness;
 import com.projet.ecommerce.business.IProduitBusiness;
 import com.projet.ecommerce.business.dto.ProduitDTO;
-import com.projet.ecommerce.persistance.entity.Categorie;
-import com.projet.ecommerce.persistance.entity.Produit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
