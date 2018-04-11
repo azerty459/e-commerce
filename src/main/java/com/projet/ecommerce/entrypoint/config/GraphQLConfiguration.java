@@ -1,9 +1,7 @@
-package com.projet.ecommerce.config;
+package com.projet.ecommerce.entrypoint.config;
 
-import com.coxautodev.graphql.tools.SchemaParser;
-import com.coxautodev.graphql.tools.SchemaParserBuilder;
-import com.projet.ecommerce.graphQL.Mutation;
-import com.projet.ecommerce.graphQL.Query;
+import com.projet.ecommerce.entrypoint.graphQL.Mutation;
+import com.projet.ecommerce.entrypoint.graphQL.Query;
 import graphql.GraphQL;
 import graphql.schema.GraphQLSchema;
 import org.springframework.beans.factory.annotation.Autowired;
