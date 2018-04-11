@@ -1,4 +1,4 @@
-package com.projet.ecommerce.service;
+/*package com.projet.ecommerce.service;
 
 import com.projet.ecommerce.business.impl.ProduitBusiness;
 import com.projet.ecommerce.entity.Categorie;
@@ -90,3 +90,4 @@ public class ProduitBusinessTests {
 		Assert.assertTrue(produitBusiness.deleteProduit("A05A87"));
 	}
 }
+*/

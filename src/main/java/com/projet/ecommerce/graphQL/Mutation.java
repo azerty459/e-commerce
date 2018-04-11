@@ -20,6 +20,8 @@ public class Mutation implements GraphQLMutationResolver {
     @Autowired
     private ICategorieBusiness categorieBusiness;
 
+    private String test;
+
     /**
      * Ajoute un produit.
      * @param produit Un objet de type Produit
