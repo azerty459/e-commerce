@@ -45,7 +45,6 @@
 				<groupId>org.mockito</groupId>
 				<artifactId>mockito-all</artifactId>
 				<version>${mockito-all.version}</version>
-				<scope>test</scope>
 			</dependency>
 
 		</dependencies>
