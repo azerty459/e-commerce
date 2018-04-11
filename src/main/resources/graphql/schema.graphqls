@@ -1,5 +1,6 @@
 type Categorie {
     nomCategorie: String!
+    sousCategories: [Categorie]!
 }
 
 type Produit {
@@ -11,17 +12,15 @@ type Produit {
 }
 
 type Query {
-    getAllCategorie: [Categorie]!
-    getCategorieByID(nom: String!): Categorie
-
     getAllProduit: [Produit]!
     getProduitByID(referenceProduit: String!): Produit
+    getProduitByCategorie(nomCategorie: String!): [Produit]!
+
+    getAllCategorie: [Categorie]!
+    getCategorieByID(nomCategorie: String!): Categorie
 }
 
 type Mutation {
-    addCategorie(categorie: Categorie!): Categorie!
-    deleteCategorie(nomCategorie: String!) : Boolean!
-
     addProduit(produit: Produit!): Produit!
     updateProduit(produit: Produit!): Produit!
     deleteProduit(referenceProduit: String!) : Boolean!

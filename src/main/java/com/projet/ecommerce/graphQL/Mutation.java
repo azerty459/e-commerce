@@ -1,10 +1,9 @@
-package com.projet.ecommerce.graphQL;
+package com.projet.ecommerce.entrypoint.graphQL;
 
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 import com.projet.ecommerce.business.ICategorieBusiness;
 import com.projet.ecommerce.business.IProduitBusiness;
-import com.projet.ecommerce.entity.Categorie;
-import com.projet.ecommerce.entity.Produit;
+import com.projet.ecommerce.business.dto.ProduitDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,24 +19,22 @@ public class Mutation implements GraphQLMutationResolver {
     @Autowired
     private ICategorieBusiness categorieBusiness;
 
-    private String test;
-
     /**
      * Ajoute un produit.
-     * @param produit Un objet de type Produit
+     * @param produitDTO Un objet de type Produit
      * @return le produit créé
      */
-    public Produit addProduit(Produit produit) {
-        return produitBusiness.addProduit(produit);
+    public ProduitDTO addProduit(ProduitDTO produitDTO) {
+        return produitBusiness.addProduit(produitDTO);
     }
 
     /**
      * Modifie le produit.
-     * @param produit Un objet de type Produit
+     * @param produitDTO Un objet de type ProduitDTO
      * @return le produit modifié
      */
-    public Produit updateProduit(Produit produit)  {
-        return produitBusiness.updateProduit(produit);
+    public ProduitDTO updateProduit(ProduitDTO produitDTO)  {
+        return produitBusiness.updateProduit(produitDTO);
     }
 
     /**
@@ -47,23 +44,5 @@ public class Mutation implements GraphQLMutationResolver {
      */
     public boolean deleteProduit(String referenceProduit) {
         return produitBusiness.deleteProduit(referenceProduit);
-    }
-
-    /**
-     * Ajouter une catégorie.
-     * @param categorie Un objet de type catégorie
-     * @return la catégorie créé
-     */
-    public Categorie addCategorie(Categorie categorie) {
-        return categorieBusiness.addCategorie(categorie);
-    }
-
-    /**
-     * Supprime une catégorie
-     * @param nomCategorie Nom de la catégorie à supprimer
-     * @return true
-     */
-    public boolean deleteCategorie(String nomCategorie) {
-        return categorieBusiness.deleteCategorie(nomCategorie);
     }
 }

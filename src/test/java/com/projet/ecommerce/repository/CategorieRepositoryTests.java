@@ -1,30 +1,37 @@
 package com.projet.ecommerce.repository;
 
-import com.projet.ecommerce.entity.Categorie;
+import com.projet.ecommerce.persistance.entity.Categorie;
+import com.projet.ecommerce.persistance.repository.CategorieRepository;
+import liquibase.integration.spring.SpringLiquibase;
 import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ActiveProfiles("test")
 public class CategorieRepositoryTests {
-
 	private static final Categorie TEMP_INSERT = new Categorie();
 	private static final Categorie TEMP_DELETE = new Categorie();
 	private static final Categorie TEMP_UPDATE = new Categorie();
 	private static final Categorie TEMP_GET = new Categorie();
 
 	static {
+    	//Permet d'écraser la config application.properties par application-test.properties
+		System.setProperty("spring.config.location", "classpath:application-test.properties");
+
 		TEMP_INSERT.setNomCategorie("Transport");
 		TEMP_INSERT.setBorneGauche(1);
 		TEMP_INSERT.setBorneDroit(8);
@@ -42,8 +49,6 @@ public class CategorieRepositoryTests {
 		TEMP_UPDATE.setBorneDroit(6);
 	}
 
-	private Collection<Categorie> tempList;
-
 	@Autowired
 	private CategorieRepository categorieRepository;
 
@@ -51,22 +56,27 @@ public class CategorieRepositoryTests {
 	public void insertCategorie() {
 		Categorie save = categorieRepository.save(this.TEMP_INSERT);
 		Assert.assertNotNull(save);
+
 		Categorie temp = categorieRepository.findById(TEMP_INSERT.getNomCategorie()).get();
 		Assert.assertNotNull(temp);
 	}
 
 	@Test
-	public void getCategorie() {
-		this.tempList = categorieRepository.findAll();
-		Assert.assertEquals(0, this.tempList.size());
+	public void getAllCategorie() {
+		categorieRepository.deleteAll();
+
+		Collection<Categorie> categorieCollection = categorieRepository.findAll();
+		Assert.assertEquals(0, categorieCollection.size());
+
 		categorieRepository.save(this.TEMP_INSERT);
-		this.tempList = categorieRepository.findAll();
-		Assert.assertEquals(1, this.tempList.size());
+		categorieCollection = categorieRepository.findAll();
+		Assert.assertEquals(1, categorieCollection.size());
 	}
 
 	@Test
 	public void getCategorieByID() {
 		Assert.assertNotNull(categorieRepository.save(this.TEMP_GET));
+
 		Categorie temp = categorieRepository.findById(TEMP_GET.getNomCategorie()).get();
 		Assert.assertNotNull("Produit ne peut pas être null", temp);
 		Assert.assertEquals(this.TEMP_GET.getBorneDroit(), temp.getBorneDroit());
@@ -95,7 +105,6 @@ public class CategorieRepositoryTests {
 	@Test
 	public void deleteCategorie() {
 		Assert.assertNotNull(categorieRepository.save(this.TEMP_DELETE));
-
 		categorieRepository.delete(TEMP_DELETE);
 		Assert.assertFalse(categorieRepository.findById(TEMP_DELETE.getNomCategorie()).isPresent());
 	}
