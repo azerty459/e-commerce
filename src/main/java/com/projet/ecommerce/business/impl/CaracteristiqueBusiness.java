@@ -19,7 +19,7 @@ public class CaracteristiqueBusiness implements ICaracteristiqueBusiness {
 
     /**
      * Ajoute une caracteristique dans la base de données.
-     * @param typeCaracteristique Objet type caracteristique
+     * @param typeCaracteristique Objet type caracteristique sdfsdfdfdfdf
      * @param valeur Valeur
      * @return la caracteristique crée.
      */
