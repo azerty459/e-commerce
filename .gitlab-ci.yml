@@ -12,7 +12,7 @@ tests:
   - branches
   
 deploiement_dev:
-  stage: deploy
+  stage: deploiement
   script: 
     - echo 'Deploy sur le serv de developpement'
   only:
@@ -21,7 +21,7 @@ deploiement_dev:
     - branches
 
 deploiement_master:
-  stage: deploy
+  stage: deploiement
   script: 
     - echo 'Deploy sur le serv de production'
   only:
