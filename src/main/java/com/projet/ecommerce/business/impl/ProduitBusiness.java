@@ -31,6 +31,7 @@ public class ProduitBusiness implements IProduitBusiness {
      */
     @Override
     public ProduitDTO addProduit(ProduitDTO produitDTO) {
+        if (produitDTO == null) return null;
         produitRepository.save(ProduitTransformer.dtoToEntity(produitDTO));
         return produitDTO;
     }
@@ -42,6 +43,7 @@ public class ProduitBusiness implements IProduitBusiness {
      */
     @Override
     public ProduitDTO updateProduit(ProduitDTO produitDTO) {
+        if (produitDTO == null) return null;
         produitRepository.save(ProduitTransformer.dtoToEntity(produitDTO));
         return produitDTO;
     }
