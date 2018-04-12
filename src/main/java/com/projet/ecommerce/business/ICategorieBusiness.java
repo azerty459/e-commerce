@@ -14,25 +14,25 @@ public interface ICategorieBusiness {
      * @param pere Le pere de la catégorie à insérer
      * @return la catégorie crée
      */
-    CategorieDTO addCategorie(String nomCategorie, String pere);
+    CategorieDTO add(String nomCategorie, String pere);
 
     /**
      * Méthode définissant le supprésion d'une catégorie.
      * @param nomCategorie Nom de la catégorie à supprimer
      * @return true
      */
-    boolean deleteCategorie(String nomCategorie);
+    boolean delete(String nomCategorie);
 
     /**
      * Méthode définissant la recherche de toutes les catégories.
      * @return Une liste d'objet categorie
      */
-    List<CategorieDTO> getCategorie();
+    List<CategorieDTO> getAll();
 
     /**
      * Méthode définissant la recherche d'une categorie selon son nom.
      * @param nomCategorie Le nom de la catégorie à rechercher
      * @return l'objet categorie recherché
      */
-    CategorieDTO getCategorieByNom(String nomCategorie);
+    CategorieDTO getByNom(String nomCategorie);
 }

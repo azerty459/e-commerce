@@ -35,7 +35,7 @@ public class ProduitBusiness implements IProduitBusiness {
      * @return l'objet produit crée
      */
     @Override
-    public ProduitDTO addProduit(String referenceProduit, String nom, String description, Float prixHT) {
+    public ProduitDTO add(String referenceProduit, String nom, String description, Float prixHT) {
         Produit produit = new Produit();
         produit.setReferenceProduit(referenceProduit);
         produit.setNom(nom);
@@ -56,7 +56,7 @@ public class ProduitBusiness implements IProduitBusiness {
      * @return l'objet produit modifié, null si le produit à modifier n'est pas trouvée
      */
     @Override
-    public ProduitDTO updateProduit(String referenceProduit, String nom, String description, Float prixHT) {
+    public ProduitDTO update(String referenceProduit, String nom, String description, Float prixHT) {
         Optional<Produit> produitOptional = produitRepository.findById(referenceProduit);
         if(produitOptional.isPresent()){
             Produit produit = produitOptional.get();
@@ -74,7 +74,7 @@ public class ProduitBusiness implements IProduitBusiness {
      * @return true
      */
     @Override
-    public boolean deleteProduit(String referenceProduit) {
+    public boolean delete(String referenceProduit) {
         produitRepository.deleteById(referenceProduit);
         return true;
     }
@@ -84,7 +84,7 @@ public class ProduitBusiness implements IProduitBusiness {
      * @return une liste d'objet produit
      */
     @Override
-    public List<ProduitDTO> getProduit() {
+    public List<ProduitDTO> getAll() {
         return ProduitTransformer.entityToDTO(new ArrayList<>(produitRepository.findAll()));
     }
 
@@ -94,7 +94,7 @@ public class ProduitBusiness implements IProduitBusiness {
      * @return l'objet produit recherché sinon null, s'il n'est pas trouvé
      */
     @Override
-    public ProduitDTO getProduitByRef(String referenceProduit) {
+    public ProduitDTO getByRef(String referenceProduit) {
         Optional<Produit> produit = produitRepository.findById(referenceProduit);
         return ProduitTransformer.entityToDTO(produit.orElse(null));
     }
@@ -105,7 +105,7 @@ public class ProduitBusiness implements IProduitBusiness {
      * @return une liste d'objet produit
      */
     @Override
-    public List<ProduitDTO> getProduitByCategorie(String nomCategorie) {
+    public List<ProduitDTO> getByCategorie(String nomCategorie) {
         Optional<Categorie> optionalCategorie = categorieRepository.findById(nomCategorie);
         if(optionalCategorie.isPresent()) {
             Categorie categorie = optionalCategorie.get();

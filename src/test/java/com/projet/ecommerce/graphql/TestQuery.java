@@ -40,7 +40,7 @@ public class TestQuery {
     @Test
     public void getAllProduit() {
         List<ProduitDTO> produitsDTO = new ArrayList<>();
-        Mockito.when(produitBusiness.getProduit()).thenReturn(produitsDTO);
+        Mockito.when(produitBusiness.getAll()).thenReturn(produitsDTO);
         List<ProduitDTO> retour = query.getAllProduit();
 
         // on s'assure que la première fois, la liste retournée est vide
@@ -70,17 +70,17 @@ public class TestQuery {
     }
 
     @Test
-    public void getProduitByCategorie(){
+    public void getByCategorie(){
         List<ProduitDTO> produitsDTO = new ArrayList<>();
         produitsDTO.add(new ProduitDTO());
-        Mockito.when(produitBusiness.getProduitByCategorie("inexistant")).thenReturn(null);
-        Mockito.when(produitBusiness.getProduitByCategorie("livre")).thenReturn(produitsDTO);
+        Mockito.when(produitBusiness.getByCategorie("inexistant")).thenReturn(null);
+        Mockito.when(produitBusiness.getByCategorie("livre")).thenReturn(produitsDTO);
 
-        List<ProduitDTO> retour = query.getProduitByCategorie("inexistant");
+        List<ProduitDTO> retour = query.getByCategorie("inexistant");
         // quand il n'y a aucun produit pour cette catégorie, on reçoit null
         Assert.assertNull(retour);
 
-        retour = query.getProduitByCategorie("livre");
+        retour = query.getByCategorie("livre");
         // quand il y a des produits pour cette catégorie, on les reçoit
         Assert.assertEquals(produitsDTO, retour);
     }
@@ -88,7 +88,7 @@ public class TestQuery {
     @Test
     public void getAllCategorie(){
         List<CategorieDTO> categories = new ArrayList<>();
-        Mockito.when(categorieBusiness.getCategorie()).thenReturn(categories);
+        Mockito.when(categorieBusiness.getAll()).thenReturn(categories);
         List<CategorieDTO> retour = query.getAllCategorie();
 
         // on s'assure que la première fois, la liste retournée est vide

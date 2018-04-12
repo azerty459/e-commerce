@@ -18,7 +18,7 @@ public interface IProduitBusiness {
      * @param prixHT Son prix hors taxe
      * @return le produit ajouté
      */
-    ProduitDTO addProduit(String referenceProduit, String nom, String description, Float prixHT);
+    ProduitDTO add(String referenceProduit, String nom, String description, Float prixHT);
 
     /**
      * Méthode définissant la modification d'un produit.
@@ -28,30 +28,30 @@ public interface IProduitBusiness {
      * @param prixHT Le nouveau prix hors taxe
      * @return l'objet produit modifié, null si le produit à modifier n'est pas trouvée
      */
-    ProduitDTO updateProduit(String referenceProduit, String nom, String description, Float prixHT);
+    ProduitDTO update(String referenceProduit, String nom, String description, Float prixHT);
 
     /**
      * Méthode définissant la suppression d'un produit.
      * @param referenceProduit Référence du produit à supprimer
      * @return true
      */
-    boolean deleteProduit(String referenceProduit);
+    boolean delete(String referenceProduit);
 
     /**
      * Méthode définissant la recherche de tous les produits.
      * @return une liste de produit
      */
-    List<ProduitDTO> getProduit();
+    List<ProduitDTO> getAll();
 
     /**
      * Méthode définissant la recherche d'un produit selon la référence du produit recherché.
      * @param referenceProduit Référence du produit à rechercher
      * @return le produit rechercher
      */
-    ProduitDTO getProduitByRef(String referenceProduit);
+    ProduitDTO getByRef(String referenceProduit);
 
     /**
      * Méthode définissant la recherche de plusieurs produit par le nom d'une catégorie.
      */
-    List<ProduitDTO> getProduitByCategorie(String nomCategorie);
+    List<ProduitDTO> getByCategorie(String nomCategorie);
 }

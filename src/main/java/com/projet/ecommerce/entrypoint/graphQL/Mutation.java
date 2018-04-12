@@ -29,7 +29,7 @@ public class Mutation implements GraphQLMutationResolver {
      * @return le produit ajouté
      */
     public ProduitDTO addProduit(String referenceProduit, String nom, String description, Float prixHT) {
-        return produitBusiness.addProduit(referenceProduit, nom, description, prixHT);
+        return produitBusiness.add(referenceProduit, nom, description, prixHT);
     }
 
     /**
@@ -41,7 +41,7 @@ public class Mutation implements GraphQLMutationResolver {
      * @return le produit modifié
      */
     public ProduitDTO updateProduit(String referenceProduit, String nom, String description, Float prixHT)  {
-        return produitBusiness.updateProduit(referenceProduit, nom, description, prixHT);
+        return produitBusiness.update(referenceProduit, nom, description, prixHT);
     }
 
     /**
@@ -50,7 +50,7 @@ public class Mutation implements GraphQLMutationResolver {
      * @return true
      */
     public boolean deleteProduit(String referenceProduit) {
-        return produitBusiness.deleteProduit(referenceProduit);
+        return produitBusiness.delete(referenceProduit);
     }
 
     /**
@@ -59,7 +59,7 @@ public class Mutation implements GraphQLMutationResolver {
      * @return la catégorie crée
      */
     public CategorieDTO addCategorie(String nomCategorie, String pere){
-        return  categorieBusiness.addCategorie(nomCategorie, pere);
+        return  categorieBusiness.add(nomCategorie, pere);
     }
 
     /**
@@ -68,6 +68,6 @@ public class Mutation implements GraphQLMutationResolver {
      * @return true
      */
     public boolean deleteCategorie(String nomCategorie){
-        return categorieBusiness.deleteCategorie(nomCategorie);
+        return categorieBusiness.delete(nomCategorie);
     }
 }

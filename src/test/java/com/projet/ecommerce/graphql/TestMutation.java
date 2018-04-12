@@ -33,42 +33,42 @@ public class TestMutation {
     }
 
     @Test
-    public void addProduit(){
+    public void add(){
         ProduitDTO produit = new ProduitDTO();
         produit.setReferenceProduit("A4224");
-        Mockito.when(produitBusiness.addProduit(Mockito.any(),Mockito.any(),Mockito.any(),Mockito.any())).thenReturn(null);
-        ProduitDTO retour = mutation.addProduit("A4224", "Livre", "Un livre", 4.5);
+        Mockito.when(produitBusiness.add(Mockito.any(),Mockito.any(),Mockito.any(),Mockito.any())).thenReturn(null);
+        ProduitDTO retour = mutation.add("A4224", "Livre", "Un livre", 4.5);
 
         // on s'assure que la détection des paramètres null fonctionne
         Assert.assertEquals(retour, null);
 
         // lorsque l'ajout a fonctionné, on reçoit le produit ajouté
-        retour = mutation.addProduit(produit);
+        retour = mutation.add(produit);
         Assert.assertEquals(produit.getReferenceProduit(), retour.getReferenceProduit());
     }
 
     @Test
-    public void updateProduit(){
+    public void update(){
         ProduitDTO produit = new ProduitDTO();
         produit.setReferenceProduit("A4224");
-        Mockito.when(produitBusiness.updateProduit(null)).thenReturn(null);
-        Mockito.when(produitBusiness.updateProduit(produit)).thenReturn(produit);
-        ProduitDTO retour = mutation.updateProduit(null);
+        Mockito.when(produitBusiness.update(null)).thenReturn(null);
+        Mockito.when(produitBusiness.update(produit)).thenReturn(produit);
+        ProduitDTO retour = mutation.update(null);
 
         // on s'assure que la détection des paramètres null fonctionne
         Assert.assertEquals(retour, null);
 
         // lorsque la mise à jour a fonctionné, on reçoit le produit modifié
-        retour = mutation.updateProduit(produit);
+        retour = mutation.update(produit);
         Assert.assertEquals(produit.getReferenceProduit(), retour.getReferenceProduit());
     }
 
     @Test
-    public void deleteProduit(){
-        Mockito.when(produitBusiness.deleteProduit("inexistant")).thenReturn(false);
-        Mockito.when(produitBusiness.deleteProduit("A4224")).thenReturn(true);
+    public void delete(){
+        Mockito.when(produitBusiness.delete("inexistant")).thenReturn(false);
+        Mockito.when(produitBusiness.delete("A4224")).thenReturn(true);
 
-        Assert.assertFalse(mutation.deleteProduit("inexistant"));
-        Assert.assertTrue((mutation.deleteProduit("A4224")));
+        Assert.assertFalse(mutation.delete("inexistant"));
+        Assert.assertTrue((mutation.delete("A4224")));
     }*/
 }

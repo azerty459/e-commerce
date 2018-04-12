@@ -45,7 +45,7 @@ public class ProduitBusinessTests {
 		produit1.setNom("Livre1");
 		Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit1);
 
-		Produit retour1 = produitBusiness.addProduit(produit1);
+		Produit retour1 = produitBusiness.add(produit1);
 		Assert.assertNotNull(retour1);
 		Assert.assertEquals(produit1.getNom(), retour1.getNom());
 		Assert.assertEquals(produit1.getDescription(), retour1.getDescription());
@@ -54,15 +54,15 @@ public class ProduitBusinessTests {
 		Mockito.verify(produitRepository, Mockito.times(1)).save(produit1);
 
 		Mockito.when(produitRepository.save(Mockito.any())).thenReturn(null);
-		Produit retour2 = produitBusiness.addProduit(new Produit());
+		Produit retour2 = produitBusiness.add(new Produit());
 		Assert.assertNull(retour2);
 	}
 
 	@Test
-	public void getProduit() {
+	public void getAll() {
 		List<Produit> produits = new ArrayList<>();
-		Mockito.when(produitBusiness.getProduit()).thenReturn(produits);
-		Assert.assertEquals(produitBusiness.getProduit().size(), 0);
+		Mockito.when(produitBusiness.getAll()).thenReturn(produits);
+		Assert.assertEquals(produitBusiness.getAll().size(), 0);
 
 		Produit produit = new Produit();
 		produit.setReferenceProduit("A05A01");
@@ -70,10 +70,10 @@ public class ProduitBusinessTests {
 		produit.setDescription("Un livre");
 		produit.setNom("Livre1");
 		produits.add(produit);
-		Mockito.when(produitBusiness.getProduit()).thenReturn(produits);
+		Mockito.when(produitBusiness.getAll()).thenReturn(produits);
 		Mockito.verify(produitRepository, Mockito.times(1)).findAll();
 
-		produits = produitBusiness.getProduit();
+		produits = produitBusiness.getAll();
 		Assert.assertEquals(produits.size(), 1);
 
 		Produit retour = produits.get(0);
@@ -110,9 +110,9 @@ public class ProduitBusinessTests {
 	}
 
 	@Test
-	public void deleteProduit() {
+	public void delete() {
 		Mockito.when(produitRepository.findById(Mockito.any())).thenReturn(Optional.of(new Produit()));
-		Assert.assertTrue(produitBusiness.deleteProduit("A05A01"));
+		Assert.assertTrue(produitBusiness.delete("A05A01"));
 		Mockito.verify(produitRepository, Mockito.times(1)).findById(Mockito.any());
 		Mockito.verify(produitRepository, Mockito.times(1)).delete(Mockito.any());
 	}
@@ -120,20 +120,20 @@ public class ProduitBusinessTests {
 	@Test
 	public void deleteProduitNotExists() {
 		Mockito.when(produitRepository.findById(Mockito.any())).thenReturn(Optional.empty());
-		Assert.assertFalse(produitBusiness.deleteProduit("A05A078"));
+		Assert.assertFalse(produitBusiness.delete("A05A078"));
 		Mockito.verify(produitRepository, Mockito.times(1)).findById(Mockito.any());
 		Mockito.verify(produitRepository, Mockito.times(0)).delete(Mockito.any());
 	}
 
 	@Test
-	public void updateProduit() {
+	public void update() {
 		Produit produit = new Produit();
 		produit.setReferenceProduit("A05A01");
 		produit.setPrixHT(2.1);
 		produit.setDescription("Un livre");
 		produit.setNom("Livre1");
 		Mockito.when(produitRepository.findById(Mockito.any())).thenReturn(Optional.of(produit));
-		Produit retour = produitBusiness.updateProduit(produit);
+		Produit retour = produitBusiness.update(produit);
 		Mockito.verify(produitRepository, Mockito.times(1)).findById(Mockito.any());
 		Mockito.verify(produitRepository, Mockito.times(1)).save(Mockito.any());
 		Assert.assertNotNull(retour);
@@ -147,7 +147,7 @@ public class ProduitBusinessTests {
 	@Test
 	public void updateProduitEmpty() {
 		Mockito.when(produitRepository.findById(Mockito.any())).thenReturn(Optional.empty());
-		Produit retour2 = produitBusiness.updateProduit(new Produit());
+		Produit retour2 = produitBusiness.update(new Produit());
 		Mockito.verify(produitRepository, Mockito.times(1)).findById(Mockito.any());
 		Mockito.verify(produitRepository, Mockito.times(0)).save(Mockito.any());
 		Assert.assertNull(retour2);

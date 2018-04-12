@@ -42,7 +42,7 @@ public class CategorieBusinessTests {
 		categorie1.setLevel(1);
 		Mockito.when(categorieRepository.save(Mockito.any())).thenReturn(categorie1);
 
-		Categorie retour1 = categorieBusiness.addCategorie(categorie1);
+		Categorie retour1 = categorieBusiness.add(categorie1);
 		Assert.assertNotNull(retour1);
 		Assert.assertEquals(categorie1.getNom(), retour1.getNom());
         Assert.assertEquals(categorie1.getBorneGauche(), retour1.getBorneGauche());
@@ -51,15 +51,15 @@ public class CategorieBusinessTests {
 		Mockito.verify(categorieRepository, Mockito.times(1)).save(Mockito.any());
 
 		Mockito.when(categorieRepository.save(Mockito.any())).thenReturn(null);
-		Categorie retour2 = categorieBusiness.addCategorie(new Categorie());
+		Categorie retour2 = categorieBusiness.add(new Categorie());
 		Assert.assertNull(retour2);
 	}
 
 	@Test
-	public void getCategorie() {
+	public void getAll() {
 		List<Categorie> categories = new ArrayList<>();
-		Mockito.when(categorieBusiness.getCategorie()).thenReturn(categories);
-		Assert.assertEquals(categorieBusiness.getCategorie().size(), 0);
+		Mockito.when(categorieBusiness.getAll()).thenReturn(categories);
+		Assert.assertEquals(categorieBusiness.getAll().size(), 0);
 
 		Categorie categorie = new Categorie();
 		categorie.setNom("Transport1");
@@ -67,10 +67,10 @@ public class CategorieBusinessTests {
 		categorie.setBorneDroit(8);
 		categorie.setLevel(1);
 		categories.add(categorie);
-		Mockito.when(categorieBusiness.getCategorie()).thenReturn(categories);
+		Mockito.when(categorieBusiness.getAll()).thenReturn(categories);
         Mockito.verify(categorieRepository, Mockito.times(1)).findAll();
 
-        categories = categorieBusiness.getCategorie();
+        categories = categorieBusiness.getAll();
         Assert.assertEquals(categories.size(), 1);
 
 		Categorie retour = categories.get(0);
@@ -108,9 +108,9 @@ public class CategorieBusinessTests {
 	}
 
 	@Test
-	public void deleteCategorie() {
+	public void delete() {
 		Mockito.when(categorieRepository.findById(Mockito.any())).thenReturn(Optional.of(new Categorie()));
-		Assert.assertTrue(categorieBusiness.deleteCategorie("Fofo"));
+		Assert.assertTrue(categorieBusiness.delete("Fofo"));
 		Mockito.verify(categorieRepository, Mockito.times(1)).findById(Mockito.any());
 		Mockito.verify(categorieRepository, Mockito.times(1)).delete(Mockito.any());
 	}
@@ -118,7 +118,7 @@ public class CategorieBusinessTests {
 	@Test
 	public void deleteCategorieNotExists() {
 		Mockito.when(categorieRepository.findById(Mockito.any())).thenReturn(Optional.empty());
-		Assert.assertFalse(categorieBusiness.deleteCategorie("Fofo"));
+		Assert.assertFalse(categorieBusiness.delete("Fofo"));
 		Mockito.verify(categorieRepository, Mockito.times(1)).findById(Mockito.any());
 		Mockito.verify(categorieRepository, Mockito.times(0)).delete(Mockito.any());
 	}
