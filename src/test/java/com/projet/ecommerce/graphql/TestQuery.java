@@ -41,14 +41,14 @@ public class TestQuery {
     public void getAllProduit() {
         List<ProduitDTO> produitsDTO = new ArrayList<>();
         Mockito.when(produitBusiness.getProduit()).thenReturn(produitsDTO);
-        List<ProduitDTO> retour = produitBusiness.getProduit();
+        List<ProduitDTO> retour = query.getAllProduit();
 
         // on s'assure que la première fois, la liste retournée est vide
         Assert.assertNotNull(retour);
         Assert.assertEquals(retour.size(), 0);
 
         produitsDTO.add(new ProduitDTO());
-        retour = produitBusiness.getProduit();
+        retour = query.getAllProduit();
         // on s'assure que la liste comporte bien un élément
         Assert.assertEquals(retour.size(), 1);
     }
@@ -60,11 +60,11 @@ public class TestQuery {
         Mockito.when(produitBusiness.getProduitByID("A2442")).thenReturn(null);
         Mockito.when(produitBusiness.getProduitByID("A4224")).thenReturn(produit);
 
-        ProduitDTO retour = produitBusiness.getProduitByID("A2442");
+        ProduitDTO retour = query.getProduitByID("A2442");
         // lorsque la référence produit n'existe pas, on reçoit null
         Assert.assertNull(retour);
 
-        retour = produitBusiness.getProduitByID("A4224");
+        retour = query.getProduitByID("A4224");
         // lorsque la référence produit existe, on reçoit le produit correspondant
         Assert.assertEquals(produit.getReferenceProduit(), retour.getReferenceProduit());
     }
@@ -76,11 +76,11 @@ public class TestQuery {
         Mockito.when(produitBusiness.getProduitByCategorie("inexistant")).thenReturn(null);
         Mockito.when(produitBusiness.getProduitByCategorie("livre")).thenReturn(produitsDTO);
 
-        List<ProduitDTO> retour = produitBusiness.getProduitByCategorie("inexistant");
+        List<ProduitDTO> retour = query.getProduitByCategorie("inexistant");
         // quand il n'y a aucun produit pour cette catégorie, on reçoit null
         Assert.assertNull(retour);
 
-        retour = produitBusiness.getProduitByCategorie("livre");
+        retour = query.getProduitByCategorie("livre");
         // quand il y a des produits pour cette catégorie, on les reçoit
         Assert.assertEquals(produitsDTO, retour);
     }
@@ -89,14 +89,14 @@ public class TestQuery {
     public void getAllCategorie(){
         List<CategorieDTO> categories = new ArrayList<>();
         Mockito.when(categorieBusiness.getCategorie()).thenReturn(categories);
-        List<CategorieDTO> retour = categorieBusiness.getCategorie();
+        List<CategorieDTO> retour = query.getAllCategorie();
 
         // on s'assure que la première fois, la liste retournée est vide
         Assert.assertNotNull(retour);
         Assert.assertEquals(retour.size(), 0);
 
         categories.add(new CategorieDTO());
-        retour = categorieBusiness.getCategorie();
+        retour = query.getAllCategorie();
         // on s'assure que la liste comporte bien un élément
         Assert.assertEquals(retour.size(), 1);
     }
@@ -108,11 +108,11 @@ public class TestQuery {
         Mockito.when(categorieBusiness.getCategorieByID("inexistant")).thenReturn(null);
         Mockito.when(categorieBusiness.getCategorieByID("test")).thenReturn(categorie);
 
-        CategorieDTO retour = categorieBusiness.getCategorieByID("inexistant");
+        CategorieDTO retour = query.getCategorieByID("inexistant");
         // lorsque le nom de catégorie n'existe pas, on reçoit null
         Assert.assertNull(retour);
 
-        retour = categorieBusiness.getCategorieByID("test");
+        retour = query.getCategorieByID("test");
         // lorsque le nom de catégorie existe, on reçoit la catégorie correspondante
         Assert.assertEquals(categorie.getNomCategorie(), retour.getNomCategorie());
     }

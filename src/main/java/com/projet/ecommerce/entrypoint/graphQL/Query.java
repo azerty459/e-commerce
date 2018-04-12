@@ -38,7 +38,6 @@ public class Query implements GraphQLQueryResolver {
     }
 
     public List<CategorieDTO> getAllCategorie() {
-        System.out.println("nom: "+categorieBusiness.getCategorie().get(0).getNomCategorie());
         return categorieBusiness.getCategorie();
     }
 
