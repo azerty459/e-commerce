@@ -4,11 +4,12 @@ import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
 import com.projet.ecommerce.persistance.entity.Caracteristique;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class CaracteristiqueTransformer {
 
-    public static List<Caracteristique> dtoToEntity(List<CaracteristiqueDTO> caracteristiqueDTOCollection){
+    public static List<Caracteristique> dtoToEntity(Collection<CaracteristiqueDTO> caracteristiqueDTOCollection){
         if(caracteristiqueDTOCollection == null) return null;
         List<Caracteristique> caracteristiques = new ArrayList<>();
         for (CaracteristiqueDTO caracteristiqueDTO : caracteristiqueDTOCollection) {
@@ -26,7 +27,7 @@ public class CaracteristiqueTransformer {
     }
 
 
-    public static List<CaracteristiqueDTO> entityToDto(List<Caracteristique> caracteristiques){
+    public static List<CaracteristiqueDTO> entityToDto(Collection<Caracteristique> caracteristiques){
         if (caracteristiques == null) return null;
         List<CaracteristiqueDTO> caracteristiqueDTOCollection = new ArrayList<>();
         for (Caracteristique caracteristique : caracteristiques) {

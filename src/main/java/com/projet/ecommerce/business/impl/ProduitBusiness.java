@@ -100,7 +100,7 @@ public class ProduitBusiness implements IProduitBusiness {
     }
 
     /**
-     * Retourne une liste de produit en fonction de la catégorie recherché
+     * Retourne une liste de produit en fonction de la catégorie recherché.
      * @param nomCategorie Le nom de catégorie
      * @return une liste d'objet produit
      */

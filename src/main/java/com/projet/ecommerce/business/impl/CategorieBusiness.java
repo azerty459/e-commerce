@@ -20,10 +20,10 @@ public class CategorieBusiness implements ICategorieBusiness {
     private CategorieRepository categorieRepository;
 
     /**
-     * Méthode définissant l'ajout d'une catégorie.
-     *
+     * Ajout d'une catégorie
      * @param nomCategorie Le nom de la catégorie
-     * @return la catégorie crée
+     * @param pere Le pere de la catégorie à insérer
+     * @return
      */
     @Override
     public CategorieDTO add(String nomCategorie, String pere) {
@@ -76,7 +76,6 @@ public class CategorieBusiness implements ICategorieBusiness {
 
     /**
      * Supprime la catégorie dans la base de données.
-     *
      * @param nomCategorie Nom de la catégorie à supprimer
      * @return true
      */
@@ -92,7 +91,6 @@ public class CategorieBusiness implements ICategorieBusiness {
 
     /**
      * Retourne la liste complète des catégories liées à la base de données.
-     *
      * @return une liste de catégorie
      */
     @Override
@@ -102,7 +100,6 @@ public class CategorieBusiness implements ICategorieBusiness {
 
     /**
      * Retourne la catégorie recherché
-     *
      * @param nomCategorie Le nom de la catégorie à rechercher
      * @return l'objet catégorie recherché sinon null, s'il n'est pas trouvé
      */

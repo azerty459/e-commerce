@@ -1,6 +1,8 @@
 package com.projet.ecommerce.business.impl;
 
 import com.projet.ecommerce.business.ICaracteristiqueBusiness;
+import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
+import com.projet.ecommerce.business.dto.transformer.CaracteristiqueTransformer;
 import com.projet.ecommerce.persistance.entity.Caracteristique;
 import com.projet.ecommerce.persistance.entity.TypeCaracteristique;
 import com.projet.ecommerce.persistance.repository.CaracteristiqueRepository;
@@ -24,11 +26,11 @@ public class CaracteristiqueBusiness implements ICaracteristiqueBusiness {
      * @return la caracteristique crée.
      */
     @Override
-    public Caracteristique addCaracteristique(TypeCaracteristique typeCaracteristique, String valeur) {
+    public CaracteristiqueDTO addCaracteristique(TypeCaracteristique typeCaracteristique, String valeur) {
         Caracteristique caracteristique = new Caracteristique();
         caracteristique.setTypeCaracteristique(typeCaracteristique);
         caracteristique.setValeur(valeur);
-        return caracteristiqueRepository.save(caracteristique);
+        return CaracteristiqueTransformer.entityToDto(caracteristiqueRepository.save(caracteristique));
     }
 
     /**
@@ -39,14 +41,13 @@ public class CaracteristiqueBusiness implements ICaracteristiqueBusiness {
      * @return la caractéristique modifié, null si elle n'est pas trouvée
      */
     @Override
-    public Caracteristique updateCaracteristique(int idCaracteristique, TypeCaracteristique typeCaracteristique, String valeur) {
+    public CaracteristiqueDTO updateCaracteristique(int idCaracteristique, TypeCaracteristique typeCaracteristique, String valeur) {
         Optional<Caracteristique> tempCaracteristique = caracteristiqueRepository.findById(idCaracteristique);
         if (tempCaracteristique.isPresent() == true){
             Caracteristique caracteristique = tempCaracteristique.get();
             caracteristique.setTypeCaracteristique(typeCaracteristique);
             caracteristique.setValeur(valeur);
-            caracteristiqueRepository.save(caracteristique);
-            return caracteristique;
+            return CaracteristiqueTransformer.entityToDto(caracteristiqueRepository.save(caracteristique));
         }
         return null;
     }
@@ -58,7 +59,7 @@ public class CaracteristiqueBusiness implements ICaracteristiqueBusiness {
      */
     @Override
     public boolean deleteCaracteristique(int idCaracteristique) {
-        caracteristiqueRepository.delete(caracteristiqueRepository.findById(idCaracteristique).get());
+        caracteristiqueRepository.deleteById(idCaracteristique);
         return true;
     }
 
@@ -67,8 +68,8 @@ public class CaracteristiqueBusiness implements ICaracteristiqueBusiness {
      * @return une liste de caracteristique
      */
     @Override
-    public List<Caracteristique> getCaracteristique() {
-        return new ArrayList<>(caracteristiqueRepository.findAll());
+    public List<CaracteristiqueDTO> getCaracteristique() {
+        return new ArrayList<>(CaracteristiqueTransformer.entityToDto(caracteristiqueRepository.findAll()));
     }
 
     /**
@@ -77,11 +78,8 @@ public class CaracteristiqueBusiness implements ICaracteristiqueBusiness {
      * @return l'objet caractéristique recherché sinon null, s'il n'est pas trouvé
      */
     @Override
-    public Caracteristique getCaracteristiqueByID(int idCaracteristique) {
+    public CaracteristiqueDTO getCaracteristiqueByID(int idCaracteristique) {
         Optional<Caracteristique> caracteristique = caracteristiqueRepository.findById(idCaracteristique);
-        if (caracteristique.isPresent() == true){
-            return caracteristique.get();
-        }
-        return null;
+        return CaracteristiqueTransformer.entityToDto(caracteristique.orElse(null));
     }
 }
