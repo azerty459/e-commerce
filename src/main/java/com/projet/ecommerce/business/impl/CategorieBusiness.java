@@ -1,12 +1,15 @@
 package com.projet.ecommerce.business.impl;
 
 import com.projet.ecommerce.business.ICategorieBusiness;
-import com.projet.ecommerce.entity.Categorie;
-import com.projet.ecommerce.repository.CategorieRepository;
+import com.projet.ecommerce.business.dto.CategorieDTO;
+import com.projet.ecommerce.business.dto.transformer.CategorieTransformer;
+import com.projet.ecommerce.persistance.entity.Categorie;
+import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,8 +25,9 @@ public class CategorieBusiness implements ICategorieBusiness {
      * @return l'objet catégorie créé
      */
     @Override
-    public Categorie addCategorie(Categorie categorie) {
-        return categorieRepository.save(categorie);
+    public CategorieDTO addCategorie(CategorieDTO categorieDTO) {
+        categorieRepository.save(CategorieTransformer.dtoToEntity(categorieDTO));
+        return categorieDTO;
     }
 
     /**
@@ -33,8 +37,12 @@ public class CategorieBusiness implements ICategorieBusiness {
      */
     @Override
     public boolean deleteCategorie(String nomCategorie) {
-        categorieRepository.deleteById(nomCategorie);
-        return true;
+        Optional<Categorie> categorie = categorieRepository.findById(nomCategorie);
+        if(categorie.isPresent()){
+            categorieRepository.delete(categorie.get());
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -42,8 +50,8 @@ public class CategorieBusiness implements ICategorieBusiness {
      * @return une liste de catégorie
      */
     @Override
-    public List<Categorie> getCategorie() {
-        return new ArrayList<>(categorieRepository.findAll());
+    public List<CategorieDTO> getCategorie() {
+        return CategorieTransformer.entityToDto(new ArrayList<>(categorieRepository.findAll()));
     }
 
     /**
@@ -52,11 +60,8 @@ public class CategorieBusiness implements ICategorieBusiness {
      * @return l'objet catégorie recherché sinon null, s'il n'est pas trouvé
      */
     @Override
-    public Categorie getCategorieByID(String nomCategorie) {
+    public CategorieDTO getCategorieByID(String nomCategorie) {
         Optional<Categorie> categorie = categorieRepository.findById(nomCategorie);
-        if(categorie.isPresent()){
-            return categorie.get();
-        }
-        return null;
+        return CategorieTransformer.entityToDto(categorie.orElse(null), new ArrayList<>(categorieRepository.findAll()));
     }
 }

@@ -24,6 +24,7 @@
 		<java.version>1.8</java.version>
 		<graphql-java-tools.version>3.2.0</graphql-java-tools.version>
 		<com.graphql-java.version>3.6.0</com.graphql-java.version>
+		<!--<mockito-all.version>1.9.5</mockito-all.version>-->
 	</properties>
 
 	<dependencyManagement>
@@ -39,6 +40,13 @@
 				<artifactId>graphiql-spring-boot-starter</artifactId>
 				<version>${com.graphql-java.version}</version>
 			</dependency>
+
+			<!--<dependency>-->
+				<!--<groupId>org.mockito</groupId>-->
+				<!--<artifactId>mockito-all</artifactId>-->
+				<!--<version>${mockito-all.version}</version>-->
+				<!--<scope>test</scope>-->
+			<!--</dependency>-->
 
 		</dependencies>
 	</dependencyManagement>
@@ -95,11 +103,11 @@
 			<scope>test</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-all</artifactId>
-			<scope>test</scope>
-		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>org.mockito</groupId>-->
+			<!--<artifactId>mockito-all</artifactId>-->
+			<!--<scope>test</scope>-->
+		<!--</dependency>-->
 
 		<dependency>
 			<groupId>com.h2database</groupId>
@@ -117,6 +125,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
-
 </project>
