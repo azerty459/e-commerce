@@ -1,9 +1,9 @@
 package com.projet.ecommerce.business.dto;
 
-import com.projet.ecommerce.persistance.entity.Categorie;
-import com.projet.ecommerce.persistance.entity.Produit;
 
-import java.util.List;
+/**
+ * Entité qui permet d'assurer le découplage entre la couche de présentation et les objets métier stockés sur le serveur (Photo).
+ */
 
 public class PhotoDTO {
 
