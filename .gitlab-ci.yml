@@ -16,7 +16,7 @@ deploiement_dev:
   script: 
     - echo 'Deploy sur le serv de developpement'
   only:
-    - dev
+    - /^dev.*$/
   except:
     - branches
 
