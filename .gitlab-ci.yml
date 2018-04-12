@@ -23,8 +23,6 @@ deploiement_dev:
     - echo 'Deploy sur le serv de developpement'
   only:
     - dev
-  except:
-    - branches
 
 deploiement_master:
   stage: deploiement
