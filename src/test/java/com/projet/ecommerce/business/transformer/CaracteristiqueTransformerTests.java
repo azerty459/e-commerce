@@ -72,7 +72,7 @@ public class CaracteristiqueTransformerTests {
 
     @Test
     public void severalDtoToEntity(){
-        List<Caracteristique> listCar = CaracteristiqueTransformer.dtoToEntity(listeDTO);
+        List<Caracteristique> listCar = new ArrayList<>(CaracteristiqueTransformer.dtoToEntity(listeDTO));
 
         Assert.assertNotNull(listCar);
         Assert.assertEquals(listCar.get(0).getTypeCaracteristique(), listeDTO.get(0).getTypeCaracteristique());
@@ -83,7 +83,7 @@ public class CaracteristiqueTransformerTests {
 
     @Test
     public void severalEntityToDto(){
-        List<CaracteristiqueDTO> listDTO = CaracteristiqueTransformer.entityToDto(listeCaracteristiques);
+        List<CaracteristiqueDTO> listDTO = new ArrayList<>(CaracteristiqueTransformer.entityToDto(listeCaracteristiques));
 
         Assert.assertNotNull(listDTO);
         Assert.assertEquals(listeCaracteristiques.get(0).getTypeCaracteristique(), listDTO.get(0).getTypeCaracteristique());

@@ -6,6 +6,10 @@ public class TypeCaracteristiqueDTO {
 
     private String type;
 
+    /**
+     *
+     * @return
+     */
     public int getIdTypeCaracteristique() {
         return idTypeCaracteristique;
     }

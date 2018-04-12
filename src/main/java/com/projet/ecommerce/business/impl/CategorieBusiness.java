@@ -95,7 +95,7 @@ public class CategorieBusiness implements ICategorieBusiness {
      */
     @Override
     public List<CategorieDTO> getAll() {
-        return CategorieTransformer.entityToDto(new ArrayList<>(categorieRepository.findAll()));
+        return new ArrayList<>(CategorieTransformer.entityToDto(new ArrayList<>(categorieRepository.findAll())));
     }
 
     /**

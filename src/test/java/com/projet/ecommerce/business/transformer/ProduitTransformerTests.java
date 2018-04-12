@@ -143,7 +143,7 @@ public class ProduitTransformerTests {
 
     @Test
     public void singleEntityToDto(){
-        ProduitDTO prodDto = ProduitTransformer.entityToDTO(produit1);
+        ProduitDTO prodDto = ProduitTransformer.entityToDto(produit1);
         Assert.assertNotNull(prodDto);
         Assert.assertEquals(produit1.getCaracteristiques().get(0).getValeur(), prodDto.getCaracteristiques().get(0).getValeur());
         Assert.assertEquals(produit1.getCaracteristiques().get(0).getTypeCaracteristique(), prodDto.getCaracteristiques().get(0).getTypeCaracteristique());
@@ -158,7 +158,7 @@ public class ProduitTransformerTests {
 
     @Test
     public void severalDtoToEntity(){
-        List<Produit> listProd = ProduitTransformer.dtoToEntity(listeProduitsDTO);
+        List<Produit> listProd = new ArrayList<>(ProduitTransformer.dtoToEntity(listeProduitsDTO));
 
         Assert.assertNotNull(listProd);
         Assert.assertEquals(listProd.get(0).getCaracteristiques().get(0).getValeur(), listeProduitsDTO.get(0).getCaracteristiques().get(0).getValeur());
@@ -174,7 +174,7 @@ public class ProduitTransformerTests {
 
     @Test
     public void severalEntityToDto(){
-        List<ProduitDTO> listDTO = ProduitTransformer.entityToDTO(listeProduits);
+        List<ProduitDTO> listDTO = new ArrayList<>(ProduitTransformer.entityToDto(listeProduits));
 
         Assert.assertNotNull(listDTO);
         Assert.assertEquals(listDTO.get(0).getCaracteristiques().get(0).getTypeCaracteristique(), listeProduits.get(0).getCaracteristiques().get(0).getTypeCaracteristique());

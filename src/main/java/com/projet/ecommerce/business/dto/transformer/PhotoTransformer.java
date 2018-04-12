@@ -4,18 +4,29 @@ import com.projet.ecommerce.business.dto.PhotoDTO;
 import com.projet.ecommerce.persistance.entity.Photo;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class PhotoTransformer {
 
-    public static List<Photo> dtoToEntity(List<PhotoDTO> photoDTOCollection){
-        List<Photo> photoCollection = new ArrayList<>();
+    /**
+     * Transforme une collection d'objets PhotoDTO en une collection d'objets Photo.
+     * @param photoDTOCollection Une collection d'objets PhotoDTO
+     * @return une collection d'objets Photo
+     */
+    public static Collection<Photo> dtoToEntity(Collection<PhotoDTO> photoDTOCollection){
+        List<Photo> photoList = new ArrayList<>();
         for (PhotoDTO photoDTO : photoDTOCollection) {
-            photoCollection.add(dtoToEntity(photoDTO));
+            photoList.add(dtoToEntity(photoDTO));
         }
-        return photoCollection;
+        return photoList;
     }
 
+    /**
+     * Transforme un objet PhotoDTO en un objet Photo.
+     * @param photoDTO Un objet photoDTO
+     * @return un objet Photo
+     */
     public static Photo dtoToEntity(PhotoDTO photoDTO){
         Photo photo = new Photo();
         photo.setUrl(photoDTO.getUrl());
@@ -23,14 +34,24 @@ public class PhotoTransformer {
         return photo;
     }
 
-    public static List<PhotoDTO> entityToDto(List<Photo> photoCollection){
-        List<PhotoDTO> photoDTOCollection = new ArrayList<>();
+    /**
+     * Transforme une collection d'objets Photo en une collection d'objets PhotoDTO.
+     * @param photoCollection Une collection d'objets Photo
+     * @return une collection d'objets PhotoDTO
+     */
+    public static Collection<PhotoDTO> entityToDto(Collection<Photo> photoCollection){
+        List<PhotoDTO> photoDTOList = new ArrayList<>();
         for (Photo photo : photoCollection) {
-            photoDTOCollection.add(entityToDto(photo));
+            photoDTOList.add(entityToDto(photo));
         }
-        return photoDTOCollection;
+        return photoDTOList;
     }
 
+    /**
+     * Transforme un objet Photo en PhotoDTO.
+     * @param photo Un objet Photo
+     * @return un objet PhotoDTO
+     */
     public static PhotoDTO entityToDto(Photo photo){
         PhotoDTO photoDTO = new PhotoDTO();
         photoDTO.setIdPhoto(photo.getIdPhoto());

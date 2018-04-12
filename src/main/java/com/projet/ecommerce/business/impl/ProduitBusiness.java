@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,7 +43,7 @@ public class ProduitBusiness implements IProduitBusiness {
         produit.setCaracteristiques(new ArrayList<Caracteristique>());
         produit.setPhotos(new ArrayList<Photo>());
         produit.setCategories(new ArrayList<Categorie>());
-        return ProduitTransformer.entityToDTO(produitRepository.save(produit));
+        return ProduitTransformer.entityToDto(produitRepository.save(produit));
     }
 
     /**
@@ -63,7 +62,7 @@ public class ProduitBusiness implements IProduitBusiness {
             produit.setNom(nom);
             produit.setDescription(description);
             produit.setPrixHT(prixHT);
-            return ProduitTransformer.entityToDTO(produitRepository.save(produit));
+            return ProduitTransformer.entityToDto(produitRepository.save(produit));
         }
         return null;
     }
@@ -85,7 +84,7 @@ public class ProduitBusiness implements IProduitBusiness {
      */
     @Override
     public List<ProduitDTO> getAll() {
-        return ProduitTransformer.entityToDTO(new ArrayList<>(produitRepository.findAll()));
+        return new ArrayList<>(ProduitTransformer.entityToDto(new ArrayList<>(produitRepository.findAll())));
     }
 
     /**
@@ -96,7 +95,7 @@ public class ProduitBusiness implements IProduitBusiness {
     @Override
     public ProduitDTO getByRef(String referenceProduit) {
         Optional<Produit> produit = produitRepository.findById(referenceProduit);
-        return ProduitTransformer.entityToDTO(produit.orElse(null));
+        return ProduitTransformer.entityToDto(produit.orElse(null));
     }
 
     /**
@@ -116,7 +115,7 @@ public class ProduitBusiness implements IProduitBusiness {
                     produitList.addAll(categorieList.get(i).getProduits());
                 }
             }
-            return ProduitTransformer.entityToDTO(produitList);
+            return new ArrayList<>(ProduitTransformer.entityToDto(produitList));
         }
         return null;
     }

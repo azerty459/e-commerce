@@ -11,18 +11,34 @@ public class PhotoDTO {
 
     private String url;
 
+    /**
+     * Retourne l'id de l'objet Produit.
+     * @return l'id de l'objet Produit
+     */
     public int getIdPhoto() {
         return idPhoto;
     }
 
+    /**
+     * Remplace l'id de l'objet Produit par celui-ci mit en paramètre.
+     * @param idPhoto Le nouveau ID de la photo
+     */
     public void setIdPhoto(int idPhoto) {
         this.idPhoto = idPhoto;
     }
 
+    /**
+     * Retourne l'url liée à la photo.
+     * @return l'url liée à la photo
+     */
     public String getUrl() {
         return url;
     }
 
+    /**
+     * Remplace l'url de la photo par celle-ci mit en paramètre.
+     * @param url La nouvelle URL à prendre en compte.
+     */
     public void setUrl(String url) {
         this.url = url;
     }
