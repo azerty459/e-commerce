@@ -5,7 +5,6 @@ import com.projet.ecommerce.business.dto.transformer.CaracteristiqueTransformer;
 import com.projet.ecommerce.persistance.entity.Caracteristique;
 import com.projet.ecommerce.persistance.entity.TypeCaracteristique;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -15,63 +14,59 @@ import java.util.List;
 @SpringBootTest
 public class CaracteristiqueTransformerTests {
 
-    TypeCaracteristique typeCaracteristique;
-    CaracteristiqueDTO caracteristiqueDTO1, caracteristiqueDTO2;
-    Caracteristique caracteristique1, caracteristique2;
-    List<CaracteristiqueDTO> listeDTO;
-    List<Caracteristique> listeCaracteristiques;
+    private static final TypeCaracteristique TYPE_CARACTERISTIQUE;
+    private static final CaracteristiqueDTO CARACTERISTIQUE_DTO1;
+    private static final CaracteristiqueDTO  CARACTERISTIQUE_DTO2;
+    private static final Caracteristique CARACTERISTIQUE1;
+    private static final Caracteristique CARACTERISTIQUE2;
 
-	@Before
-	public void setUp() {
-        typeCaracteristique = new TypeCaracteristique();
-        typeCaracteristique.setIdTypeCaracteristique(0);
-        typeCaracteristique.setType("testType");
+	static {
+        TYPE_CARACTERISTIQUE = new TypeCaracteristique();
+        TYPE_CARACTERISTIQUE.setIdTypeCaracteristique(0);
+        TYPE_CARACTERISTIQUE.setType("testType");
 
-        caracteristiqueDTO1 = new CaracteristiqueDTO();
-        caracteristiqueDTO1.setValeur("testCar1");
-        caracteristiqueDTO1.setTypeCaracteristique(typeCaracteristique);
+        CARACTERISTIQUE_DTO1 = new CaracteristiqueDTO();
+        CARACTERISTIQUE_DTO1.setValeur("testCar1");
+        CARACTERISTIQUE_DTO1.setTypeCaracteristique(TYPE_CARACTERISTIQUE);
 
-        caracteristiqueDTO2 = new CaracteristiqueDTO();
-        caracteristiqueDTO2.setValeur("testCar2");
-        caracteristiqueDTO2.setTypeCaracteristique(typeCaracteristique);
+        CARACTERISTIQUE_DTO2 = new CaracteristiqueDTO();
+        CARACTERISTIQUE_DTO2.setValeur("testCar2");
+        CARACTERISTIQUE_DTO2.setTypeCaracteristique(TYPE_CARACTERISTIQUE);
 
-        caracteristique1 = new Caracteristique();
-        caracteristique1.setTypeCaracteristique(typeCaracteristique);
-        caracteristique1.setValeur("test1");
+        CARACTERISTIQUE1 = new Caracteristique();
+        CARACTERISTIQUE1.setTypeCaracteristique(TYPE_CARACTERISTIQUE);
+        CARACTERISTIQUE1.setValeur("test1");
 
-        caracteristique2 = new Caracteristique();
-        caracteristique2.setTypeCaracteristique(typeCaracteristique);
-        caracteristique2.setValeur("test2");
-
-        listeDTO = new ArrayList<CaracteristiqueDTO>();
-        listeDTO.add(caracteristiqueDTO1);
-        listeDTO.add(caracteristiqueDTO2);
-
-        listeCaracteristiques = new ArrayList<Caracteristique>();
-        listeCaracteristiques.add(caracteristique1);
-        listeCaracteristiques.add(caracteristique2);
+        CARACTERISTIQUE2 = new Caracteristique();
+        CARACTERISTIQUE2.setTypeCaracteristique(TYPE_CARACTERISTIQUE);
+        CARACTERISTIQUE2.setValeur("test2");
 	}
 
 	@Test
     public void singleDtoToEntity(){
-        Caracteristique car = CaracteristiqueTransformer.dtoToEntity(caracteristiqueDTO1);
+        Caracteristique car = CaracteristiqueTransformer.dtoToEntity(CARACTERISTIQUE_DTO1);
 
         Assert.assertNotNull(car);
-        Assert.assertEquals(caracteristiqueDTO1.getTypeCaracteristique(), car.getTypeCaracteristique());
-        Assert.assertEquals(caracteristiqueDTO1.getValeur(), car.getValeur());
+        Assert.assertEquals(CARACTERISTIQUE_DTO1.getTypeCaracteristique(), car.getTypeCaracteristique());
+        Assert.assertEquals(CARACTERISTIQUE_DTO1.getValeur(), car.getValeur());
     }
 
     @Test
     public void singleEntityToDto(){
-	    CaracteristiqueDTO carDTO = CaracteristiqueTransformer.entityToDto(caracteristique1);
+	    CaracteristiqueDTO carDTO = CaracteristiqueTransformer.entityToDto(CARACTERISTIQUE1);
 
 	    Assert.assertNotNull(carDTO);
-        Assert.assertEquals(carDTO.getTypeCaracteristique(), caracteristique1.getTypeCaracteristique());
-        Assert.assertEquals(carDTO.getValeur(), caracteristique1.getValeur());
+        Assert.assertEquals(carDTO.getTypeCaracteristique(), CARACTERISTIQUE1.getTypeCaracteristique());
+        Assert.assertEquals(carDTO.getValeur(), CARACTERISTIQUE1.getValeur());
     }
 
     @Test
     public void severalDtoToEntity(){
+        List<CaracteristiqueDTO> listeDTO;
+        listeDTO = new ArrayList<>();
+        listeDTO.add(CARACTERISTIQUE_DTO1);
+        listeDTO.add(CARACTERISTIQUE_DTO2);
+
         List<Caracteristique> listCar = new ArrayList<>(CaracteristiqueTransformer.dtoToEntity(listeDTO));
 
         Assert.assertNotNull(listCar);
@@ -83,6 +78,11 @@ public class CaracteristiqueTransformerTests {
 
     @Test
     public void severalEntityToDto(){
+        List<Caracteristique> listeCaracteristiques;
+        listeCaracteristiques = new ArrayList<>();
+        listeCaracteristiques.add(CARACTERISTIQUE1);
+        listeCaracteristiques.add(CARACTERISTIQUE2);
+
         List<CaracteristiqueDTO> listDTO = new ArrayList<>(CaracteristiqueTransformer.entityToDto(listeCaracteristiques));
 
         Assert.assertNotNull(listDTO);

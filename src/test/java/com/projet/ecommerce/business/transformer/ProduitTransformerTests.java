@@ -7,7 +7,6 @@ import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.persistance.entity.*;
 import com.projet.ecommerce.business.dto.transformer.ProduitTransformer;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -17,174 +16,187 @@ import java.util.List;
 @SpringBootTest
 public class ProduitTransformerTests {
 
-    private TypeCaracteristique typeCaracteristique;
-    private CaracteristiqueDTO caracteristiqueDTO;
-    private Caracteristique caracteristique;
-    private ArrayList<CaracteristiqueDTO> listeCaracteristiquesDto;
-    private ArrayList<Caracteristique> listeCaracteristiques;
-    private CategorieDTO sousCategorieDTO, categorieDTO;
-    private Categorie sousCategorie, categorie;
-    private ArrayList<CategorieDTO> listeCategoriesDto1, listeCategoriesDto2;
-    private ArrayList<Categorie> listeCategories1, listeCategories2;
-    private PhotoDTO photoDto;
-    private Photo photo;
-    private ArrayList<Photo> listePhoto;
-    private ArrayList<PhotoDTO> listePhotoDTO;
-    private ProduitDTO produitDTO1, produitDTO2;
-    private Produit produit1, produit2;
-    private List<Produit> listeProduits;
-    private List<ProduitDTO> listeProduitsDTO;
+    private static final TypeCaracteristique TYPE_CARACTERISTIQUE;
 
-    @Before
-    public void setUp(){
-        typeCaracteristique = new TypeCaracteristique();
-        typeCaracteristique.setIdTypeCaracteristique(0);
-        typeCaracteristique.setType("testType");
+    private static final CaracteristiqueDTO CARACTERISTIQUE_DTO;
 
-        caracteristiqueDTO = new CaracteristiqueDTO();
-        caracteristiqueDTO.setValeur("testCar");
-        caracteristiqueDTO.setTypeCaracteristique(typeCaracteristique);
+    private static final Caracteristique CARACTERISTIQUE;
 
-        caracteristique = new Caracteristique();
-        caracteristique.setValeur("testCar");
-        caracteristique.setTypeCaracteristique(typeCaracteristique);
+    private static final ArrayList<CaracteristiqueDTO> LIST_CARACTERISTIQUE_DTO;
 
-        listeCaracteristiquesDto = new ArrayList<>();
-        listeCaracteristiquesDto.add(caracteristiqueDTO);
+    private static final ArrayList<Caracteristique> LIST_CARACTERISTIQUE;
 
-        listeCaracteristiques = new ArrayList<>();
-        listeCaracteristiques.add(caracteristique);
+    private static final CategorieDTO SOUS_CATEGORIE_DTO;
 
-        sousCategorieDTO = new CategorieDTO();
-        categorieDTO = new CategorieDTO();
-        listeCategoriesDto1 = new ArrayList<>();
-        listeCategoriesDto2 = new ArrayList<>();
-        sousCategorieDTO.setNom("sous catégorie");
-        listeCategoriesDto1.add(sousCategorieDTO);
-        categorieDTO.setNom("catégorie");
-        categorieDTO.setSousCategories(listeCategoriesDto1);
-        listeCategoriesDto2.add(categorieDTO);
+    private static final CategorieDTO CATEGORIE_DTO;
 
-        sousCategorie = new Categorie();
-        categorie = new Categorie();
-        listeCategories1 = new ArrayList<>();
+    private static final ArrayList<CategorieDTO> LIST_CATEGORIE_DTO1;
+    private static final ArrayList<CategorieDTO> LIST_CATEGORIE_DTO2;
 
-        photoDto = new PhotoDTO();
-        listePhotoDTO = new ArrayList<>();
-        photoDto.setIdPhoto(1);
-        photoDto.setUrl("test");
-        listePhotoDTO.add(photoDto);
+    private static final ArrayList<Categorie> LISTE_CATEGORIE1;
 
-        photo = new Photo();
-        listePhoto = new ArrayList<>();
-        photo.setIdPhoto(1);
-        photo.setUrl("test");
-        listePhoto.add(photo);
+    private static final PhotoDTO PHOTO_DTO;
+    private static final Photo PHOTO;
 
-        produitDTO1 = new ProduitDTO();
-        produitDTO1.setCaracteristiques(listeCaracteristiquesDto);
-        produitDTO1.setCategories(listeCategoriesDto2);
-        produitDTO1.setPhotos(listePhotoDTO);
-        produitDTO1.setDescription("ceci est un test");
-        produitDTO1.setNom("test");
-        produitDTO1.setPrixHT(1);
-        produitDTO1.setRef("A4224");
+    private static final ArrayList<Photo> LIST_PHOTO;
+    private static final ArrayList<PhotoDTO> LIST_PHOTO_DTO;
 
-        produitDTO2 = new ProduitDTO();
-        produitDTO2.setCaracteristiques(listeCaracteristiquesDto);
-        produitDTO2.setCategories(listeCategoriesDto2);
-        produitDTO2.setPhotos(listePhotoDTO);
-        produitDTO2.setDescription("ceci est un test");
-        produitDTO2.setNom("test");
-        produitDTO2.setPrixHT(1);
-        produitDTO2.setRef("A4224");
+    private static final ProduitDTO PRODUIT_DTO1;
+    private static final ProduitDTO PRODUIT_DTO2;
 
-        produit1 = new Produit();
-        produit1.setCaracteristiques(listeCaracteristiques);
-        produit1.setCategories(listeCategories1);
-        produit1.setPhotos(listePhoto);
-        produit1.setDescription("ceci est un test");
-        produit1.setNom("test");
-        produit1.setPrixHT(1);
-        produit1.setReferenceProduit("A4224");
+    private static final Produit PRODUIT1;
+    private static final Produit PRODUIT2;
 
-        produit2 = new Produit();
-        produit2.setCaracteristiques(listeCaracteristiques);
-        produit2.setCategories(listeCategories1);
-        produit2.setPhotos(listePhoto);
-        produit2.setDescription("ceci est un test");
-        produit2.setNom("test");
-        produit2.setPrixHT(1);
-        produit2.setReferenceProduit("A4224");
+    private static final List<Produit> LIST_PRODUIT;
+    private static final List<ProduitDTO> LIST_PRODUIT_DTO;
 
-        listeProduits = new ArrayList<>();
-        listeProduits.add(produit1);
-        listeProduits.add(produit2);
+    static {
+        TYPE_CARACTERISTIQUE = new TypeCaracteristique();
+        TYPE_CARACTERISTIQUE.setIdTypeCaracteristique(0);
+        TYPE_CARACTERISTIQUE.setType("testType");
 
-        listeProduitsDTO = new ArrayList<>();
-        listeProduitsDTO.add(produitDTO1);
-        listeProduitsDTO.add(produitDTO2);
+        CARACTERISTIQUE_DTO = new CaracteristiqueDTO();
+        CARACTERISTIQUE_DTO.setValeur("testCar");
+        CARACTERISTIQUE_DTO.setTypeCaracteristique(TYPE_CARACTERISTIQUE);
+
+        CARACTERISTIQUE = new Caracteristique();
+        CARACTERISTIQUE.setValeur("testCar");
+        CARACTERISTIQUE.setTypeCaracteristique(TYPE_CARACTERISTIQUE);
+
+        LIST_CARACTERISTIQUE_DTO = new ArrayList<>();
+        LIST_CARACTERISTIQUE_DTO.add(CARACTERISTIQUE_DTO);
+
+        LIST_CARACTERISTIQUE = new ArrayList<>();
+        LIST_CARACTERISTIQUE.add(CARACTERISTIQUE);
+
+        SOUS_CATEGORIE_DTO = new CategorieDTO();
+        CATEGORIE_DTO = new CategorieDTO();
+        LIST_CATEGORIE_DTO1 = new ArrayList<>();
+        LIST_CATEGORIE_DTO2 = new ArrayList<>();
+        SOUS_CATEGORIE_DTO.setNom("sous catégorie");
+        LIST_CATEGORIE_DTO1.add(SOUS_CATEGORIE_DTO);
+        CATEGORIE_DTO.setNom("catégorie");
+        CATEGORIE_DTO.setSousCategories(LIST_CATEGORIE_DTO1);
+        LIST_CATEGORIE_DTO2.add(CATEGORIE_DTO);
+
+        LISTE_CATEGORIE1 = new ArrayList<>();
+
+        PHOTO_DTO = new PhotoDTO();
+        LIST_PHOTO_DTO = new ArrayList<>();
+        PHOTO_DTO.setIdPhoto(1);
+        PHOTO_DTO.setUrl("test");
+        LIST_PHOTO_DTO.add(PHOTO_DTO);
+
+        PHOTO = new Photo();
+        LIST_PHOTO = new ArrayList<>();
+        PHOTO.setIdPhoto(1);
+        PHOTO.setUrl("test");
+        LIST_PHOTO.add(PHOTO);
+
+        PRODUIT_DTO1 = new ProduitDTO();
+        PRODUIT_DTO1.setCaracteristiques(LIST_CARACTERISTIQUE_DTO);
+        PRODUIT_DTO1.setCategories(LIST_CATEGORIE_DTO2);
+        PRODUIT_DTO1.setPhotos(LIST_PHOTO_DTO);
+        PRODUIT_DTO1.setDescription("ceci est un test");
+        PRODUIT_DTO1.setNom("test");
+        PRODUIT_DTO1.setPrixHT(1);
+        PRODUIT_DTO1.setRef("A4224");
+
+        PRODUIT_DTO2 = new ProduitDTO();
+        PRODUIT_DTO2.setCaracteristiques(LIST_CARACTERISTIQUE_DTO);
+        PRODUIT_DTO2.setCategories(LIST_CATEGORIE_DTO2);
+        PRODUIT_DTO2.setPhotos(LIST_PHOTO_DTO);
+        PRODUIT_DTO2.setDescription("ceci est un test");
+        PRODUIT_DTO2.setNom("test");
+        PRODUIT_DTO2.setPrixHT(1);
+        PRODUIT_DTO2.setRef("A4224");
+
+        PRODUIT1 = new Produit();
+        PRODUIT1.setCaracteristiques(LIST_CARACTERISTIQUE);
+        PRODUIT1.setCategories(LISTE_CATEGORIE1);
+        PRODUIT1.setPhotos(LIST_PHOTO);
+        PRODUIT1.setDescription("ceci est un test");
+        PRODUIT1.setNom("test");
+        PRODUIT1.setPrixHT(1);
+        PRODUIT1.setReferenceProduit("A4224");
+
+        PRODUIT2 = new Produit();
+        PRODUIT2.setCaracteristiques(LIST_CARACTERISTIQUE);
+        PRODUIT2.setCategories(LISTE_CATEGORIE1);
+        PRODUIT2.setPhotos(LIST_PHOTO);
+        PRODUIT2.setDescription("ceci est un test");
+        PRODUIT2.setNom("test");
+        PRODUIT2.setPrixHT(1);
+        PRODUIT2.setReferenceProduit("A4224");
+
+        LIST_PRODUIT = new ArrayList<>();
+        LIST_PRODUIT.add(PRODUIT1);
+        LIST_PRODUIT.add(PRODUIT2);
+
+        LIST_PRODUIT_DTO = new ArrayList<>();
+        LIST_PRODUIT_DTO.add(PRODUIT_DTO1);
+        LIST_PRODUIT_DTO.add(PRODUIT_DTO2);
     }
 
     @Test
     public void singleDtoToEntity(){
-        Produit prod = ProduitTransformer.dtoToEntity(produitDTO1);
+        Produit prod = ProduitTransformer.dtoToEntity(PRODUIT_DTO1);
         Assert.assertNotNull(prod);
-        Assert.assertEquals(produitDTO1.getCaracteristiques().get(0).getValeur(), prod.getCaracteristiques().get(0).getValeur());
-        Assert.assertEquals(produitDTO1.getCaracteristiques().get(0).getTypeCaracteristique(), prod.getCaracteristiques().get(0).getTypeCaracteristique());
-        Assert.assertEquals(produitDTO1.getCategories().get(0).getNom(), prod.getCategories().get(0).getNomCategorie());
-        Assert.assertEquals(produitDTO1.getDescription(), prod.getDescription());
-        Assert.assertEquals(produitDTO1.getNom(), prod.getNom());
-        Assert.assertEquals(produitDTO1.getPhotos().get(0).getIdPhoto(), prod.getPhotos().get(0).getIdPhoto());
-        Assert.assertEquals(produitDTO1.getPhotos().get(0).getUrl(), prod.getPhotos().get(0).getUrl());
-        Assert.assertEquals(produitDTO1.getPrixHT(), prod.getPrixHT(), 0);
-        Assert.assertEquals(produitDTO1.getRef(), prod.getReferenceProduit());
+        Assert.assertEquals(PRODUIT_DTO1.getCaracteristiques().get(0).getValeur(), prod.getCaracteristiques().get(0).getValeur());
+        Assert.assertEquals(PRODUIT_DTO1.getCaracteristiques().get(0).getTypeCaracteristique(), prod.getCaracteristiques().get(0).getTypeCaracteristique());
+        Assert.assertEquals(PRODUIT_DTO1.getCategories().get(0).getNom(), prod.getCategories().get(0).getNomCategorie());
+        Assert.assertEquals(PRODUIT_DTO1.getDescription(), prod.getDescription());
+        Assert.assertEquals(PRODUIT_DTO1.getNom(), prod.getNom());
+        Assert.assertEquals(PRODUIT_DTO1.getPhotos().get(0).getIdPhoto(), prod.getPhotos().get(0).getIdPhoto());
+        Assert.assertEquals(PRODUIT_DTO1.getPhotos().get(0).getUrl(), prod.getPhotos().get(0).getUrl());
+        Assert.assertEquals(PRODUIT_DTO1.getPrixHT(), prod.getPrixHT(), 0);
+        Assert.assertEquals(PRODUIT_DTO1.getRef(), prod.getReferenceProduit());
     }
 
     @Test
     public void singleEntityToDto(){
-        ProduitDTO prodDto = ProduitTransformer.entityToDto(produit1);
+        ProduitDTO prodDto = ProduitTransformer.entityToDto(PRODUIT1);
         Assert.assertNotNull(prodDto);
-        Assert.assertEquals(produit1.getCaracteristiques().get(0).getValeur(), prodDto.getCaracteristiques().get(0).getValeur());
-        Assert.assertEquals(produit1.getCaracteristiques().get(0).getTypeCaracteristique(), prodDto.getCaracteristiques().get(0).getTypeCaracteristique());
-        Assert.assertEquals(produit1.getCategories(), prodDto.getCategories());
-        Assert.assertEquals(produit1.getDescription(), prodDto.getDescription());
-        Assert.assertEquals(produit1.getNom(), prodDto.getNom());
-        Assert.assertEquals(produit1.getPhotos().get(0).getIdPhoto(), prodDto.getPhotos().get(0).getIdPhoto());
-        Assert.assertEquals(produit1.getPhotos().get(0).getUrl(), prodDto.getPhotos().get(0).getUrl());
-        Assert.assertEquals(produit1.getPrixHT(), prodDto.getPrixHT(), 0);
-        Assert.assertEquals(produit1.getReferenceProduit(), prodDto.getRef());
+        Assert.assertEquals(PRODUIT1.getCaracteristiques().get(0).getValeur(), prodDto.getCaracteristiques().get(0).getValeur());
+        Assert.assertEquals(PRODUIT1.getCaracteristiques().get(0).getTypeCaracteristique(), prodDto.getCaracteristiques().get(0).getTypeCaracteristique());
+        Assert.assertEquals(PRODUIT1.getCategories(), prodDto.getCategories());
+        Assert.assertEquals(PRODUIT1.getDescription(), prodDto.getDescription());
+        Assert.assertEquals(PRODUIT1.getNom(), prodDto.getNom());
+        Assert.assertEquals(PRODUIT1.getPhotos().get(0).getIdPhoto(), prodDto.getPhotos().get(0).getIdPhoto());
+        Assert.assertEquals(PRODUIT1.getPhotos().get(0).getUrl(), prodDto.getPhotos().get(0).getUrl());
+        Assert.assertEquals(PRODUIT1.getPrixHT(), prodDto.getPrixHT(), 0);
+        Assert.assertEquals(PRODUIT1.getReferenceProduit(), prodDto.getRef());
     }
 
     @Test
     public void severalDtoToEntity(){
-        List<Produit> listProd = new ArrayList<>(ProduitTransformer.dtoToEntity(listeProduitsDTO));
+        List<Produit> listProd = new ArrayList<>(ProduitTransformer.dtoToEntity(LIST_PRODUIT_DTO));
 
         Assert.assertNotNull(listProd);
-        Assert.assertEquals(listProd.get(0).getCaracteristiques().get(0).getValeur(), listeProduitsDTO.get(0).getCaracteristiques().get(0).getValeur());
-        Assert.assertEquals(listProd.get(0).getCaracteristiques().get(0).getTypeCaracteristique(), listeProduitsDTO.get(0).getCaracteristiques().get(0).getTypeCaracteristique());
-        Assert.assertEquals(listProd.get(0).getCategories().get(0).getNomCategorie(), listeProduitsDTO.get(0).getCategories().get(0).getNom());
-        Assert.assertEquals(listProd.get(0).getDescription(), listeProduitsDTO.get(0).getDescription());
-        Assert.assertEquals(listProd.get(0).getNom(), listeProduitsDTO.get(0).getNom());
-        Assert.assertEquals(listProd.get(0).getPhotos().get(0).getIdPhoto(), listeProduitsDTO.get(0).getPhotos().get(0).getIdPhoto());
-        Assert.assertEquals(listProd.get(0).getPhotos().get(0).getUrl(), listeProduitsDTO.get(0).getPhotos().get(0).getUrl());
-        Assert.assertEquals(listProd.get(0).getPrixHT(), listeProduitsDTO.get(0).getPrixHT(), 0);
-        Assert.assertEquals(listProd.get(0).getReferenceProduit(), listeProduitsDTO.get(0).getRef());
+        Assert.assertEquals(listProd.get(0).getCaracteristiques().get(0).getValeur(), LIST_PRODUIT_DTO.get(0).getCaracteristiques().get(0).getValeur());
+        Assert.assertEquals(listProd.get(0).getCaracteristiques().get(0).getTypeCaracteristique(), LIST_PRODUIT_DTO.get(0).getCaracteristiques().get(0).getTypeCaracteristique());
+        Assert.assertEquals(listProd.get(0).getCategories().get(0).getNomCategorie(), LIST_PRODUIT_DTO.get(0).getCategories().get(0).getNom());
+        Assert.assertEquals(listProd.get(0).getDescription(), LIST_PRODUIT_DTO.get(0).getDescription());
+        Assert.assertEquals(listProd.get(0).getNom(), LIST_PRODUIT_DTO.get(0).getNom());
+        Assert.assertEquals(listProd.get(0).getPhotos().get(0).getIdPhoto(), LIST_PRODUIT_DTO.get(0).getPhotos().get(0).getIdPhoto());
+        Assert.assertEquals(listProd.get(0).getPhotos().get(0).getUrl(), LIST_PRODUIT_DTO.get(0).getPhotos().get(0).getUrl());
+        Assert.assertEquals(listProd.get(0).getPrixHT(), LIST_PRODUIT_DTO.get(0).getPrixHT(), 0);
+        Assert.assertEquals(listProd.get(0).getReferenceProduit(), LIST_PRODUIT_DTO.get(0).getRef());
     }
 
     @Test
     public void severalEntityToDto(){
-        List<ProduitDTO> listDTO = new ArrayList<>(ProduitTransformer.entityToDto(listeProduits));
+        List<ProduitDTO> listDTO = new ArrayList<>(ProduitTransformer.entityToDto(LIST_PRODUIT));
 
         Assert.assertNotNull(listDTO);
-        Assert.assertEquals(listDTO.get(0).getCaracteristiques().get(0).getTypeCaracteristique(), listeProduits.get(0).getCaracteristiques().get(0).getTypeCaracteristique());
-        Assert.assertEquals(listDTO.get(0).getCaracteristiques().get(0).getValeur(), listeProduits.get(0).getCaracteristiques().get(0).getValeur());
-        Assert.assertEquals(listDTO.get(0).getCategories(), listeProduits.get(0).getCategories());
-        Assert.assertEquals(listDTO.get(0).getDescription(), listeProduits.get(0).getDescription());
-        Assert.assertEquals(listDTO.get(0).getNom(), listeProduits.get(0).getNom());
-        Assert.assertEquals(listDTO.get(0).getPhotos().get(0).getIdPhoto(), listeProduits.get(0).getPhotos().get(0).getIdPhoto());
-        Assert.assertEquals(listDTO.get(0).getPhotos().get(0).getUrl(), listeProduits.get(0).getPhotos().get(0).getUrl());
-        Assert.assertEquals(listDTO.get(0).getPrixHT(), listeProduits.get(0).getPrixHT(), 0);
-        Assert.assertEquals(listDTO.get(0).getRef(), listeProduits.get(0).getReferenceProduit());
+        Assert.assertEquals(listDTO.get(0).getCaracteristiques().get(0).getTypeCaracteristique(), LIST_PRODUIT.get(0).getCaracteristiques().get(0).getTypeCaracteristique());
+        Assert.assertEquals(listDTO.get(0).getCaracteristiques().get(0).getValeur(), LIST_PRODUIT.get(0).getCaracteristiques().get(0).getValeur());
+        Assert.assertEquals(listDTO.get(0).getCategories(), LIST_PRODUIT.get(0).getCategories());
+        Assert.assertEquals(listDTO.get(0).getDescription(), LIST_PRODUIT.get(0).getDescription());
+        Assert.assertEquals(listDTO.get(0).getNom(), LIST_PRODUIT.get(0).getNom());
+        Assert.assertEquals(listDTO.get(0).getPhotos().get(0).getIdPhoto(), LIST_PRODUIT.get(0).getPhotos().get(0).getIdPhoto());
+        Assert.assertEquals(listDTO.get(0).getPhotos().get(0).getUrl(), LIST_PRODUIT.get(0).getPhotos().get(0).getUrl());
+        Assert.assertEquals(listDTO.get(0).getPrixHT(), LIST_PRODUIT.get(0).getPrixHT(), 0);
+        Assert.assertEquals(listDTO.get(0).getRef(), LIST_PRODUIT.get(0).getReferenceProduit());
     }
 }
