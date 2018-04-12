@@ -29,8 +29,8 @@ public class Query implements GraphQLQueryResolver {
         return produitBusiness.getProduit();
     }
 
-    public ProduitDTO getProduitByID(String referenceProduit) {
-        return produitBusiness.getProduitByID(referenceProduit);
+    public ProduitDTO getProduitByRef(String referenceProduit) {
+        return produitBusiness.getProduitByRef(referenceProduit);
     }
 
     public List<ProduitDTO> getProduitByCategorie(String nomCategorie){
@@ -41,7 +41,7 @@ public class Query implements GraphQLQueryResolver {
         return categorieBusiness.getCategorie();
     }
 
-    public CategorieDTO getCategorieByID(String nomCategorie) {
-        return categorieBusiness.getCategorieByID(nomCategorie);
+    public CategorieDTO getCategorieByNom(String nomCategorie) {
+        return categorieBusiness.getCategorieByNom(nomCategorie);
     }
 }

@@ -6,18 +6,18 @@ import java.util.List;
 
 public class CategorieDTO {
 
-    private String nomCategorie;
+    private String nom;
 
     private List<CategorieDTO> sousCategories;
 
     public CategorieDTO() {}
 
-    public String getNomCategorie() {
-        return nomCategorie;
+    public String getNom() {
+        return nom;
     }
 
-    public void setNomCategorie(String nomCategorie) {
-        this.nomCategorie = nomCategorie;
+    public void setNom(String nom) {
+        this.nom = nom;
     }
 
     public List<CategorieDTO> getSousCategories() {

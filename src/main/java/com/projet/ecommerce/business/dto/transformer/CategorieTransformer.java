@@ -18,7 +18,7 @@ public class CategorieTransformer {
 
     public static Categorie dtoToEntity(CategorieDTO categorieDTO){
         Categorie categorie = new Categorie();
-        categorie.setNomCategorie(categorieDTO.getNomCategorie());
+        categorie.setNomCategorie(categorieDTO.getNom());
         return categorie;
     }
 
@@ -28,7 +28,7 @@ public class CategorieTransformer {
         for(int i=0; i<categories.size(); i++) {
             if(categorie.getLevel()+1 == categories.get(i).getLevel() && categorie.getBorneGauche() < categories.get(i).getBorneGauche() &&  categorie.getBorneDroit() > categories.get(i).getBorneDroit()) {
                 CategorieDTO categorieDTO = new CategorieDTO();
-                categorieDTO.setNomCategorie(categories.get(i).getNomCategorie());
+                categorieDTO.setNom(categories.get(i).getNomCategorie());
                 categorieDTO.setSousCategories(getSousCategorie(categories.get(i), categories));
                 tempCategories.add(categorieDTO);
             }
@@ -46,7 +46,7 @@ public class CategorieTransformer {
 
     public static CategorieDTO entityToDto(Categorie categorie, List<Categorie> categoriesList) {
         CategorieDTO categorieDTO = new CategorieDTO();
-        categorieDTO.setNomCategorie(categorie.getNomCategorie());
+        categorieDTO.setNom(categorie.getNomCategorie());
         categorieDTO.setSousCategories(getSousCategorie(categorie, categoriesList));
         return categorieDTO;
     }

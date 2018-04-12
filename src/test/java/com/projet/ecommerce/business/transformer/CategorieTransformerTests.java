@@ -25,7 +25,7 @@ public class CategorieTransformerTests {
     @Before
     public void setUp() {
         categorie = new Categorie();
-        categorie.setNomCategorie("test");
+        categorie.setNom("test");
 
         categorieDTO1 = new CategorieDTO();
         categorieDTO1.

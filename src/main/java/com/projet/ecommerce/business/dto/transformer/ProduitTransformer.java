@@ -21,7 +21,7 @@ public class ProduitTransformer {
     public static ProduitDTO entityToDTO(Produit produit){
         if(produit == null) return null;
         ProduitDTO produitDTO = new ProduitDTO();
-        produitDTO.setReferenceProduit(produit.getReferenceProduit());
+        produitDTO.setRef(produit.getReferenceProduit());
         produitDTO.setNom(produit.getNom());
         produitDTO.setDescription(produit.getDescription());
         produitDTO.setPrixHT(produit.getPrixHT());
@@ -43,7 +43,7 @@ public class ProduitTransformer {
     public static Produit dtoToEntity(ProduitDTO produitDTO){
         if(produitDTO == null) return null;
         Produit produit = new Produit();
-        produit.setReferenceProduit(produitDTO.getReferenceProduit());
+        produit.setReferenceProduit(produitDTO.getRef());
         produit.setNom(produitDTO.getNom());
         produit.setDescription(produitDTO.getDescription());
         produit.setPrixHT(produitDTO.getPrixHT());

@@ -36,7 +36,7 @@ public class CategorieBusinessTests {
 	@Test
 	public void insertCategorie() {
 		Categorie categorie1 = new Categorie();
-		categorie1.setNomCategorie("Transport1");
+		categorie1.setNom("Transport1");
 		categorie1.setBorneGauche(1);
 		categorie1.setBorneDroit(8);
 		categorie1.setLevel(1);
@@ -44,7 +44,7 @@ public class CategorieBusinessTests {
 
 		Categorie retour1 = categorieBusiness.addCategorie(categorie1);
 		Assert.assertNotNull(retour1);
-		Assert.assertEquals(categorie1.getNomCategorie(), retour1.getNomCategorie());
+		Assert.assertEquals(categorie1.getNom(), retour1.getNom());
         Assert.assertEquals(categorie1.getBorneGauche(), retour1.getBorneGauche());
         Assert.assertEquals(categorie1.getBorneDroit(), retour1.getBorneDroit());
         Assert.assertEquals(categorie1.getLevel(), retour1.getLevel());
@@ -62,7 +62,7 @@ public class CategorieBusinessTests {
 		Assert.assertEquals(categorieBusiness.getCategorie().size(), 0);
 
 		Categorie categorie = new Categorie();
-		categorie.setNomCategorie("Transport1");
+		categorie.setNom("Transport1");
 		categorie.setBorneGauche(1);
 		categorie.setBorneDroit(8);
 		categorie.setLevel(1);
@@ -74,7 +74,7 @@ public class CategorieBusinessTests {
         Assert.assertEquals(categories.size(), 1);
 
 		Categorie retour = categories.get(0);
-		Assert.assertEquals(categorie.getNomCategorie(), retour.getNomCategorie());
+		Assert.assertEquals(categorie.getNom(), retour.getNom());
         Assert.assertEquals(categorie.getLevel(), retour.getLevel());
         Assert.assertEquals(categorie.getBorneDroit(), retour.getBorneDroit());
         Assert.assertEquals(categorie.getBorneGauche(), retour.getBorneGauche());
@@ -85,16 +85,16 @@ public class CategorieBusinessTests {
 	@Test
 	public void getCategorieByID() {
 		Categorie categorie = new Categorie();
-		categorie.setNomCategorie("Transport3");
+		categorie.setNom("Transport3");
 		categorie.setBorneGauche(1);
 		categorie.setBorneDroit(8);
 		categorie.setLevel(1);
 
 		Mockito.when(categorieRepository.findById(Mockito.any())).thenReturn(Optional.of(categorie));
-		Categorie retour1 = categorieBusiness.getCategorieByID(categorie.getNomCategorie());
+		Categorie retour1 = categorieBusiness.getCategorieByID(categorie.getNom());
 		Assert.assertNotNull(retour1);
 
-		Assert.assertEquals(retour1.getNomCategorie(), categorie.getNomCategorie());
+		Assert.assertEquals(retour1.getNom(), categorie.getNom());
 		Assert.assertEquals(retour1.getBorneGauche(), categorie.getBorneGauche());
 		Assert.assertEquals(retour1.getBorneDroit(), categorie.getBorneDroit());
 		Assert.assertEquals(retour1.getLevel(), categorie.getLevel());

@@ -9,7 +9,7 @@ import java.util.List;
 
 public class ProduitDTO {
 
-    private String referenceProduit;
+    private String ref;
 
     private String nom;
 
@@ -23,12 +23,12 @@ public class ProduitDTO {
 
     private List<PhotoDTO> photos;
 
-    public String getReferenceProduit() {
-        return referenceProduit;
+    public String getRef() {
+        return ref;
     }
 
-    public void setReferenceProduit(String referenceProduit) {
-        this.referenceProduit = referenceProduit;
+    public void setRef(String ref) {
+        this.ref = ref;
     }
 
     public String getNom() {

@@ -10,10 +10,11 @@ public interface ICategorieBusiness {
 
     /**
      * Méthode définissant l'ajout d'une catégorie.
-     * @param categorieDTO Un objet de type CategorieDTO
-     * @return l'objet categorie créer
+     * @param nomCategorie Le nom de la catégorie
+     * @param pere Le pere de la catégorie à insérer
+     * @return la catégorie crée
      */
-    CategorieDTO addCategorie(CategorieDTO categorieDTO);
+    CategorieDTO addCategorie(String nomCategorie, String pere);
 
     /**
      * Méthode définissant le supprésion d'une catégorie.
@@ -29,9 +30,9 @@ public interface ICategorieBusiness {
     List<CategorieDTO> getCategorie();
 
     /**
-     * Méthode définissant la recherche d'une photo selon l'id de la photo recherché.
+     * Méthode définissant la recherche d'une categorie selon son nom.
      * @param nomCategorie Le nom de la catégorie à rechercher
      * @return l'objet categorie recherché
      */
-    CategorieDTO getCategorieByID(String nomCategorie);
+    CategorieDTO getCategorieByNom(String nomCategorie);
 }

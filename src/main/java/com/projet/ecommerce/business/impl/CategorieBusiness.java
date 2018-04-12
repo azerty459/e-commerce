@@ -20,14 +20,52 @@ public class CategorieBusiness implements ICategorieBusiness {
     private CategorieRepository categorieRepository;
 
     /**
-     * Ajoute une catégorie dans la base de données.
-     * @param categorie Un objet de type Categorie
-     * @return l'objet catégorie créé
+     * Méthode définissant l'ajout d'une catégorie.
+     * @param nomCategorie Le nom de la catégorie
+     * @return la catégorie crée
      */
     @Override
-    public CategorieDTO addCategorie(CategorieDTO categorieDTO) {
-        categorieRepository.save(CategorieTransformer.dtoToEntity(categorieDTO));
-        return categorieDTO;
+    public CategorieDTO addCategorie(String nomCategorie, String pere) {
+        Optional<Categorie> categoriePereOptional = categorieRepository.findById(pere);
+        if(categoriePereOptional.isPresent()){
+            if(pere == null) {
+                List<Categorie> categorieList = new ArrayList<>(categorieRepository.findAll());
+                int borndeDroit = categorieList.get(0).getBorneDroit();
+                for (int i = 0; i < categorieList.size(); i++) {
+                    if (categorieList.get(i).getLevel() == 0 && categorieList.get(i).getBorneDroit() > borndeDroit) {
+                        borndeDroit = categorieList.get(i).getBorneDroit();
+                    }
+                    // Insére la catégorie
+                    Categorie categorieInserer = new Categorie();
+                    categorieInserer.setNomCategorie(nomCategorie);
+                    categorieInserer.setBorneGauche(borndeDroit+1);
+                    categorieInserer.setBorneDroit(borndeDroit+2);
+                    return CategorieTransformer.entityToDto(categorieRepository.save(categorieInserer), new ArrayList<>(categorieRepository.findAll()));
+                }
+            }else{
+                // Checherche la catégorie père et ajoute + 2 à sa borne droite.
+                Categorie categoriePere = categoriePereOptional.get();
+                categoriePere.setBorneDroit(categoriePere.getBorneDroit() + 2);
+                categorieRepository.save(categoriePere);
+                //Permet de décaler les catégorie de + 2 par rapport à la borne droite du père
+                List<Categorie> categorieList = new ArrayList<>(categorieRepository.findAll());
+                for (int i = 0; i < categorieList.size(); i++) {
+                    if (categorieList.get(i).getBorneDroit() > categoriePere.getBorneDroit()) {
+                        Categorie retour = categorieList.get(i);
+                        retour.setBorneGauche(retour.getBorneGauche() + 2);
+                        retour.setBorneDroit(retour.getBorneDroit() + 2);
+                        categorieRepository.save(retour);
+                    }
+                }
+                // Insére la catégorie dans le père
+                Categorie categorieInserer = new Categorie();
+                categorieInserer.setNomCategorie(nomCategorie);
+                categorieInserer.setBorneGauche(categoriePere.getBorneDroit());
+                categorieInserer.setBorneDroit(categoriePere.getBorneDroit() + 1);
+                return CategorieTransformer.entityToDto(categorieRepository.save(categorieInserer), new ArrayList<>(categorieRepository.findAll()));
+            }
+        }
+        return null;
     }
 
     /**
@@ -60,7 +98,7 @@ public class CategorieBusiness implements ICategorieBusiness {
      * @return l'objet catégorie recherché sinon null, s'il n'est pas trouvé
      */
     @Override
-    public CategorieDTO getCategorieByID(String nomCategorie) {
+    public CategorieDTO getCategorieByNom(String nomCategorie) {
         Optional<Categorie> categorie = categorieRepository.findById(nomCategorie);
         return CategorieTransformer.entityToDto(categorie.orElse(null), new ArrayList<>(categorieRepository.findAll()));
     }
