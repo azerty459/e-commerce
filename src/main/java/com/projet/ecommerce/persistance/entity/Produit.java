@@ -1,8 +1,8 @@
-package com.projet.ecommerce.entity;
+package com.projet.ecommerce.persistance.entity;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Entité représentant la table produit sous forme de classe.
