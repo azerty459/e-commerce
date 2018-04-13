@@ -1,10 +1,10 @@
 package com.projet.ecommerce.business;
 
 import com.projet.ecommerce.business.dto.ProduitDTO;
-import com.projet.ecommerce.business.dto.transformer.ProduitTransformer;
 import com.projet.ecommerce.business.impl.ProduitBusiness;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Produit;
+import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import com.projet.ecommerce.persistance.repository.ProduitRepository;
 import org.junit.Assert;
 import org.junit.Before;
@@ -17,9 +17,11 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.ArrayList;;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static org.hamcrest.CoreMatchers.instanceOf;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
@@ -27,6 +29,9 @@ public class ProduitBusinessTests {
 
     @Mock
     private ProduitRepository produitRepository;
+
+    @Mock
+    private CategorieRepository categorieRepository;
 
     @InjectMocks
     private ProduitBusiness produitBusiness;
@@ -37,7 +42,7 @@ public class ProduitBusinessTests {
     }
 
     @Test
-    public void insertProduit() {
+    public void add() {
         Produit produit = new Produit();
         produit.setReferenceProduit("A05A01");
         produit.setPrixHT(2.1);
@@ -55,9 +60,45 @@ public class ProduitBusinessTests {
         Assert.assertEquals(produit.getPrixHT(), retour1.getPrixHT(), 0);
         Assert.assertEquals(produit.getReferenceProduit(), retour1.getRef());
 
-        Mockito.when(produitRepository.save(Mockito.any())).thenReturn(null);
-        ProduitDTO retour2 = produitBusiness.add("Test", "Test", "Test", 4.7f);
+        ProduitDTO retour2 = produitBusiness.add("", "", "dfdfdf", null);
         Assert.assertNull(retour2);
+
+        ProduitDTO retour3 = produitBusiness.add("ddfd", "sdffd", "", 4.7f);
+        Assert.assertNotNull(retour3);
+    }
+
+    @Test
+    public void updateFound() {
+        Produit produit = new Produit();
+        produit.setReferenceProduit("A05A01");
+        produit.setPrixHT(2.1);
+        produit.setDescription("Un livre");
+        produit.setNom("Livre1");
+        produit.setCategories(new ArrayList<>());
+        produit.setPhotos(new ArrayList<>());
+        produit.setCaracteristiques(new ArrayList<>());
+
+        Mockito.when(produitRepository.findById(Mockito.any())).thenReturn(Optional.of(produit));
+        Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
+        ProduitDTO retour = produitBusiness.update("Test", "Test", "Test", 4.7f);
+        Assert.assertNotNull(retour);
+
+        Assert.assertEquals(produit.getNom(), retour.getNom());
+        Assert.assertEquals(produit.getDescription(), retour.getDescription());
+        Assert.assertEquals(produit.getPrixHT(), retour.getPrixHT(), 0);
+        Assert.assertEquals(produit.getReferenceProduit(), retour.getRef());
+    }
+
+    @Test
+    public void updateEmpty() {
+        Mockito.when(produitRepository.findById(Mockito.any())).thenReturn(Optional.empty());
+        ProduitDTO retour2 = produitBusiness.update("Test", "Test", "Test", 4.7f);
+        Assert.assertNull(retour2);
+    }
+
+    @Test
+    public void delete() {
+        Assert.assertTrue(produitBusiness.delete("A05A01"));
     }
 
     @Test
@@ -112,47 +153,24 @@ public class ProduitBusinessTests {
     }
 
     @Test
-    public void getProduitByIDNotFound() {
+    public void getProduitByRefNotFound() {
+        Mockito.when(produitRepository.findById(Mockito.any())).thenReturn(Optional.empty());
         ProduitDTO produit = produitBusiness.getByRef("A04A78");
         Assert.assertNull(produit);
     }
 
     @Test
-    public void delete() {
-        Assert.assertTrue(produitBusiness.delete("A05A01"));
+    public void getByCategorie() {
+        Mockito.when(categorieRepository.findById(Mockito.any())).thenReturn(Optional.of(new Categorie()));
+        Mockito.when(categorieRepository.findAll()).thenReturn(new ArrayList<Categorie>());
+        List<ProduitDTO> produitDTOList = produitBusiness.getByCategorie("Test");
+        Assert.assertNotNull(produitDTOList);
     }
 
     @Test
-    public void update() {
-        Produit produit = new Produit();
-        produit.setReferenceProduit("A05A01");
-        produit.setPrixHT(2.1);
-        produit.setDescription("Un livre");
-        produit.setNom("Livre1");
-        produit.setCategories(new ArrayList<>());
-        produit.setPhotos(new ArrayList<>());
-        produit.setCaracteristiques(new ArrayList<>());
-
-        Mockito.when(produitRepository.findById(Mockito.any())).thenReturn(Optional.of(produit));
-        Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
-        ProduitDTO retour = produitBusiness.update("Test", "Test", "Test", 4.7f);
-
-        Mockito.verify(produitRepository, Mockito.times(1)).findById(Mockito.any());
-        Mockito.verify(produitRepository, Mockito.times(1)).save(Mockito.any());
-        Assert.assertNotNull(retour);
-
-        Assert.assertEquals(produit.getNom(), retour.getNom());
-        Assert.assertEquals(produit.getDescription(), retour.getDescription());
-        Assert.assertEquals(produit.getPrixHT(), retour.getPrixHT(), 0);
-        Assert.assertEquals(produit.getReferenceProduit(), retour.getRef());
-    }
-
-    @Test
-    public void updateProduitEmpty() {
-        Mockito.when(produitRepository.findById(Mockito.any())).thenReturn(Optional.empty());
-        ProduitDTO retour2 = produitBusiness.update("Test", "Test", "Test", 4.7f);
-        Mockito.verify(produitRepository, Mockito.times(1)).findById(Mockito.any());
-        Mockito.verify(produitRepository, Mockito.times(0)).save(Mockito.any());
-        Assert.assertNull(retour2);
+    public void getByCategorieNotFound() {
+        Mockito.when(categorieRepository.findById(Mockito.any())).thenReturn(Optional.empty());
+        List<ProduitDTO> produitDTOList = produitBusiness.getByCategorie("Test");
+        Assert.assertNull(produitDTOList);
     }
 }

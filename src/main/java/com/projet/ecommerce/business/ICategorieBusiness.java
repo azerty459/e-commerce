@@ -9,12 +9,20 @@ import java.util.List;
 public interface ICategorieBusiness {
 
     /**
-     * Méthode définissant l'ajout d'une catégorie.
+     * Méthode définissant l'ajout d'une catégorie parent.
      * @param nomCategorie Le nom de la catégorie
-     * @param pere Le pere de la catégorie à insérer
      * @return la catégorie crée
      */
-    CategorieDTO add(String nomCategorie, String pere);
+    CategorieDTO addParent(String nomCategorie);
+
+
+    /**
+     * Méthode définissant l'ajout d'une catégorie enfant.
+     * @param nomCategorie Le nom de la catégorie
+     * @param parent Le parent de la catégorie à insérer
+     * @return la catégorie crée
+     */
+    CategorieDTO addEnfant(String nomCategorie, String parent);
 
     /**
      * Méthode définissant le supprésion d'une catégorie.
