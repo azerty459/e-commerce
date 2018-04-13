@@ -25,7 +25,8 @@ type Mutation {
     updateProduit(ref: String!, nom: String!, description: String!, prixHT: Float!): Produit!
     deleteProduit(ref: String!): Boolean!
 
-    addCategorie(nom: String!, pere: String): Categorie!
+    addCategorieParent(nom: String!): Categorie!
+    addCategorieEnfant(nom: String!, pere: String): Categorie!
     deleteCategorie(nom: String!): Boolean!
 }
 

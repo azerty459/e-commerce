@@ -5,6 +5,7 @@ import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.business.impl.CategorieBusiness;
 import com.projet.ecommerce.business.impl.ProduitBusiness;
 import com.projet.ecommerce.entrypoint.graphQL.Mutation;
+import com.projet.ecommerce.persistance.entity.Categorie;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +18,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
-import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 
@@ -66,19 +66,35 @@ public class TestMutation {
     }
 
     @Test
-    public void addCategorie(){
-        Mockito.when(categorieBusiness.add(Mockito.anyString(), Mockito.anyString())).thenReturn(null);
-        CategorieDTO retour = mutation.addCategorie("Test", "Test");
-        Assert.assertNull(retour);
-
+    public void addCategorieParent(){
         CategorieDTO categorieDTO = new CategorieDTO();
-        categorieDTO.setNom("Transport");
+        categorieDTO.setNom("Transpole");
         categorieDTO.setSousCategories(new ArrayList<>());
 
-        Mockito.when(categorieBusiness.add(Mockito.anyString(), Mockito.anyString())).thenReturn(categorieDTO);
-        CategorieDTO retour2 = mutation.addCategorie("Test", "Test");
-        Assert.assertNotNull(retour2);
-        Assert.assertThat(retour2, instanceOf(CategorieDTO.class));
+        Mockito.when(categorieBusiness.addParent(Mockito.anyString())).thenReturn(categorieDTO);
+        CategorieDTO retour = mutation.addCategorieParent("Transpole");
+
+        Assert.assertNotNull(retour);
+        Assert.assertEquals(categorieDTO.getNom(), retour.getNom());
+        Assert.assertEquals(categorieDTO.getSousCategories().size(), 0);
+    }
+
+    @Test
+    public void addCategorieEnfant(){
+        CategorieDTO categorieDTO = new CategorieDTO();
+        categorieDTO.setNom("Transpole");
+        categorieDTO.setSousCategories(new ArrayList<>());
+
+        Mockito.when(categorieBusiness.addEnfant(Mockito.anyString(), Mockito.anyString())).thenReturn(categorieDTO);
+        CategorieDTO retour = mutation.addCategorieEnfant("Test", "Test");
+        Assert.assertNotNull(retour);
+    }
+
+    @Test
+    public void addCategorieEnfant_ParentNoFound(){
+        Mockito.when(categorieBusiness.addEnfant(Mockito.anyString(), Mockito.anyString())).thenReturn(null);
+        CategorieDTO retour = mutation.addCategorieEnfant("Test", "Test");
+        Assert.assertNull(retour);
     }
 
     @Test

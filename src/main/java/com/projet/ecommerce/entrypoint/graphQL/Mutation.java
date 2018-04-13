@@ -53,13 +53,24 @@ public class Mutation implements GraphQLMutationResolver {
         return produitBusiness.delete(referenceProduit);
     }
 
+
     /**
-     * Ajoute une catégorie.
-     * @param nomCategorie Le nom de la catégorie
-     * @return la catégorie crée
+     * Ajoute une catégorie parent.
+     * @param nomCategorie Nom de la catégorie à créer
+     * @return la catégorie parent créée
      */
-    public CategorieDTO addCategorie(String nomCategorie, String pere){
-        return  categorieBusiness.add(nomCategorie, pere);
+    public CategorieDTO addCategorieParent(String nomCategorie){
+        return  categorieBusiness.addParent(nomCategorie);
+    }
+
+    /**
+     * Ajoute une catégorie enfant.
+     * @param nomCategorie Nom de la catégorie à créer
+     * @param parent Nom de la catégorie parent
+     * @return la catégorie enfant créée
+     */
+    public CategorieDTO addCategorieEnfant(String nomCategorie, String parent){
+        return  categorieBusiness.addEnfant(nomCategorie, parent);
     }
 
     /**
