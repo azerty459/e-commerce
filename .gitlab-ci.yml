@@ -1,0 +1,31 @@
+image: maven:3.5.3-jdk-8
+  
+stages:
+  - tests
+  - deploiement
+  
+tests:
+  stage: tests
+  script: 
+  - mvn test
+  only:
+  - branches
+  
+deploiement_dev:
+  stage: deploiement
+  script: 
+    - echo 'Deploy sur le serv de developpement'
+  only:
+    - /^dev.*$/
+  except:
+    - branches
+
+deploiement_master:
+  stage: deploiement
+  script: 
+    - echo 'Deploy sur le serv de production'
+  only:
+    - master
+  except:
+    - branches
+
