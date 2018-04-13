@@ -1,5 +1,6 @@
 package com.projet.ecommerce.business;
 
+import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.business.impl.CategorieBusiness;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
@@ -13,10 +14,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-/*
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
 @ActiveProfiles("test")
@@ -34,93 +35,104 @@ public class CategorieBusinessTests {
 	}
 
 	@Test
-	public void insertCategorie() {
+	public void insertParent() {
 		Categorie categorie1 = new Categorie();
-		categorie1.setNom("Transport1");
+		categorie1.setNomCategorie("Transport");
 		categorie1.setBorneGauche(1);
-		categorie1.setBorneDroit(8);
+		categorie1.setBorneDroit(4);
 		categorie1.setLevel(1);
+
+        Collection<Categorie> categorieCollection = new ArrayList<>();
+        categorieCollection.add(categorie1);
+
+		Mockito.when(categorieRepository.findAll()).thenReturn(categorieCollection);
 		Mockito.when(categorieRepository.save(Mockito.any())).thenReturn(categorie1);
+		CategorieDTO retour1 = categorieBusiness.addParent("Test");
 
-		Categorie retour1 = categorieBusiness.add(categorie1);
 		Assert.assertNotNull(retour1);
-		Assert.assertEquals(categorie1.getNom(), retour1.getNom());
-        Assert.assertEquals(categorie1.getBorneGauche(), retour1.getBorneGauche());
-        Assert.assertEquals(categorie1.getBorneDroit(), retour1.getBorneDroit());
-        Assert.assertEquals(categorie1.getLevel(), retour1.getLevel());
-		Mockito.verify(categorieRepository, Mockito.times(1)).save(Mockito.any());
-
-		Mockito.when(categorieRepository.save(Mockito.any())).thenReturn(null);
-		Categorie retour2 = categorieBusiness.add(new Categorie());
-		Assert.assertNull(retour2);
+		Assert.assertEquals(categorie1.getNomCategorie(), retour1.getNom());
 	}
+
+    @Test
+    public void insertEnfant() {
+        Categorie categorie1 = new Categorie();
+        categorie1.setNomCategorie("Transport");
+        categorie1.setBorneGauche(1);
+        categorie1.setBorneDroit(4);
+        categorie1.setLevel(1);
+
+        Collection<Categorie> categorieCollection = new ArrayList<>();
+        categorieCollection.add(categorie1);
+
+        Mockito.when(categorieRepository.findById(Mockito.any())).thenReturn(Optional.of(categorie1));
+        Mockito.when(categorieRepository.findAll()).thenReturn(categorieCollection);
+        Mockito.when(categorieRepository.save(Mockito.any())).thenReturn(categorie1);
+        CategorieDTO retour1 = categorieBusiness.addEnfant("Test", "Transport");
+
+        Assert.assertNotNull(retour1);
+        Assert.assertEquals(categorie1.getNomCategorie(), retour1.getNom());
+    }
+
+    @Test
+    public void delete() {
+        Assert.assertTrue(categorieBusiness.delete("Fofo"));
+    }
 
 	@Test
 	public void getAll() {
 		List<Categorie> categories = new ArrayList<>();
-		Mockito.when(categorieBusiness.getAll()).thenReturn(categories);
+		Mockito.when(categorieRepository.findAll()).thenReturn(categories);
 		Assert.assertEquals(categorieBusiness.getAll().size(), 0);
 
-		Categorie categorie = new Categorie();
-		categorie.setNom("Transport1");
-		categorie.setBorneGauche(1);
-		categorie.setBorneDroit(8);
-		categorie.setLevel(1);
-		categories.add(categorie);
-		Mockito.when(categorieBusiness.getAll()).thenReturn(categories);
-        Mockito.verify(categorieRepository, Mockito.times(1)).findAll();
+		// Création des catégories et ajout dans la liste.
+		Categorie categorie1 = new Categorie();
+        categorie1.setNomCategorie("Transport1");
+        categorie1.setBorneGauche(1);
+        categorie1.setBorneDroit(4);
+        categorie1.setLevel(1);
+        categorie1.setProduits(new ArrayList<>());
 
-        categories = categorieBusiness.getAll();
-        Assert.assertEquals(categories.size(), 1);
+        Categorie categorie2 = new Categorie();
+        categorie2.setNomCategorie("Transport1");
+        categorie2.setBorneGauche(2);
+        categorie2.setBorneDroit(3);
+        categorie2.setLevel(2);
+        categorie2.setProduits(new ArrayList<>());
 
-		Categorie retour = categories.get(0);
-		Assert.assertEquals(categorie.getNom(), retour.getNom());
-        Assert.assertEquals(categorie.getLevel(), retour.getLevel());
-        Assert.assertEquals(categorie.getBorneDroit(), retour.getBorneDroit());
-        Assert.assertEquals(categorie.getBorneGauche(), retour.getBorneGauche());
+        categories.add(categorie1);
+        categories.add(categorie2);
 
-		Mockito.verify(categorieRepository, Mockito.times(2)).findAll();
+        // Tests
+		Mockito.when(categorieRepository.findAll()).thenReturn(categories);
+        List<CategorieDTO> categorieDTOList = categorieBusiness.getAll();
+
+        Assert.assertEquals(2, categories.size());
+
+		CategorieDTO retour = categorieDTOList.get(0);
+		Assert.assertEquals(categorie1.getNomCategorie(), retour.getNom());
+        Assert.assertEquals(categorie2.getNomCategorie(), retour.getSousCategories().get(0).getNom());
 	}
 
 	@Test
-	public void getCategorieByID() {
+	public void getCategorieByNom() {
 		Categorie categorie = new Categorie();
-		categorie.setNom("Transport3");
+		categorie.setNomCategorie("Transport3");
 		categorie.setBorneGauche(1);
 		categorie.setBorneDroit(8);
 		categorie.setLevel(1);
+		categorie.setProduits(new ArrayList<>());
 
 		Mockito.when(categorieRepository.findById(Mockito.any())).thenReturn(Optional.of(categorie));
-		Categorie retour1 = categorieBusiness.getCategorieByID(categorie.getNom());
+		CategorieDTO retour1 = categorieBusiness.getByNom(categorie.getNomCategorie());
 		Assert.assertNotNull(retour1);
 
-		Assert.assertEquals(retour1.getNom(), categorie.getNom());
-		Assert.assertEquals(retour1.getBorneGauche(), categorie.getBorneGauche());
-		Assert.assertEquals(retour1.getBorneDroit(), categorie.getBorneDroit());
-		Assert.assertEquals(retour1.getLevel(), categorie.getLevel());
+		Assert.assertEquals(retour1.getNom(), categorie.getNomCategorie());
 	}
 
 	@Test
-	public void getCategorieByIDNotFound(){
-		Categorie categorie = categorieBusiness.getCategorieByID("Transport4");
-		Mockito.verify(categorieRepository, Mockito.times(1)).findById(Mockito.any());
-		Assert.assertNull(categorie);
-	}
-
-	@Test
-	public void delete() {
-		Mockito.when(categorieRepository.findById(Mockito.any())).thenReturn(Optional.of(new Categorie()));
-		Assert.assertTrue(categorieBusiness.delete("Fofo"));
-		Mockito.verify(categorieRepository, Mockito.times(1)).findById(Mockito.any());
-		Mockito.verify(categorieRepository, Mockito.times(1)).delete(Mockito.any());
-	}
-
-	@Test
-	public void deleteCategorieNotExists() {
-		Mockito.when(categorieRepository.findById(Mockito.any())).thenReturn(Optional.empty());
-		Assert.assertFalse(categorieBusiness.delete("Fofo"));
-		Mockito.verify(categorieRepository, Mockito.times(1)).findById(Mockito.any());
-		Mockito.verify(categorieRepository, Mockito.times(0)).delete(Mockito.any());
+	public void getCategorieByNomNotFound(){
+        Mockito.when(categorieRepository.findById(Mockito.any())).thenReturn(Optional.empty());
+		CategorieDTO retour = categorieBusiness.getByNom("Transport4");
+		Assert.assertNull(retour);
 	}
 }
-*/

@@ -27,37 +27,42 @@ public class ProduitBusiness implements IProduitBusiness {
 
     /**
      * Ajoute un produit dans la base de données.
+     *
      * @param referenceProduit La référence du produit
-     * @param nom Le nom du produit
-     * @param description Sa description
-     * @param prixHT Son prix hors taxe
-     * @return l'objet produit crée
+     * @param nom              Le nom du produit
+     * @param description      Sa description
+     * @param prixHT           Son prix hors taxe
+     * @return l'objet produit crée ou null, s'il il manque une referenceProduit, un nom et un prixHT.
      */
     @Override
     public ProduitDTO add(String referenceProduit, String nom, String description, Float prixHT) {
-        Produit produit = new Produit();
-        produit.setReferenceProduit(referenceProduit);
-        produit.setNom(nom);
-        produit.setDescription(description);
-        produit.setPrixHT(prixHT);
-        produit.setCaracteristiques(new ArrayList<Caracteristique>());
-        produit.setPhotos(new ArrayList<Photo>());
-        produit.setCategories(new ArrayList<Categorie>());
-        return ProduitTransformer.entityToDto(produitRepository.save(produit));
+        if (!referenceProduit.isEmpty() && !nom.isEmpty() && prixHT != null) {
+            Produit produit = new Produit();
+            produit.setReferenceProduit(referenceProduit);
+            produit.setNom(nom);
+            produit.setDescription(description);
+            produit.setPrixHT(prixHT);
+            produit.setCaracteristiques(new ArrayList<Caracteristique>());
+            produit.setPhotos(new ArrayList<Photo>());
+            produit.setCategories(new ArrayList<Categorie>());
+            return ProduitTransformer.entityToDto(produitRepository.save(produit));
+        }
+        return null;
     }
 
     /**
-     * Modifie le produit dans la base de données
+     * Modifie le produit dans la base de données.
+     *
      * @param referenceProduit La référence du produit à modifier
-     * @param nom Le nouveau nom
-     * @param description La nouvelle description
-     * @param prixHT Le nouveau prix hors taxe
+     * @param nom              Le nouveau nom
+     * @param description      La nouvelle description
+     * @param prixHT           Le nouveau prix hors taxe
      * @return l'objet produit modifié, null si le produit à modifier n'est pas trouvée
      */
     @Override
     public ProduitDTO update(String referenceProduit, String nom, String description, Float prixHT) {
         Optional<Produit> produitOptional = produitRepository.findById(referenceProduit);
-        if(produitOptional.isPresent()){
+        if (produitOptional.isPresent()) {
             Produit produit = produitOptional.get();
             produit.setNom(nom);
             produit.setDescription(description);
@@ -69,6 +74,7 @@ public class ProduitBusiness implements IProduitBusiness {
 
     /**
      * Supprime le produit dans la base de données.
+     *
      * @param referenceProduit Référence du produit à supprimer
      * @return true
      */
@@ -80,6 +86,7 @@ public class ProduitBusiness implements IProduitBusiness {
 
     /**
      * Retourne la liste complète des produits liés à la base de données.
+     *
      * @return une liste d'objet produit
      */
     @Override
@@ -89,6 +96,7 @@ public class ProduitBusiness implements IProduitBusiness {
 
     /**
      * Retourne le produit recherché.
+     *
      * @param referenceProduit Référence du produit à rechercher
      * @return l'objet produit recherché sinon null, s'il n'est pas trouvé
      */
@@ -100,13 +108,14 @@ public class ProduitBusiness implements IProduitBusiness {
 
     /**
      * Retourne une liste de produit en fonction de la catégorie recherché.
+     *
      * @param nomCategorie Le nom de catégorie
      * @return une liste d'objet produit
      */
     @Override
     public List<ProduitDTO> getByCategorie(String nomCategorie) {
         Optional<Categorie> optionalCategorie = categorieRepository.findById(nomCategorie);
-        if(optionalCategorie.isPresent()) {
+        if (optionalCategorie.isPresent()) {
             Categorie categorie = optionalCategorie.get();
             List<Categorie> categorieList = new ArrayList<>(categorieRepository.findAll());
             List<Produit> produitList = new ArrayList<>();
