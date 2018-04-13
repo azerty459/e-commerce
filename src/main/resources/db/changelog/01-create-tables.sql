@@ -23,7 +23,7 @@ CREATE TABLE produit_categorie
   reference_produit VARCHAR(255) NOT NULL,
   nom_categorie VARCHAR(255) NOT NULL,
   PRIMARY KEY (reference_produit, nom_categorie),
-  CONSTRAINT FK_referenceProduit FOREIGN KEY (reference_produit)
+  CONSTRAINT FK_produit_categorie_referenceProduit FOREIGN KEY (reference_produit)
   REFERENCES produit(reference_produit),
   CONSTRAINT FK_idCategorie FOREIGN KEY (nom_categorie)
   REFERENCES categorie(nom_categorie)
@@ -56,6 +56,6 @@ CREATE TABLE caracteristique
   PRIMARY KEY (id_caracteristique),
   CONSTRAINT FK_typeCaracteristique FOREIGN KEY (id_type_caracteristique)
   REFERENCES type_caracteristique(id_type_caracteristique),
-  CONSTRAINT FK_referenceProduit FOREIGN KEY (reference_produit)
+  CONSTRAINT FK_caracteristique_referenceProduit FOREIGN KEY (reference_produit)
   REFERENCES produit(reference_produit)
 );

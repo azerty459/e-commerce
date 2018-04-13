@@ -1,8 +1,10 @@
 package com.projet.ecommerce.business.impl;
 
 import com.projet.ecommerce.business.ICaracteristiqueTypeBusiness;
-import com.projet.ecommerce.entity.TypeCaracteristique;
-import com.projet.ecommerce.repository.TypeCaracteristiqueRepository;
+import com.projet.ecommerce.business.dto.TypeCaracteristiqueDTO;
+import com.projet.ecommerce.business.dto.transformer.TypeCaracteristiqueTransformer;
+import com.projet.ecommerce.persistance.entity.TypeCaracteristique;
+import com.projet.ecommerce.persistance.repository.TypeCaracteristiqueRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,11 +24,10 @@ public class CaracteristiqueTypeBusiness implements ICaracteristiqueTypeBusiness
      * @return l'objet TypeCaracteristique crée
      */
     @Override
-    public TypeCaracteristique addTypeCaracteristique(String type) {
+    public TypeCaracteristiqueDTO addTypeCaracteristique(String type) {
         TypeCaracteristique caracteristiqueType = new TypeCaracteristique();
         caracteristiqueType.setType(type);
-        TypecaracteristiqueRepository.save(caracteristiqueType);
-        return caracteristiqueType;
+        return TypeCaracteristiqueTransformer.entityToDto(TypecaracteristiqueRepository.save(caracteristiqueType));
     }
 
     /**
@@ -36,13 +37,12 @@ public class CaracteristiqueTypeBusiness implements ICaracteristiqueTypeBusiness
      * @return l'objet TypeCaracteristique modifié, null s'il n'est pas trouvée
      */
     @Override
-    public TypeCaracteristique updateTypeCaracteristique(int idTypeCaracteristique, String type) {
+    public TypeCaracteristiqueDTO updateTypeCaracteristique(int idTypeCaracteristique, String type) {
         Optional<TypeCaracteristique> tempCaracteristiqueTypeRepository = TypecaracteristiqueRepository.findById(idTypeCaracteristique);
         if (tempCaracteristiqueTypeRepository.isPresent() == true){
             TypeCaracteristique caracteristiqueType = tempCaracteristiqueTypeRepository.get();
             caracteristiqueType.setType(type);
-            TypecaracteristiqueRepository.save(caracteristiqueType);
-            return caracteristiqueType;
+            return TypeCaracteristiqueTransformer.entityToDto(TypecaracteristiqueRepository.save(caracteristiqueType));
         }
         return null;
     }
@@ -54,7 +54,7 @@ public class CaracteristiqueTypeBusiness implements ICaracteristiqueTypeBusiness
      */
     @Override
     public boolean deleteTypeCaracteristique(int idTypeCaracteristique) {
-        TypecaracteristiqueRepository.delete(TypecaracteristiqueRepository.findById(idTypeCaracteristique).get());
+        TypecaracteristiqueRepository.deleteById(idTypeCaracteristique);
         return true;
     }
 
@@ -63,8 +63,8 @@ public class CaracteristiqueTypeBusiness implements ICaracteristiqueTypeBusiness
      * @return une liste de type de caractéristique.
      */
     @Override
-    public List<TypeCaracteristique> getTypeCaracteristique() {
-        return new ArrayList<>(TypecaracteristiqueRepository.findAll());
+    public List<TypeCaracteristiqueDTO> getTypeCaracteristique() {
+        return new ArrayList<>(TypeCaracteristiqueTransformer.entityToDto(TypecaracteristiqueRepository.findAll()));
     }
 
     /**
@@ -73,11 +73,8 @@ public class CaracteristiqueTypeBusiness implements ICaracteristiqueTypeBusiness
      * @return l'objet TypeCaracteristique recherché sinon null, s'il n'est pas trouvé
      */
     @Override
-    public TypeCaracteristique getTypeCaracteristiqueByID(int idTypeCaracteristique) {
-        Optional<TypeCaracteristique> CaracteristiqueTypeRepository = TypecaracteristiqueRepository.findById(idTypeCaracteristique);
-        if (CaracteristiqueTypeRepository.isPresent() == true){
-            return CaracteristiqueTypeRepository.get();
-        }
-        return null;
+    public TypeCaracteristiqueDTO getTypeCaracteristiqueByID(int idTypeCaracteristique) {
+        Optional<TypeCaracteristique> caracteristiqueOptional = TypecaracteristiqueRepository.findById(idTypeCaracteristique);
+        return TypeCaracteristiqueTransformer.entityToDto(caracteristiqueOptional.orElse(null));
     }
 }

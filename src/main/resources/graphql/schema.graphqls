@@ -1,9 +1,10 @@
 type Categorie {
-    nomCategorie: String!
+    nom: String!
+    sousCategories: [Categorie]!
 }
 
 type Produit {
-    referenceProduit: String!
+    ref: String!
     nom: String!
     description: String
     prixHT: Float!
@@ -11,19 +12,20 @@ type Produit {
 }
 
 type Query {
-    getAllCategorie: [Categorie]!
-    getCategorieByID(nom: String!): Categorie
-
     getAllProduit: [Produit]!
-    getProduitByID(referenceProduit: String!): Produit
+    getProduitByRef(ref: String!): Produit
+    getProduitByCategorie(nom: String!): [Produit]!
+
+    getAllCategorie: [Categorie]!
+    getCategorieByNom(nom: String!): Categorie
 }
 
 type Mutation {
-    addCategorie(categorie: Categorie!): Categorie!
-    deleteCategorie(nomCategorie: String!) : Boolean!
+    addProduit(ref: String!, nom: String!, description: String!, prixHT: Float!): Produit!
+    updateProduit(ref: String!, nom: String!, description: String!, prixHT: Float!): Produit!
+    deleteProduit(ref: String!): Boolean!
 
-    addProduit(produit: Produit!): Produit!
-    updateProduit(produit: Produit!): Produit!
-    deleteProduit(referenceProduit: String!) : Boolean!
+    addCategorie(nom: String!, pere: String): Categorie!
+    deleteCategorie(nom: String!): Boolean!
 }
 

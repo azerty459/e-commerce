@@ -1,16 +1,19 @@
 package com.projet.ecommerce.repository;
 
-import com.projet.ecommerce.entity.Produit;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import com.projet.ecommerce.persistance.entity.Categorie;
+import com.projet.ecommerce.persistance.entity.Produit;
+import com.projet.ecommerce.persistance.repository.ProduitRepository;
+import liquibase.Liquibase;
+import liquibase.integration.spring.SpringLiquibase;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Collection;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -23,26 +26,29 @@ public class ProduitRepositoryTests {
 	private static final Produit TEMP_UPDATE = new Produit();
 	private static final Produit TEMP_GET = new Produit();
 
-	private List<Produit> tempList;
+	static {
+		//Permet d'écraser la config application.properties par application-test.properties
+		System.setProperty("spring.config.location", "classpath:application-test.properties");
+
+		TEMP_INSERT.setReferenceProduit("A05A87");
+		TEMP_INSERT.setPrixHT(8.7);
+		TEMP_INSERT.setDescription("joli produit");
+
+		TEMP_DELETE.setReferenceProduit("A05A88");
+		TEMP_DELETE.setPrixHT(11.7);
+		TEMP_DELETE.setDescription("produit");
+
+		TEMP_UPDATE.setReferenceProduit("A05A89");
+		TEMP_UPDATE.setPrixHT(10.875);
+		TEMP_UPDATE.setDescription("joli truc");
+
+		TEMP_GET.setReferenceProduit("A05A90");
+		TEMP_GET.setPrixHT(9.214);
+		TEMP_GET.setDescription("bas de gamme");
+	}
 
 	@Autowired
 	private ProduitRepository produitRepository;
-
-	@Before
-	public void init() {
-		this.TEMP_INSERT.setReferenceProduit("A05A87");
-		this.TEMP_INSERT.setPrixHT(8.7);
-		this.TEMP_INSERT.setDescription("joli produit");
-		this.TEMP_DELETE.setReferenceProduit("A05A88");
-		this.TEMP_DELETE.setPrixHT(11.7);
-		this.TEMP_DELETE.setDescription("produit");
-		this.TEMP_UPDATE.setReferenceProduit("A05A89");
-		this.TEMP_UPDATE.setPrixHT(10.875);
-		this.TEMP_UPDATE.setDescription("joli truc");
-		this.TEMP_GET.setReferenceProduit("A05A90");
-		this.TEMP_GET.setPrixHT(9.214);
-		this.TEMP_GET.setDescription("bas de gamme");
-	}
 
 	@Test
 	public void insertProduit() {
@@ -53,12 +59,13 @@ public class ProduitRepositoryTests {
 
 	@Test
 	public void getProduit() {
-//		this.tempList = produitRepository.findAll();
-//		Assert.assertEquals(0, this.tempList.size());
-//		produitRepository.save(this.TEMP_INSERT);
-//		this.tempList = produitRepository.findAll();
-//		Assert.assertNotEquals(0, this.tempList.size());
-//		Assert.assertEquals(1, this.tempList.size());
+		produitRepository.deleteAll();
+		Collection<Produit> produitCollection = produitRepository.findAll();
+		Assert.assertEquals(0, produitCollection.size());
+
+		produitRepository.save(this.TEMP_INSERT);
+		produitCollection = produitRepository.findAll();
+		Assert.assertEquals(1, produitCollection.size());
 	}
 
 	@Test
