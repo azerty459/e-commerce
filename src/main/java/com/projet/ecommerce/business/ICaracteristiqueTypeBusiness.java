@@ -1,6 +1,6 @@
 package com.projet.ecommerce.business;
 
-import com.projet.ecommerce.persistance.entity.TypeCaracteristique;
+import com.projet.ecommerce.business.dto.TypeCaracteristiqueDTO;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ public interface ICaracteristiqueTypeBusiness {
      * @param type Le type de la caractéristique
      * @return l'objet TypeCaracteristique crée
      */
-    TypeCaracteristique addTypeCaracteristique(String type);
+    TypeCaracteristiqueDTO addTypeCaracteristique(String type);
 
     /**
      * Méthode définissant la modification d'un type de caractéristique.
@@ -21,7 +21,7 @@ public interface ICaracteristiqueTypeBusiness {
      * @param type Le nouveau type de caractéristique
      * @return l'objet TypeCaracteristique modifié
      */
-    TypeCaracteristique updateTypeCaracteristique(int idTypeCaracteristique, String type);
+    TypeCaracteristiqueDTO updateTypeCaracteristique(int idTypeCaracteristique, String type);
 
     /**
      * Méthode définissant la supprésion d'un type de caractéristique.
@@ -34,12 +34,12 @@ public interface ICaracteristiqueTypeBusiness {
      * Méthode définissant la recherche de tous les types de caractéristique.
      * @return une liste de type de caractéristique
      */
-    List<TypeCaracteristique> getTypeCaracteristique();
+    List<TypeCaracteristiqueDTO> getTypeCaracteristique();
 
     /**
      * Méthode définissant la recherche d'un type de caractéristique selon l'id du type caractéristique.
      * @param idTypeCaracteristique L'id du type de caractéristique recherché.
      * @return l'objet TypeCaracteristique recherché
      */
-    TypeCaracteristique getTypeCaracteristiqueByID(int idTypeCaracteristique);
+    TypeCaracteristiqueDTO getTypeCaracteristiqueByID(int idTypeCaracteristique);
 }
