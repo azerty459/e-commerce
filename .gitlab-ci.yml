@@ -3,9 +3,6 @@ image: maven:3.5.3-jdk-8
 stages:
   - sonar
   - deploiement
-  
-before_script:
-  - apt-get install docker
 
 sonarqube:
   image: docker:latest
