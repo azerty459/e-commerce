@@ -1,7 +1,6 @@
 image: maven:3.5.3-jdk-8
   
 stages:
-  - tests
   - sonar
   - deploiement
   
