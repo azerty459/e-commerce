@@ -19,7 +19,7 @@ sonarqube:
     SONAR_URL: http://localhost:8080
     SONAR_ANALYSIS_MODE: issues
   script:
-  - sonar-gitlab-scanner
+  - gitlab-sonar-scanner
   
 sonarqube-reports:
   stage: sonar
@@ -28,7 +28,7 @@ sonarqube-reports:
     SONAR_URL: http://localhost:8080
     SONAR_ANALYSIS_MODE: publish
   script:
-  - sonar-gitlab-scanner
+  - gitlab-sonar-scanner
   
 deploiement_dev:
   stage: deploiement
