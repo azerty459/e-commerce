@@ -4,13 +4,6 @@ stages:
   - sonar
   - deploiement
   
-tests:
-  stage: tests
-  script: 
-  - mvn test
-  only:
-  - branches
-  
 sonarqube:
   stage: sonar
   image: ciricihq/gitlab-sonar-scanner
