@@ -5,24 +5,6 @@ stages:
   - sonar
   - deploiement
   
-build:
-  stage: build
-  script:
-    - mvn package && java -jar target/e-commerce-0.0.1-SNAPSHOT.jar
-
-sonarqube:
-  stage: sonar
-  image: hiorgserver/gitlab-sonar-scanner
-  variables:
-    SONAR_URL: "http://localhost:8888"
-    SONAR_PROJECT_KEY: "com.projet.ecommerce"
-    SONAR_PROJECT_NAME: "e-commerce"
-    SONAR_PROJECT_VERSION: "1.0"
-    SONAR_GITLAB_COMMENT: "true"
-    SONAR_PUBLISH: "true"
-  script:
-  - /usr/bin/sonar-scanner-run.sh 
-  
 deploiement_dev:
   stage: deploiement
   script: 
