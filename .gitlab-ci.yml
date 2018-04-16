@@ -1,7 +1,9 @@
-image: maven:3.5.3-jdk-8
+image: 
+  - maven:3.5.3-jdk-8
   
 stages:
   - tests
+  - sonar
   - deploiement
   
 tests:
@@ -10,6 +12,24 @@ tests:
   - mvn test
   only:
   - branches
+  
+sonarqube:
+  stage: sonar
+  image: ciricihq/gitlab-sonar-scanner
+  variables:
+    SONAR_URL: http://localhost:8080
+    SONAR_ANALYSIS_MODE: issues
+  script:
+  - sonar-gitlab-scanner
+  
+sonarqube:
+  stage: sonar
+  image: ciricihq/gitlab-sonar-scanner
+  variables:
+    SONAR_URL: http://localhost:8080
+    SONAR_ANALYSIS_MODE: publish
+  script:
+  - sonar-gitlab-scanner
   
 deploiement_dev:
   stage: deploiement
