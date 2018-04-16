@@ -16,6 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service permettant de gérer les actions effectuées pour les produits.
+ */
+
 @Service
 public class ProduitBusiness implements IProduitBusiness {
 

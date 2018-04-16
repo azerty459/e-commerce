@@ -13,6 +13,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service permettant de gérer les actions effectuées pour les catégories.
+ */
+
 @Service
 public class CategorieBusiness implements ICategorieBusiness {
 
@@ -21,6 +25,7 @@ public class CategorieBusiness implements ICategorieBusiness {
 
     /**
      * Ajout d'une catégorie parent
+     *
      * @param nomCategorie Le nom de la catégorie
      * @return la catégorie crée
      */
@@ -52,8 +57,9 @@ public class CategorieBusiness implements ICategorieBusiness {
 
     /**
      * Ajoute une catégorie enfant
+     *
      * @param nomCategorie Le nom de la catégorie
-     * @param parent Le parent de la catégorie à insérer
+     * @param parent       Le parent de la catégorie à insérer
      * @return la catégorie crée
      */
     @Override

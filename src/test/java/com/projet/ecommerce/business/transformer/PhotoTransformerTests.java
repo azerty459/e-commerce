@@ -1,12 +1,8 @@
 package com.projet.ecommerce.business.transformer;
 
-import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
 import com.projet.ecommerce.business.dto.PhotoDTO;
-import com.projet.ecommerce.business.dto.transformer.CaracteristiqueTransformer;
 import com.projet.ecommerce.business.dto.transformer.PhotoTransformer;
-import com.projet.ecommerce.persistance.entity.Caracteristique;
 import com.projet.ecommerce.persistance.entity.Photo;
-import com.projet.ecommerce.persistance.entity.TypeCaracteristique;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;

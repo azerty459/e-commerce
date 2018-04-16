@@ -1,24 +1,18 @@
 package com.projet.ecommerce.repository;
 
-import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Produit;
 import com.projet.ecommerce.persistance.repository.ProduitRepository;
-import liquibase.Liquibase;
-import liquibase.integration.spring.SpringLiquibase;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Collection;
-import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ActiveProfiles("test")
 public class ProduitRepositoryTests {
 
 	private static final Produit TEMP_INSERT = new Produit();
@@ -52,8 +46,8 @@ public class ProduitRepositoryTests {
 
 	@Test
 	public void insertProduit() {
-		Assert.assertNotNull(produitRepository.save(this.TEMP_INSERT));
-		Produit temp = produitRepository.findById(TEMP_INSERT.getReferenceProduit()).get();
+		Assert.assertNotNull(produitRepository.save(TEMP_INSERT));
+		Produit temp = produitRepository.findById(TEMP_INSERT.getReferenceProduit()).orElse(null);
 		Assert.assertNotNull(temp);
 	}
 
@@ -63,33 +57,34 @@ public class ProduitRepositoryTests {
 		Collection<Produit> produitCollection = produitRepository.findAll();
 		Assert.assertEquals(0, produitCollection.size());
 
-		produitRepository.save(this.TEMP_INSERT);
+		produitRepository.save(TEMP_INSERT);
 		produitCollection = produitRepository.findAll();
 		Assert.assertEquals(1, produitCollection.size());
 	}
 
 	@Test
 	public void getProduitByID() {
-		Assert.assertNotNull(produitRepository.save(this.TEMP_GET));
-		Produit temp = produitRepository.findById(TEMP_GET.getReferenceProduit()).get();
+		Assert.assertNotNull(produitRepository.save(TEMP_GET));
+		Produit temp = produitRepository.findById(TEMP_GET.getReferenceProduit()).orElse(null);
 		Assert.assertNotNull("Produit ne peut pas être null", temp);
-		Assert.assertEquals(this.TEMP_GET.getReferenceProduit(), temp.getReferenceProduit());
-		Assert.assertEquals(this.TEMP_GET.getPrixHT(), temp.getPrixHT(), 0);
-		Assert.assertEquals(this.TEMP_GET.getDescription(), temp.getDescription());
+		Assert.assertEquals(TEMP_GET.getReferenceProduit(), temp.getReferenceProduit());
+		Assert.assertEquals(TEMP_GET.getPrixHT(), temp.getPrixHT(), 0);
+		Assert.assertEquals(TEMP_GET.getDescription(), temp.getDescription());
 	}
 
 	@Test
 	public void updateProduit() {
 		produitRepository.save(TEMP_UPDATE);
-		Produit temp = produitRepository.findById(TEMP_UPDATE.getReferenceProduit()).get();
-		Assert.assertEquals(this.TEMP_UPDATE.getReferenceProduit(), temp.getReferenceProduit());
-		Assert.assertEquals(this.TEMP_UPDATE.getPrixHT(), temp.getPrixHT(), 0);
-		Assert.assertEquals(this.TEMP_UPDATE.getDescription(), temp.getDescription());
-		this.TEMP_UPDATE.setReferenceProduit("A05A100");
-		this.TEMP_UPDATE.setPrixHT(15.5);
-		this.TEMP_UPDATE.setDescription("joli chose");
-		Assert.assertNotNull(produitRepository.save(this.TEMP_UPDATE));
-		temp = produitRepository.findById(TEMP_UPDATE.getReferenceProduit()).get();
+		Produit temp = produitRepository.findById(TEMP_UPDATE.getReferenceProduit()).orElse(null);
+		Assert.assertEquals(TEMP_UPDATE.getReferenceProduit(), temp.getReferenceProduit());
+		Assert.assertEquals(TEMP_UPDATE.getPrixHT(), temp.getPrixHT(), 0);
+		Assert.assertEquals(TEMP_UPDATE.getDescription(), temp.getDescription());
+
+		TEMP_UPDATE.setReferenceProduit("A05A100");
+		TEMP_UPDATE.setPrixHT(15.5);
+		TEMP_UPDATE.setDescription("joli chose");
+		Assert.assertNotNull(produitRepository.save(TEMP_UPDATE));
+		temp = produitRepository.findById(TEMP_UPDATE.getReferenceProduit()).orElse(null);
 		Assert.assertEquals("joli chose", temp.getDescription());
 		Assert.assertEquals(TEMP_UPDATE.getPrixHT(), temp.getPrixHT(), 0);
 		Assert.assertEquals(TEMP_UPDATE.getReferenceProduit(), temp.getReferenceProduit());
@@ -97,16 +92,16 @@ public class ProduitRepositoryTests {
 
 	@Test
 	public void deleteProduit() {
-		Assert.assertNotNull(produitRepository.save(this.TEMP_DELETE));
+		Assert.assertNotNull(produitRepository.save(TEMP_DELETE));
 		produitRepository.delete(TEMP_DELETE);
 		Assert.assertFalse(produitRepository.findById(TEMP_DELETE.getReferenceProduit()).isPresent());
 	}
 
 	@After
 	public void end(){
-		produitRepository.delete(this.TEMP_DELETE);
-		produitRepository.delete(this.TEMP_GET);
-		produitRepository.delete(this.TEMP_INSERT);
-		produitRepository.delete(this.TEMP_UPDATE);
+		produitRepository.delete(TEMP_DELETE);
+		produitRepository.delete(TEMP_GET);
+		produitRepository.delete(TEMP_INSERT);
+		produitRepository.delete(TEMP_UPDATE);
 	}
 }
