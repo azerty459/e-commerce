@@ -8,7 +8,7 @@ before_script:
   - apt-get install docker
 
 sonarqube:
-  image: sonarqube:7.0
+  image: docker:latest
   stage: sonar
   script:
   - docker run -d --name sonarqube -p 9000:9000 -p 9092:9092 sonarqube
