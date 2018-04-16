@@ -12,6 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service permettant de gérer les actions effectuées pour les types de caractéristiques.
+ */
+
 @Service
 public class CaracteristiqueTypeBusiness implements ICaracteristiqueTypeBusiness {
 
@@ -20,6 +24,7 @@ public class CaracteristiqueTypeBusiness implements ICaracteristiqueTypeBusiness
 
     /**
      * Ajoute un type de caracteristique dans la base de données.
+     *
      * @param type Le type de la caractéristique
      * @return l'objet TypeCaracteristique crée
      */
@@ -32,14 +37,15 @@ public class CaracteristiqueTypeBusiness implements ICaracteristiqueTypeBusiness
 
     /**
      * Modifie le type de caracteristique dans la base de données.
+     *
      * @param idTypeCaracteristique Id du type de caracteristique à modifier.
-     * @param type Le nouveau type de caractéristique
+     * @param type                  Le nouveau type de caractéristique
      * @return l'objet TypeCaracteristique modifié, null s'il n'est pas trouvée
      */
     @Override
     public TypeCaracteristiqueDTO updateTypeCaracteristique(int idTypeCaracteristique, String type) {
         Optional<TypeCaracteristique> tempCaracteristiqueTypeRepository = TypecaracteristiqueRepository.findById(idTypeCaracteristique);
-        if (tempCaracteristiqueTypeRepository.isPresent() == true){
+        if (tempCaracteristiqueTypeRepository.isPresent() == true) {
             TypeCaracteristique caracteristiqueType = tempCaracteristiqueTypeRepository.get();
             caracteristiqueType.setType(type);
             return TypeCaracteristiqueTransformer.entityToDto(TypecaracteristiqueRepository.save(caracteristiqueType));
@@ -49,6 +55,7 @@ public class CaracteristiqueTypeBusiness implements ICaracteristiqueTypeBusiness
 
     /**
      * Supprimer le type de caracteristique dans la base de données.
+     *
      * @param idTypeCaracteristique Id du type de caractéristique à supprimer
      * @return true
      */
@@ -60,6 +67,7 @@ public class CaracteristiqueTypeBusiness implements ICaracteristiqueTypeBusiness
 
     /**
      * Retourne la liste complète des types de caractéristique liés à la base de données.
+     *
      * @return une liste de type de caractéristique.
      */
     @Override
@@ -69,6 +77,7 @@ public class CaracteristiqueTypeBusiness implements ICaracteristiqueTypeBusiness
 
     /**
      * Retourne le type de caractéristique recherché.
+     *
      * @param idTypeCaracteristique L'id du type de caractéristique recherché.
      * @return l'objet TypeCaracteristique recherché sinon null, s'il n'est pas trouvé
      */

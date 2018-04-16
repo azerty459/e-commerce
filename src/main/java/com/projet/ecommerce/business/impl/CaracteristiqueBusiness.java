@@ -13,6 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service permettant de gérer les actions effectuées pour les caractéristiques.
+ */
+
 @Service
 public class CaracteristiqueBusiness implements ICaracteristiqueBusiness {
 
@@ -21,8 +25,9 @@ public class CaracteristiqueBusiness implements ICaracteristiqueBusiness {
 
     /**
      * Ajoute une caracteristique dans la base de données.
+     *
      * @param typeCaracteristique Objet type caracteristique
-     * @param valeur Valeur
+     * @param valeur              Valeur
      * @return la caracteristique crée.
      */
     @Override
@@ -35,15 +40,16 @@ public class CaracteristiqueBusiness implements ICaracteristiqueBusiness {
 
     /**
      * Modifie une caractéristique dans la base de données.
-     * @param idCaracteristique Id de la caractéristiqe à modifier
+     *
+     * @param idCaracteristique   Id de la caractéristiqe à modifier
      * @param typeCaracteristique le nouveau objet TypeCaracteristique liée à la caractéristique
-     * @param valeur la nouvelle valeur associée à la caractéristique
+     * @param valeur              la nouvelle valeur associée à la caractéristique
      * @return la caractéristique modifié, null si elle n'est pas trouvée
      */
     @Override
     public CaracteristiqueDTO updateCaracteristique(int idCaracteristique, TypeCaracteristique typeCaracteristique, String valeur) {
         Optional<Caracteristique> tempCaracteristique = caracteristiqueRepository.findById(idCaracteristique);
-        if (tempCaracteristique.isPresent() == true){
+        if (tempCaracteristique.isPresent() == true) {
             Caracteristique caracteristique = tempCaracteristique.get();
             caracteristique.setTypeCaracteristique(typeCaracteristique);
             caracteristique.setValeur(valeur);
@@ -54,6 +60,7 @@ public class CaracteristiqueBusiness implements ICaracteristiqueBusiness {
 
     /**
      * Supprime une caractéristique dans la base de données.
+     *
      * @param idCaracteristique Id de la caractéristique à supprimer
      * @return true
      */
@@ -65,6 +72,7 @@ public class CaracteristiqueBusiness implements ICaracteristiqueBusiness {
 
     /**
      * Retourne la liste complète des caractéristiques liés à la base de données.
+     *
      * @return une liste de caracteristique
      */
     @Override
@@ -74,6 +82,7 @@ public class CaracteristiqueBusiness implements ICaracteristiqueBusiness {
 
     /**
      * Retourne la caractéristique recherché.
+     *
      * @param idCaracteristique Id de la caractéristique à rechercher
      * @return l'objet caractéristique recherché sinon null, s'il n'est pas trouvé
      */

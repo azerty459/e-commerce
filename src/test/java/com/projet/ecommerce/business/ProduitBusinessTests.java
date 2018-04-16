@@ -21,8 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
 public class ProduitBusinessTests {

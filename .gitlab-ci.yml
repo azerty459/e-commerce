@@ -8,18 +8,24 @@ tests:
   stage: tests
   script: 
   - mvn test
-
+  only:
+  - branches
+  
 deploiement_dev:
   stage: deploiement
   script: 
-    - echo 'Deploiement sur le serveur de developpement'
+    - echo 'Deploy sur le serv de developpement'
   only:
-    - dev
+    - /^dev.*$/
+  except:
+    - branches
 
 deploiement_master:
   stage: deploiement
   script: 
-    - echo 'Deploiement sur le serveur de production'
+    - echo 'Deploy sur le serv de production'
   only:
     - master
+  except:
+    - branches
 

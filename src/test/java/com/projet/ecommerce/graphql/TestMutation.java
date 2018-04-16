@@ -5,7 +5,6 @@ import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.business.impl.CategorieBusiness;
 import com.projet.ecommerce.business.impl.ProduitBusiness;
 import com.projet.ecommerce.entrypoint.graphQL.Mutation;
-import com.projet.ecommerce.persistance.entity.Categorie;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
