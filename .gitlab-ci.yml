@@ -22,7 +22,7 @@ sonarqube:
   script:
   - sonar-gitlab-scanner
   
-sonarqube:
+sonarqube-reports:
   stage: sonar
   image: ciricihq/gitlab-sonar-scanner
   variables:
