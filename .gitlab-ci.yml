@@ -8,7 +8,7 @@ stages:
 build:
   stage: build
   script:
-    - mvn package
+    - mvn package && java -jar target/e-commerce-0.0.1-SNAPSHOT.jar
 
 sonarqube:
   stage: sonar
@@ -21,7 +21,7 @@ sonarqube:
     SONAR_GITLAB_COMMENT: "true"
     SONAR_PUBLISH: "true"
   script:
-  - /usr/bin/sonar-scanner-run.sh
+  - /usr/bin/sonar-scanner-run.sh 
   
 deploiement_dev:
   stage: deploiement
