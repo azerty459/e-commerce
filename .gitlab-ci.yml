@@ -4,6 +4,9 @@ stages:
   - sonar
   - deploiement
   
+before_script:
+  - apt-get install docker
+
 sonarqube:
   image: sonarqube:7.0
   stage: sonar
