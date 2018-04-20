@@ -12,7 +12,7 @@ import java.util.List;
 public class Categorie {
 
     @Id
-    @Column
+    @Column(name = "nom_categorie")
     private String nomCategorie;
 
     @Column(name = "borne_gauche")
