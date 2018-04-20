@@ -35,7 +35,7 @@ public class Produit {
     @OneToMany(mappedBy="produit", cascade = CascadeType.ALL , fetch = FetchType.LAZY)
     private List<Caracteristique> caracteristiques;
 
-    @OneToMany(mappedBy="produit", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy="produit", cascade = CascadeType.ALL , fetch = FetchType.LAZY)
     private List<Photo> photos;
 
     /**

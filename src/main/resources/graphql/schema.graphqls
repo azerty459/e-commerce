@@ -6,7 +6,7 @@ type Categorie {
 type Produit {
     ref: String!
     nom: String!
-    description: String
+    description: String!
     prixHT: Float!
     categories: [Categorie]!
 }
