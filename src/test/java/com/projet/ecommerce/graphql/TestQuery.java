@@ -40,14 +40,14 @@ public class TestQuery {
     public void getAllProduit() {
         List<ProduitDTO> produitsDTO = new ArrayList<>();
         Mockito.when(produitBusiness.getAll()).thenReturn(produitsDTO);
-        List<ProduitDTO> retour = query.getAllProduit();
+        List<ProduitDTO> retour = query.produit();
 
         // on s'assure que la première fois, la liste retournée est vide
         Assert.assertNotNull(retour);
         Assert.assertEquals(retour.size(), 0);
 
         produitsDTO.add(new ProduitDTO());
-        retour = query.getAllProduit();
+        retour = query.produit();
         // on s'assure que la liste comporte bien un élément
         Assert.assertEquals(retour.size(), 1);
     }

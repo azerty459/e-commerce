@@ -29,7 +29,7 @@ public class Query implements GraphQLQueryResolver {
      * Obtenir tous les produits présents en base
      * @return la liste des produits présents en base
      */
-    public List<ProduitDTO> getAllProduit() {
+    public List<ProduitDTO> produit() {
         return produitBusiness.getAll();
     }
 

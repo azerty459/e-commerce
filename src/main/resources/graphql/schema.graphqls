@@ -12,10 +12,9 @@ type Produit {
 }
 
 type Query {
-    getAllProduit: [Produit]!
+    produit: [Produit]!
     getProduitByRef(ref: String!): Produit
     getProduitByCategorie(nom: String!): [Produit]!
-
     getAllCategorie: [Categorie]!
     getCategorieByNom(nom: String!): Categorie
 }
