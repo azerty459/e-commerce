@@ -9,7 +9,7 @@ tests:
   services: 
   - sonarqube:alpine
   script: 
-  - ping -c 5 10.6.67.150
+  - mvn sonar:sonar -Dsonar.host.url=http://10.6.67.150:9000 -Dsonar.login=admin -Dsonar.analysis.mode=analysis -Dsonar.gitlab.project_id=564
   only:
   - branches
   
