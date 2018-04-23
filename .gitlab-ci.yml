@@ -9,7 +9,7 @@ tests:
   services: 
   - sonarqube:alpine
   script: 
-  - ping 172.18.0.1
+  - ping -c 5 10.6.67.150
   only:
   - branches
   
