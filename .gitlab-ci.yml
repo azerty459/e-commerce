@@ -9,8 +9,7 @@ tests:
   services: 
   - sonarqube:alpine
   script: 
-  - mvn clean install -DskipTests=true
-  - mvn sonar:sonar
+  - ping 172.18.0.1
   only:
   - branches
   
