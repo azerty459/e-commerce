@@ -1,4 +1,4 @@
-image: maven:3.5.3-jdk-8
+image: maven:3.5.3-jdk-8-slim
   
 stages:
   - tests
@@ -7,7 +7,7 @@ stages:
 tests:
   stage: tests
   script: 
-  - mvn sonar:sonar
+  - ping 10.6.67.150:9000
   only:
   - branches
   
