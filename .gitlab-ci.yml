@@ -6,7 +6,7 @@ stages:
   
 tests:
   stage: tests
-  image: sonarqube:alpine
+  image: sonarqube:7.1
   script: 
   - mvn clean install -DskipTests=true
   - mvn sonar:sonar
