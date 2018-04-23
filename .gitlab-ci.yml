@@ -6,10 +6,12 @@ stages:
   
 tests:
   stage: tests
-  services: 
-  - sonarqube:alpine
-  script: 
-  - mvn sonar:sonar -Dsonar.host.url=http://10.6.67.150:9000 -Dsonar.login=admin -Dsonar.analysis.mode=analysis -Dsonar.gitlab.project_id=564
+  image: ciricihq/gitlab-sonar-scanner
+  variables:
+    SONAR_URL: http://10.6.67.150:9000
+    SONAR_ANALYSIS_MODE: issues
+  script:
+  - sonar-gitlab-scanner
   only:
   - branches
   
