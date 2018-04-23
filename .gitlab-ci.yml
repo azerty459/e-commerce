@@ -6,8 +6,10 @@ stages:
   
 tests:
   stage: tests
+  image: sonarqube:alpine
   script: 
-  - mvn test
+  - mvn clean install -DskipTests=true
+  - mvn sonar:sonar
   only:
   - branches
   
