@@ -6,7 +6,8 @@ stages:
   
 tests:
   stage: tests
-  services: sonarqube:alpine
+  services: 
+  - sonarqube:alpine
   script: 
   - mvn clean install -DskipTests=true
   - mvn sonar:sonar
