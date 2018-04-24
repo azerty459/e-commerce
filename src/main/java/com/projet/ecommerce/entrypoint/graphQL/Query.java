@@ -25,6 +25,23 @@ public class Query implements GraphQLQueryResolver {
     @Autowired
     private IProduitBusiness produitBusiness;
 
+
+    /**
+     * A FAIRE *******************************************************************
+     *
+     * @param ref la référence du produit recherché
+     * @param cat la catégorie du /des produit(s) recherché(s)
+     * @return la liste des produits trouvés selon ces critères
+     */
+    public List<ProduitDTO> produits(String ref, String cat) {
+        return produitBusiness.getAll(ref, cat);
+    }
+
+
+
+
+
+
     /**
      * Obtenir tous les produits présents en base
      * @return la liste des produits présents en base

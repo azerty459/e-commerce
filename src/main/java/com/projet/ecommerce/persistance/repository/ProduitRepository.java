@@ -11,7 +11,8 @@ import java.util.Collection;
  */
 
 @Repository
-public interface ProduitRepository extends CrudRepository<Produit, String> {
+public interface ProduitRepository extends CrudRepository<Produit, String>, ProduitRepositoryCustom {
 
     Collection<Produit> findAll();
+
 }

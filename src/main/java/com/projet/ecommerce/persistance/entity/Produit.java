@@ -1,7 +1,6 @@
 package com.projet.ecommerce.persistance.entity;
 
 import javax.persistence.*;
-import java.util.Collection;
 import java.util.List;
 
 /**
