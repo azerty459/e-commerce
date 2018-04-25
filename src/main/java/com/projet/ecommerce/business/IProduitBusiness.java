@@ -20,7 +20,7 @@ public interface IProduitBusiness {
      * @param prixHT           Son prix hors taxe
      * @return le produit ajouté
      */
-    ProduitDTO add(String referenceProduit, String nom, String description, Float prixHT);
+    ProduitDTO add(String referenceProduit, String nom, String description, Double prixHT);
 
     /**
      * Méthode définissant la modification d'un produit.

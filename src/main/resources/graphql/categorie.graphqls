@@ -1,0 +1,22 @@
+type Categorie {
+    nom: String!
+    sousCategories: [Categorie]!
+}
+
+extend type Query {
+    getAllCategorie: [Categorie]!
+    getCategorieByNom(nom: String!): Categorie
+}
+
+extend type Mutation {
+    addCategorieParent(nom: String!): Categorie!
+    addCategorieEnfant(nom: String!, pere: String): Categorie!
+    deleteCategorie(nom: String!): Boolean!
+}
+
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+

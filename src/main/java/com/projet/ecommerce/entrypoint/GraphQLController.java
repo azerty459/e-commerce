@@ -1,9 +1,13 @@
 package com.projet.ecommerce.entrypoint;
 
+import com.projet.ecommerce.entrypoint.graphQL.GraphQlUtility;
+import graphql.ExecutionResult;
 import graphql.GraphQL;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -11,13 +15,18 @@ import java.util.Map;
  */
 
 @RestController
-@RequestMapping("/graphql")
 public class GraphQLController {
 
-    @Autowired
     private GraphQL graphQL;
 
-    @RequestMapping(method = RequestMethod.POST)
+    @Autowired
+    private GraphQlUtility graphQlUtility;
+
+    GraphQLController(GraphQlUtility graphQlUtility) throws IOException {
+        graphQL = graphQlUtility.createGraphQlObject();
+    }
+
+    @RequestMapping(value = "/graphql", method = RequestMethod.POST)
     public Object handle(@RequestBody Map<String,String> query) {
         return graphQL.execute(query.get("query")).getData();
     }

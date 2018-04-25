@@ -39,7 +39,7 @@ public class ProduitBusiness implements IProduitBusiness {
      * @return l'objet produit crée ou null, s'il il manque une referenceProduit, un nom et un prixHT.
      */
     @Override
-    public ProduitDTO add(String referenceProduit, String nom, String description, Float prixHT) {
+    public ProduitDTO add(String referenceProduit, String nom, String description, Double prixHT) {
         if (!referenceProduit.isEmpty() && !nom.isEmpty() && prixHT != null) {
             Produit produit = new Produit();
             produit.setReferenceProduit(referenceProduit);

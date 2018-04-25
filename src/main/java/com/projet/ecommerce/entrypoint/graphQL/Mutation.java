@@ -28,7 +28,7 @@ public class Mutation implements GraphQLMutationResolver {
      * @param prixHT Son prix hors taxe
      * @return le produit ajouté
      */
-    public ProduitDTO addProduit(String referenceProduit, String nom, String description, Float prixHT) {
+    public ProduitDTO addProduit(String referenceProduit, String nom, String description, Double prixHT) {
         return produitBusiness.add(referenceProduit, nom, description, prixHT);
     }
 

@@ -51,7 +51,7 @@ public class ProduitBusinessTests {
         produit.setCaracteristiques(new ArrayList<>());
         Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
 
-        ProduitDTO retour1 = produitBusiness.add("Test", "Test", "Test", 4.7f);
+        ProduitDTO retour1 = produitBusiness.add("Test", "Test", "Test", 4.7);
         Assert.assertNotNull(retour1);
         Assert.assertEquals(produit.getNom(), retour1.getNom());
         Assert.assertEquals(produit.getDescription(), retour1.getDescription());
@@ -61,7 +61,7 @@ public class ProduitBusinessTests {
         ProduitDTO retour2 = produitBusiness.add("", "", "dfdfdf", null);
         Assert.assertNull(retour2);
 
-        ProduitDTO retour3 = produitBusiness.add("ddfd", "sdffd", "", 4.7f);
+        ProduitDTO retour3 = produitBusiness.add("ddfd", "sdffd", "", 4.7);
         Assert.assertNotNull(retour3);
     }
 

@@ -1,0 +1,30 @@
+type Produit {
+    ref: String!
+    nom: String!
+    description: String!
+    prixHT: Float!
+    categories: [Categorie]!
+}
+
+type Categorie {
+    nom: String!
+    sousCategories: [Categorie]!
+}
+
+
+type Query {
+    getAllProduit: [Produit]!
+    getProduitByRef(ref: String!): Produit
+    getProduitByCategorie(nom: String!): [Produit]!
+}
+
+type Mutation {
+    addProduit(ref: String!, nom: String!, description: String!, prixHT: Float!): Produit!
+    updateProduit(ref: String!, nom: String!, description: String!, prixHT: Float!): Produit!
+    deleteProduit(ref: String!): Boolean!
+}
+
+schema {
+    query: Query
+    mutation: Mutation
+}

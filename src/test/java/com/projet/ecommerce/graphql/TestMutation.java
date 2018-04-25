@@ -39,8 +39,8 @@ public class TestMutation {
 
     @Test
     public void addProduit(){
-        Mockito.when(produitBusiness.add(Mockito.anyString(),Mockito.anyString(),Mockito.anyString(),Mockito.anyFloat())).thenReturn(new ProduitDTO());
-        ProduitDTO retour = mutation.addProduit("Test", "Test", "Test" , 4.7f);
+        Mockito.when(produitBusiness.add(Mockito.anyString(),Mockito.anyString(),Mockito.anyString(),Mockito.anyDouble())).thenReturn(new ProduitDTO());
+        ProduitDTO retour = mutation.addProduit("Test", "Test", "Test" , 4.7);
         Assert.assertNotNull(retour);
         Assert.assertThat(retour, instanceOf(ProduitDTO.class));
     }
