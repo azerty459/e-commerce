@@ -13,6 +13,7 @@ type Produit {
 
 type Query {
     produits(ref: String, cat: String): [Produit]!
+    categories(nom: String): [Categorie]!
 }
 
 

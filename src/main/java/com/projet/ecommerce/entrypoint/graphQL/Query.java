@@ -3,6 +3,7 @@ package com.projet.ecommerce.entrypoint.graphQL;
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import com.projet.ecommerce.business.ICategorieBusiness;
 import com.projet.ecommerce.business.IProduitBusiness;
+import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.business.dto.ProduitDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,9 +16,6 @@ import java.util.List;
 @Component
 public class Query implements GraphQLQueryResolver {
 
-    /**
-     *
-     */
     @Autowired
     private ICategorieBusiness categorieBusiness;
 
@@ -33,8 +31,22 @@ public class Query implements GraphQLQueryResolver {
      * @return la liste des produits trouvés selon ces critères
      */
     public List<ProduitDTO> produits(String ref, String cat) {
-
         return produitBusiness.getAll(ref, cat);
     }
+
+    /**
+     * Implémente la query GraphQL "categories"
+     *
+     * @param nom le nom de la catégorie recherchée
+     * @return la liste des catégories trouvées
+     */
+    public List<CategorieDTO> categories(String nom) {
+        return categorieBusiness.getCategorie(nom);
+    }
+
+
+
+
+
 
 }

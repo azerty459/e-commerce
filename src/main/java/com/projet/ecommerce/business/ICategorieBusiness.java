@@ -1,9 +1,7 @@
 package com.projet.ecommerce.business;
 
 import com.projet.ecommerce.business.dto.CategorieDTO;
-import com.projet.ecommerce.persistance.entity.Categorie;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -11,6 +9,13 @@ import java.util.List;
  */
 
 public interface ICategorieBusiness {
+
+    /**
+     * Méthode allant chercher les catégories
+     * @param nom le nom de la catégorie à aller chercher. "null" si on cherche à lister toutes les catégories.
+     * @return liste des catégories recherchées
+     */
+    List<CategorieDTO> getCategorie(String nom);
 
     /**
      * Méthode définissant l'ajout d'une catégorie parent.
