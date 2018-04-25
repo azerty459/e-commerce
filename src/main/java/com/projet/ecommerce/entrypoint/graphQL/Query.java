@@ -16,55 +16,37 @@ import java.util.List;
 @Component
 public class Query implements GraphQLQueryResolver {
 
-    /**
-     *
-     */
     @Autowired
     private ICategorieBusiness categorieBusiness;
 
     @Autowired
     private IProduitBusiness produitBusiness;
 
+
     /**
-     * Obtenir tous les produits présents en base
-     * @return la liste des produits présents en base
+     * Implémente la query GraphQL "produits"
+     *
+     * @param ref la référence du produit recherché
+     * @param cat la catégorie du /des produit(s) recherché(s)
+     * @return la liste des produits trouvés selon ces critères
      */
-    public List<ProduitDTO> getAllProduit() {
-        return produitBusiness.getAll();
+    public List<ProduitDTO> produits(String ref, String cat) {
+        return produitBusiness.getAll(ref, cat);
     }
 
     /**
-     * Obtenir un produit en fonction de sa référence
-     * @param referenceProduit la référence du produit voulu
-     * @return le produit recherché
+     * Implémente la query GraphQL "categories"
+     *
+     * @param nom le nom de la catégorie recherchée
+     * @return la liste des catégories trouvées
      */
-    public ProduitDTO getProduitByRef(String referenceProduit) {
-        return produitBusiness.getByRef(referenceProduit);
+    public List<CategorieDTO> categories(String nom) {
+        return categorieBusiness.getCategorie(nom);
     }
 
-    /**
-     * Obtenir les produits appartenant à une catégorie
-     * @param nomCategorie la catégorie voulue
-     * @return la liste des produits appartenants à la catégorie recherchée
-     */
-    public List<ProduitDTO> getProduitByCategorie(String nomCategorie){
-        return produitBusiness.getByCategorie(nomCategorie);
-    }
 
-    /**
-     * Obtenir toute les catégories présentes en base
-     * @return la liste des catégories présentes en base
-     */
-    public List<CategorieDTO> getAllCategorie() {
-        return categorieBusiness.getAll();
-    }
 
-    /**
-     * Obtenir une catégorie en fonction de son nom
-     * @param nomCategorie le nom de la catégorie recherchée
-     * @return la catégorie trouvée
-     */
-    public CategorieDTO getCategorieByNom(String nomCategorie) {
-        return categorieBusiness.getByNom(nomCategorie);
-    }
+
+
+
 }

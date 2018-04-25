@@ -9,7 +9,9 @@ import com.projet.ecommerce.persistance.entity.Photo;
 import com.projet.ecommerce.persistance.entity.Produit;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import com.projet.ecommerce.persistance.repository.ProduitRepository;
+import com.projet.ecommerce.persistance.repository.ProduitRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -25,6 +27,10 @@ public class ProduitBusiness implements IProduitBusiness {
 
     @Autowired
     private ProduitRepository produitRepository;
+
+    @Autowired
+    @Qualifier("produitRepositoryCustomImpl")
+    private ProduitRepositoryCustom produitRepositoryCustom;
 
     @Autowired
     private CategorieRepository categorieRepository;
@@ -97,6 +103,20 @@ public class ProduitBusiness implements IProduitBusiness {
     public List<ProduitDTO> getAll() {
         return new ArrayList<>(ProduitTransformer.entityToDto(new ArrayList<>(produitRepository.findAll())));
     }
+
+    /**
+     * Va chercher les produits selon les paramètres ci-dessous
+     * @param ref la référence du produit recherché
+     * @param cat la catégorie du /des produit(s) recherché(s)
+     * @return
+     */
+    @Override
+    public List<ProduitDTO> getAll(String ref, String cat) {
+
+        return new ArrayList<>(ProduitTransformer.entityToDto(new ArrayList<>(produitRepositoryCustom.findAllWithCriteria(ref, cat))));
+    }
+
+
 
     /**
      * Retourne le produit recherché.

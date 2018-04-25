@@ -5,11 +5,11 @@ import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.business.dto.transformer.CategorieTransformer;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
+import com.projet.ecommerce.persistance.repository.CategorieRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +22,14 @@ public class CategorieBusiness implements ICategorieBusiness {
 
     @Autowired
     private CategorieRepository categorieRepository;
+
+    @Autowired
+    private CategorieRepositoryCustom categorieRepositoryCustom;
+
+    @Override
+    public List<CategorieDTO> getCategorie(String nom) {
+        return new ArrayList<>(CategorieTransformer.entityToDto(new ArrayList<>(categorieRepositoryCustom.findAll(nom))));
+    }
 
     /**
      * Ajout d'une catégorie parent

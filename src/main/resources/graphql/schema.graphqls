@@ -12,13 +12,10 @@ type Produit {
 }
 
 type Query {
-    getAllProduit: [Produit]!
-    getProduitByRef(ref: String!): Produit
-    getProduitByCategorie(nom: String!): [Produit]!
-
-    getAllCategorie: [Categorie]!
-    getCategorieByNom(nom: String!): Categorie
+    produits(ref: String, cat: String): [Produit]!
+    categories(nom: String): [Categorie]!
 }
+
 
 type Mutation {
     addProduit(ref: String!, nom: String!, description: String!, prixHT: Float!): Produit!

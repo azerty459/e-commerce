@@ -1,7 +1,6 @@
 package com.projet.ecommerce.business;
 
 import com.projet.ecommerce.business.dto.ProduitDTO;
-import com.projet.ecommerce.persistance.entity.Produit;
 
 import java.util.List;
 
@@ -47,6 +46,21 @@ public interface IProduitBusiness {
      * @return une liste de produit
      */
     List<ProduitDTO> getAll();
+
+
+
+
+
+    /**
+     * A FAIRE *******************************************************************
+     * @param ref la référence du produit recherché
+     * @param cat la catégorie du /des produit(s) recherché(s)
+     * @return la liste des produits trouvés
+     */
+    List<ProduitDTO> getAll(String ref, String cat);
+
+
+
 
     /**
      * Méthode définissant la recherche d'un produit selon la référence du produit recherché.
