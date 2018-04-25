@@ -105,7 +105,7 @@ public class ProduitBusiness implements IProduitBusiness {
     }
 
     /**
-     * A FAIRE *******************************************************************
+     * Va chercher les produits selon les paramètres ci-dessous
      * @param ref la référence du produit recherché
      * @param cat la catégorie du /des produit(s) recherché(s)
      * @return
