@@ -7,7 +7,7 @@ stages:
 tests:
   stage: tests
   script: 
-  - mvn test
+  - ping 10.6.67.150:9000
   only:
   - branches
   
