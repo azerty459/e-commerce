@@ -25,7 +25,7 @@ public class CategorieMutation {
                 return categorieBusiness.addParent(env.getArgument("nom"));
             }
         });
-        builder.dataFetcher("addEnfant", new DataFetcher() {
+        builder.dataFetcher("addCategorieEnfant", new DataFetcher() {
             @Override
             public CategorieDTO get(DataFetchingEnvironment env) {
                 return categorieBusiness.addEnfant(env.getArgument("nom"), env.getArgument("pere"));

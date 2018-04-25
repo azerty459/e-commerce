@@ -4,8 +4,7 @@ type Categorie {
 }
 
 extend type Query {
-    getAllCategorie: [Categorie]!
-    getCategorieByNom(nom: String!): Categorie
+    categories(nom: String): [Categorie]!
 }
 
 extend type Mutation {

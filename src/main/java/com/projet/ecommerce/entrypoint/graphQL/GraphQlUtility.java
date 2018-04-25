@@ -1,7 +1,10 @@
 package com.projet.ecommerce.entrypoint.graphQL;
 
+import com.projet.ecommerce.entrypoint.graphQL.categorie.CategorieMutation;
+import com.projet.ecommerce.entrypoint.graphQL.categorie.CategorieQuery;
 import com.projet.ecommerce.entrypoint.graphQL.produit.ProduitMutation;
 import com.projet.ecommerce.entrypoint.graphQL.produit.ProduitQuery;
+import com.projet.ecommerce.persistance.entity.Categorie;
 import graphql.GraphQL;
 import graphql.schema.GraphQLSchema;
 import graphql.schema.idl.RuntimeWiring;
@@ -27,6 +30,12 @@ public class GraphQlUtility {
     @Autowired
     private ProduitMutation produitMutation;
 
+    @Autowired
+    private CategorieQuery categorieQuery;
+
+    @Autowired
+    private CategorieMutation categorieMutation;
+
     @PostConstruct
     public GraphQL createGraphQlObject() {
         return GraphQL.newGraphQL(graphQLSchema())
@@ -37,6 +46,8 @@ public class GraphQlUtility {
         return  RuntimeWiring.newRuntimeWiring()
                 .type(produitQuery.produitWiring())
                 .type(produitMutation.produitWiring())
+                .type(categorieQuery.produitWiring())
+                .type(categorieMutation.produitWiring())
                 .build();
     }
 
@@ -49,7 +60,7 @@ public class GraphQlUtility {
         TypeDefinitionRegistry typeRegistry = new TypeDefinitionRegistry();
         // chaque registre est fusionné dans le registre principal
         typeRegistry.merge(schemaParser.parse(produitSchemaFile));
-        //typeRegistry.merge(schemaParser.parse(categorieSchemaFile));
+        typeRegistry.merge(schemaParser.parse(categorieSchemaFile));
 
         RuntimeWiring wiring = buildRuntimeWiring();
         return new SchemaGenerator().makeExecutableSchema(typeRegistry, wiring);
