@@ -4,6 +4,7 @@ import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.business.impl.CategorieBusiness;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
+import com.projet.ecommerce.persistance.repository.CategorieRepositoryCustom;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,6 +26,9 @@ public class CategorieBusinessTests {
 
 	@Mock
 	private CategorieRepository categorieRepository;
+
+	@Mock
+	private CategorieRepositoryCustom categorieRepositoryCustom;
 
 	@InjectMocks
 	private CategorieBusiness categorieBusiness;
@@ -111,6 +115,41 @@ public class CategorieBusinessTests {
 		CategorieDTO retour = categorieDTOList.get(0);
 		Assert.assertEquals(categorie1.getNomCategorie(), retour.getNom());
         Assert.assertEquals(categorie2.getNomCategorie(), retour.getSousCategories().get(0).getNom());
+	}
+
+	@Test
+	public void getCategorie() {
+		List<Categorie> categories = new ArrayList<>();
+		Mockito.when(categorieRepositoryCustom.findAll(Mockito.anyString())).thenReturn(categories);
+		Assert.assertEquals(categorieBusiness.getCategorie("nom").size(), 0);
+
+		// Création des catégories et ajout dans la liste.
+		Categorie categorie1 = new Categorie();
+		categorie1.setNomCategorie("Transport1");
+		categorie1.setBorneGauche(1);
+		categorie1.setBorneDroit(4);
+		categorie1.setLevel(1);
+		categorie1.setProduits(new ArrayList<>());
+
+		Categorie categorie2 = new Categorie();
+		categorie2.setNomCategorie("Transport1");
+		categorie2.setBorneGauche(2);
+		categorie2.setBorneDroit(3);
+		categorie2.setLevel(2);
+		categorie2.setProduits(new ArrayList<>());
+
+		categories.add(categorie1);
+		categories.add(categorie2);
+
+		// Tests
+		Mockito.when(categorieRepositoryCustom.findAll(Mockito.anyString())).thenReturn(categories);
+		List<CategorieDTO> categorieDTOList = categorieBusiness.getCategorie("nom");
+
+		Assert.assertEquals(2, categories.size());
+
+		CategorieDTO retour = categorieDTOList.get(0);
+		Assert.assertEquals(categorie1.getNomCategorie(), retour.getNom());
+		Assert.assertEquals(categorie2.getNomCategorie(), retour.getSousCategories().get(0).getNom());
 	}
 
 	@Test
