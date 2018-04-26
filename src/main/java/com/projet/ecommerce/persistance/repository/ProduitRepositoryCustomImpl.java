@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.Collection;
-import java.util.List;
+
 
 @Repository
 public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
@@ -34,29 +34,22 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
     @Override
     public Collection<Produit> findAllWithCriteria(String ref, String cat) {
 
-        String sql = "";
         Query query = null;
 
-        // ref et cat sont nuls
-        if(ref == null && cat == null) {
-            query =  entityManager.createQuery(SQL_ALL_PRODUCTS, Produit.class);
-            return query.getResultList();
+        if(ref == null) {
+            if(cat == null) {
+                query =  entityManager.createQuery(SQL_ALL_PRODUCTS, Produit.class);
+            }
+            else {
+                query =  entityManager.createQuery(SQL_PRODUCTS_BY_CATEGORY, Collection.class);
+                query.setParameter("cat", cat);
+            }
         }
-
-        // Seul ref est non nul
-        if(ref != null && cat == null) {
+        else {
+            // Dans tous les cas, on fait une recherche par référence
             query =  entityManager.createQuery(SQL_PRODUCT_BY_REFERENCE, Produit.class);
             query.setParameter("ref", ref);
-            return query.getResultList();
         }
-
-        // Seul cat est non null
-        if(ref == null && cat != null) {
-            query =  entityManager.createQuery(SQL_PRODUCTS_BY_CATEGORY, Collection.class);
-            query.setParameter("cat", cat);
-        }
-
-        // ref et cat non nulls: à implémenter si demandé
 
         return query.getResultList();
     }
