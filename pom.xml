@@ -119,10 +119,6 @@
             <artifactId>h2</artifactId>
             <scope>test</scope>
         </dependency>
-        Mockito.when(produitBusiness.add(Mockito.anyString(),Mockito.anyString(),Mockito.anyString(),Mockito.anyDouble())).thenReturn(new ProduitDTO());
-        ProduitDTO retour = mutation.addProduit("Test", "Test", "Test" , 4.7);
-        Assert.assertNotNull(retour);
-        Assert.assertThat(retour, instanceOf(ProduitDTO.class));
     </dependencies>
 
     <build>
