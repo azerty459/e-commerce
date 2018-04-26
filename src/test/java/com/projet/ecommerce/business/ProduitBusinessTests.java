@@ -83,7 +83,7 @@ public class ProduitBusinessTests {
 
         Mockito.when(produitRepository.findById(Mockito.any())).thenReturn(Optional.of(produit));
         Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
-        ProduitDTO retour = produitBusiness.update("Test", "Test", "Test", 4.7f);
+        ProduitDTO retour = produitBusiness.update("Test", "Test", "Test", 4.7);
         Assert.assertNotNull(retour);
 
         Assert.assertEquals(produit.getNom(), retour.getNom());
@@ -95,7 +95,7 @@ public class ProduitBusinessTests {
     @Test
     public void updateEmpty() {
         Mockito.when(produitRepository.findById(Mockito.any())).thenReturn(Optional.empty());
-        ProduitDTO retour2 = produitBusiness.update("Test", "Test", "Test", 4.7f);
+        ProduitDTO retour2 = produitBusiness.update("Test", "Test", "Test", 4.7);
         Assert.assertNull(retour2);
     }
 

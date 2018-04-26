@@ -70,7 +70,7 @@ public class ProduitBusiness implements IProduitBusiness {
      * @return l'objet produit modifié, null si le produit à modifier n'est pas trouvée
      */
     @Override
-    public ProduitDTO update(String referenceProduit, String nom, String description, Float prixHT) {
+    public ProduitDTO update(String referenceProduit, String nom, String description, Double prixHT) {
         Optional<Produit> produitOptional = produitRepository.findById(referenceProduit);
         if (produitOptional.isPresent()) {
             Produit produit = produitOptional.get();

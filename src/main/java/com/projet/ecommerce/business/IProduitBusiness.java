@@ -30,7 +30,7 @@ public interface IProduitBusiness {
      * @param prixHT           Le nouveau prix hors taxe
      * @return l'objet produit modifié, null si le produit à modifier n'est pas trouvée
      */
-    ProduitDTO update(String referenceProduit, String nom, String description, Float prixHT);
+    ProduitDTO update(String referenceProduit, String nom, String description, Double prixHT);
 
     /**
      * Méthode définissant la suppression d'un produit.
