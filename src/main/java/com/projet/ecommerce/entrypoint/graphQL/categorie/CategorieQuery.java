@@ -20,14 +20,10 @@ public class CategorieQuery {
 
         TypeRuntimeWiring.Builder builder = new TypeRuntimeWiring.Builder();
         builder.typeName("Query");
-        builder.dataFetcher("categories", new DataFetcher() {
+        builder.dataFetcher("categories", (DataFetchingEnvironment env) ->
+                categorieBusiness.getCategorie(env.getArgument("nom")
 
-            @Override
-            public List<CategorieDTO> get(DataFetchingEnvironment env) {
-              return categorieBusiness.getCategorie(env.getArgument("nom"));
-            }
-
-        });
+                ));
         return builder.build();
     }
 }
