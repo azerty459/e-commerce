@@ -1,6 +1,7 @@
-package com.projet.ecommerce.persistance.repository;
+package com.projet.ecommerce.persistance.repository.impl;
 
 import com.projet.ecommerce.persistance.entity.Categorie;
+import com.projet.ecommerce.persistance.repository.CategorieRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 

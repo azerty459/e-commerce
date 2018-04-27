@@ -37,7 +37,7 @@ public class ProduitTransformer {
         produitDTO.setPrixHT(produit.getPrixHT());
         produitDTO.setCaracteristiques(new ArrayList<>(CaracteristiqueTransformer.entityToDto(produit.getCaracteristiques())));
         produitDTO.setPhotos(new ArrayList<>(PhotoTransformer.entityToDto(produit.getPhotos())));
-        produitDTO.setCategories(new ArrayList<>(CategorieTransformer.entityToDto(produit.getCategories())));
+        produitDTO.setCategories(new ArrayList<>(CategorieTransformer.entityToDto(produit.getCategories(), false)));
         return produitDTO;
     }
 

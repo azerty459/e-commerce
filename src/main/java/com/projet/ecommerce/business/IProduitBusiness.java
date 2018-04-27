@@ -1,6 +1,8 @@
 package com.projet.ecommerce.business;
 
 import com.projet.ecommerce.business.dto.ProduitDTO;
+import com.projet.ecommerce.persistance.entity.Produit;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -47,20 +49,13 @@ public interface IProduitBusiness {
      */
     List<ProduitDTO> getAll();
 
-
-
-
-
     /**
-     * A FAIRE *******************************************************************
+     * Méthode définissant la recherche des produits selon les paramètres ci-dessous
      * @param ref la référence du produit recherché
      * @param cat la catégorie du /des produit(s) recherché(s)
      * @return la liste des produits trouvés
      */
     List<ProduitDTO> getAll(String ref, String cat);
-
-
-
 
     /**
      * Méthode définissant la recherche d'un produit selon la référence du produit recherché.
@@ -71,7 +66,18 @@ public interface IProduitBusiness {
     ProduitDTO getByRef(String referenceProduit);
 
     /**
-     * Méthode définissant la recherche de plusieurs produit par le nom d'une catégorie.
+     * Méthode définissant la recherche de plusieurs produit par le nom d'une catégorie
+     * @param nomCategorie le nom de la catégorie
+     * @return une liste de ProduitDTO
      */
     List<ProduitDTO> getByCategorie(String nomCategorie);
+
+    /**
+     * Méthode définissant la pagination
+     * @param pageNumber la page souhaitée
+     * @param nb le nombre de produit à afficher dans la page
+     * @return une page de produit
+     */
+    Page<Produit> getPage(int pageNumber, int nb);
+
 }

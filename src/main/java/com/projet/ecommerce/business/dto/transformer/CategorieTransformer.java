@@ -38,10 +38,12 @@ public class CategorieTransformer {
      * @param categoriesList Une liste de d'objets Categorie
      * @return une collection d'objets CategorieDTO
      */
-    public static Collection<CategorieDTO> entityToDto(List<Categorie> categoriesList) {
+    public static Collection<CategorieDTO> entityToDto(List<Categorie> categoriesList, Boolean sousCat) {
         List<CategorieDTO> categorieDTOList = new ArrayList<>();
         for(int i=0; i<categoriesList.size(); i++) {
-            if(categoriesList.get(i).getLevel() == 1)
+            if(sousCat && categoriesList.get(i).getLevel() == 1)
+                categorieDTOList.add(entityToDto(categoriesList.get(i), categoriesList));
+            else if (sousCat == false)
                 categorieDTOList.add(entityToDto(categoriesList.get(i), categoriesList));
         }
         return categorieDTOList;

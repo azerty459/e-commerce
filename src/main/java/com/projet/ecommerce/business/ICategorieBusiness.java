@@ -1,6 +1,8 @@
 package com.projet.ecommerce.business;
 
 import com.projet.ecommerce.business.dto.CategorieDTO;
+import com.projet.ecommerce.persistance.entity.Categorie;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -57,4 +59,13 @@ public interface ICategorieBusiness {
      * @return l'objet categorie recherché
      */
     CategorieDTO getByNom(String nomCategorie);
+
+
+    /**
+     * Méthode définissant la pagination
+     * @param pageNumber le page souhaitée
+     * @param nb le nombre de produit à afficher dans la page
+     * @return une page de categorie
+     */
+    Page<Categorie> getPage(int pageNumber, int nb);
 }

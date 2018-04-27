@@ -7,6 +7,8 @@ import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import com.projet.ecommerce.persistance.repository.CategorieRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,7 +30,7 @@ public class CategorieBusiness implements ICategorieBusiness {
 
     @Override
     public List<CategorieDTO> getCategorie(String nom) {
-        return new ArrayList<>(CategorieTransformer.entityToDto(new ArrayList<>(categorieRepositoryCustom.findAll(nom))));
+        return new ArrayList<>(CategorieTransformer.entityToDto(new ArrayList<>(categorieRepositoryCustom.findAll(nom)), true));
     }
 
     /**
@@ -60,7 +62,7 @@ public class CategorieBusiness implements ICategorieBusiness {
         categorieInserer.setLevel(1);
         categorieInserer.setProduits(new ArrayList<>());
 
-        return CategorieTransformer.entityToDto(categorieRepository.save(categorieInserer), new ArrayList<>(categorieRepository.findAll()));
+        return CategorieTransformer.entityToDto(categorieRepository.save(categorieInserer), new ArrayList<>());
     }
 
     /**
@@ -99,7 +101,7 @@ public class CategorieBusiness implements ICategorieBusiness {
             // On ajoute + 2 au père sur sa borne droite puis au sauvegarde
             categorieParent.setBorneDroit(categorieParent.getBorneDroit() + 2);
             categorieRepository.save(categorieParent);
-            return CategorieTransformer.entityToDto(categorieRepository.save(categorieInserer), new ArrayList<>(categorieRepository.findAll()));
+            return CategorieTransformer.entityToDto(categorieRepository.save(categorieInserer), new ArrayList<>());
         }
         return null;
     }
@@ -123,7 +125,7 @@ public class CategorieBusiness implements ICategorieBusiness {
      */
     @Override
     public List<CategorieDTO> getAll() {
-        return new ArrayList<>(CategorieTransformer.entityToDto(new ArrayList<>(categorieRepository.findAll())));
+        return new ArrayList<>(CategorieTransformer.entityToDto(new ArrayList<>(categorieRepository.findAll()), false));
     }
 
     /**
@@ -139,5 +141,16 @@ public class CategorieBusiness implements ICategorieBusiness {
             return CategorieTransformer.entityToDto(categorie.get(), new ArrayList<>(categorieRepository.findAll()));
         }
         return null;
+    }
+
+    /**
+     * Retourne un objet page de catégorie.
+     * @param pageNumber le page souhaitée
+     * @param nb le nombre de produit à afficher dans la page
+     * @return un objet page de produit
+     */
+    @Override
+    public Page<Categorie> getPage(int pageNumber, int nb) {
+        return  categorieRepository.findAll(PageRequest.of(pageNumber - 1, nb));
     }
 }

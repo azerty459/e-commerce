@@ -1,0 +1,16 @@
+type Pagination {
+    nbpage: Int
+    total: Long
+    produits: [Produit]!
+    categories: [Categorie]!
+}
+
+extend type Query {
+    pagination(type: String!, page: Int!, npp: Int!): Pagination!
+}
+
+schema {
+    query: Query
+    mutation: Mutation
+}
+

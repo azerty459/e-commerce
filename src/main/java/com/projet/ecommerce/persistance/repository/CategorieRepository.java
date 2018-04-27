@@ -1,7 +1,7 @@
 package com.projet.ecommerce.persistance.repository;
 
 import com.projet.ecommerce.persistance.entity.Categorie;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
@@ -11,7 +11,7 @@ import java.util.Collection;
  */
 
 @Repository
-public interface CategorieRepository extends CrudRepository<Categorie, String> {
+public interface CategorieRepository extends PagingAndSortingRepository<Categorie, String> {
 
     Collection<Categorie> findAll();
 }

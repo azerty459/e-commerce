@@ -3,15 +3,15 @@ package com.projet.ecommerce.business.impl;
 import com.projet.ecommerce.business.IProduitBusiness;
 import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.business.dto.transformer.ProduitTransformer;
-import com.projet.ecommerce.persistance.entity.Caracteristique;
 import com.projet.ecommerce.persistance.entity.Categorie;
-import com.projet.ecommerce.persistance.entity.Photo;
 import com.projet.ecommerce.persistance.entity.Produit;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import com.projet.ecommerce.persistance.repository.ProduitRepository;
 import com.projet.ecommerce.persistance.repository.ProduitRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -52,9 +52,9 @@ public class ProduitBusiness implements IProduitBusiness {
             produit.setNom(nom);
             produit.setDescription(description);
             produit.setPrixHT(prixHT);
-            produit.setCaracteristiques(new ArrayList<Caracteristique>());
-            produit.setPhotos(new ArrayList<Photo>());
-            produit.setCategories(new ArrayList<Categorie>());
+            produit.setCaracteristiques(new ArrayList<>());
+            produit.setPhotos(new ArrayList<>());
+            produit.setCategories(new ArrayList<>());
             return ProduitTransformer.entityToDto(produitRepository.save(produit));
         }
         return null;
@@ -108,7 +108,7 @@ public class ProduitBusiness implements IProduitBusiness {
      * Va chercher les produits selon les paramètres ci-dessous
      * @param ref la référence du produit recherché
      * @param cat la catégorie du /des produit(s) recherché(s)
-     * @return
+     * @return une liste de produits selon les paramètres ci-dessous
      */
     @Override
     public List<ProduitDTO> getAll(String ref, String cat) {
@@ -143,13 +143,24 @@ public class ProduitBusiness implements IProduitBusiness {
             Categorie categorie = optionalCategorie.get();
             List<Categorie> categorieList = new ArrayList<>(categorieRepository.findAll());
             List<Produit> produitList = new ArrayList<>();
-            for (int i = 0; i < categorieList.size(); i++) {
-                if (categorie.getBorneGauche() < categorieList.get(i).getBorneGauche() && categorie.getBorneDroit() > categorieList.get(i).getBorneDroit()) {
-                    produitList.addAll(categorieList.get(i).getProduits());
+            for (Categorie retourCategorie : categorieList) {
+                if (categorie.getBorneGauche() < retourCategorie.getBorneGauche() && categorie.getBorneDroit() > retourCategorie.getBorneDroit()) {
+                    produitList.addAll(retourCategorie.getProduits());
                 }
             }
             return new ArrayList<>(ProduitTransformer.entityToDto(produitList));
         }
         return null;
+    }
+
+    /**
+     * Retourne un objet page de produit
+     * @param pageNumber la page souhaitée
+     * @param nb le nombre de produit à afficher dans la page
+     * @return un objet page de produit
+     */
+    @Override
+    public Page<Produit> getPage(int pageNumber, int nb) {
+        return  produitRepository.findAll(PageRequest.of(pageNumber - 1, nb));
     }
 }

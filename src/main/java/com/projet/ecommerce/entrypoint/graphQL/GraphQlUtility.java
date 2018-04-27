@@ -2,9 +2,9 @@ package com.projet.ecommerce.entrypoint.graphQL;
 
 import com.projet.ecommerce.entrypoint.graphQL.categorie.CategorieMutation;
 import com.projet.ecommerce.entrypoint.graphQL.categorie.CategorieQuery;
+import com.projet.ecommerce.entrypoint.graphQL.pagination.PaginationQuery;
 import com.projet.ecommerce.entrypoint.graphQL.produit.ProduitMutation;
 import com.projet.ecommerce.entrypoint.graphQL.produit.ProduitQuery;
-import com.projet.ecommerce.persistance.entity.Categorie;
 import graphql.GraphQL;
 import graphql.schema.GraphQLSchema;
 import graphql.schema.idl.RuntimeWiring;
@@ -36,6 +36,9 @@ public class GraphQlUtility {
     @Autowired
     private CategorieMutation categorieMutation;
 
+    @Autowired
+    private PaginationQuery paginationQuery;
+
     @PostConstruct
     public GraphQL createGraphQlObject() {
         return GraphQL.newGraphQL(graphQLSchema())
@@ -48,6 +51,7 @@ public class GraphQlUtility {
                 .type(produitMutation.produitWiring())
                 .type(categorieQuery.produitWiring())
                 .type(categorieMutation.produitWiring())
+                .type(paginationQuery.produitWiring())
                 .build();
     }
 
@@ -55,12 +59,14 @@ public class GraphQlUtility {
 
         File produitSchemaFile = new File("src/main/resources/graphql/produit.graphqls");
         File categorieSchemaFile = new File("src/main/resources/graphql/categorie.graphqls");
+        File paginationSchemaFile = new File("src/main/resources/graphql/pagination.graphqls");
 
         SchemaParser schemaParser = new SchemaParser();
         TypeDefinitionRegistry typeRegistry = new TypeDefinitionRegistry();
         // chaque registre est fusionné dans le registre principal
         typeRegistry.merge(schemaParser.parse(produitSchemaFile));
         typeRegistry.merge(schemaParser.parse(categorieSchemaFile));
+        typeRegistry.merge(schemaParser.parse(paginationSchemaFile));
 
         RuntimeWiring wiring = buildRuntimeWiring();
         return new SchemaGenerator().makeExecutableSchema(typeRegistry, wiring);
