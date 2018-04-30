@@ -12,20 +12,40 @@ import java.util.List;
 
 public class PaginationDTO {
 
-  private int nbpage;
+    private int pageActuelle;
 
-  private long total;
+    private int pageMin;
 
-  private List produits;
+    private int pageMax;
 
-  private List categories;
+    private long total;
 
-    public int getNbpage() {
-        return nbpage;
+    private List produits;
+
+    private List categories;
+
+    public int getPageActuelle() {
+        return pageActuelle;
     }
 
-    public void setNbpage(int nbpage) {
-        this.nbpage = nbpage;
+    public void setPageActuelle(int pageActuelle) {
+        this.pageActuelle = pageActuelle;
+    }
+
+    public int getPageMin() {
+        return pageMin;
+    }
+
+    public void setPageMin(int pageMin) {
+        this.pageMin = pageMin;
+    }
+
+    public int getPageMax() {
+        return pageMax;
+    }
+
+    public void setPageMax(int pageMax) {
+        this.pageMax = pageMax;
     }
 
     public long getTotal() {

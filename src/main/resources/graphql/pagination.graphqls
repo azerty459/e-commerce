@@ -1,5 +1,7 @@
 type Pagination {
-    nbpage: Int
+    pageActuelle: Int
+    pageMin: Int
+    pageMax: Int
     total: Long
     produits: [Produit]!
     categories: [Categorie]!
