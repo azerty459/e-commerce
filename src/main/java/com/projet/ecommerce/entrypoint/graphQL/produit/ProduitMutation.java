@@ -15,20 +15,27 @@ public class ProduitMutation {
     private IProduitBusiness produitBusiness;
 
     public TypeRuntimeWiring produitWiring() {
+
         TypeRuntimeWiring.Builder builder = new TypeRuntimeWiring.Builder();
         builder.typeName("Mutation");
+
         builder.dataFetcher("addProduit", new DataFetcher() {
+
             @Override
             public ProduitDTO get(DataFetchingEnvironment env) {
-                System.out.println(env.getArgument("prixHT").getClass());
+
                 return produitBusiness.add(env.getArgument("ref"), env.getArgument("nom"), env.getArgument("description"), env.getArgument("prixHT"));
             }
         });
+
         builder.dataFetcher("updateProduit", new DataFetcher() {
+
             @Override
             public ProduitDTO get(DataFetchingEnvironment env) {
+
                 return produitBusiness.update(env.getArgument("ref"), env.getArgument("nom"), env.getArgument("description"), env.getArgument("prixHT"));
             }
+
         });
 
         builder.dataFetcher("deleteProduit", new DataFetcher() {
@@ -38,5 +45,6 @@ public class ProduitMutation {
             }
         });
         return builder.build();
+
     }
 }

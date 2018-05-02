@@ -5,7 +5,6 @@ import com.projet.ecommerce.business.impl.ProduitBusiness;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Produit;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
-import com.projet.ecommerce.persistance.repository.CategorieRepositoryCustom;
 import com.projet.ecommerce.persistance.repository.ProduitRepository;
 import com.projet.ecommerce.persistance.repository.ProduitRepositoryCustom;
 import org.junit.Assert;
