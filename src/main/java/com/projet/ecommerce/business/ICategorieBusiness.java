@@ -17,7 +17,7 @@ public interface ICategorieBusiness {
      * @param nom le nom de la catégorie à aller chercher. "null" si on cherche à lister toutes les catégories.
      * @return liste des catégories recherchées
      */
-    List<CategorieDTO> getCategorie(String nom);
+    List<CategorieDTO> getCategorie(String nom, boolean sousCategorie);
 
     /**
      * Méthode définissant l'ajout d'une catégorie parent.

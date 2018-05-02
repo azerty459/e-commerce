@@ -12,6 +12,11 @@ import java.util.List;
 public class Categorie {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_categorie")
+    private int idCategorie;
+
+
     @Column(name = "nom_categorie")
     private String nomCategorie;
 
@@ -105,5 +110,21 @@ public class Categorie {
      */
     public void setProduits(List<Produit> produits) {
         this.produits = produits;
+    }
+
+    /**
+     * Retourne l'id de la catégorie.
+     * @return l'id de la catégorie
+     */
+    public int getIdCategorie() {
+        return idCategorie;
+    }
+
+    /**
+     * Remplace l'id de la catégorie par celui-ci mit en paramètre.
+     * @param idCategorie La nouvelle ID de la catégorie
+     */
+    public void setIdCategorie(int idCategorie) {
+        this.idCategorie = idCategorie;
     }
 }

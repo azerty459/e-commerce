@@ -61,6 +61,18 @@ public class CategorieTransformer {
         return categorieDTO;
     }
 
+    /**
+     * Transforme un objet Categorie en CategorieDTO
+     * @param categorie Un objet Categorie
+     * @return un objet CategorieDTO
+     */
+    public static CategorieDTO entityToDto(Categorie categorie) {
+        CategorieDTO categorieDTO = new CategorieDTO();
+        categorieDTO.setNom(categorie.getNomCategorie());
+        categorieDTO.setSousCategories(new ArrayList<>());
+        return categorieDTO;
+    }
+
 
     /**
      * Algorithme pour trouver les sous-catégories d'une catégorie.

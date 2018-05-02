@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,14 +21,15 @@ import java.util.Optional;
  */
 
 @Service
+@Transactional
 public class CategorieBusiness implements ICategorieBusiness {
 
     @Autowired
     private CategorieRepository categorieRepository;
 
     @Override
-    public List<CategorieDTO> getCategorie(String nom) {
-        return new ArrayList<>(CategorieTransformer.entityToDto(new ArrayList<>(categorieRepository.findAllWithCriteria(nom)), true));
+    public List<CategorieDTO> getCategorie(String nom, boolean sousCategorie) {
+        return new ArrayList<>(CategorieTransformer.entityToDto(new ArrayList<>(categorieRepository.findAllWithCriteria(nom)), sousCategorie));
     }
 
     /**
@@ -59,7 +61,7 @@ public class CategorieBusiness implements ICategorieBusiness {
         categorieInserer.setLevel(1);
         categorieInserer.setProduits(new ArrayList<>());
 
-        return CategorieTransformer.entityToDto(categorieRepository.save(categorieInserer), new ArrayList<>());
+        return CategorieTransformer.entityToDto(categorieRepository.save(categorieInserer));
     }
 
     /**
@@ -72,16 +74,22 @@ public class CategorieBusiness implements ICategorieBusiness {
     @Override
     public CategorieDTO addEnfant(String nomCategorie, String parent) {
         // Ajout d'une categorie enfant
-        Optional<Categorie> categorieParentOptional = categorieRepository.findById(parent);
+        Optional<Categorie> categorieParentOptional = categorieRepository.findCategorieByNomCategorie(parent);
         if (categorieParentOptional.isPresent()) {
-            // Checherche la catégorie père et ajoute + 2 à sa borne droite.
             Categorie categorieParent = categorieParentOptional.get();
+
+            System.out.println("ID "+categorieParent.getIdCategorie());
+            System.out.println("Nom Categorie "+categorieParent.getNomCategorie());
+            System.out.println("Level "+categorieParent.getLevel());
+            System.out.println("Borne gauche "+categorieParent.getBorneGauche());
+            System.out.println("Borne droit "+categorieParent.getBorneDroit());
 
             //Permet de décaler les catégorie de + 2 par rapport à la borne droite du père
             List<Categorie> categorieList = new ArrayList<>(categorieRepository.findAll());
             for (int i = 0; i < categorieList.size(); i++) {
                 if (categorieList.get(i).getBorneDroit() > categorieParent.getBorneDroit()) {
                     Categorie retour = categorieList.get(i);
+                    System.out.println(retour.getIdCategorie());
                     retour.setBorneDroit(retour.getBorneDroit() + 2);
                     categorieRepository.save(retour);
                 }
@@ -98,7 +106,7 @@ public class CategorieBusiness implements ICategorieBusiness {
             // On ajoute + 2 au père sur sa borne droite puis au sauvegarde
             categorieParent.setBorneDroit(categorieParent.getBorneDroit() + 2);
             categorieRepository.save(categorieParent);
-            return CategorieTransformer.entityToDto(categorieRepository.save(categorieInserer), new ArrayList<>());
+            return CategorieTransformer.entityToDto(categorieRepository.save(categorieInserer));
         }
         return null;
     }
@@ -111,7 +119,7 @@ public class CategorieBusiness implements ICategorieBusiness {
      */
     @Override
     public boolean delete(String nomCategorie) {
-        categorieRepository.deleteById(nomCategorie);
+        categorieRepository.delete(categorieRepository.findCategorieByNomCategorie(nomCategorie).orElse(null));
         return true;
     }
 
@@ -133,7 +141,7 @@ public class CategorieBusiness implements ICategorieBusiness {
      */
     @Override
     public CategorieDTO getByNom(String nomCategorie) {
-        Optional<Categorie> categorie = categorieRepository.findById(nomCategorie);
+        Optional<Categorie> categorie = categorieRepository.findCategorieByNomCategorie(nomCategorie);
         if (categorie.isPresent()) {
             return CategorieTransformer.entityToDto(categorie.get(), new ArrayList<>(categorieRepository.findAll()));
         }

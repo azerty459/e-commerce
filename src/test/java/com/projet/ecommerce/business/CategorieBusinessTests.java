@@ -121,7 +121,7 @@ public class CategorieBusinessTests {
 	public void getCategorie() {
 		List<Categorie> categories = new ArrayList<>();
 		Mockito.when(categorieRepositoryCustom.findAllWithCriteria(Mockito.anyString())).thenReturn(categories);
-		Assert.assertEquals(categorieBusiness.getCategorie("nom").size(), 0);
+		Assert.assertEquals(categorieBusiness.getCategorie("nom", false).size(), 0);
 
 		// Création des catégories et ajout dans la liste.
 		Categorie categorie1 = new Categorie();
@@ -143,9 +143,9 @@ public class CategorieBusinessTests {
 
 		// Tests
 		Mockito.when(categorieRepositoryCustom.findAllWithCriteria(Mockito.anyString())).thenReturn(categories);
-		List<CategorieDTO> categorieDTOList = categorieBusiness.getCategorie("nom");
+		List<CategorieDTO> categorieDTOList = categorieBusiness.getCategorie("tests", true);
 
-		Assert.assertEquals(2, categories.size());
+		Assert.assertEquals(2, categorieDTOList.size());
 
 		CategorieDTO retour = categorieDTOList.get(0);
 		Assert.assertEquals(categorie1.getNomCategorie(), retour.getNom());

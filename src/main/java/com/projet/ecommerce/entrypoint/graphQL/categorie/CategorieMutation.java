@@ -16,15 +16,16 @@ public class CategorieMutation {
         TypeRuntimeWiring.Builder builder = new TypeRuntimeWiring.Builder();
         builder.typeName("Mutation");
         builder.dataFetcher("addCategorieParent", (DataFetchingEnvironment env) ->
-                categorieBusiness.addParent(env.getArgument("nom")
-                ));
+                categorieBusiness.addParent(env.getArgument("nom"))
+        );
+
         builder.dataFetcher("addCategorieEnfant", (DataFetchingEnvironment env) ->
-                categorieBusiness.addEnfant(env.getArgument("nom"), env.getArgument("pere")
-                ));
+                categorieBusiness.addEnfant(env.getArgument("nom"), env.getArgument("pere"))
+        );
 
         builder.dataFetcher("deleteCategorie", (DataFetchingEnvironment env) ->
-                categorieBusiness.delete(env.getArgument("nom")
-                ));
+                categorieBusiness.delete(env.getArgument("nom"))
+        );
         return builder.build();
     }
 }

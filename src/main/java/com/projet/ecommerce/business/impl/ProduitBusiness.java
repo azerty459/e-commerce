@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -138,7 +139,7 @@ public class ProduitBusiness implements IProduitBusiness {
      */
     @Override
     public List<ProduitDTO> getByCategorie(String nomCategorie) {
-        Optional<Categorie> optionalCategorie = categorieRepository.findById(nomCategorie);
+        Optional<Categorie> optionalCategorie = categorieRepository.findCategorieByNomCategorie(nomCategorie);
         if (optionalCategorie.isPresent()) {
             Categorie categorie = optionalCategorie.get();
             List<Categorie> categorieList = new ArrayList<>(categorieRepository.findAll());

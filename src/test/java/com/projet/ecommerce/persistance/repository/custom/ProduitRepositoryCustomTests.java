@@ -22,32 +22,33 @@ import java.util.List;
 @SpringBootTest
 public class ProduitRepositoryCustomTests {
 
-	private static final Produit TEMP_INSERT = new Produit();
-	private static final Categorie TEMP_CATEGORIE = new Categorie();
+	private static final Produit TEMP_INSERT;
+	private static final Categorie TEMP_CATEGORIE;
 
 	static {
 		//Permet d'écraser la config application.properties par application-test.properties
 		System.setProperty("spring.config.location", "classpath:application-test.properties");
+
+		TEMP_INSERT = new Produit();
 		TEMP_INSERT.setReferenceProduit("A05A87");
 		TEMP_INSERT.setPrixHT(8.7);
 		TEMP_INSERT.setDescription("joli produit");
 		TEMP_INSERT.setCategories(new ArrayList<>());
 
-		// On créer une nouvelle catégorie pour que les tests fonctionne
+		TEMP_CATEGORIE = new Categorie();
 		TEMP_CATEGORIE.setNomCategorie("Livre");
 		TEMP_CATEGORIE.setBorneGauche(1);
 		TEMP_CATEGORIE.setBorneDroit(2);
 		TEMP_CATEGORIE.setLevel(1);
+		TEMP_CATEGORIE.setProduits(new ArrayList<>());
+
+		Collection<Categorie> categorieCollection = TEMP_INSERT.getCategories();
+		categorieCollection.add(TEMP_CATEGORIE);
+		TEMP_INSERT.setCategories(new ArrayList<>(categorieCollection));
 	}
 
 	@Before
 	public void insertProduit(){
-		categorieRepository.save(TEMP_CATEGORIE);
-
-		// On insert la catégorie créer dans le produit
-		Collection<Categorie> categorieCollection = TEMP_INSERT.getCategories();
-		categorieCollection.add(TEMP_CATEGORIE);
-		TEMP_INSERT.setCategories(new ArrayList<>(categorieCollection));
 		produitRepository.save(TEMP_INSERT);
 	}
 
@@ -72,7 +73,7 @@ public class ProduitRepositoryCustomTests {
 	}
 
 	@Test
-	@Transactional // Permet de charger le lazy loading getCategories du produit
+	@Transactional
 	public void findAllWithCriteriaByCat() {
 		List<Produit> retourProduitCollection = new ArrayList<>(produitRepository.findAllWithCriteria(null, "Livre"));
 		Assert.assertEquals(1, retourProduitCollection.size());

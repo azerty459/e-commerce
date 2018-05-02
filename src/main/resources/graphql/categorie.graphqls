@@ -4,7 +4,7 @@ type Categorie {
 }
 
 type Query {
-    categories(nom: String, sousCat: Boolean): [Categorie]!
+    categories(nom: String): [Categorie]!
 }
 
 type Mutation {

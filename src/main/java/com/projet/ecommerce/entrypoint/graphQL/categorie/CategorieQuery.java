@@ -20,10 +20,18 @@ public class CategorieQuery {
 
         TypeRuntimeWiring.Builder builder = new TypeRuntimeWiring.Builder();
         builder.typeName("Query");
-        builder.dataFetcher("categories", (DataFetchingEnvironment env) ->
-                categorieBusiness.getCategorie(env.getArgument("nom")
-
-                ));
+        builder.dataFetcher("categories", new DataFetcher() {
+            @Override
+            public Object get(DataFetchingEnvironment environment) {
+                return categorieBusiness.getCategorie(environment.getArgument("nom"), environment.getFields().toString().contains("sousCategories"));
+            }
+        });
+        /*
+                builder.dataFetcher("categories", (DataFetchingEnvironment env) ->
+                System.out.println(env)
+                categorieBusiness.getCategorie(env.getArgument("nom"))
+        );
+         */
         return builder.build();
     }
 }

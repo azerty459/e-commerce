@@ -60,8 +60,8 @@ public class TestCategorieQuery {
         Assert.assertNotNull(retourMap.get("categories"));
         retourMap.get("categories").get(dataFetchingEnvironment);
         // Test avec nb appel add avec bon param
-        Mockito.verify(categorieBusiness, Mockito.times(1)).getCategorie("Livre");
+        Mockito.verify(categorieBusiness, Mockito.times(1)).getCategorie("Livre", false);
         // Test avec nb appel add avec mauvais param
-        Mockito.verify(categorieBusiness, Mockito.times(0)).getCategorie(null);
+        Mockito.verify(categorieBusiness, Mockito.times(0)).getCategorie(null, false);
     }
 }

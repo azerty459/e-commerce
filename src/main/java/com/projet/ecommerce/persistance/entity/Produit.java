@@ -1,5 +1,7 @@
 package com.projet.ecommerce.persistance.entity;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -23,18 +25,18 @@ public class Produit {
     @Column(name = "prix_ht")
     private double prixHT;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(
             name = "produit_categorie",
             joinColumns = { @JoinColumn(name = "reference_produit") },
-            inverseJoinColumns = { @JoinColumn(name = "nom_categorie") }
+            inverseJoinColumns = { @JoinColumn(name = "id_categorie") }
     )
     private List<Categorie> categories;
 
-    @OneToMany(mappedBy="produit", cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+    @OneToMany(mappedBy="produit", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Caracteristique> caracteristiques;
 
-    @OneToMany(mappedBy="produit", cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+    @OneToMany(mappedBy="produit", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Photo> photos;
 
     /**
