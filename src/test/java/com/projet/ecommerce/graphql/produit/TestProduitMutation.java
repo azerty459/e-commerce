@@ -1,12 +1,9 @@
 package com.projet.ecommerce.graphql.produit;
 
-import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.business.impl.ProduitBusiness;
 import com.projet.ecommerce.entrypoint.graphQL.produit.ProduitMutation;
-import graphql.execution.ExecutionId;
-import graphql.language.Field;
-import graphql.language.FragmentDefinition;
-import graphql.schema.*;
+import graphql.schema.DataFetcher;
+import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.idl.TypeRuntimeWiring;
 import org.junit.Assert;
 import org.junit.Before;
@@ -19,7 +16,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.*;
+import java.util.Map;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest

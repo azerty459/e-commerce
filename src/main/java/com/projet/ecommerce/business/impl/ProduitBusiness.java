@@ -46,7 +46,9 @@ public class ProduitBusiness implements IProduitBusiness {
      */
     @Override
     public ProduitDTO add(String referenceProduit, String nom, String description, Double prixHT) {
+
         if (!referenceProduit.isEmpty() && !nom.isEmpty() && prixHT != null) {
+
             Produit produit = new Produit();
             produit.setReferenceProduit(referenceProduit);
             produit.setNom(nom);
@@ -57,6 +59,7 @@ public class ProduitBusiness implements IProduitBusiness {
             produit.setCategories(new ArrayList<>());
             return ProduitTransformer.entityToDto(produitRepository.save(produit));
         }
+
         return null;
     }
 
