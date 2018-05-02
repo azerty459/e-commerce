@@ -18,8 +18,8 @@ public class PaginationQuery {
         builder.typeName("Query");
 
         builder.dataFetcher("pagination", (DataFetchingEnvironment env) ->
-                paginationBusiness.getPagination(env.getArgument("type"), env.getArgument("page"), env.getArgument("npp"), env.getFields().get(0).getSelectionSet().getSelections().get(2).toString().contains("sousCategories")
-                ));
+                paginationBusiness.getPagination(env.getArgument("type"), env.getArgument("page"), env.getArgument("npp"))
+                );
         return builder.build();
     }
 }

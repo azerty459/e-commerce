@@ -24,7 +24,7 @@ public class Categorie {
     @Column(name = "level")
     private int level;
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "categories")
+    @ManyToMany(mappedBy = "categories", fetch = FetchType.LAZY)
     private List<Produit> produits;
 
     /**

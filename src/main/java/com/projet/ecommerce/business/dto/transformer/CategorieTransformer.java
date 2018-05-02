@@ -14,7 +14,7 @@ public class CategorieTransformer {
      * @param categorieDTOCollection Une collection d'objets CategorieDTO
      * @return une collection d'objets Categorie
      */
-    public static Collection<Categorie> dtoToEntity(Collection<CategorieDTO> categorieDTOCollection){
+    public static Collection<Categorie> dtoToEntity(List<CategorieDTO> categorieDTOCollection){
         List<Categorie> categorieList = new ArrayList<>();
         for (CategorieDTO categorieDTO : categorieDTOCollection) {
             categorieList.add(dtoToEntity(categorieDTO));
@@ -27,9 +27,8 @@ public class CategorieTransformer {
      * @param categorieDTO Un objet CategorieDTO
      * @return un objet Categorie
      */
-    public static Categorie dtoToEntity(CategorieDTO categorieDTO){
+    private static Categorie dtoToEntity(CategorieDTO categorieDTO){
         Categorie categorie = new Categorie();
-        categorie.setNomCategorie(categorieDTO.getNom());
         return categorie;
     }
 

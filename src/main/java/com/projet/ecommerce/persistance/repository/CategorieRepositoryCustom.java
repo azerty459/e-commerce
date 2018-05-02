@@ -6,6 +6,6 @@ import java.util.Collection;
 
 public interface CategorieRepositoryCustom {
 
-    Collection<Categorie> findAll(String nom);
+    Collection<Categorie> findAllWithCriteria(String nom);
 
 }

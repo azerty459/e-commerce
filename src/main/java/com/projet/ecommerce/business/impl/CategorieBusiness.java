@@ -25,12 +25,9 @@ public class CategorieBusiness implements ICategorieBusiness {
     @Autowired
     private CategorieRepository categorieRepository;
 
-    @Autowired
-    private CategorieRepositoryCustom categorieRepositoryCustom;
-
     @Override
     public List<CategorieDTO> getCategorie(String nom) {
-        return new ArrayList<>(CategorieTransformer.entityToDto(new ArrayList<>(categorieRepositoryCustom.findAll(nom)), true));
+        return new ArrayList<>(CategorieTransformer.entityToDto(new ArrayList<>(categorieRepository.findAllWithCriteria(nom)), true));
     }
 
     /**

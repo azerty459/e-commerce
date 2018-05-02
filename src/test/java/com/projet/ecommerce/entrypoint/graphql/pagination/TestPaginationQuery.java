@@ -1,9 +1,7 @@
-package com.projet.ecommerce.graphql.categorie;
+package com.projet.ecommerce.entrypoint.graphql.pagination;
 
-import com.projet.ecommerce.business.impl.CategorieBusiness;
-import com.projet.ecommerce.business.impl.ProduitBusiness;
-import com.projet.ecommerce.entrypoint.graphQL.categorie.CategorieQuery;
-import com.projet.ecommerce.entrypoint.graphQL.produit.ProduitQuery;
+import com.projet.ecommerce.business.impl.PaginationBusiness;
+import com.projet.ecommerce.entrypoint.graphQL.pagination.PaginationQuery;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.idl.TypeRuntimeWiring;
@@ -22,15 +20,15 @@ import java.util.Map;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
-public class TestCategorieQuery {
+public class TestPaginationQuery {
     @Mock
-    private CategorieBusiness categorieBusiness;
+    private PaginationBusiness paginationBusiness;
 
     @Mock
     private DataFetchingEnvironment dataFetchingEnvironment;
 
     @InjectMocks
-    private CategorieQuery categorieQuery;
+    private PaginationQuery paginationQuery;
 
     @Before
     public void setUp() {
@@ -39,7 +37,7 @@ public class TestCategorieQuery {
 
     @Test
     public void produitWiring(){
-        TypeRuntimeWiring typeRuntimeWiring = categorieQuery.produitWiring();
+        TypeRuntimeWiring typeRuntimeWiring = paginationQuery.produitWiring();
         Assert.assertEquals(typeRuntimeWiring.getTypeName(), "Query");
         Assert.assertEquals(typeRuntimeWiring.getTypeResolver(), null);
         Assert.assertNotNull(typeRuntimeWiring);
@@ -47,23 +45,25 @@ public class TestCategorieQuery {
 
     @Test
     public void testNbDataFetcher() {
-        Map<String, DataFetcher> retourMap = categorieQuery.produitWiring().getFieldDataFetchers();
+        Map<String, DataFetcher> retourMap = paginationQuery.produitWiring().getFieldDataFetchers();
         Assert.assertNotNull(retourMap);
         Assert.assertEquals(1,retourMap.size());
     }
 
     @Test
     public void categories(){
-        Map<String, DataFetcher> retourMap = categorieQuery.produitWiring().getFieldDataFetchers();
+        Map<String, DataFetcher> retourMap = paginationQuery.produitWiring().getFieldDataFetchers();
 
         // On imite le comportement des getArgument
-        Mockito.when(dataFetchingEnvironment.getArgument("nom")).thenReturn("Livre");
+        Mockito.when(dataFetchingEnvironment.getArgument("type")).thenReturn("produit");
+        Mockito.when(dataFetchingEnvironment.getArgument("page")).thenReturn(1);
+        Mockito.when(dataFetchingEnvironment.getArgument("npp")).thenReturn(5);
 
-        Assert.assertNotNull(retourMap.get("categories"));
-        retourMap.get("categories").get(dataFetchingEnvironment);
+        Assert.assertNotNull(retourMap.get("pagination"));
+        retourMap.get("pagination").get(dataFetchingEnvironment);
         // Test avec nb appel add avec bon param
-        Mockito.verify(categorieBusiness, Mockito.times(1)).getCategorie("Livre");
+        Mockito.verify(paginationBusiness, Mockito.times(1)).getPagination("produit",1,5);
         // Test avec nb appel add avec mauvais param
-        Mockito.verify(categorieBusiness, Mockito.times(0)).getCategorie(null);
+        Mockito.verify(paginationBusiness, Mockito.times(0)).getPagination(null,0,0);
     }
 }

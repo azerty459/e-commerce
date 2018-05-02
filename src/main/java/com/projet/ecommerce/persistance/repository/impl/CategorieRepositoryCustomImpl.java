@@ -25,7 +25,8 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
      * @param nom le nom de la catégorie recherchée
      * @return une collection de la / des catégorie(s) trouvée(s)
      */
-    public Collection<Categorie> findAll(String nom) {
+    @Override
+    public Collection<Categorie> findAllWithCriteria(String nom) {
 
         String sql = "";
         Query query = null;

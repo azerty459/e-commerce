@@ -1,11 +1,7 @@
-package com.projet.ecommerce.graphql.produit;
+package com.projet.ecommerce.entrypoint.graphql.produit;
 
-import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.business.impl.ProduitBusiness;
 import com.projet.ecommerce.entrypoint.graphQL.produit.ProduitMutation;
-import graphql.execution.ExecutionId;
-import graphql.language.Field;
-import graphql.language.FragmentDefinition;
 import graphql.schema.*;
 import graphql.schema.idl.TypeRuntimeWiring;
 import org.junit.Assert;

@@ -11,7 +11,7 @@ import java.util.Collection;
  */
 
 @Repository
-public interface CategorieRepository extends PagingAndSortingRepository<Categorie, String> {
+public interface CategorieRepository extends PagingAndSortingRepository<Categorie, String>, CategorieRepositoryCustom {
 
     Collection<Categorie> findAll();
 }

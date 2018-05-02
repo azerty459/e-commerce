@@ -33,7 +33,7 @@ public class PaginationBusiness implements IPaginationBusiness {
      * @return une objet PaginationDTO
      */
     @Override
-    public PaginationDTO getPagination(String type, int page, int npp, Boolean sousCat) {
+    public PaginationDTO getPagination(String type, int page, int npp) {
         PaginationDTO paginationDTO = new PaginationDTO();
         if(page < 0) {
             page = 1;
@@ -60,7 +60,7 @@ public class PaginationBusiness implements IPaginationBusiness {
             }
             paginationDTO.setPageMax(pageCategorie.getTotalPages());
             paginationDTO.setTotal(pageCategorie.getTotalElements());
-            paginationDTO.setCategories(new ArrayList<>(CategorieTransformer.entityToDto(pageCategorie.getContent(), sousCat)));
+            paginationDTO.setCategories(new ArrayList<>(CategorieTransformer.entityToDto(pageCategorie.getContent(), false)));
             paginationDTO.setProduits(new ArrayList<>());
         }
         return paginationDTO;

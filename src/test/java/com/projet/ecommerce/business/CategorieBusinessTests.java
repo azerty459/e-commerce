@@ -120,7 +120,7 @@ public class CategorieBusinessTests {
 	@Test
 	public void getCategorie() {
 		List<Categorie> categories = new ArrayList<>();
-		Mockito.when(categorieRepositoryCustom.findAll(Mockito.anyString())).thenReturn(categories);
+		Mockito.when(categorieRepositoryCustom.findAllWithCriteria(Mockito.anyString())).thenReturn(categories);
 		Assert.assertEquals(categorieBusiness.getCategorie("nom").size(), 0);
 
 		// Création des catégories et ajout dans la liste.
@@ -142,7 +142,7 @@ public class CategorieBusinessTests {
 		categories.add(categorie2);
 
 		// Tests
-		Mockito.when(categorieRepositoryCustom.findAll(Mockito.anyString())).thenReturn(categories);
+		Mockito.when(categorieRepositoryCustom.findAllWithCriteria(Mockito.anyString())).thenReturn(categories);
 		List<CategorieDTO> categorieDTOList = categorieBusiness.getCategorie("nom");
 
 		Assert.assertEquals(2, categories.size());

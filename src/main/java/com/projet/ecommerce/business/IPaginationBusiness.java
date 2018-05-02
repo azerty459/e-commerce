@@ -17,5 +17,5 @@ public interface IPaginationBusiness {
      * @param npp le nombre de produits à afficher dans la page paginée
      * @return une objet PaginationDTO
      */
-    PaginationDTO getPagination(String type, int page, int npp, Boolean sousCat);
+    PaginationDTO getPagination(String type, int page, int npp);
 }
