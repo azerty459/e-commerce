@@ -60,6 +60,7 @@ public class CategorieTransformer {
         CategorieDTO categorieDTO = new CategorieDTO();
         categorieDTO.setNom(categorie.getNomCategorie());
         categorieDTO.setSousCategories(new ArrayList<>(getSousCategorie(categorie, categoriesList)));
+        categorieDTO.setId(categorie.getIdCategorie());
         return categorieDTO;
     }
 
