@@ -7,12 +7,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Collection;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@ActiveProfiles("test")
 public class CategorieRepositoryTests {
     private static final Categorie TEMP_INSERT = new Categorie();
     private static final Categorie TEMP_DELETE = new Categorie();
@@ -20,7 +23,7 @@ public class CategorieRepositoryTests {
     private static final Categorie TEMP_GET = new Categorie();
 
     static {
-        //Permet d'écraser la config application.properties par application-test.properties pour que la base de données en mémoire soit prise en compte et non celle de postgreSQL.
+        //Permet d'écraser la config application.properties par application-test.properties
         System.setProperty("spring.config.location", "classpath:application-test.properties");
 
         TEMP_INSERT.setNomCategorie("Transport");

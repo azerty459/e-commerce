@@ -3,7 +3,9 @@ package com.projet.ecommerce.persistance.entity;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Entité représentant la table produit sous forme de classe.
@@ -25,7 +27,7 @@ public class Produit {
     @Column(name = "prix_ht")
     private double prixHT;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinTable(
             name = "produit_categorie",
             joinColumns = { @JoinColumn(name = "reference_produit") },
@@ -112,7 +114,7 @@ public class Produit {
     }
 
     /**
-     *
+     * Remplace la liste de catégorie par celui-ci mit en paramètre
      * @param categories
      */
     public void setCategories(List<Categorie> categories) {

@@ -194,7 +194,7 @@ public class ProduitBusinessTests {
 
     @Test
     public void getByCategorie() {
-        Mockito.when(categorieRepository.findById(Mockito.any())).thenReturn(Optional.of(new Categorie()));
+        Mockito.when(categorieRepository.findCategorieByNomCategorie(Mockito.any())).thenReturn(Optional.of(new Categorie()));
         Mockito.when(categorieRepository.findAll()).thenReturn(new ArrayList<Categorie>());
         List<ProduitDTO> produitDTOList = produitBusiness.getByCategorie("Test");
         Assert.assertNotNull(produitDTOList);
@@ -202,7 +202,7 @@ public class ProduitBusinessTests {
 
     @Test
     public void getByCategorieNotFound() {
-        Mockito.when(categorieRepository.findById(Mockito.any())).thenReturn(Optional.empty());
+        Mockito.when(categorieRepository.findCategorieByNomCategorie(Mockito.any())).thenReturn(Optional.empty());
         List<ProduitDTO> produitDTOList = produitBusiness.getByCategorie("Test");
         Assert.assertNull(produitDTOList);
     }

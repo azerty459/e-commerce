@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,7 @@ import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@ActiveProfiles("test")
 public class CategorieRepositoryCustomTests {
 
 	private static final Categorie TEMP_CATEGORIE = new Categorie();
@@ -26,6 +28,7 @@ public class CategorieRepositoryCustomTests {
 	static {
 		//Permet d'écraser la config application.properties par application-test.properties
 		System.setProperty("spring.config.location", "classpath:application-test.properties");
+
 		// On créer une nouvelle catégorie pour que les tests fonctionne
 		TEMP_CATEGORIE.setNomCategorie("Livre");
 		TEMP_CATEGORIE.setBorneGauche(1);

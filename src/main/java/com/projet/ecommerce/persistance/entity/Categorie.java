@@ -29,7 +29,7 @@ public class Categorie {
     @Column(name = "level")
     private int level;
 
-    @ManyToMany(mappedBy = "categories", fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "categories", fetch = FetchType.LAZY)
     private List<Produit> produits;
 
     /**

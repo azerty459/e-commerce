@@ -29,6 +29,8 @@ public class CategorieTransformer {
      */
     private static Categorie dtoToEntity(CategorieDTO categorieDTO){
         Categorie categorie = new Categorie();
+        categorie.setNomCategorie(categorieDTO.getNom());
+        categorie.setIdCategorie(categorieDTO.getId());
         return categorie;
     }
 

@@ -21,14 +21,10 @@ import java.util.Optional;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
-@ActiveProfiles("test")
 public class CategorieBusinessTests {
 
 	@Mock
 	private CategorieRepository categorieRepository;
-
-	@Mock
-	private CategorieRepositoryCustom categorieRepositoryCustom;
 
 	@InjectMocks
 	private CategorieBusiness categorieBusiness;
@@ -68,7 +64,7 @@ public class CategorieBusinessTests {
         Collection<Categorie> categorieCollection = new ArrayList<>();
         categorieCollection.add(categorie1);
 
-        Mockito.when(categorieRepository.findById(Mockito.any())).thenReturn(Optional.of(categorie1));
+        Mockito.when(categorieRepository.findCategorieByNomCategorie(Mockito.any())).thenReturn(Optional.of(categorie1));
         Mockito.when(categorieRepository.findAll()).thenReturn(categorieCollection);
         Mockito.when(categorieRepository.save(Mockito.any())).thenReturn(categorie1);
         CategorieDTO retour1 = categorieBusiness.addEnfant("Test", "Transport");
@@ -120,7 +116,7 @@ public class CategorieBusinessTests {
 	@Test
 	public void getCategorie() {
 		List<Categorie> categories = new ArrayList<>();
-		Mockito.when(categorieRepositoryCustom.findAllWithCriteria(Mockito.anyString())).thenReturn(categories);
+		Mockito.when(categorieRepository.findAllWithCriteria(Mockito.anyString())).thenReturn(categories);
 		Assert.assertEquals(categorieBusiness.getCategorie("nom", false).size(), 0);
 
 		// Création des catégories et ajout dans la liste.
@@ -142,10 +138,10 @@ public class CategorieBusinessTests {
 		categories.add(categorie2);
 
 		// Tests
-		Mockito.when(categorieRepositoryCustom.findAllWithCriteria(Mockito.anyString())).thenReturn(categories);
+		Mockito.when(categorieRepository.findAllWithCriteria(Mockito.anyString())).thenReturn(categories);
 		List<CategorieDTO> categorieDTOList = categorieBusiness.getCategorie("tests", true);
 
-		Assert.assertEquals(2, categorieDTOList.size());
+		Assert.assertEquals(1, categorieDTOList.size());
 
 		CategorieDTO retour = categorieDTOList.get(0);
 		Assert.assertEquals(categorie1.getNomCategorie(), retour.getNom());
@@ -161,7 +157,7 @@ public class CategorieBusinessTests {
 		categorie.setLevel(1);
 		categorie.setProduits(new ArrayList<>());
 
-		Mockito.when(categorieRepository.findById(Mockito.any())).thenReturn(Optional.of(categorie));
+		Mockito.when(categorieRepository.findCategorieByNomCategorie(Mockito.any())).thenReturn(Optional.of(categorie));
 		CategorieDTO retour1 = categorieBusiness.getByNom(categorie.getNomCategorie());
 		Assert.assertNotNull(retour1);
 

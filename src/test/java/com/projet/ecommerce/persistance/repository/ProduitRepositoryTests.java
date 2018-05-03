@@ -5,12 +5,14 @@ import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Collection;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@ActiveProfiles("test")
 public class ProduitRepositoryTests {
 
 	private static final Produit TEMP_INSERT = new Produit();
@@ -93,13 +95,5 @@ public class ProduitRepositoryTests {
 		Assert.assertNotNull(produitRepository.save(TEMP_DELETE));
 		produitRepository.delete(TEMP_DELETE);
 		Assert.assertFalse(produitRepository.findById(TEMP_DELETE.getReferenceProduit()).isPresent());
-	}
-
-	@After
-	public void end(){
-		produitRepository.delete(TEMP_DELETE);
-		produitRepository.delete(TEMP_GET);
-		produitRepository.delete(TEMP_INSERT);
-		produitRepository.delete(TEMP_UPDATE);
 	}
 }
