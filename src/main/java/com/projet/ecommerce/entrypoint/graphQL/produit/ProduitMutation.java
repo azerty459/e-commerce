@@ -13,8 +13,10 @@ public class ProduitMutation {
     private IProduitBusiness produitBusiness;
 
     public TypeRuntimeWiring produitWiring() {
+
         TypeRuntimeWiring.Builder builder = new TypeRuntimeWiring.Builder();
         builder.typeName("Mutation");
+
         builder.dataFetcher("addProduit", (DataFetchingEnvironment env) ->
                 produitBusiness.add(env.getArgument("ref"), env.getArgument("nom"), env.getArgument("description"), env.getArgument("prixHT")
         ));
@@ -26,5 +28,6 @@ public class ProduitMutation {
                 produitBusiness.delete(env.getArgument("ref")
         ));
         return builder.build();
+
     }
 }
