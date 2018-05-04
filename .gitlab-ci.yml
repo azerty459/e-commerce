@@ -21,8 +21,6 @@ deploiement_dev:
     expire_in: 1 week
   only:
     - /^dev-.*/
-  except:
-    - branches
 
 
 deploiement_master:
