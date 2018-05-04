@@ -20,7 +20,7 @@ deploiement_dev:
     - jar
     expire_in: 1 week
   only:
-    - /^dev-.*/
+    - dev
 
 
 deploiement_master:
