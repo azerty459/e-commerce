@@ -15,10 +15,15 @@ deploiement_dev:
   stage: deploiement
   script: 
     - mvn package
+  artifacts:
+    paths:
+    - jar
+    expire_in: 1 week
   only:
     - /^dev.*$/
   except:
     - branches
+
 
 deploiement_master:
   stage: deploiement
