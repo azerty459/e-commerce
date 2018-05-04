@@ -17,7 +17,7 @@ deploiement_dev:
     - mvn package
   artifacts:
     paths:
-    - e-commerce-0.0.1-SNAPSHOT.jar
+    - target/*.jar
     expire_in: 1 week
   only:
     - dev
