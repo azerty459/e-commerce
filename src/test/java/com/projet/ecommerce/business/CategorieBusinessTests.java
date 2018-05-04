@@ -4,7 +4,6 @@ import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.business.impl.CategorieBusiness;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
-import com.projet.ecommerce.persistance.repository.CategorieRepositoryCustom;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,7 +11,6 @@ import org.junit.runner.RunWith;
 import org.mockito.*;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -81,7 +79,6 @@ public class CategorieBusinessTests {
 
 	@Test
 	public void deleteNull() {
-		Mockito.when(categorieRepository.findCategorieByNomCategorie(Mockito.anyString())).thenReturn(Optional.ofNullable(null));
 		Assert.assertFalse(categorieBusiness.delete("Fofo"));
 	}
 
@@ -173,7 +170,6 @@ public class CategorieBusinessTests {
 
 	@Test
 	public void getCategorieByNomNotFound(){
-        Mockito.when(categorieRepository.findById(Mockito.any())).thenReturn(Optional.empty());
 		CategorieDTO retour = categorieBusiness.getByNom("Transport4");
 		Assert.assertNull(retour);
 	}

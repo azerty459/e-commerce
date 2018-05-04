@@ -54,7 +54,7 @@ public class CategorieRepositoryCustomTests {
 	@Test
 	public void findAllWithCriteriaByNom() {
 		Collection<Categorie> categorieCollection = categorieRepository.findAllWithCriteria("Livre");
-		Assert.assertEquals(1, categorieCollection.size());
+		Assert.assertEquals(3, categorieCollection.size());
 		Assert.assertEquals(0, categorieRepository.findAllWithCriteria("Toto").size());
 	}
 }
