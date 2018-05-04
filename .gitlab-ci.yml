@@ -18,7 +18,11 @@ tests:
 deploiement_dev:
   stage: deploiement
   script: 
-    - echo 'Deploy sur le serv de developpement'
+    - maven build
+  artifacts:
+    paths:
+    - jar
+    expire_in: 1 week
   only:
     - /^dev.*$/
   except:
