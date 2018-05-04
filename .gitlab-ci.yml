@@ -7,7 +7,7 @@ stages:
 tests:
   stage: tests
   script: 
-  - mvn test
+  - echo 'test'
   only:
   - branches
   
