@@ -75,8 +75,15 @@ public class CategorieBusinessTests {
 
     @Test
     public void delete() {
-        Assert.assertTrue(categorieBusiness.delete("Fofo"));
+		Mockito.when(categorieRepository.findCategorieByNomCategorie(Mockito.anyString())).thenReturn(Optional.of(new Categorie()));
+		Assert.assertTrue(categorieBusiness.delete("Fofo"));
     }
+
+	@Test
+	public void deleteNull() {
+		Mockito.when(categorieRepository.findCategorieByNomCategorie(Mockito.anyString())).thenReturn(Optional.ofNullable(null));
+		Assert.assertFalse(categorieBusiness.delete("Fofo"));
+	}
 
 	@Test
 	public void getAll() {

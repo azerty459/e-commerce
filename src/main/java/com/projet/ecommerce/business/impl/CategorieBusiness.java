@@ -5,7 +5,6 @@ import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.business.dto.transformer.CategorieTransformer;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
-import com.projet.ecommerce.persistance.repository.CategorieRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -42,14 +41,17 @@ public class CategorieBusiness implements ICategorieBusiness {
     public CategorieDTO addParent(String nomCategorie) {
         //On récupère toute la liste des catégories
         List<Categorie> categorieList = new ArrayList<>(categorieRepository.findAll());
+        int borndeDroit = 0;
 
-        //On déclare une borne droit par défaut qui va être utilisée juste après
-        int borndeDroit = categorieList.get(0).getBorneDroit();
+        if(!categorieList.isEmpty()){
+            //On déclare une borne droit par défaut qui va être utilisée juste après
+            borndeDroit = categorieList.get(0).getBorneDroit();
 
-        //On parcours la liste pour trouver la borne droit maximum dans la base de données par rapport au catégorie parent
-        for (int i = 0; i < categorieList.size(); i++) {
-            if (categorieList.get(i).getLevel() == 0 && categorieList.get(i).getBorneDroit() > borndeDroit) {
-                borndeDroit = categorieList.get(i).getBorneDroit();
+            //On parcours la liste pour trouver la borne droit maximum dans la base de données par rapport au catégorie parent
+            for (Categorie retour : categorieList) {
+                if (retour.getLevel() == 1 && retour.getBorneDroit() > borndeDroit) {
+                    borndeDroit = retour.getBorneDroit();
+                }
             }
         }
 
@@ -77,24 +79,22 @@ public class CategorieBusiness implements ICategorieBusiness {
         Optional<Categorie> categorieParentOptional = categorieRepository.findCategorieByNomCategorie(parent);
         if (categorieParentOptional.isPresent()) {
             Categorie categorieParent = categorieParentOptional.get();
-
-            System.out.println("ID "+categorieParent.getIdCategorie());
-            System.out.println("Nom Categorie "+categorieParent.getNomCategorie());
-            System.out.println("Level "+categorieParent.getLevel());
-            System.out.println("Borne gauche "+categorieParent.getBorneGauche());
-            System.out.println("Borne droit "+categorieParent.getBorneDroit());
-
             //Permet de décaler les catégorie de + 2 par rapport à la borne droite du père
             List<Categorie> categorieList = new ArrayList<>(categorieRepository.findAll());
-            for (int i = 0; i < categorieList.size(); i++) {
-                if (categorieList.get(i).getBorneDroit() > categorieParent.getBorneDroit()) {
-                    Categorie retour = categorieList.get(i);
-                    System.out.println(retour.getIdCategorie());
-                    retour.setBorneDroit(retour.getBorneDroit() + 2);
-                    categorieRepository.save(retour);
+            // On par cours tout le tableau de catégorie
+            for (Categorie retour : categorieList) {
+                if (retour.getBorneDroit() > categorieParent.getBorneDroit()) {
+                    // Si la catégorie est compris dans le parrent, on ajoute que +2 à la borne droite
+                    if(retour.getBorneGauche() < categorieParent.getBorneGauche()){
+                        retour.setBorneDroit(retour.getBorneDroit() + 2);
+                        categorieRepository.save(retour);
+                    }else{ // Sinon on ajoute + 2 à la borne gauche et droite
+                        retour.setBorneDroit(retour.getBorneDroit() + 2);
+                        retour.setBorneGauche(retour.getBorneGauche() + 2);
+                        categorieRepository.save(retour);
+                    }
                 }
             }
-
             // On créer la catégorie à insérer
             Categorie categorieInserer = new Categorie();
             categorieInserer.setNomCategorie(nomCategorie);
@@ -102,7 +102,6 @@ public class CategorieBusiness implements ICategorieBusiness {
             categorieInserer.setBorneDroit(categorieParent.getBorneDroit() + 1);
             categorieInserer.setLevel(categorieParent.getLevel() + 1);
             categorieInserer.setProduits(new ArrayList<>());
-
             // On ajoute + 2 au père sur sa borne droite puis au sauvegarde
             categorieParent.setBorneDroit(categorieParent.getBorneDroit() + 2);
             categorieRepository.save(categorieParent);
@@ -119,8 +118,13 @@ public class CategorieBusiness implements ICategorieBusiness {
      */
     @Override
     public boolean delete(String nomCategorie) {
-        categorieRepository.delete(categorieRepository.findCategorieByNomCategorie(nomCategorie).orElse(null));
-        return true;
+        Optional<Categorie> categorie = categorieRepository.findCategorieByNomCategorie(nomCategorie);
+        if(categorie.isPresent()){
+            categorieRepository.delete(categorie.get());
+            return true;
+        }else{
+            return false;
+        }
     }
 
     /**
