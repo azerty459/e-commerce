@@ -18,7 +18,7 @@ tests:
 deploiement_dev:
   stage: deploiement
   script: 
-    - maven build
+    - maven package
   artifacts:
     paths:
     - jar
@@ -29,7 +29,7 @@ deploiement_dev:
 deploiement_master:
   stage: deploiement
   script: 
-    - maven build
+    - maven package
   artifacts:
     paths:
     - jar
