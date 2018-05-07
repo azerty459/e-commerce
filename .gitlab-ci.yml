@@ -18,15 +18,21 @@ deploiement_dev:
   artifacts:
     paths:
     - target/*.jar
-    expire_in: 1 week
+    expire_in: 1h
   only:
     - dev
+  except:
+    - branches
 
 
 deploiement_master:
   stage: deploiement
   script: 
-    - echo 'Deploy sur le serv de production'
+    - mvn package
+  artifacts:
+    paths:
+    - target/*.jar
+    expire_in: 1h
   only:
     - master
   except:
