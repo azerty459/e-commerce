@@ -6,11 +6,7 @@ stages:
   
 tests:
   stage: tests
-  image: ciricihq/gitlab-sonar-scanner
-  variables:
-    SONAR_URL: http://10.6.67.150:9000
-    SONAR_ANALYSIS_MODE: issues
-  script:
+  script: 
   - echo 'test'
   only:
   - branches
@@ -18,21 +14,21 @@ tests:
 deploiement_dev:
   stage: deploiement
   script: 
-    - maven package
+    - mvn package
   artifacts:
     paths:
-    - jar
-    expire_in: 1 week
+    - target/*.jar
+    expire_in: 1h
   only:
     - dev
 
 deploiement_master:
   stage: deploiement
   script: 
-    - maven package
+    - mvn package
   artifacts:
     paths:
-    - jar
-    expire_in: 1 week
+    - target/*.jar
+    expire_in: 1h
   only:
     - master
