@@ -11,7 +11,7 @@ tests:
     SONAR_URL: http://10.6.67.150:9000
     SONAR_ANALYSIS_MODE: issues
   script:
-  - sonar-gitlab-scanner
+  - echo 'test'
   only:
   - branches
   
