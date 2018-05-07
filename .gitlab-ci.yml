@@ -21,9 +21,6 @@ deploiement_dev:
     expire_in: 1h
   only:
     - dev
-  except:
-    - branches
-
 
 deploiement_master:
   stage: deploiement
