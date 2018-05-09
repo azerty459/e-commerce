@@ -28,6 +28,7 @@ public class CategorieBusiness implements ICategorieBusiness {
 
     @Override
     public List<CategorieDTO> getCategorie(String nom, boolean sousCategorie) {
+        System.out.println(categorieRepository.findAllWithCriteria(nom).size());
         return new ArrayList<>(CategorieTransformer.entityToDto(new ArrayList<>(categorieRepository.findAllWithCriteria(nom)), sousCategorie));
     }
 
