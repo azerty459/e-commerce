@@ -18,15 +18,15 @@ public class ProduitMutation {
         builder.typeName("Mutation");
 
         builder.dataFetcher("addProduit", (DataFetchingEnvironment env) ->
-                produitBusiness.add(env.getArgument("ref"), env.getArgument("nom"), env.getArgument("description"), env.getArgument("prixHT")
-        ));
+                produitBusiness.add(env.getArgument("ref"), env.getArgument("nom"), env.getArgument("description"), env.getArgument("prixHT"), env.getArgument("nouvelleCat"))
+        );
         builder.dataFetcher("updateProduit", (DataFetchingEnvironment env) ->
-                produitBusiness.update(env.getArgument("ref"), env.getArgument("nom"), env.getArgument("description"), env.getArgument("prixHT")
-        ));
+                produitBusiness.update(env.getArgument("ref"), env.getArgument("nom"), env.getArgument("description"), env.getArgument("prixHT"), env.getArgument("nouvelleCat"), env.getArgument("supprimerCat"))
+        );
 
         builder.dataFetcher("deleteProduit", (DataFetchingEnvironment env) ->
-                produitBusiness.delete(env.getArgument("ref")
-        ));
+                produitBusiness.delete(env.getArgument("ref"))
+        );
         return builder.build();
 
     }

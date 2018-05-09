@@ -21,7 +21,7 @@ import java.util.Map;
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
 public class TestProduitMutation {
-    @Mock
+    /*@Mock
     private ProduitBusiness produitBusiness;
 
     @Mock
@@ -99,5 +99,5 @@ public class TestProduitMutation {
         Mockito.verify(produitBusiness, Mockito.times(1)).delete("A09A87");
         // Test avec nb appel add avec mauvais param
         Mockito.verify(produitBusiness, Mockito.times(0)).delete("A09A82");
-    }
+    }*/
 }

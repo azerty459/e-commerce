@@ -21,7 +21,7 @@ public interface IProduitBusiness {
      * @param prixHT           Son prix hors taxe
      * @return le produit ajouté
      */
-    ProduitDTO add(String referenceProduit, String nom, String description, Double prixHT);
+    ProduitDTO add(String referenceProduit, String nom, String description, Double prixHT, String nouvelleCat);
 
     /**
      * Méthode définissant la modification d'un produit.
@@ -32,7 +32,7 @@ public interface IProduitBusiness {
      * @param prixHT           Le nouveau prix hors taxe
      * @return l'objet produit modifié, null si le produit à modifier n'est pas trouvée
      */
-    ProduitDTO update(String referenceProduit, String nom, String description, Double prixHT);
+    ProduitDTO update(String referenceProduit, String nom, String description, Double prixHT, String nouvelleCat, String supprimerCat);
 
     /**
      * Méthode définissant la suppression d'un produit.

@@ -46,7 +46,7 @@ public class ProduitBusiness implements IProduitBusiness {
      * @return l'objet produit crée ou null, s'il il manque une referenceProduit, un nom et un prixHT.
      */
     @Override
-    public ProduitDTO add(String referenceProduit, String nom, String description, Double prixHT) {
+    public ProduitDTO add(String referenceProduit, String nom, String description, Double prixHT, String nouvelleCat) {
 
         if (!referenceProduit.isEmpty() && !nom.isEmpty() && prixHT != null) {
 
@@ -57,7 +57,12 @@ public class ProduitBusiness implements IProduitBusiness {
             produit.setPrixHT(prixHT);
             produit.setCaracteristiques(new ArrayList<>());
             produit.setPhotos(new ArrayList<>());
-            produit.setCategories(new ArrayList<>());
+            List<Categorie> categorieList = new ArrayList<>();
+            Optional<Categorie> categorie = categorieRepository.findCategorieByNomCategorie(nouvelleCat);
+            if(categorie.isPresent()){
+                categorieList.add(categorie.get());
+            }
+            produit.setCategories(categorieList);
             return ProduitTransformer.entityToDto(produitRepository.save(produit));
         }
 
@@ -74,13 +79,37 @@ public class ProduitBusiness implements IProduitBusiness {
      * @return l'objet produit modifié, null si le produit à modifier n'est pas trouvée
      */
     @Override
-    public ProduitDTO update(String referenceProduit, String nom, String description, Double prixHT) {
+    public ProduitDTO update(String referenceProduit, String nom, String description, Double prixHT, String nouvelleCat, String supprimerCat) {
         Optional<Produit> produitOptional = produitRepository.findById(referenceProduit);
         if (produitOptional.isPresent()) {
             Produit produit = produitOptional.get();
-            produit.setNom(nom);
-            produit.setDescription(description);
-            produit.setPrixHT(prixHT);
+
+            if(nom != null)
+                produit.setNom(nom);
+
+            if(description != null)
+                produit.setDescription(description);
+
+            if(prixHT != null)
+                produit.setPrixHT(prixHT);
+
+            List<Categorie> categorieList = produit.getCategories();
+
+            if (nouvelleCat != null){
+                Optional<Categorie> categorieAjout = categorieRepository.findCategorieByNomCategorie(nouvelleCat);
+                if(categorieAjout.isPresent()){
+                    categorieList.add(categorieAjout.get());
+                }
+            }
+
+            if(supprimerCat != null){
+                Optional<Categorie> categorieSupprimer = categorieRepository.findCategorieByNomCategorie(supprimerCat);
+                if(categorieSupprimer.isPresent()){
+                    categorieList.remove(categorieSupprimer.get());
+                }
+            }
+
+            produit.setCategories(categorieList);
             return ProduitTransformer.entityToDto(produitRepository.save(produit));
         }
         return null;
