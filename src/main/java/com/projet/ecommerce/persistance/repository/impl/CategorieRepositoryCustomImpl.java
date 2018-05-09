@@ -15,7 +15,11 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
     // Requêtes JPQL
     private static final String SQL_ALL_CATEGORIES = "SELECT c FROM Categorie AS c";
 
-    private static final String SQL_CATEGORY_BY_NAME = "SELECT c FROM Categorie AS c WHERE c.nomCategorie =:nom";
+    // private static final String SQL_CATEGORY_BY_NAME = "SELECT c FROM Categorie AS c WHERE c.nomCategorie =:nom";
+    private static final String SQL_CATEGORY_BY_NAME = "SELECT souscat FROM Categorie AS souscat WHERE souscat.borneGauche >= " +
+            "(SELECT maincat.borneGauche FROM Categorie AS maincat WHERE maincat.nomCategorie =:nom) " +
+            "AND souscat.borneDroit <= " +
+            "(SELECT maincat2.borneDroit FROM Categorie AS maincat2 WHERE maincat2.nomCategorie =:nom)";
 
     @Autowired
     private EntityManager entityManager;
@@ -38,9 +42,9 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
         else {
             query =  entityManager.createQuery(SQL_CATEGORY_BY_NAME, Categorie.class);
             query.setParameter("nom", nom);
-
         }
 
         return query.getResultList();
+
     }
 }

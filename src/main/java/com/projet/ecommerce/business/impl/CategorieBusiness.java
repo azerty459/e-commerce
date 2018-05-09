@@ -5,7 +5,6 @@ import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.business.dto.transformer.CategorieTransformer;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
-import com.projet.ecommerce.persistance.repository.CategorieRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +28,7 @@ public class CategorieBusiness implements ICategorieBusiness {
 
     @Override
     public List<CategorieDTO> getCategorie(String nom, boolean sousCategorie) {
+        System.out.println(categorieRepository.findAllWithCriteria(nom).size());
         return new ArrayList<>(CategorieTransformer.entityToDto(new ArrayList<>(categorieRepository.findAllWithCriteria(nom)), sousCategorie));
     }
 
