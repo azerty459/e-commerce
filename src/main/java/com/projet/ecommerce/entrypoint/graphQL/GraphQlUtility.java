@@ -6,6 +6,7 @@ import com.projet.ecommerce.entrypoint.graphQL.pagination.PaginationQuery;
 import com.projet.ecommerce.entrypoint.graphQL.produit.ProduitMutation;
 import com.projet.ecommerce.entrypoint.graphQL.produit.ProduitQuery;
 import graphql.GraphQL;
+import graphql.GraphQLError;
 import graphql.schema.GraphQLSchema;
 import graphql.schema.idl.RuntimeWiring;
 import graphql.schema.idl.SchemaGenerator;
@@ -69,6 +70,8 @@ public class GraphQlUtility {
         typeRegistry.merge(schemaParser.parse(paginationSchemaFile));
 
         RuntimeWiring wiring = buildRuntimeWiring();
+
+
         return new SchemaGenerator().makeExecutableSchema(typeRegistry, wiring);
     }
 }

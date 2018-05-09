@@ -23,6 +23,9 @@ public class CategorieQuery {
         builder.dataFetcher("categories", new DataFetcher() {
             @Override
             public Object get(DataFetchingEnvironment environment) {
+                if(environment.getArgument("nom") == null){
+                    throw new CategorieException("Veuillez mettre un nom", environment.getArgument("nom"));
+                }
                 return categorieBusiness.getCategorie(environment.getArgument("nom"), environment.getFields().toString().contains("sousCategories"));
             }
         });
