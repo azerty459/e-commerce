@@ -33,9 +33,9 @@ public class GraphQLController {
     public Object handle(@RequestBody Map<String,String> query) {
         ExecutionResult result = graphQL.execute(query.get("query"));
         if(result.getErrors().isEmpty()){
-            return graphQL.execute(query.get("query")).getData();
+            return result.getData();
         }else{
-            List<GraphQLError> graphQLErrors = graphQL.execute(query.get("query")).getErrors();
+            List<GraphQLError> graphQLErrors = result.getErrors();
             return graphQlUtility.graphQLErrorHandler(graphQLErrors);
         }
     }

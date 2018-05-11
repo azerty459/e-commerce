@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -48,9 +47,12 @@ public class ProduitBusiness implements IProduitBusiness {
      * @return l'objet produit crée ou null, s'il il manque une referenceProduit, un nom et un prixHT.
      */
     @Override
-    public ProduitDTO add(String referenceProduit, String nom, String description, Double prixHT, String nouvelleCat) {
-
+    public ProduitDTO add(String referenceProduit, String nom, String description, Double prixHT, List<String> nouvelleCatList) {
+        System.out.println("HALLLLLO");
         if (!referenceProduit.isEmpty() && !nom.isEmpty()) {
+            if (produitRepository.findById(referenceProduit).isPresent()){
+                throw new GraphQLCustomException("Le produit à ajouter existe déjà.");
+            }
             Produit produit = new Produit();
             produit.setReferenceProduit(referenceProduit);
             produit.setNom(nom);
@@ -58,17 +60,24 @@ public class ProduitBusiness implements IProduitBusiness {
             produit.setPrixHT(prixHT);
             produit.setCaracteristiques(new ArrayList<>());
             produit.setPhotos(new ArrayList<>());
+
+
             List<Categorie> categorieList = new ArrayList<>();
-            Optional<Categorie> categorie = categorieRepository.findCategorieByNomCategorie(nouvelleCat);
-            if(categorie.isPresent()){
-                categorieList.add(categorie.get());
+            if(nouvelleCatList != null) {
+                for(String Nomcategorie: nouvelleCatList){
+                    Optional<Categorie> categorie = categorieRepository.findCategorieByNomCategorie(Nomcategorie);
+                    if (categorie.isPresent()) {
+                        categorieList.add(categorie.get());
+                    }
+                    //TODO else faire une erreur qui dit que la categorie n'existe pas mais n'arrete pas l'algorithme.
+                }
             }
             produit.setCategories(categorieList);
             return ProduitTransformer.entityToDto(produitRepository.save(produit));
         }else{
             GraphQLCustomException graphQLCustomException = new GraphQLCustomException("Erreur dans l'ajout du produit (la référence du produit et le nom ne peut être null)");
-            graphQLCustomException.ajouterExtansion("Référence", referenceProduit);
-            graphQLCustomException.ajouterExtansion("Nom", nom);
+            graphQLCustomException.ajouterExtension("Référence", referenceProduit);
+            graphQLCustomException.ajouterExtension("Nom", nom);
             throw graphQLCustomException;
         }
     }
@@ -167,12 +176,16 @@ public class ProduitBusiness implements IProduitBusiness {
      * Retourne le produit recherché.
      *
      * @param referenceProduit Référence du produit à rechercher
-     * @return l'objet produit recherché sinon null, s'il n'est pas trouvé
+     * @return l'objet produit recherché sinon une exception, s'il n'est pas trouvé
      */
     @Override
     public ProduitDTO getByRef(String referenceProduit) {
         Optional<Produit> produit = produitRepository.findById(referenceProduit);
-        return ProduitTransformer.entityToDto(produit.orElse(null));
+        if (produit.isPresent()){
+            return ProduitTransformer.entityToDto(produit.get());
+        }else{
+            throw new GraphQLCustomException("Le produit recherche n'existe pas.");
+        }
     }
 
     /**

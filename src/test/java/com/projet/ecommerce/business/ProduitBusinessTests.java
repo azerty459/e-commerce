@@ -192,8 +192,8 @@ public class ProduitBusinessTests {
     @Test
     public void getProduitByRefNotFound() {
         Mockito.when(produitRepository.findById(Mockito.any())).thenReturn(Optional.empty());
-        ProduitDTO produit = produitBusiness.getByRef("A04A78");
-        Assert.assertNull(produit);
+        thrown.expect(GraphQLCustomException.class);
+        produitBusiness.getByRef("A04A78");
     }
 
     @Test

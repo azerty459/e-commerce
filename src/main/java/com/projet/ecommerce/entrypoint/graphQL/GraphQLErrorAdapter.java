@@ -8,6 +8,9 @@ import graphql.language.SourceLocation;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Classe permettante de récrire l'extension de l'erreur.
+ */
 public class GraphQLErrorAdapter implements GraphQLError {
 
     private GraphQLError error;
