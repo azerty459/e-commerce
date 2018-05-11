@@ -3,6 +3,7 @@ package com.projet.ecommerce.business.impl;
 import com.projet.ecommerce.business.IProduitBusiness;
 import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.business.dto.transformer.ProduitTransformer;
+import com.projet.ecommerce.entrypoint.graphQL.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Produit;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,8 +50,7 @@ public class ProduitBusiness implements IProduitBusiness {
     @Override
     public ProduitDTO add(String referenceProduit, String nom, String description, Double prixHT, String nouvelleCat) {
 
-        if (!referenceProduit.isEmpty() && !nom.isEmpty() && prixHT != null) {
-
+        if (!referenceProduit.isEmpty() && !nom.isEmpty()) {
             Produit produit = new Produit();
             produit.setReferenceProduit(referenceProduit);
             produit.setNom(nom);
@@ -64,9 +65,12 @@ public class ProduitBusiness implements IProduitBusiness {
             }
             produit.setCategories(categorieList);
             return ProduitTransformer.entityToDto(produitRepository.save(produit));
+        }else{
+            GraphQLCustomException graphQLCustomException = new GraphQLCustomException("Erreur dans l'ajout du produit (la référence du produit et le nom ne peut être null)");
+            graphQLCustomException.ajouterExtansion("Référence", referenceProduit);
+            graphQLCustomException.ajouterExtansion("Nom", nom);
+            throw graphQLCustomException;
         }
-
-        return null;
     }
 
     /**
@@ -99,6 +103,8 @@ public class ProduitBusiness implements IProduitBusiness {
                 Optional<Categorie> categorieAjout = categorieRepository.findCategorieByNomCategorie(nouvelleCat);
                 if(categorieAjout.isPresent()){
                     categorieList.add(categorieAjout.get());
+                }else{
+                    throw new GraphQLCustomException("La catégorie associer au produit n'existe pas.");
                 }
             }
 
@@ -106,13 +112,16 @@ public class ProduitBusiness implements IProduitBusiness {
                 Optional<Categorie> categorieSupprimer = categorieRepository.findCategorieByNomCategorie(supprimerCat);
                 if(categorieSupprimer.isPresent()){
                     categorieList.remove(categorieSupprimer.get());
+                }else{
+                    throw new GraphQLCustomException("La catégorie associer au produit n'existe pas.");
                 }
             }
 
             produit.setCategories(categorieList);
             return ProduitTransformer.entityToDto(produitRepository.save(produit));
+        }else{
+            throw new GraphQLCustomException("Le produit recherché n'existe pas.");
         }
-        return null;
     }
 
     /**
@@ -145,8 +154,11 @@ public class ProduitBusiness implements IProduitBusiness {
      */
     @Override
     public List<ProduitDTO> getAll(String ref, String cat) {
-
-        return new ArrayList<>(ProduitTransformer.entityToDto(new ArrayList<>(produitRepositoryCustom.findAllWithCriteria(ref, cat))));
+        Collection<Produit> produitCollection = produitRepositoryCustom.findAllWithCriteria(ref, cat);
+        if(produitCollection.size() == 0){
+            throw new GraphQLCustomException("Le produit recherche n'existe pas.");
+        }
+        return new ArrayList<>(ProduitTransformer.entityToDto(new ArrayList<>(produitCollection)));
     }
 
 

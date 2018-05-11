@@ -3,6 +3,7 @@ package com.projet.ecommerce.business.impl;
 import com.projet.ecommerce.business.ICategorieBusiness;
 import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.business.dto.transformer.CategorieTransformer;
+import com.projet.ecommerce.entrypoint.graphQL.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,7 +30,11 @@ public class CategorieBusiness implements ICategorieBusiness {
 
     @Override
     public List<CategorieDTO> getCategorie(String nom, boolean sousCategorie) {
-        return new ArrayList<>(CategorieTransformer.entityToDto(new ArrayList<>(categorieRepository.findAllWithCriteria(nom)), sousCategorie));
+        Collection<Categorie> categories = categorieRepository.findAllWithCriteria(nom);
+        if(categories.size() == 0){
+            throw new GraphQLCustomException("Aucune catégorie trouvé avec ce nom: "+nom);
+        }
+        return new ArrayList<>(CategorieTransformer.entityToDto(new ArrayList<>(categories), sousCategorie));
     }
 
     /**
@@ -75,7 +81,7 @@ public class CategorieBusiness implements ICategorieBusiness {
      */
     @Override
     public CategorieDTO addEnfant(String nomCategorie, String parent) {
-        // Ajout d'une categorie enfant
+        // On recherche si le père existe
         Optional<Categorie> categorieParentOptional = categorieRepository.findCategorieByNomCategorie(parent);
         if (categorieParentOptional.isPresent()) {
             Categorie categorieParent = categorieParentOptional.get();
@@ -106,8 +112,9 @@ public class CategorieBusiness implements ICategorieBusiness {
             categorieParent.setBorneDroit(categorieParent.getBorneDroit() + 2);
             categorieRepository.save(categorieParent);
             return CategorieTransformer.entityToDto(categorieRepository.save(categorieInserer));
+        }else{
+            throw new GraphQLCustomException("Aucune catégorie parent trouvé: "+parent);
         }
-        return null;
     }
 
     /**

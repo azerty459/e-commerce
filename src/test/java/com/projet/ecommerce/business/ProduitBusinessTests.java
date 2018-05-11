@@ -2,6 +2,7 @@ package com.projet.ecommerce.business;
 
 import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.business.impl.ProduitBusiness;
+import com.projet.ecommerce.entrypoint.graphQL.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Produit;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
@@ -9,7 +10,10 @@ import com.projet.ecommerce.persistance.repository.ProduitRepository;
 import com.projet.ecommerce.persistance.repository.ProduitRepositoryCustom;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.matchers.JUnitMatchers;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -26,7 +30,7 @@ import java.util.Optional;
 @SpringBootTest
 public class ProduitBusinessTests {
 
-    /*@Mock
+    @Mock
     private ProduitRepository produitRepository;
 
     @Mock
@@ -43,6 +47,9 @@ public class ProduitBusinessTests {
         MockitoAnnotations.initMocks(this);
     }
 
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
     @Test
     public void add() {
         Produit produit = new Produit();
@@ -55,18 +62,16 @@ public class ProduitBusinessTests {
         produit.setCaracteristiques(new ArrayList<>());
         Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
 
-        ProduitDTO retour1 = produitBusiness.add("Test", "Test", "Test", 4.7);
+        ProduitDTO retour1 = produitBusiness.add("Test", "Test", "Test", 4.7, null);
         Assert.assertNotNull(retour1);
         Assert.assertEquals(produit.getNom(), retour1.getNom());
         Assert.assertEquals(produit.getDescription(), retour1.getDescription());
         Assert.assertEquals(produit.getPrixHT(), retour1.getPrixHT(), 0);
         Assert.assertEquals(produit.getReferenceProduit(), retour1.getRef());
 
-        ProduitDTO retour2 = produitBusiness.add("", "", "dfdfdf", null);
+        thrown.expect(GraphQLCustomException.class);
+        ProduitDTO retour2 = produitBusiness.add("", "", "dfdfdf", null, null);
         Assert.assertNull(retour2);
-
-        ProduitDTO retour3 = produitBusiness.add("ddfd", "sdffd", "", 4.7);
-        Assert.assertNotNull(retour3);
     }
 
     @Test
@@ -82,7 +87,7 @@ public class ProduitBusinessTests {
 
         Mockito.when(produitRepository.findById(Mockito.any())).thenReturn(Optional.of(produit));
         Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
-        ProduitDTO retour = produitBusiness.update("Test", "Test", "Test", 4.7);
+        ProduitDTO retour = produitBusiness.update("Test", "Test", "Test", 4.7, null, null );
         Assert.assertNotNull(retour);
 
         Assert.assertEquals(produit.getNom(), retour.getNom());
@@ -94,8 +99,8 @@ public class ProduitBusinessTests {
     @Test
     public void updateEmpty() {
         Mockito.when(produitRepository.findById(Mockito.any())).thenReturn(Optional.empty());
-        ProduitDTO retour2 = produitBusiness.update("Test", "Test", "Test", 4.7);
-        Assert.assertNull(retour2);
+        thrown.expect(GraphQLCustomException.class);
+        ProduitDTO retour2 = produitBusiness.update("Test", "Test", "Test", 4.7, null, null);
     }
 
     @Test
@@ -204,5 +209,5 @@ public class ProduitBusinessTests {
         Mockito.when(categorieRepository.findCategorieByNomCategorie(Mockito.any())).thenReturn(Optional.empty());
         List<ProduitDTO> produitDTOList = produitBusiness.getByCategorie("Test");
         Assert.assertNull(produitDTOList);
-    }*/
+    }
 }

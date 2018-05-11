@@ -11,7 +11,7 @@ extend type Query {
 }
 
 extend type Mutation {
-    addProduit(ref: String!, nom: String!, description: String!, prixHT: Float!, nouvelleCat: String): Produit!
+    addProduit(ref: String!, nom: String!, description: String, prixHT: Float!, nouvelleCat: String): Produit!
     updateProduit(ref: String!, nom: String, description: String, prixHT: Float, nouvelleCat: String, supprimerCat: String): Produit!
     deleteProduit(ref: String!): Boolean!
 }

@@ -6,6 +6,8 @@ import com.projet.ecommerce.business.IProduitBusiness;
 import com.projet.ecommerce.business.dto.PaginationDTO;
 import com.projet.ecommerce.business.dto.transformer.CategorieTransformer;
 import com.projet.ecommerce.business.dto.transformer.ProduitTransformer;
+import com.projet.ecommerce.persistance.entity.Categorie;
+import com.projet.ecommerce.persistance.entity.Produit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
