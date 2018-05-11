@@ -164,9 +164,6 @@ public class ProduitBusiness implements IProduitBusiness {
     @Override
     public List<ProduitDTO> getAll(String ref, String cat) {
         Collection<Produit> produitCollection = produitRepositoryCustom.findAllWithCriteria(ref, cat);
-        if(produitCollection.size() == 0){
-            throw new GraphQLCustomException("Le produit recherche n'existe pas.");
-        }
         return new ArrayList<>(ProduitTransformer.entityToDto(new ArrayList<>(produitCollection)));
     }
 

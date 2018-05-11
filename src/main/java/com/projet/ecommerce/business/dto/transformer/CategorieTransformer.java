@@ -41,17 +41,19 @@ public class CategorieTransformer {
      */
     public static Collection<CategorieDTO> entityToDto(List<Categorie> categoriesList, Boolean sousCat) {
         List<CategorieDTO> categorieDTOList = new ArrayList<>();
-        int levelMin = categoriesList.get(0).getLevel();
-        for(int i=0; i<categoriesList.size(); i++) {
-            if(categoriesList.get(i).getLevel() < levelMin){
-                levelMin = categoriesList.get(i).getLevel();
+        if(!categoriesList.isEmpty()){
+            int levelMin = categoriesList.get(0).getLevel();
+            for(Categorie categorie: categoriesList){
+                if(categorie.getLevel() < levelMin){
+                    levelMin = categorie.getLevel();
+                }
             }
-        }
-        for(int i=0; i<categoriesList.size(); i++) {
-            if(sousCat && categoriesList.get(i).getLevel() == levelMin)
-                categorieDTOList.add(entityToDto(categoriesList.get(i), categoriesList));
-            else if (!sousCat)
-                categorieDTOList.add(entityToDto(categoriesList.get(i), categoriesList));
+            for(int i=0; i<categoriesList.size(); i++) {
+                if(sousCat && categoriesList.get(i).getLevel() == levelMin)
+                    categorieDTOList.add(entityToDto(categoriesList.get(i), categoriesList));
+                else if (!sousCat)
+                    categorieDTOList.add(entityToDto(categoriesList.get(i), categoriesList));
+            }
         }
         return categorieDTOList;
     }

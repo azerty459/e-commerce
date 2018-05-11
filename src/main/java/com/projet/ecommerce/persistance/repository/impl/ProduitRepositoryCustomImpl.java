@@ -15,7 +15,6 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
 
     // Requêtes en Java Persistence Query Language
     private static final String SQL_ALL_PRODUCTS = "SELECT p FROM Produit AS p";
-
     private static final String SQL_PRODUCT_BY_REFERENCE = "SELECT p FROM Produit AS p WHERE p.referenceProduit = :ref";
 
     private static final String SQL_PRODUCTS_BY_CATEGORY = "SELECT c.produits FROM Categorie AS c " +
