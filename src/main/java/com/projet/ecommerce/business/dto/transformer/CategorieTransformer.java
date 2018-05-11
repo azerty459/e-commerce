@@ -14,7 +14,7 @@ public class CategorieTransformer {
      * @param categorieDTOCollection Une collection d'objets CategorieDTO
      * @return une collection d'objets Categorie
      */
-    public static Collection<Categorie> dtoToEntity(Collection<CategorieDTO> categorieDTOCollection){
+    public static Collection<Categorie> dtoToEntity(List<CategorieDTO> categorieDTOCollection){
         List<Categorie> categorieList = new ArrayList<>();
         for (CategorieDTO categorieDTO : categorieDTOCollection) {
             categorieList.add(dtoToEntity(categorieDTO));
@@ -27,9 +27,10 @@ public class CategorieTransformer {
      * @param categorieDTO Un objet CategorieDTO
      * @return un objet Categorie
      */
-    public static Categorie dtoToEntity(CategorieDTO categorieDTO){
+    private static Categorie dtoToEntity(CategorieDTO categorieDTO){
         Categorie categorie = new Categorie();
         categorie.setNomCategorie(categorieDTO.getNom());
+        categorie.setIdCategorie(categorieDTO.getId());
         return categorie;
     }
 
@@ -38,11 +39,21 @@ public class CategorieTransformer {
      * @param categoriesList Une liste de d'objets Categorie
      * @return une collection d'objets CategorieDTO
      */
-    public static Collection<CategorieDTO> entityToDto(List<Categorie> categoriesList) {
+    public static Collection<CategorieDTO> entityToDto(List<Categorie> categoriesList, Boolean sousCat) {
         List<CategorieDTO> categorieDTOList = new ArrayList<>();
-        for(int i=0; i<categoriesList.size(); i++) {
-            if(categoriesList.get(i).getLevel() == 1)
-                categorieDTOList.add(entityToDto(categoriesList.get(i), categoriesList));
+        if(!categoriesList.isEmpty()){
+            int levelMin = categoriesList.get(0).getLevel();
+            for(Categorie categorie: categoriesList){
+                if(categorie.getLevel() < levelMin){
+                    levelMin = categorie.getLevel();
+                }
+            }
+            for(int i=0; i<categoriesList.size(); i++) {
+                if(sousCat && categoriesList.get(i).getLevel() == levelMin)
+                    categorieDTOList.add(entityToDto(categoriesList.get(i), categoriesList));
+                else if (!sousCat)
+                    categorieDTOList.add(entityToDto(categoriesList.get(i), categoriesList));
+            }
         }
         return categorieDTOList;
     }
@@ -57,6 +68,20 @@ public class CategorieTransformer {
         CategorieDTO categorieDTO = new CategorieDTO();
         categorieDTO.setNom(categorie.getNomCategorie());
         categorieDTO.setSousCategories(new ArrayList<>(getSousCategorie(categorie, categoriesList)));
+        categorieDTO.setId(categorie.getIdCategorie());
+        // System.out.println(categoriesList.size());
+        return categorieDTO;
+    }
+
+    /**
+     * Transforme un objet Categorie en CategorieDTO
+     * @param categorie Un objet Categorie
+     * @return un objet CategorieDTO
+     */
+    public static CategorieDTO entityToDto(Categorie categorie) {
+        CategorieDTO categorieDTO = new CategorieDTO();
+        categorieDTO.setNom(categorie.getNomCategorie());
+        categorieDTO.setSousCategories(new ArrayList<>());
         return categorieDTO;
     }
 
@@ -74,6 +99,7 @@ public class CategorieTransformer {
                 CategorieDTO categorieDTO = new CategorieDTO();
                 categorieDTO.setNom(categorieList.get(i).getNomCategorie());
                 categorieDTO.setSousCategories(new ArrayList<>(getSousCategorie(categorieList.get(i), categorieList)));
+                categorieDTO.setId(categorieList.get(i).getIdCategorie());
                 categorieDTOList.add(categorieDTO);
             }
         }

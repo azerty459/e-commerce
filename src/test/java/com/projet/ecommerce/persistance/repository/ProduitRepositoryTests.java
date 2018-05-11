@@ -1,7 +1,6 @@
-package com.projet.ecommerce.repository;
+package com.projet.ecommerce.persistance.repository;
 
 import com.projet.ecommerce.persistance.entity.Produit;
-import com.projet.ecommerce.persistance.repository.ProduitRepository;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +12,7 @@ import java.util.Collection;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@ActiveProfiles("test")
 public class ProduitRepositoryTests {
 
 	private static final Produit TEMP_INSERT = new Produit();
@@ -95,13 +95,5 @@ public class ProduitRepositoryTests {
 		Assert.assertNotNull(produitRepository.save(TEMP_DELETE));
 		produitRepository.delete(TEMP_DELETE);
 		Assert.assertFalse(produitRepository.findById(TEMP_DELETE.getReferenceProduit()).isPresent());
-	}
-
-	@After
-	public void end(){
-		produitRepository.delete(TEMP_DELETE);
-		produitRepository.delete(TEMP_GET);
-		produitRepository.delete(TEMP_INSERT);
-		produitRepository.delete(TEMP_UPDATE);
 	}
 }

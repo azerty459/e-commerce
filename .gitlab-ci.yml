@@ -7,29 +7,23 @@ stages:
 tests:
   stage: tests
   script: 
-  - echo 'test'
+  - ping 10.6.67.150:9000
   only:
   - branches
   
 deploiement_dev:
   stage: deploiement
   script: 
-    - mvn package
-  artifacts:
-    paths:
-    - target/*.jar
-    expire_in: 1h
+    - echo 'Deploy sur le serv de developpement'
   only:
-    - dev
+    - /^dev.*$/
+  except:
+    - branches
 
 deploiement_master:
   stage: deploiement
   script: 
-    - mvn package
-  artifacts:
-    paths:
-    - target/*.jar
-    expire_in: 1h
+    - echo 'Deploy sur le serv de production'
   only:
     - master
   except:

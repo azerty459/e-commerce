@@ -1,0 +1,17 @@
+type Produit {
+    ref: String!
+    nom: String!
+    description: String!
+    prixHT: Float!
+    categories: [Categorie]!
+}
+
+extend type Query {
+    produits(ref: String, cat: String): [Produit]!
+}
+
+extend type Mutation {
+    addProduit(ref: String!, nom: String!, description: String, prixHT: Float!, nouvelleCat: [String]): Produit!
+    updateProduit(ref: String!, nom: String, description: String, prixHT: Float, nouvelleCat: String, supprimerCat: String): Produit!
+    deleteProduit(ref: String!): Boolean!
+}

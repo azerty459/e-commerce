@@ -37,7 +37,7 @@ public class ProduitTransformer {
         produitDTO.setPrixHT(produit.getPrixHT());
         produitDTO.setCaracteristiques(new ArrayList<>(CaracteristiqueTransformer.entityToDto(produit.getCaracteristiques())));
         produitDTO.setPhotos(new ArrayList<>(PhotoTransformer.entityToDto(produit.getPhotos())));
-        produitDTO.setCategories(new ArrayList<>(CategorieTransformer.entityToDto(produit.getCategories())));
+        produitDTO.setCategories(new ArrayList<>(CategorieTransformer.entityToDto(produit.getCategories(), false)));
         return produitDTO;
     }
 
@@ -69,7 +69,9 @@ public class ProduitTransformer {
         produit.setPrixHT(produitDTO.getPrixHT());
         produit.setCaracteristiques(new ArrayList<>(CaracteristiqueTransformer.dtoToEntity(produitDTO.getCaracteristiques())));
         produit.setPhotos(new ArrayList<>(PhotoTransformer.dtoToEntity(produitDTO.getPhotos())));
+        System.out.println("dd"+produitDTO.getCategories().get(0).getNom());
         produit.setCategories(new ArrayList<>(CategorieTransformer.dtoToEntity(produitDTO.getCategories())));
+        System.out.println("dd"+produit.getCategories().get(0).getNomCategorie());
         return produit;
     }
 }

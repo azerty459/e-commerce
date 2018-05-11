@@ -8,6 +8,8 @@ import java.util.List;
 
 public class CategorieDTO {
 
+    private int id;
+
     private String nom;
 
     private List<CategorieDTO> sousCategories;
@@ -42,5 +44,21 @@ public class CategorieDTO {
      */
     public void setSousCategories(List<CategorieDTO> sousCategories) {
         this.sousCategories = sousCategories;
+    }
+
+    /**
+     * Retourne l'id de la catégorie.
+     * @return l'id de la catégorie
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * Remplace l'id par celle-ci mit en paramètre.
+     * @param id La nouvelle id
+     */
+    public void setId(int id) {
+        this.id = id;
     }
 }

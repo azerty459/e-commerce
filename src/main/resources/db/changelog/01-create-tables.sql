@@ -11,22 +11,23 @@ CREATE TABLE produit
 
 CREATE TABLE categorie
 (
+  id_categorie SERIAL,
   nom_categorie VARCHAR(255) NOT NULL,
   borne_gauche int NOT NULL,
   borne_droit int NOT NULL,
   level int NOT NULL,
-  PRIMARY KEY (nom_categorie)
+  PRIMARY KEY (id_categorie)
 );
 
 CREATE TABLE produit_categorie
 (
   reference_produit VARCHAR(255) NOT NULL,
-  nom_categorie VARCHAR(255) NOT NULL,
-  PRIMARY KEY (reference_produit, nom_categorie),
+  id_categorie int NOT NULL,
+  PRIMARY KEY (reference_produit, id_categorie),
   CONSTRAINT FK_produit_categorie_referenceProduit FOREIGN KEY (reference_produit)
   REFERENCES produit(reference_produit),
-  CONSTRAINT FK_idCategorie FOREIGN KEY (nom_categorie)
-  REFERENCES categorie(nom_categorie)
+  CONSTRAINT FK_idCategorie FOREIGN KEY (id_categorie)
+  REFERENCES categorie(id_categorie)
 );
 
 

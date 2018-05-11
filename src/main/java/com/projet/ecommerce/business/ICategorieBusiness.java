@@ -2,8 +2,8 @@ package com.projet.ecommerce.business;
 
 import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.persistance.entity.Categorie;
+import org.springframework.data.domain.Page;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -11,6 +11,13 @@ import java.util.List;
  */
 
 public interface ICategorieBusiness {
+
+    /**
+     * Méthode allant chercher les catégories
+     * @param nom le nom de la catégorie à aller chercher. "null" si on cherche à lister toutes les catégories.
+     * @return liste des catégories recherchées
+     */
+    List<CategorieDTO> getCategorie(String nom, boolean sousCategorie);
 
     /**
      * Méthode définissant l'ajout d'une catégorie parent.
@@ -52,4 +59,13 @@ public interface ICategorieBusiness {
      * @return l'objet categorie recherché
      */
     CategorieDTO getByNom(String nomCategorie);
+
+
+    /**
+     * Méthode définissant la pagination
+     * @param pageNumber le page souhaitée
+     * @param nb le nombre de produit à afficher dans la page
+     * @return une page de categorie
+     */
+    Page<Categorie> getPage(int pageNumber, int nb);
 }

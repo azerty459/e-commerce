@@ -1,8 +1,11 @@
 package com.projet.ecommerce.persistance.entity;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.*;
-import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Entité représentant la table produit sous forme de classe.
@@ -24,18 +27,18 @@ public class Produit {
     @Column(name = "prix_ht")
     private double prixHT;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinTable(
             name = "produit_categorie",
             joinColumns = { @JoinColumn(name = "reference_produit") },
-            inverseJoinColumns = { @JoinColumn(name = "nom_categorie") }
+            inverseJoinColumns = { @JoinColumn(name = "id_categorie") }
     )
     private List<Categorie> categories;
 
-    @OneToMany(mappedBy="produit", cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+    @OneToMany(mappedBy="produit", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Caracteristique> caracteristiques;
 
-    @OneToMany(mappedBy="produit", cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+    @OneToMany(mappedBy="produit", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Photo> photos;
 
     /**
@@ -111,7 +114,7 @@ public class Produit {
     }
 
     /**
-     *
+     * Remplace la liste de catégorie par celui-ci mit en paramètre
      * @param categories
      */
     public void setCategories(List<Categorie> categories) {

@@ -2,6 +2,7 @@ package com.projet.ecommerce.business;
 
 import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.persistance.entity.Produit;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public interface IProduitBusiness {
      * @param prixHT           Son prix hors taxe
      * @return le produit ajouté
      */
-    ProduitDTO add(String referenceProduit, String nom, String description, Float prixHT);
+    ProduitDTO add(String referenceProduit, String nom, String description, Double prixHT, List<String> nouvelleCat);
 
     /**
      * Méthode définissant la modification d'un produit.
@@ -31,7 +32,7 @@ public interface IProduitBusiness {
      * @param prixHT           Le nouveau prix hors taxe
      * @return l'objet produit modifié, null si le produit à modifier n'est pas trouvée
      */
-    ProduitDTO update(String referenceProduit, String nom, String description, Float prixHT);
+    ProduitDTO update(String referenceProduit, String nom, String description, Double prixHT, String nouvelleCat, String supprimerCat);
 
     /**
      * Méthode définissant la suppression d'un produit.
@@ -49,6 +50,14 @@ public interface IProduitBusiness {
     List<ProduitDTO> getAll();
 
     /**
+     * Méthode définissant la recherche des produits selon les paramètres ci-dessous
+     * @param ref la référence du produit recherché
+     * @param cat la catégorie du /des produit(s) recherché(s)
+     * @return la liste des produits trouvés
+     */
+    List<ProduitDTO> getAll(String ref, String cat);
+
+    /**
      * Méthode définissant la recherche d'un produit selon la référence du produit recherché.
      *
      * @param referenceProduit Référence du produit à rechercher
@@ -57,7 +66,18 @@ public interface IProduitBusiness {
     ProduitDTO getByRef(String referenceProduit);
 
     /**
-     * Méthode définissant la recherche de plusieurs produit par le nom d'une catégorie.
+     * Méthode définissant la recherche de plusieurs produit par le nom d'une catégorie
+     * @param nomCategorie le nom de la catégorie
+     * @return une liste de ProduitDTO
      */
     List<ProduitDTO> getByCategorie(String nomCategorie);
+
+    /**
+     * Méthode définissant la pagination
+     * @param pageNumber la page souhaitée
+     * @param nb le nombre de produit à afficher dans la page
+     * @return une page de produit
+     */
+    Page<Produit> getPage(int pageNumber, int nb);
+
 }

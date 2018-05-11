@@ -3,10 +3,14 @@ package com.projet.ecommerce.business.impl;
 import com.projet.ecommerce.business.ICategorieBusiness;
 import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.business.dto.transformer.CategorieTransformer;
+import com.projet.ecommerce.entrypoint.graphQL.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,10 +22,26 @@ import java.util.Optional;
  */
 
 @Service
+@Transactional
 public class CategorieBusiness implements ICategorieBusiness {
 
     @Autowired
     private CategorieRepository categorieRepository;
+
+    /**
+     *
+     * @param nom le nom de la catégorie à aller chercher. "null" si on cherche à lister toutes les catégories.
+     * @param sousCategorie true si on veut lister les sous-catégories sous forme d'arbre, false si on souhaite lister toutes les catégories
+     * @return
+     */
+    @Override
+    public List<CategorieDTO> getCategorie(String nom, boolean sousCategorie) {
+        Collection<Categorie> categories = categorieRepository.findAllWithCriteria(nom);
+        if(categories.size() == 0){
+            throw new GraphQLCustomException("Aucune catégorie trouvé avec ce nom: "+nom);
+        }
+        return new ArrayList<>(CategorieTransformer.entityToDto(new ArrayList<>(categories), sousCategorie));
+    }
 
     /**
      * Ajout d'une catégorie parent
@@ -33,14 +53,17 @@ public class CategorieBusiness implements ICategorieBusiness {
     public CategorieDTO addParent(String nomCategorie) {
         //On récupère toute la liste des catégories
         List<Categorie> categorieList = new ArrayList<>(categorieRepository.findAll());
+        int borndeDroit = 0;
 
-        //On déclare une borne droit par défaut qui va être utilisée juste après
-        int borndeDroit = categorieList.get(0).getBorneDroit();
+        if(!categorieList.isEmpty()){
+            //On déclare une borne droit par défaut qui va être utilisée juste après
+            borndeDroit = categorieList.get(0).getBorneDroit();
 
-        //On parcours la liste pour trouver la borne droit maximum dans la base de données par rapport au catégorie parent
-        for (int i = 0; i < categorieList.size(); i++) {
-            if (categorieList.get(i).getLevel() == 0 && categorieList.get(i).getBorneDroit() > borndeDroit) {
-                borndeDroit = categorieList.get(i).getBorneDroit();
+            //On parcours la liste pour trouver la borne droit maximum dans la base de données par rapport au catégorie parent
+            for (Categorie retour : categorieList) {
+                if (retour.getLevel() == 1 && retour.getBorneDroit() > borndeDroit) {
+                    borndeDroit = retour.getBorneDroit();
+                }
             }
         }
 
@@ -52,7 +75,7 @@ public class CategorieBusiness implements ICategorieBusiness {
         categorieInserer.setLevel(1);
         categorieInserer.setProduits(new ArrayList<>());
 
-        return CategorieTransformer.entityToDto(categorieRepository.save(categorieInserer), new ArrayList<>(categorieRepository.findAll()));
+        return CategorieTransformer.entityToDto(categorieRepository.save(categorieInserer));
     }
 
     /**
@@ -64,22 +87,26 @@ public class CategorieBusiness implements ICategorieBusiness {
      */
     @Override
     public CategorieDTO addEnfant(String nomCategorie, String parent) {
-        // Ajout d'une categorie enfant
-        Optional<Categorie> categorieParentOptional = categorieRepository.findById(parent);
+        // On recherche si le père existe
+        Optional<Categorie> categorieParentOptional = categorieRepository.findCategorieByNomCategorie(parent);
         if (categorieParentOptional.isPresent()) {
-            // Checherche la catégorie père et ajoute + 2 à sa borne droite.
             Categorie categorieParent = categorieParentOptional.get();
-
             //Permet de décaler les catégorie de + 2 par rapport à la borne droite du père
             List<Categorie> categorieList = new ArrayList<>(categorieRepository.findAll());
-            for (int i = 0; i < categorieList.size(); i++) {
-                if (categorieList.get(i).getBorneDroit() > categorieParent.getBorneDroit()) {
-                    Categorie retour = categorieList.get(i);
-                    retour.setBorneDroit(retour.getBorneDroit() + 2);
-                    categorieRepository.save(retour);
+            // On par cours tout le tableau de catégorie
+            for (Categorie retour : categorieList) {
+                if (retour.getBorneDroit() > categorieParent.getBorneDroit()) {
+                    // Si la catégorie est compris dans le parrent, on ajoute que +2 à la borne droite
+                    if(retour.getBorneGauche() < categorieParent.getBorneGauche()){
+                        retour.setBorneDroit(retour.getBorneDroit() + 2);
+                        categorieRepository.save(retour);
+                    }else{ // Sinon on ajoute + 2 à la borne gauche et droite
+                        retour.setBorneDroit(retour.getBorneDroit() + 2);
+                        retour.setBorneGauche(retour.getBorneGauche() + 2);
+                        categorieRepository.save(retour);
+                    }
                 }
             }
-
             // On créer la catégorie à insérer
             Categorie categorieInserer = new Categorie();
             categorieInserer.setNomCategorie(nomCategorie);
@@ -87,13 +114,13 @@ public class CategorieBusiness implements ICategorieBusiness {
             categorieInserer.setBorneDroit(categorieParent.getBorneDroit() + 1);
             categorieInserer.setLevel(categorieParent.getLevel() + 1);
             categorieInserer.setProduits(new ArrayList<>());
-
             // On ajoute + 2 au père sur sa borne droite puis au sauvegarde
             categorieParent.setBorneDroit(categorieParent.getBorneDroit() + 2);
             categorieRepository.save(categorieParent);
-            return CategorieTransformer.entityToDto(categorieRepository.save(categorieInserer), new ArrayList<>(categorieRepository.findAll()));
+            return CategorieTransformer.entityToDto(categorieRepository.save(categorieInserer));
+        }else{
+            throw new GraphQLCustomException("Aucune catégorie parent trouvé: "+parent);
         }
-        return null;
     }
 
     /**
@@ -104,8 +131,13 @@ public class CategorieBusiness implements ICategorieBusiness {
      */
     @Override
     public boolean delete(String nomCategorie) {
-        categorieRepository.deleteById(nomCategorie);
-        return true;
+        Optional<Categorie> categorie = categorieRepository.findCategorieByNomCategorie(nomCategorie);
+        if(categorie.isPresent()){
+            categorieRepository.delete(categorie.get());
+            return true;
+        }else{
+            return false;
+        }
     }
 
     /**
@@ -115,7 +147,7 @@ public class CategorieBusiness implements ICategorieBusiness {
      */
     @Override
     public List<CategorieDTO> getAll() {
-        return new ArrayList<>(CategorieTransformer.entityToDto(new ArrayList<>(categorieRepository.findAll())));
+        return new ArrayList<>(CategorieTransformer.entityToDto(new ArrayList<>(categorieRepository.findAll()), false));
     }
 
     /**
@@ -126,10 +158,21 @@ public class CategorieBusiness implements ICategorieBusiness {
      */
     @Override
     public CategorieDTO getByNom(String nomCategorie) {
-        Optional<Categorie> categorie = categorieRepository.findById(nomCategorie);
+        Optional<Categorie> categorie = categorieRepository.findCategorieByNomCategorie(nomCategorie);
         if (categorie.isPresent()) {
             return CategorieTransformer.entityToDto(categorie.get(), new ArrayList<>(categorieRepository.findAll()));
         }
         return null;
+    }
+
+    /**
+     * Retourne un objet page de catégorie.
+     * @param pageNumber le page souhaitée
+     * @param nb le nombre de produit à afficher dans la page
+     * @return un objet page de produit
+     */
+    @Override
+    public Page<Categorie> getPage(int pageNumber, int nb) {
+        return  categorieRepository.findAll(PageRequest.of(pageNumber - 1, nb));
     }
 }

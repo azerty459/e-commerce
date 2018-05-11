@@ -12,6 +12,11 @@ import java.util.List;
 public class Categorie {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_categorie")
+    private int idCategorie;
+
+
     @Column(name = "nom_categorie")
     private String nomCategorie;
 
@@ -24,7 +29,7 @@ public class Categorie {
     @Column(name = "level")
     private int level;
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "categories")
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "categories", fetch = FetchType.LAZY)
     private List<Produit> produits;
 
     /**
@@ -105,5 +110,21 @@ public class Categorie {
      */
     public void setProduits(List<Produit> produits) {
         this.produits = produits;
+    }
+
+    /**
+     * Retourne l'id de la catégorie.
+     * @return l'id de la catégorie
+     */
+    public int getIdCategorie() {
+        return idCategorie;
+    }
+
+    /**
+     * Remplace l'id de la catégorie par celui-ci mit en paramètre.
+     * @param idCategorie La nouvelle ID de la catégorie
+     */
+    public void setIdCategorie(int idCategorie) {
+        this.idCategorie = idCategorie;
     }
 }
