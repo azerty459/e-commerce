@@ -5,7 +5,9 @@ import com.projet.ecommerce.entrypoint.graphQL.categorie.CategorieQuery;
 import com.projet.ecommerce.entrypoint.graphQL.pagination.PaginationQuery;
 import com.projet.ecommerce.entrypoint.graphQL.produit.ProduitMutation;
 import com.projet.ecommerce.entrypoint.graphQL.produit.ProduitQuery;
+import graphql.ExceptionWhileDataFetching;
 import graphql.GraphQL;
+import graphql.GraphQLError;
 import graphql.schema.GraphQLSchema;
 import graphql.schema.idl.RuntimeWiring;
 import graphql.schema.idl.SchemaGenerator;
@@ -16,6 +18,9 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Configuration de graphQL.
@@ -45,6 +50,26 @@ public class GraphQlUtility {
                 .build();
     }
 
+    public List<GraphQLError> graphQLErrorHandler(List<GraphQLError> graphQLErrors){
+        List<GraphQLError> clientErrors = graphQLErrors.stream()
+                .filter(this::isClientError)
+                .collect(Collectors.toList());
+
+        List<GraphQLError> serverErrors = graphQLErrors.stream()
+                .filter(e -> !isClientError(e))
+                .map(GraphQLErrorAdapter::new)
+                .collect(Collectors.toList());
+
+        List<GraphQLError> returnGraphQLErrors = new ArrayList<>();
+        returnGraphQLErrors.addAll(clientErrors);
+        returnGraphQLErrors.addAll(serverErrors);
+        return returnGraphQLErrors;
+    }
+
+    private boolean isClientError(GraphQLError error) {
+        return !(error instanceof ExceptionWhileDataFetching || error instanceof Throwable);
+    }
+
     public RuntimeWiring buildRuntimeWiring(){
         return  RuntimeWiring.newRuntimeWiring()
                 .type(produitQuery.produitWiring())
@@ -69,6 +94,8 @@ public class GraphQlUtility {
         typeRegistry.merge(schemaParser.parse(paginationSchemaFile));
 
         RuntimeWiring wiring = buildRuntimeWiring();
+
+
         return new SchemaGenerator().makeExecutableSchema(typeRegistry, wiring);
     }
 }

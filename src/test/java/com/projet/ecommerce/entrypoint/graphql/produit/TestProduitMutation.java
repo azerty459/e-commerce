@@ -63,9 +63,9 @@ public class TestProduitMutation {
         Assert.assertNotNull(retourMap.get("addProduit"));
         retourMap.get("addProduit").get(dataFetchingEnvironment);
         // Test avec nb appel add avec bon param
-        Mockito.verify(produitBusiness, Mockito.times(1)).add("A09A87", "test", "test", 4.7);
+        Mockito.verify(produitBusiness, Mockito.times(1)).add("A09A87", "test", "test", 4.7, null);
         // Test avec nb appel add avec mauvais param
-        Mockito.verify(produitBusiness, Mockito.times(0)).add("A09A82", "test", "test", 4.7);
+        Mockito.verify(produitBusiness, Mockito.times(0)).add("A09A82", "test", "test", 4.7, null);
     }
 
     @Test
@@ -81,9 +81,9 @@ public class TestProduitMutation {
         Assert.assertNotNull(retourMap.get("updateProduit"));
         retourMap.get("updateProduit").get(dataFetchingEnvironment);
         // Test avec nb appel add avec bon param
-        Mockito.verify(produitBusiness, Mockito.times(1)).update("A09A87", "test", "test", 4.7);
+        Mockito.verify(produitBusiness, Mockito.times(1)).update("A09A87", "test", "test", 4.7, null, null);
         // Test avec nb appel add avec mauvais param
-        Mockito.verify(produitBusiness, Mockito.times(0)).update("A09A82", "test", "test", 4.7);
+        Mockito.verify(produitBusiness, Mockito.times(0)).update("A09A82", "test", "test", 4.7, null, null);
     }
 
     @Test

@@ -2,11 +2,14 @@ package com.projet.ecommerce.business;
 
 import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.business.impl.CategorieBusiness;
+import com.projet.ecommerce.entrypoint.graphQL.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.*;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -31,6 +34,9 @@ public class CategorieBusinessTests {
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 	}
+
+	@Rule
+	public ExpectedException thrown = ExpectedException.none();
 
 	@Test
 	public void insertParent() {
@@ -121,7 +127,8 @@ public class CategorieBusinessTests {
 	public void getCategorie() {
 		List<Categorie> categories = new ArrayList<>();
 		Mockito.when(categorieRepository.findAllWithCriteria(Mockito.anyString())).thenReturn(categories);
-		Assert.assertEquals(categorieBusiness.getCategorie("nom", false).size(), 0);
+		thrown.expect(GraphQLCustomException.class);
+		categorieBusiness.getCategorie("nom", false);
 
 		// Création des catégories et ajout dans la liste.
 		Categorie categorie1 = new Categorie();

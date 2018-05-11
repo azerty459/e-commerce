@@ -1,13 +1,16 @@
 package com.projet.ecommerce.entrypoint;
 
 import com.projet.ecommerce.entrypoint.graphQL.GraphQlUtility;
+import graphql.ExceptionWhileDataFetching;
 import graphql.ExecutionResult;
 import graphql.GraphQL;
+import graphql.GraphQLError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,6 +31,12 @@ public class GraphQLController {
 
     @RequestMapping(value = "/graphql", method = RequestMethod.POST)
     public Object handle(@RequestBody Map<String,String> query) {
-        return graphQL.execute(query.get("query")).getData();
+        ExecutionResult result = graphQL.execute(query.get("query"));
+        if(result.getErrors().isEmpty()){
+            return result.getData();
+        }else{
+            List<GraphQLError> graphQLErrors = result.getErrors();
+            return graphQlUtility.graphQLErrorHandler(graphQLErrors);
+        }
     }
 }
