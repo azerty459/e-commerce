@@ -28,6 +28,12 @@ public class CategorieBusiness implements ICategorieBusiness {
     @Autowired
     private CategorieRepository categorieRepository;
 
+    /**
+     *
+     * @param nom le nom de la catégorie à aller chercher. "null" si on cherche à lister toutes les catégories.
+     * @param sousCategorie true si on veut lister les sous-catégories sous forme d'arbre, false si on souhaite lister toutes les catégories
+     * @return
+     */
     @Override
     public List<CategorieDTO> getCategorie(String nom, boolean sousCategorie) {
         Collection<Categorie> categories = categorieRepository.findAllWithCriteria(nom);
