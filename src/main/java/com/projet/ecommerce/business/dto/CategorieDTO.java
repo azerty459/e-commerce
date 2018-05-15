@@ -14,6 +14,19 @@ public class CategorieDTO {
 
     private List<CategorieDTO> sousCategories;
 
+
+    // US#192 - DEBUT
+    /**
+     * Liste des parents de la catégories.
+     */
+    private List<CategorieDTO> parents;
+
+     /**
+     * Niveau de la catégorie dans l'arborescence des catégories (Niveau 1 = niveau le plus élevé).
+     */
+    private int level;
+    // US#192 - FIN
+
     /**
      * Retourne le nom de la categorieDTO.
      * @return le nom de la categorie.
@@ -61,4 +74,20 @@ public class CategorieDTO {
     public void setId(int id) {
         this.id = id;
     }
+
+    // US#192 - DEBUT
+
+    public List<CategorieDTO> getParents() {
+        return this.parents;
+    }
+
+    public void setParents(List<CategorieDTO> p) {
+        this.parents = p;
+    }
+
+    public int getLevel() { return this.level; }
+
+    public void setLevel(int l) { this.level = l; }
+
+    // US#192 - FIN
 }

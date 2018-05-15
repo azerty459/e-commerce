@@ -2,6 +2,7 @@ type Categorie {
     id: Int!
     nom: String!
     sousCategories: [Categorie]!
+    level: Int!
 }
 
 type Query {

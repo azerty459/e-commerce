@@ -13,9 +13,8 @@ import java.util.Collection;
 public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom {
 
     // Requêtes JPQL
-    private static final String SQL_ALL_CATEGORIES = "SELECT c FROM Categorie AS c";
+    private static final String SQL_ALL_CATEGORIES = "SELECT c FROM Categorie AS c ORDER BY c.borneGauche ASC";
 
-    // private static final String SQL_CATEGORY_BY_NAME = "SELECT c FROM Categorie AS c WHERE c.nomCategorie =:nom";
     private static final String SQL_CATEGORY_BY_NAME = "SELECT souscat FROM Categorie AS souscat WHERE souscat.borneGauche >= " +
             "(SELECT maincat.borneGauche FROM Categorie AS maincat WHERE maincat.nomCategorie =:nom) " +
             "AND souscat.borneDroit <= " +

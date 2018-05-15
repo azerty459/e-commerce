@@ -12,10 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Service permettant de gérer les actions effectuées pour les catégories.
@@ -29,10 +26,10 @@ public class CategorieBusiness implements ICategorieBusiness {
     private CategorieRepository categorieRepository;
 
     /**
-     *
+     * Va chercher toutes les catégories, ou la catégorie donnée en nom. Récupère aussi les sous-catégories si demandées.
      * @param nom le nom de la catégorie à aller chercher. "null" si on cherche à lister toutes les catégories.
      * @param sousCategorie true si on veut lister les sous-catégories sous forme d'arbre, false si on souhaite lister toutes les catégories
-     * @return
+     * @return Une liste de CategorieDTO
      */
     @Override
     public List<CategorieDTO> getCategorie(String nom, boolean sousCategorie) {
@@ -40,6 +37,7 @@ public class CategorieBusiness implements ICategorieBusiness {
         if(categories.size() == 0){
             throw new GraphQLCustomException("Aucune catégorie trouvé avec ce nom: "+nom);
         }
+
         return new ArrayList<>(CategorieTransformer.entityToDto(new ArrayList<>(categories), sousCategorie));
     }
 
@@ -145,10 +143,10 @@ public class CategorieBusiness implements ICategorieBusiness {
      *
      * @return une liste de catégorie
      */
-    @Override
-    public List<CategorieDTO> getAll() {
-        return new ArrayList<>(CategorieTransformer.entityToDto(new ArrayList<>(categorieRepository.findAll()), false));
-    }
+//    @Override
+//    public List<CategorieDTO> getAll() {
+//        return new ArrayList<>(CategorieTransformer.entityToDto(new ArrayList<>(categorieRepository.findAll()), false));
+//    }
 
     /**
      * Retourne une categorieDTO parent et ses éventuelle enfants.
@@ -156,14 +154,14 @@ public class CategorieBusiness implements ICategorieBusiness {
      * @param nomCategorie Le nom de la catégorie parent à rechercher.
      * @return une categorieDTO parent et ses éventuelle enfants, null si la catégorie parent n'est pas trouvé
      */
-    @Override
-    public CategorieDTO getByNom(String nomCategorie) {
-        Optional<Categorie> categorie = categorieRepository.findCategorieByNomCategorie(nomCategorie);
-        if (categorie.isPresent()) {
-            return CategorieTransformer.entityToDto(categorie.get(), new ArrayList<>(categorieRepository.findAll()));
-        }
-        return null;
-    }
+//    @Override
+//    public CategorieDTO getByNom(String nomCategorie) {
+//        Optional<Categorie> categorie = categorieRepository.findCategorieByNomCategorie(nomCategorie);
+//        if (categorie.isPresent()) {
+//            return CategorieTransformer.entityToDto(categorie.get(), new ArrayList<>(categorieRepository.findAll()));
+//        }
+//        return null;
+//    }
 
     /**
      * Retourne un objet page de catégorie.

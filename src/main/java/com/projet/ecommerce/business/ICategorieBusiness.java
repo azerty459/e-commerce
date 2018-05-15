@@ -50,7 +50,7 @@ public interface ICategorieBusiness {
      *
      * @return Une liste d'objet categorie
      */
-    List<CategorieDTO> getAll();
+//    List<CategorieDTO> getAll();
 
     /**
      * Méthode définissant la recherche d'une categorie selon son nom.
@@ -58,7 +58,7 @@ public interface ICategorieBusiness {
      * @param nomCategorie Le nom de la catégorie à rechercher
      * @return l'objet categorie recherché
      */
-    CategorieDTO getByNom(String nomCategorie);
+//    CategorieDTO getByNom(String nomCategorie);
 
 
     /**

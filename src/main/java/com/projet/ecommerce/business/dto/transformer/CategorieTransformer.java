@@ -31,6 +31,9 @@ public class CategorieTransformer {
         Categorie categorie = new Categorie();
         categorie.setNomCategorie(categorieDTO.getNom());
         categorie.setIdCategorie(categorieDTO.getId());
+        // US#192 - DEBUT
+        categorie.setLevel(categorieDTO.getLevel());
+        // US#192 - FIN
         return categorie;
     }
 
@@ -69,7 +72,9 @@ public class CategorieTransformer {
         categorieDTO.setNom(categorie.getNomCategorie());
         categorieDTO.setSousCategories(new ArrayList<>(getSousCategorie(categorie, categoriesList)));
         categorieDTO.setId(categorie.getIdCategorie());
-        // System.out.println(categoriesList.size());
+        // US#192 - DEBUT
+        categorieDTO.setLevel(categorie.getLevel());
+        // US#192 - FIN
         return categorieDTO;
     }
 
@@ -82,6 +87,9 @@ public class CategorieTransformer {
         CategorieDTO categorieDTO = new CategorieDTO();
         categorieDTO.setNom(categorie.getNomCategorie());
         categorieDTO.setSousCategories(new ArrayList<>());
+        // US#192 - DEBUT
+        categorieDTO.setLevel(categorie.getLevel());
+        // US#192 - FIN
         return categorieDTO;
     }
 
@@ -92,7 +100,7 @@ public class CategorieTransformer {
      * @param categorieList Une liste de d'objets Categorie
      * @return une liste d'objets CategorieDTO représentant les sous-catégories
      */
-    private static Collection<CategorieDTO> getSousCategorie (Categorie categorie , List<Categorie> categorieList) {
+    private static Collection<CategorieDTO> getSousCategorie (Categorie categorie, List<Categorie> categorieList) {
         List<CategorieDTO> categorieDTOList = new ArrayList<>();
         for(int i=0; i<categorieList.size(); i++) {
             if(categorie.getLevel()+1 == categorieList.get(i).getLevel() && categorie.getBorneGauche() < categorieList.get(i).getBorneGauche() &&  categorie.getBorneDroit() > categorieList.get(i).getBorneDroit()) {
@@ -100,6 +108,9 @@ public class CategorieTransformer {
                 categorieDTO.setNom(categorieList.get(i).getNomCategorie());
                 categorieDTO.setSousCategories(new ArrayList<>(getSousCategorie(categorieList.get(i), categorieList)));
                 categorieDTO.setId(categorieList.get(i).getIdCategorie());
+                // US#192 _ DEBUT
+                categorieDTO.setLevel(categorieList.get(i).getLevel());
+                // US#192 - FIN
                 categorieDTOList.add(categorieDTO);
             }
         }
