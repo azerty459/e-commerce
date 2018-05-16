@@ -5,6 +5,7 @@ import com.projet.ecommerce.persistance.entity.Categorie;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 public class CategorieTransformer {
@@ -40,9 +41,11 @@ public class CategorieTransformer {
     /**
      * Transforme une liste d'objets Categorie en une collection d'objets CategorieDTO.
      * @param categoriesList Une liste de d'objets Categorie
+     * @param chemins HashMap associant chaque catégorie à un chemin (sous la forme d'une chaîne de caractères)
+     * @param sousCat true si on veut les sous-catégories, false sinon
      * @return une collection d'objets CategorieDTO
      */
-    public static Collection<CategorieDTO> entityToDto(List<Categorie> categoriesList, Boolean sousCat) {
+    public static Collection<CategorieDTO> entityToDto(List<Categorie> categoriesList, HashMap<Categorie,String> chemins, Boolean sousCat) {
         List<CategorieDTO> categorieDTOList = new ArrayList<>();
         if(!categoriesList.isEmpty()){
             int levelMin = categoriesList.get(0).getLevel();
@@ -51,13 +54,17 @@ public class CategorieTransformer {
                     levelMin = categorie.getLevel();
                 }
             }
+            // TODO: changer le if
             for(int i=0; i<categoriesList.size(); i++) {
-                if(sousCat && categoriesList.get(i).getLevel() == levelMin)
-                    categorieDTOList.add(entityToDto(categoriesList.get(i), categoriesList));
-                else if (!sousCat)
-                    categorieDTOList.add(entityToDto(categoriesList.get(i), categoriesList));
+                if(sousCat && categoriesList.get(i).getLevel() == levelMin) {
+                    categorieDTOList.add(entityToDto(categoriesList.get(i), categoriesList, chemins));
+                }
+                else if (!sousCat) {
+                    categorieDTOList.add(entityToDto(categoriesList.get(i), categoriesList, chemins));
+                }
             }
         }
+
         return categorieDTOList;
     }
 
@@ -65,16 +72,23 @@ public class CategorieTransformer {
      * Transforme un objet Categorie en CategorieDTO
      * @param categorie Un objet Categorie
      * @param categoriesList Une liste contenant des objets Categorie
+     * @param chemins HashMap associant chaque catégorie à un chemin (sous la forme d'une chaîne de caractères)
      * @return un objet CategorieDTO
      */
-    public static CategorieDTO entityToDto(Categorie categorie, List<Categorie> categoriesList) {
+    public static CategorieDTO entityToDto(Categorie categorie, List<Categorie> categoriesList, HashMap<Categorie,String> chemins) {
         CategorieDTO categorieDTO = new CategorieDTO();
         categorieDTO.setNom(categorie.getNomCategorie());
         categorieDTO.setSousCategories(new ArrayList<>(getSousCategorie(categorie, categoriesList)));
         categorieDTO.setId(categorie.getIdCategorie());
+
         // US#192 - DEBUT
+        // Renseignement du level de la catégorie
         categorieDTO.setLevel(categorie.getLevel());
+        // Ajout de son chemin
+        String ch = chemins.get(categorie);
+        categorieDTO.setChemin(ch);
         // US#192 - FIN
+
         return categorieDTO;
     }
 

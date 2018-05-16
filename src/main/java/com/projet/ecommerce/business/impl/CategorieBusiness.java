@@ -33,13 +33,115 @@ public class CategorieBusiness implements ICategorieBusiness {
      */
     @Override
     public List<CategorieDTO> getCategorie(String nom, boolean sousCategorie) {
+
         Collection<Categorie> categories = categorieRepository.findAllWithCriteria(nom);
-        if(categories.size() == 0){
+        int tailleListeCategories = categories.size();
+        if(tailleListeCategories == 0){
             throw new GraphQLCustomException("Aucune catégorie trouvé avec ce nom: "+nom);
         }
 
-        return new ArrayList<>(CategorieTransformer.entityToDto(new ArrayList<>(categories), sousCategorie));
+        // Mise en forme des objets CategorieDTO
+        return new ArrayList<>(CategorieTransformer.entityToDto(new ArrayList<>(categories), this.construireAssociationEnfantsChemins(categories), sousCategorie));
+
     }
+
+    @Override
+    public HashMap<Categorie,String> construireAssociationEnfantsChemins(Collection<Categorie> categories) {
+
+        // US#192 - DEBUT
+
+        // Construire un tableau des catégories retournées par findAllWithCriteria
+        HashMap<Integer,Categorie> categoriesPourParents = new HashMap<Integer,Categorie>();
+        Iterator<Categorie> it = categories.iterator();
+        int i = 1;
+        while(it.hasNext()) {
+            categoriesPourParents.put(i, it.next());
+            i++;
+        }
+
+        // Request all the parents for these categories
+        Collection<Categorie> parents = this.categorieRepository.findParents(categoriesPourParents);
+
+        // Classer cette collection pour mettre chaque parents en face de chaque catégorie de départ
+        HashMap<Categorie,String> associationsEnfantsChemins = new HashMap<Categorie,String>();
+        associationsEnfantsChemins = associer(categories, parents);
+
+        return associationsEnfantsChemins;
+    }
+
+    /**
+     * Association des enfants et des parents possibles
+     * @param enfants la liste des enfants dont on doit trouver les parents
+     * @param parents les parents disponibles
+     * @return une HashMap contennant en clés, chaque enfant, et en valeur le chemin vers cet enfant
+     */
+    private static HashMap<Categorie,String> associer(Collection<Categorie> enfants, Collection<Categorie> parents) {
+
+        // Le Hashmap à retourner
+        HashMap<Categorie, String> resultat = new HashMap<Categorie,String>();
+
+        // Pour chaque enfant, aller chercher les parents
+        Iterator<Categorie> it = enfants.iterator();
+        while(it.hasNext()) {
+            Categorie enf = it.next();
+            String chemin = chercherChemin(enf, parents, "");
+            if(chemin.length() > 1) {
+                chemin = chemin.substring(0, chemin.length() - 3);
+            }
+
+            resultat.put(enf, chemin);
+        }
+
+        return resultat;
+
+    }
+
+    /**
+     * Fonction récursive cherchant les parents pour un enfant donné
+     * @param enfant l'enfant dont on veut trouver les parents
+     * @param parents la collection des parents possibles
+     * @return le chemin vers l'enfant
+     */
+    private static String chercherChemin(Categorie enfant, Collection<Categorie> parents, String chemin) {
+
+        // Condition d'arrêt de l'algorithme
+        if(enfant.getLevel() == 1) {
+            return chemin;
+        }
+
+        // Borne gauche max du parent potentiel
+        int max = 0;
+
+        // Parent potentiel
+        Categorie tempParent = null;
+
+        // Construction du chemin
+        Iterator<Categorie> it = parents.iterator();
+
+        while(it.hasNext()) {
+            Categorie p = it.next();
+            if(p.getLevel() == enfant.getLevel() - 1) {
+                // On est à un niveau au-dessus dans la hiérarchie des catégories
+                // On recherche la borne gauche inférieure la plus proche de celle de l'enfant
+                if(p.getBorneGauche() < enfant.getBorneGauche()) {
+                    // On recherche la borne gauche maximale dans celles qui restent
+                    if(p.getBorneGauche() > max) {
+                        max = p.getBorneGauche();
+                        tempParent = p;
+                    }
+                }
+            }
+        }
+
+        // On a trouvé le parent juste au-dessus dans la hiérarchie et on construit le chemin
+        chemin = tempParent.getNomCategorie() + " > " + chemin;
+
+        return chercherChemin(tempParent, parents, chemin);
+    }
+
+    // US#192 - FIN
+
+
 
     /**
      * Ajout d'une catégorie parent
@@ -143,6 +245,7 @@ public class CategorieBusiness implements ICategorieBusiness {
      *
      * @return une liste de catégorie
      */
+    // TODO: A SUPPRIMER
 //    @Override
 //    public List<CategorieDTO> getAll() {
 //        return new ArrayList<>(CategorieTransformer.entityToDto(new ArrayList<>(categorieRepository.findAll()), false));
@@ -154,6 +257,7 @@ public class CategorieBusiness implements ICategorieBusiness {
      * @param nomCategorie Le nom de la catégorie parent à rechercher.
      * @return une categorieDTO parent et ses éventuelle enfants, null si la catégorie parent n'est pas trouvé
      */
+    // TODO: A SUPPRIMER
 //    @Override
 //    public CategorieDTO getByNom(String nomCategorie) {
 //        Optional<Categorie> categorie = categorieRepository.findCategorieByNomCategorie(nomCategorie);

@@ -11,14 +11,14 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.mockito.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
@@ -159,25 +159,43 @@ public class CategorieBusinessTests {
 		Assert.assertEquals(categorie2.getNomCategorie(), retour.getSousCategories().get(0).getNom());
 	}
 
-//	@Test
-//	public void getCategorieByNom() {
-//		Categorie categorie = new Categorie();
-//		categorie.setNomCategorie("Transport3");
-//		categorie.setBorneGauche(1);
-//		categorie.setBorneDroit(8);
-//		categorie.setLevel(1);
-//		categorie.setProduits(new ArrayList<>());
-//
-//		Mockito.when(categorieRepository.findCategorieByNomCategorie(Mockito.any())).thenReturn(Optional.of(categorie));
-//		CategorieDTO retour1 = categorieBusiness.getByNom(categorie.getNomCategorie());
-//		Assert.assertNotNull(retour1);
-//
-//		Assert.assertEquals(retour1.getNom(), categorie.getNomCategorie());
-//	}
+	@Test
+	public void construireAssociationEnfantsChemins() {
 
-//	@Test
-//	public void getCategorieByNomNotFound(){
-//		CategorieDTO retour = categorieBusiness.getByNom("Transport4");
-//		Assert.assertNull(retour);
-//	}
+		// Création des catégories
+		Collection<Categorie> categories = null;
+
+		Categorie cat1 = new Categorie();
+		cat1.setLevel(1);
+		cat1.setBorneDroit(10);
+		cat1.setBorneGauche(1);
+		cat1.setNomCategorie("Transport");
+
+		Categorie cat2 = new Categorie();
+		cat2.setLevel(2);
+		cat2.setBorneDroit(7);
+		cat2.setBorneGauche(2);
+		cat2.setNomCategorie("Aérien");
+
+		Categorie cat3 = new Categorie();
+		cat3.setLevel(3);
+		cat3.setBorneDroit(6);
+		cat3.setBorneGauche(3);
+		cat3.setNomCategorie("Avion");
+
+		categories.add(cat1);
+		categories.add(cat2);
+		categories.add(cat3);
+
+		HashMap<Categorie,String> resultat = null;
+		resultat = this.categorieBusiness.construireAssociationEnfantsChemins(categories);
+
+		// Tests
+		Assert.assertEquals(resultat.get(cat1), "");
+		Assert.assertEquals(resultat.get(cat2), "Transport");
+		Assert.assertEquals(resultat.get(cat3), "Transport > Aérien");
+
+	}
+
+
 }

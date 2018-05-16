@@ -1,17 +1,14 @@
 package com.projet.ecommerce.business.transformer;
 
-import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
 import com.projet.ecommerce.business.dto.CategorieDTO;
-import com.projet.ecommerce.business.dto.transformer.CaracteristiqueTransformer;
 import com.projet.ecommerce.business.dto.transformer.CategorieTransformer;
-import com.projet.ecommerce.persistance.entity.Caracteristique;
 import com.projet.ecommerce.persistance.entity.Categorie;
-import com.projet.ecommerce.persistance.entity.TypeCaracteristique;
-import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.Assert;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @SpringBootTest
@@ -24,6 +21,8 @@ public class CategorieTransformerTests {
     private static final Categorie CATEGORIE_5;
 
     private static final List<Categorie> CATEGORIE_LIST;
+
+    private static final HashMap<Categorie,String> CHEMINS;
 
     static {
         CATEGORIE_1 = new Categorie();
@@ -67,11 +66,13 @@ public class CategorieTransformerTests {
         CATEGORIE_LIST.add(CATEGORIE_3);
         CATEGORIE_LIST.add(CATEGORIE_4);
         CATEGORIE_LIST.add(CATEGORIE_5);
+
+        CHEMINS = new HashMap<Categorie,String>();
     }
 
     @Test
     public void entityToDto(){
-        CategorieDTO categorieDTO = CategorieTransformer.entityToDto(CATEGORIE_1, CATEGORIE_LIST);
+        CategorieDTO categorieDTO = CategorieTransformer.entityToDto(CATEGORIE_1, CATEGORIE_LIST, CHEMINS);
         Assert.assertNotNull(categorieDTO);
         Assert.assertEquals(categorieDTO.getNom(), CATEGORIE_1.getNomCategorie());
         Assert.assertEquals(categorieDTO.getSousCategories().get(0).getNom(), CATEGORIE_2.getNomCategorie());
@@ -82,7 +83,7 @@ public class CategorieTransformerTests {
 
     @Test
     public void listEntityToDto(){
-        List<CategorieDTO> categorieDTOList = new ArrayList<>(CategorieTransformer.entityToDto(CATEGORIE_LIST, true));
+        List<CategorieDTO> categorieDTOList = new ArrayList<>(CategorieTransformer.entityToDto(CATEGORIE_LIST, CHEMINS, true));
         Assert.assertEquals(1, categorieDTOList.size());
         Assert.assertEquals(categorieDTOList.get(0).getNom(), CATEGORIE_1.getNomCategorie());
         Assert.assertEquals(categorieDTOList.get(0).getSousCategories().get(0).getNom(), CATEGORIE_2.getNomCategorie());
