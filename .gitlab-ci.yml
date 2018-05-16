@@ -18,6 +18,7 @@ deploiement_dev:
   artifacts:
     paths:
     - target/*.jar
+    - src/main/resources/*.properties
     expire_in: 1h
   only:
     - dev
@@ -29,6 +30,7 @@ deploiement_master:
   artifacts:
     paths:
     - target/*.jar
+    - src/main/resources/*.properties
     expire_in: 1h
   only:
     - master
