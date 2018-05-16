@@ -14,11 +14,12 @@ tests:
 deploiement_dev:
   stage: deploiement
   script: 
-    - mvn package
+    - mvn package -DskipTests
   artifacts:
     paths:
     - target/*.jar
     - src/main/resources/application-dev.properties
+    - src/main/resources/graphql
     expire_in: 1h
   only:
     - dev
@@ -26,11 +27,12 @@ deploiement_dev:
 deploiement_master:
   stage: deploiement
   script: 
-    - mvn package
+    - mvn package -DskipTests
   artifacts:
     paths:
     - target/*.jar
     - src/main/resources/application-prod.properties
+    - src/main/resources/graphql
     expire_in: 1h
   only:
     - master
