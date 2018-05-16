@@ -32,6 +32,7 @@ deploiement_master:
     paths:
     - target/*.jar
     - src/main/resources/application-prod.properties
+    - src/main/resources/graphql
     expire_in: 1h
   only:
     - master
