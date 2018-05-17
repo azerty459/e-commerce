@@ -1,9 +1,7 @@
 package com.projet.ecommerce.persistance.repository.custom;
 
 import com.projet.ecommerce.persistance.entity.Categorie;
-import com.projet.ecommerce.persistance.entity.Produit;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
-import com.projet.ecommerce.persistance.repository.ProduitRepository;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,11 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.HashMap;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -24,16 +20,30 @@ import java.util.List;
 public class CategorieRepositoryCustomTests {
 
 	private static final Categorie TEMP_CATEGORIE = new Categorie();
+	private static final Categorie TEMP_ENFANT1 = new Categorie();
+	private static final Categorie TEMP_ENFANT2 = new Categorie();
 
 	static {
 		//Permet d'écraser la config application.properties par application-test.properties
 		System.setProperty("spring.config.location", "classpath:application-test.properties");
 
-		// On créer une nouvelle catégorie pour que les tests fonctionne
+		// On créer une nouvelle catégorie pour que les tests fonctionnent
 		TEMP_CATEGORIE.setNomCategorie("Livre");
 		TEMP_CATEGORIE.setBorneGauche(1);
-		TEMP_CATEGORIE.setBorneDroit(2);
+		TEMP_CATEGORIE.setBorneDroit(8);
 		TEMP_CATEGORIE.setLevel(1);
+
+		// Création de 2 catégories enfant de Livre
+		TEMP_ENFANT1.setNomCategorie("Droit");
+		TEMP_ENFANT1.setBorneGauche(4);
+		TEMP_ENFANT1.setBorneDroit(7);
+		TEMP_ENFANT1.setLevel(2);
+
+		TEMP_ENFANT2.setNomCategorie("Culture");
+		TEMP_ENFANT2.setBorneGauche(5);
+		TEMP_ENFANT2.setBorneDroit(6);
+		TEMP_ENFANT2.setLevel(3);
+
 	}
 
 	@Before
@@ -56,5 +66,24 @@ public class CategorieRepositoryCustomTests {
 		Collection<Categorie> categorieCollection = categorieRepository.findAllWithCriteria("Livre");
 		Assert.assertEquals(1, categorieCollection.size());
 		Assert.assertEquals(0, categorieRepository.findAllWithCriteria("Toto").size());
+	}
+
+	@Test
+	public void findParents() {
+
+		// Création du HashMap d'entrée
+		HashMap<Integer,Categorie> entree = new HashMap<Integer, Categorie>();
+//		entree.put(1, TEMP_ENFANT1);
+		entree.put(1, TEMP_ENFANT2);
+
+		// Exécution de la méthode findParents
+		Collection<Categorie> resultat = categorieRepository.findParents(entree);
+
+		Assert.assertNotNull(resultat);
+
+		// TODO: A FAIRE
+//		Assert.assertTrue(resultat.contains(TEMP_ENFANT1));
+		Assert.assertFalse(resultat.contains(TEMP_ENFANT2));
+
 	}
 }

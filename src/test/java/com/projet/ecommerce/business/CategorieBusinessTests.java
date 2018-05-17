@@ -159,11 +159,12 @@ public class CategorieBusinessTests {
 		Assert.assertEquals(categorie2.getNomCategorie(), retour.getSousCategories().get(0).getNom());
 	}
 
+
 	@Test
 	public void construireAssociationEnfantsChemins() {
 
 		// Création des catégories
-		Collection<Categorie> categories = null;
+		Collection<Categorie> categories = new ArrayList<>();
 
 		Categorie cat1 = new Categorie();
 		cat1.setLevel(1);
@@ -187,7 +188,9 @@ public class CategorieBusinessTests {
 		categories.add(cat2);
 		categories.add(cat3);
 
-		HashMap<Categorie,String> resultat = null;
+		Mockito.when(this.categorieRepository.findParents(Mockito.any())).thenReturn(categories);
+
+		HashMap<Categorie,String> resultat;
 		resultat = this.categorieBusiness.construireAssociationEnfantsChemins(categories);
 
 		// Tests
