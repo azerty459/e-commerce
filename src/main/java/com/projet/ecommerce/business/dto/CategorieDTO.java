@@ -8,11 +8,33 @@ import java.util.List;
 
 public class CategorieDTO {
 
+    /**
+     * L'id de la catégorie.
+     */
     private int id;
 
+    /**
+     * Le nom de la catégorie.
+     */
     private String nom;
 
+    /**
+     * La liste des sous-catégories de la catégorie.
+     */
     private List<CategorieDTO> sousCategories;
+
+
+    // US#192 - DEBUT
+    /**
+     * Liste des parents de la catégories.
+     */
+    private String chemin;
+
+     /**
+     * Niveau de la catégorie dans l'arborescence des catégories (Niveau 1 = niveau le plus élevé).
+     */
+    private int level;
+    // US#192 - FIN
 
     /**
      * Retourne le nom de la categorieDTO.
@@ -61,4 +83,36 @@ public class CategorieDTO {
     public void setId(int id) {
         this.id = id;
     }
+
+    // US#192 - DEBUT
+
+    /**
+     * Retourne le chemin pour arriver à la catégorie depuis la catégorie parente de niveau 1
+     * @return une chaîne de caractères représentant ce chemin.
+     */
+    public String getChemin() {
+        return this.chemin;
+    }
+
+    /**
+     * Fixe le chemin de la catégorie.
+     * @param c la chaîne de caractères représentant le chemin.
+     */
+    public void setChemin(String c) {
+        this.chemin = c;
+    }
+
+    /**
+     * Retourne le niveau de la catégorie dans l'arborescence des catégories.
+     * @return le niveau (1 = catégorie de niveau 1, tout en haut de l'arborescence).
+     */
+    public int getLevel() { return this.level; }
+
+    /**
+     * Fixe le niveau de la catégorie.
+     * @param l le niveau de la catégorie.
+     */
+    public void setLevel(int l) { this.level = l; }
+
+    // US#192 - FIN
 }

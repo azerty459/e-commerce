@@ -1,10 +1,12 @@
 package com.projet.ecommerce.business.dto.transformer;
 
 import com.projet.ecommerce.business.dto.ProduitDTO;
+import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Produit;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 public class ProduitTransformer {
@@ -37,7 +39,9 @@ public class ProduitTransformer {
         produitDTO.setPrixHT(produit.getPrixHT());
         produitDTO.setCaracteristiques(new ArrayList<>(CaracteristiqueTransformer.entityToDto(produit.getCaracteristiques())));
         produitDTO.setPhotos(new ArrayList<>(PhotoTransformer.entityToDto(produit.getPhotos())));
-        produitDTO.setCategories(new ArrayList<>(CategorieTransformer.entityToDto(produit.getCategories(), false)));
+        // Ajout du paramètre de chemins (US#192)
+        HashMap<Categorie,String> chemins = new HashMap<Categorie,String>();
+        produitDTO.setCategories(new ArrayList<>(CategorieTransformer.entityToDto(produit.getCategories(), chemins, false)));
         return produitDTO;
     }
 

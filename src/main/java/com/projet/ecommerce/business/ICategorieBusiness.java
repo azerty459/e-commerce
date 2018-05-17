@@ -4,6 +4,8 @@ import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import org.springframework.data.domain.Page;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -18,6 +20,13 @@ public interface ICategorieBusiness {
      * @return liste des catégories recherchées
      */
     List<CategorieDTO> getCategorie(String nom, boolean sousCategorie);
+
+    /**
+     * Construit un HashMap associant chaque catégorie à un chemin représentant l'arborescence jusqu'à la catégorie.
+     * @param categories la collection des catégories dont on cheche les chemins.
+     * @return Un HashMap associant chaque catégorie à une chaîne de caractère représentant le chemin.
+     */
+    HashMap<Categorie,String> construireAssociationEnfantsChemins(Collection<Categorie> categories);
 
     /**
      * Méthode définissant l'ajout d'une catégorie parent.
@@ -50,7 +59,8 @@ public interface ICategorieBusiness {
      *
      * @return Une liste d'objet categorie
      */
-    List<CategorieDTO> getAll();
+    // TODO: A SUPPRIMER
+//    List<CategorieDTO> getAll();
 
     /**
      * Méthode définissant la recherche d'une categorie selon son nom.
@@ -58,7 +68,8 @@ public interface ICategorieBusiness {
      * @param nomCategorie Le nom de la catégorie à rechercher
      * @return l'objet categorie recherché
      */
-    CategorieDTO getByNom(String nomCategorie);
+    // TODO: A SUPPRIMER
+//    CategorieDTO getByNom(String nomCategorie);
 
 
     /**

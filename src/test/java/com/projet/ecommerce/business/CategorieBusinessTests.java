@@ -11,14 +11,14 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.mockito.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
@@ -88,40 +88,40 @@ public class CategorieBusinessTests {
 		Assert.assertFalse(categorieBusiness.delete("Fofo"));
 	}
 
-	@Test
-	public void getAll() {
-		List<Categorie> categories = new ArrayList<>();
-		Mockito.when(categorieRepository.findAll()).thenReturn(categories);
-		Assert.assertEquals(categorieBusiness.getAll().size(), 0);
-
-		// Création des catégories et ajout dans la liste.
-		Categorie categorie1 = new Categorie();
-        categorie1.setNomCategorie("Transport1");
-        categorie1.setBorneGauche(1);
-        categorie1.setBorneDroit(4);
-        categorie1.setLevel(1);
-        categorie1.setProduits(new ArrayList<>());
-
-        Categorie categorie2 = new Categorie();
-        categorie2.setNomCategorie("Transport1");
-        categorie2.setBorneGauche(2);
-        categorie2.setBorneDroit(3);
-        categorie2.setLevel(2);
-        categorie2.setProduits(new ArrayList<>());
-
-        categories.add(categorie1);
-        categories.add(categorie2);
-
-        // Tests
-		Mockito.when(categorieRepository.findAll()).thenReturn(categories);
-        List<CategorieDTO> categorieDTOList = categorieBusiness.getAll();
-
-        Assert.assertEquals(2, categories.size());
-
-		CategorieDTO retour = categorieDTOList.get(0);
-		Assert.assertEquals(categorie1.getNomCategorie(), retour.getNom());
-        Assert.assertEquals(categorie2.getNomCategorie(), retour.getSousCategories().get(0).getNom());
-	}
+//	@Test
+//	public void getAll() {
+//		List<Categorie> categories = new ArrayList<>();
+//		Mockito.when(categorieRepository.findAll()).thenReturn(categories);
+//		Assert.assertEquals(categorieBusiness.getAll().size(), 0);
+//
+//		// Création des catégories et ajout dans la liste.
+//		Categorie categorie1 = new Categorie();
+//        categorie1.setNomCategorie("Transport1");
+//        categorie1.setBorneGauche(1);
+//        categorie1.setBorneDroit(4);
+//        categorie1.setLevel(1);
+//        categorie1.setProduits(new ArrayList<>());
+//
+//        Categorie categorie2 = new Categorie();
+//        categorie2.setNomCategorie("Transport1");
+//        categorie2.setBorneGauche(2);
+//        categorie2.setBorneDroit(3);
+//        categorie2.setLevel(2);
+//        categorie2.setProduits(new ArrayList<>());
+//
+//        categories.add(categorie1);
+//        categories.add(categorie2);
+//
+//        // Tests
+//		Mockito.when(categorieRepository.findAll()).thenReturn(categories);
+//        List<CategorieDTO> categorieDTOList = categorieBusiness.getAll();
+//
+//        Assert.assertEquals(2, categories.size());
+//
+//		CategorieDTO retour = categorieDTOList.get(0);
+//		Assert.assertEquals(categorie1.getNomCategorie(), retour.getNom());
+//        Assert.assertEquals(categorie2.getNomCategorie(), retour.getSousCategories().get(0).getNom());
+//	}
 
 	@Test
 	public void getCategorie() {
@@ -160,24 +160,42 @@ public class CategorieBusinessTests {
 	}
 
 	@Test
-	public void getCategorieByNom() {
-		Categorie categorie = new Categorie();
-		categorie.setNomCategorie("Transport3");
-		categorie.setBorneGauche(1);
-		categorie.setBorneDroit(8);
-		categorie.setLevel(1);
-		categorie.setProduits(new ArrayList<>());
+	public void construireAssociationEnfantsChemins() {
 
-		Mockito.when(categorieRepository.findCategorieByNomCategorie(Mockito.any())).thenReturn(Optional.of(categorie));
-		CategorieDTO retour1 = categorieBusiness.getByNom(categorie.getNomCategorie());
-		Assert.assertNotNull(retour1);
+		// Création des catégories
+		Collection<Categorie> categories = null;
 
-		Assert.assertEquals(retour1.getNom(), categorie.getNomCategorie());
+		Categorie cat1 = new Categorie();
+		cat1.setLevel(1);
+		cat1.setBorneDroit(10);
+		cat1.setBorneGauche(1);
+		cat1.setNomCategorie("Transport");
+
+		Categorie cat2 = new Categorie();
+		cat2.setLevel(2);
+		cat2.setBorneDroit(7);
+		cat2.setBorneGauche(2);
+		cat2.setNomCategorie("Aérien");
+
+		Categorie cat3 = new Categorie();
+		cat3.setLevel(3);
+		cat3.setBorneDroit(6);
+		cat3.setBorneGauche(3);
+		cat3.setNomCategorie("Avion");
+
+		categories.add(cat1);
+		categories.add(cat2);
+		categories.add(cat3);
+
+		HashMap<Categorie,String> resultat = null;
+		resultat = this.categorieBusiness.construireAssociationEnfantsChemins(categories);
+
+		// Tests
+		Assert.assertEquals(resultat.get(cat1), "");
+		Assert.assertEquals(resultat.get(cat2), "Transport");
+		Assert.assertEquals(resultat.get(cat3), "Transport > Aérien");
+
 	}
 
-	@Test
-	public void getCategorieByNomNotFound(){
-		CategorieDTO retour = categorieBusiness.getByNom("Transport4");
-		Assert.assertNull(retour);
-	}
+
 }
