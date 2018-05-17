@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -71,19 +72,32 @@ public class CategorieRepositoryCustomTests {
 	@Test
 	public void findParents() {
 
+		categorieRepository.save(TEMP_CATEGORIE);
+		categorieRepository.save(TEMP_ENFANT1);
+		categorieRepository.save(TEMP_ENFANT2);
+
 		// Création du HashMap d'entrée
 		HashMap<Integer,Categorie> entree = new HashMap<Integer, Categorie>();
-//		entree.put(1, TEMP_ENFANT1);
-		entree.put(1, TEMP_ENFANT2);
+		entree.put(1, TEMP_ENFANT1);
+		entree.put(2, TEMP_ENFANT2);
 
 		// Exécution de la méthode findParents
 		Collection<Categorie> resultat = categorieRepository.findParents(entree);
 
 		Assert.assertNotNull(resultat);
+		Assert.assertEquals(2, resultat.size());
 
-		// TODO: A FAIRE
-//		Assert.assertTrue(resultat.contains(TEMP_ENFANT1));
-		Assert.assertFalse(resultat.contains(TEMP_ENFANT2));
+		ArrayList<Categorie> liste = new ArrayList<Categorie>(resultat);
+
+		Assert.assertEquals(liste.get(0).getNomCategorie(), TEMP_ENFANT1.getNomCategorie());
+		Assert.assertEquals(liste.get(0).getBorneDroit(), TEMP_ENFANT1.getBorneDroit());
+		Assert.assertEquals(liste.get(0).getBorneGauche(), TEMP_ENFANT1.getBorneGauche());
+		Assert.assertEquals(liste.get(0).getLevel(), TEMP_ENFANT1.getLevel());
+
+		Assert.assertEquals(liste.get(1).getNomCategorie(), TEMP_ENFANT2.getNomCategorie());
+		Assert.assertEquals(liste.get(1).getBorneDroit(), TEMP_ENFANT2.getBorneDroit());
+		Assert.assertEquals(liste.get(1).getBorneGauche(), TEMP_ENFANT2.getBorneGauche());
+		Assert.assertEquals(liste.get(1).getLevel(), TEMP_ENFANT2.getLevel());
 
 	}
 }

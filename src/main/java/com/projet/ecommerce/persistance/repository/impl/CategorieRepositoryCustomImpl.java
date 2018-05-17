@@ -79,6 +79,8 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
         // Lancer la requête
         query = entityManager.createQuery(sql, Categorie.class);
 
+        System.out.println((sql));
+
         return query.getResultList();
 
     }
