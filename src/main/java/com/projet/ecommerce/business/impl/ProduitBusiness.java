@@ -48,7 +48,6 @@ public class ProduitBusiness implements IProduitBusiness {
      */
     @Override
     public ProduitDTO add(String referenceProduit, String nom, String description, Double prixHT, List<String> nouvelleCatList) {
-        System.out.println("HALLLLLO");
         if (!referenceProduit.isEmpty() && !nom.isEmpty()) {
             if (produitRepository.findById(referenceProduit).isPresent()){
                 throw new GraphQLCustomException("Le produit à ajouter existe déjà.");

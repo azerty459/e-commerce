@@ -4,6 +4,7 @@ type Produit {
     description: String!
     prixHT: Float!
     categories: [Categorie]!
+    photos: [Photo]!
 }
 
 extend type Query {

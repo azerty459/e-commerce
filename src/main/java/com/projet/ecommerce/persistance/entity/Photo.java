@@ -53,4 +53,12 @@ public class Photo {
     public void setIdPhoto(int idPhoto) {
         this.idPhoto = idPhoto;
     }
+
+    public Produit getProduit() {
+        return produit;
+    }
+
+    public void setProduit(Produit produit) {
+        this.produit = produit;
+    }
 }
