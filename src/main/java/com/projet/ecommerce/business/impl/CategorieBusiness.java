@@ -105,7 +105,7 @@ public class CategorieBusiness implements ICategorieBusiness {
     private static String chercherChemin(Categorie enfant, Collection<Categorie> parents, String chemin) {
 
         // Condition d'arrêt de l'algorithme
-        if(enfant.getLevel() == 1) {
+        if(enfant == null ||enfant.getLevel() == 1) {
             return chemin;
         }
 
@@ -120,7 +120,7 @@ public class CategorieBusiness implements ICategorieBusiness {
 
         while(it.hasNext()) {
             Categorie p = it.next();
-            if(p.getLevel() == enfant.getLevel() - 1) {
+            if(enfant!= null && p.getLevel() == enfant.getLevel() - 1) {
                 // On est à un niveau au-dessus dans la hiérarchie des catégories
                 // On recherche la borne gauche inférieure la plus proche de celle de l'enfant
                 if(p.getBorneGauche() < enfant.getBorneGauche()) {
@@ -134,7 +134,10 @@ public class CategorieBusiness implements ICategorieBusiness {
         }
 
         // On a trouvé le parent juste au-dessus dans la hiérarchie et on construit le chemin
-        chemin = tempParent.getNomCategorie() + " > " + chemin;
+        if(tempParent != null) {
+            chemin = tempParent.getNomCategorie() + " > " + chemin;
+        }
+
 
         return chercherChemin(tempParent, parents, chemin);
     }
