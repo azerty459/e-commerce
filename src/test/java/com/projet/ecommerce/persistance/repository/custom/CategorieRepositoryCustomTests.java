@@ -100,4 +100,21 @@ public class CategorieRepositoryCustomTests {
 		Assert.assertEquals(liste.get(1).getLevel(), TEMP_ENFANT2.getLevel());
 
 	}
+
+	@Test
+	public void findDirectParent() {
+
+		categorieRepository.save(TEMP_CATEGORIE);
+		categorieRepository.save(TEMP_ENFANT1);
+		categorieRepository.save(TEMP_ENFANT2);
+
+		// Exécution de la méthode
+		Categorie resultat = categorieRepository.findDirectParent(TEMP_ENFANT2);
+
+		// Test du résultat
+		Assert.assertNotNull(resultat);
+		Assert.assertEquals(resultat.getLevel(), 2);
+		Assert.assertEquals(resultat.getNomCategorie(), "Droit");
+
+	}
 }

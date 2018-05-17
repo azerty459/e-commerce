@@ -34,11 +34,28 @@ public class CategorieBusiness implements ICategorieBusiness {
     @Override
     public List<CategorieDTO> getCategorie(String nom, boolean sousCategorie) {
 
+        // Initialisation
+        Categorie parentDirect;
+
+        // On va chercher les catégories
         Collection<Categorie> categories = categorieRepository.findAllWithCriteria(nom);
         int tailleListeCategories = categories.size();
+
+        // S'il n'y a pas de résultat: message indiquant aucune catégorie de ce nom.
         if(tailleListeCategories == 0){
-            throw new GraphQLCustomException("Aucune catégorie trouvé avec ce nom: "+nom);
+            throw new GraphQLCustomException("Aucune catégorie trouvé avec ce nom: " + nom);
         }
+
+        // S'il n'y a qu'un seul résultat: on va aussi chercher sont parent direct.
+        if(tailleListeCategories == 1) {
+            Iterator<Categorie> it = categories.iterator();
+            parentDirect = categorieRepository.findDirectParent(it.next());
+        }
+        // TODO: A CONTINUER: passer parentDirect à entityToDto
+
+
+
+
 
         // Mise en forme des objets CategorieDTO
         return new ArrayList<>(CategorieTransformer.entityToDto(new ArrayList<>(categories), this.construireAssociationEnfantsChemins(categories), sousCategorie));

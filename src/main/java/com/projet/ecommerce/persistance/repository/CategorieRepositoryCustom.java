@@ -11,4 +11,6 @@ public interface CategorieRepositoryCustom {
 
     Collection<Categorie> findParents(HashMap<Integer,Categorie> cats);
 
+    Categorie findDirectParent(Categorie cat);
+
 }

@@ -21,6 +21,8 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
             "AND souscat.borneDroit <= " +
             "(SELECT maincat2.borneDroit FROM Categorie AS maincat2 WHERE maincat2.nomCategorie =:nom)";
 
+    private static final String SQL_PARENT_DIRECT = "SELECT c FROM Categorie AS c WHERE c.level =:l AND c.borneGauche < :bg AND c.borneDroit > :bd";
+
     @Autowired
     private EntityManager entityManager;
 
@@ -32,7 +34,7 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
     @Override
     public Collection<Categorie> findAllWithCriteria(String nom) {
 
-        Query query = null;
+        Query query;
 
         if(nom == null) {
             query =  entityManager.createQuery(SQL_ALL_CATEGORIES, Categorie.class);
@@ -56,7 +58,7 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
     @Override
     public Collection<Categorie> findParents(HashMap<Integer,Categorie> cats) {
 
-        Query query = null;
+        Query query;
 
         // Construire la requête
         String sql = "SELECT p FROM Categorie AS p WHERE ";
@@ -79,10 +81,36 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
         // Lancer la requête
         query = entityManager.createQuery(sql, Categorie.class);
 
-        System.out.println((sql));
-
         return query.getResultList();
 
     }
     // US#192 - FIN
+
+    // US#193 - DEBUT
+
+    /**
+     * Renvoie la catégorie directement parent d'une catégorie donnée en paramètre.
+     * @param cat la catégorie dont on doit chercher le parent.
+     * @return La catégorie parent.
+     */
+    @Override
+    public Categorie findDirectParent(Categorie cat) {
+
+        // TODO: gérer le cas où on est déjà au level 1 ? (à priori il ne retourne rien car pas de categorie de niveau 0)
+
+        Query query;
+
+        // On crée la requête pour aller chercher le parent direct de cat
+        query = entityManager.createQuery(SQL_PARENT_DIRECT, Categorie.class);
+
+        query.setParameter("l", cat.getLevel() - 1);
+        query.setParameter("bg", cat.getBorneGauche());
+        query.setParameter("bd", cat.getBorneDroit());
+
+        // On retourne la catégorie unique, parent de cat
+        return (Categorie) query.getSingleResult();
+
+    }
+
+    // US#193 - FIN
 }
