@@ -32,10 +32,10 @@ public class CategorieBusiness implements ICategorieBusiness {
      * @return Une liste de CategorieDTO
      */
     @Override
-    public List<CategorieDTO> getCategorie(String nom, boolean sousCategorie) {
+    public List<CategorieDTO> getCategorie(String nom, boolean sousCategorie, boolean parent) {
 
         // Initialisation
-        Categorie parentDirect;
+        Categorie parentDirect = null;
 
         // On va chercher les catégories
         Collection<Categorie> categories = categorieRepository.findAllWithCriteria(nom);
@@ -43,22 +43,18 @@ public class CategorieBusiness implements ICategorieBusiness {
 
         // S'il n'y a pas de résultat: message indiquant aucune catégorie de ce nom.
         if(tailleListeCategories == 0){
-            throw new GraphQLCustomException("Aucune catégorie trouvé avec ce nom: " + nom);
+            throw new GraphQLCustomException("Aucune catégorie trouvé avec le nom " + nom);
         }
 
-        // S'il n'y a qu'un seul résultat: on va aussi chercher sont parent direct.
-        if(tailleListeCategories == 1) {
+        // On va aussi chercher son parent direct si demandé et s'il n'y qu'un élément dont on doit chercher le parent.
+        if(parent && tailleListeCategories == 1) {
             Iterator<Categorie> it = categories.iterator();
             parentDirect = categorieRepository.findDirectParent(it.next());
         }
-        // TODO: A CONTINUER: passer parentDirect à entityToDto
-
-
-
-
 
         // Mise en forme des objets CategorieDTO
-        return new ArrayList<>(CategorieTransformer.entityToDto(new ArrayList<>(categories), this.construireAssociationEnfantsChemins(categories), sousCategorie));
+        HashMap<Categorie,String> chemins = this.construireAssociationEnfantsChemins(categories);
+        return new ArrayList<>(CategorieTransformer.entityToDto(new ArrayList<>(categories), chemins, sousCategorie, parent, parentDirect));
 
     }
 
@@ -137,7 +133,7 @@ public class CategorieBusiness implements ICategorieBusiness {
 
         while(it.hasNext()) {
             Categorie p = it.next();
-            if(enfant!= null && p.getLevel() == enfant.getLevel() - 1) {
+            if(enfant != null && p.getLevel() == enfant.getLevel() - 1) {
                 // On est à un niveau au-dessus dans la hiérarchie des catégories
                 // On recherche la borne gauche inférieure la plus proche de celle de l'enfant
                 if(p.getBorneGauche() < enfant.getBorneGauche()) {
@@ -154,7 +150,6 @@ public class CategorieBusiness implements ICategorieBusiness {
         if(tempParent != null) {
             chemin = tempParent.getNomCategorie() + " > " + chemin;
         }
-
 
         return chercherChemin(tempParent, parents, chemin);
     }

@@ -19,7 +19,7 @@ public interface ICategorieBusiness {
      * @param nom le nom de la catégorie à aller chercher. "null" si on cherche à lister toutes les catégories.
      * @return liste des catégories recherchées
      */
-    List<CategorieDTO> getCategorie(String nom, boolean sousCategorie);
+    List<CategorieDTO> getCategorie(String nom, boolean sousCategorie, boolean parent);
 
     /**
      * Construit un HashMap associant chaque catégorie à un chemin représentant l'arborescence jusqu'à la catégorie.

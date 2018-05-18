@@ -128,7 +128,7 @@ public class CategorieBusinessTests {
 		List<Categorie> categories = new ArrayList<>();
 		Mockito.when(categorieRepository.findAllWithCriteria(Mockito.anyString())).thenReturn(categories);
 		thrown.expect(GraphQLCustomException.class);
-		categorieBusiness.getCategorie("nom", false);
+		categorieBusiness.getCategorie("nom", false, false);
 
 		// Création des catégories et ajout dans la liste.
 		Categorie categorie1 = new Categorie();
@@ -150,7 +150,7 @@ public class CategorieBusinessTests {
 
 		// Tests
 		Mockito.when(categorieRepository.findAllWithCriteria(Mockito.anyString())).thenReturn(categories);
-		List<CategorieDTO> categorieDTOList = categorieBusiness.getCategorie("tests", true);
+		List<CategorieDTO> categorieDTOList = categorieBusiness.getCategorie("tests", true, false);
 
 		Assert.assertEquals(1, categorieDTOList.size());
 

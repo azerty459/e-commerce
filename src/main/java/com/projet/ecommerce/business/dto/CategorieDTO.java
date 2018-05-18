@@ -5,7 +5,6 @@ import java.util.List;
 /**
  * Entité qui permet d'assurer le découplage entre la couche de présentation et les objets métier stockés sur le serveur (Categorie).
  */
-
 public class CategorieDTO {
 
     /**
@@ -23,8 +22,6 @@ public class CategorieDTO {
      */
     private List<CategorieDTO> sousCategories;
 
-
-    // US#192 - DEBUT
     /**
      * Liste des parents de la catégories.
      */
@@ -34,7 +31,11 @@ public class CategorieDTO {
      * Niveau de la catégorie dans l'arborescence des catégories (Niveau 1 = niveau le plus élevé).
      */
     private int level;
-    // US#192 - FIN
+
+    /**
+     * Le parent direct de la catégorie
+     */
+    private CategorieDTO parent;
 
     /**
      * Retourne le nom de la categorieDTO.
@@ -84,8 +85,6 @@ public class CategorieDTO {
         this.id = id;
     }
 
-    // US#192 - DEBUT
-
     /**
      * Retourne le chemin pour arriver à la catégorie depuis la catégorie parente de niveau 1
      * @return une chaîne de caractères représentant ce chemin.
@@ -114,5 +113,21 @@ public class CategorieDTO {
      */
     public void setLevel(int l) { this.level = l; }
 
-    // US#192 - FIN
+    /**
+     * Retourne le parent direct de la catégorie
+     * @return le CategorieDTO représentant le parent
+     */
+    public CategorieDTO getParent() {
+        return this.parent;
+    }
+
+    /**
+     * Fixe le parent de la catégorie
+     * @param p le parent
+     */
+    public void setParent(CategorieDTO p) {
+        this.parent = p;
+    }
+
+
 }
