@@ -14,14 +14,23 @@ import java.util.HashMap;
 public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom {
 
     // Requêtes JPQL
+
+    // Requête pour aller chercher toutes les catégories
     private static final String SQL_ALL_CATEGORIES = "SELECT c FROM Categorie AS c ORDER BY c.borneGauche ASC";
 
+    // Aller chercher une catégorie grâce à son nom
     private static final String SQL_CATEGORY_BY_NAME = "SELECT souscat FROM Categorie AS souscat WHERE souscat.borneGauche >= " +
             "(SELECT maincat.borneGauche FROM Categorie AS maincat WHERE maincat.nomCategorie =:nom) " +
             "AND souscat.borneDroit <= " +
             "(SELECT maincat2.borneDroit FROM Categorie AS maincat2 WHERE maincat2.nomCategorie =:nom)";
 
+    // Aller chercher une catégorie parente directe d'une catégorie
     private static final String SQL_PARENT_DIRECT = "SELECT c FROM Categorie AS c WHERE c.level =:l AND c.borneGauche < :bg AND c.borneDroit > :bd";
+
+    // Réarranger les bornes suite à la suppression d'une catégorie
+    private static final String  SQL_REARRANGER_BORNES_SUITE_SUPPRESSION = "UPDATE Categorie AS c" +
+            "SET c.borneGauche = c.borneGauche - :i WHERE c.borneGauche > :bg";
+
 
     @Autowired
     private EntityManager entityManager;
@@ -110,6 +119,23 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
         // On retourne la catégorie unique, parent de cat
         return (Categorie) query.getSingleResult();
 
+    }
+
+    @Override
+    public int rearrangerBornes(int bg, int bd, int intervalle) {
+
+        Query query;
+
+        query = entityManager.createQuery(SQL_REARRANGER_BORNES_SUITE_SUPPRESSION);
+        query.setParameter("i", intervalle);
+        query.setParameter("bg", bg);
+
+        int nb = query.executeUpdate();
+
+        // TODO: A FINIR
+
+
+        return nb;
     }
 
     // US#193 - FIN

@@ -6,6 +6,7 @@ import com.projet.ecommerce.business.dto.transformer.CategorieTransformer;
 import com.projet.ecommerce.entrypoint.graphQL.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
+import com.projet.ecommerce.persistance.repository.impl.CategorieRepositoryCustomImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +25,9 @@ public class CategorieBusiness implements ICategorieBusiness {
 
     @Autowired
     private CategorieRepository categorieRepository;
+
+    @Autowired
+    private CategorieRepositoryCustomImpl categorieRepositoryCustom;
 
     /**
      * Va chercher toutes les catégories, ou la catégorie donnée en nom. Récupère aussi les sous-catégories si demandées.
@@ -248,9 +252,20 @@ public class CategorieBusiness implements ICategorieBusiness {
     public boolean delete(String nomCategorie) {
         Optional<Categorie> categorie = categorieRepository.findCategorieByNomCategorie(nomCategorie);
         if(categorie.isPresent()){
+            // Récupération des bornes de la catégorie à supprimer
+            int bg = categorie.get().getBorneGauche();
+            int bd = categorie.get().getBorneDroit();
+            int intervalleSupprime = bd - bg + 1;
+
+            // Suppression de la catégorie
             categorieRepository.delete(categorie.get());
+
+            // Réarrangement des index bornes gauches et droites: on décale toutes les bornes à droite
+            // de la catégorie supprimée (> à bd) de l'intervalle supprimé.
+            categorieRepositoryCustom.rearrangerBornes(bg, bd, intervalleSupprime);
+
             return true;
-        }else{
+        } else {
             return false;
         }
     }

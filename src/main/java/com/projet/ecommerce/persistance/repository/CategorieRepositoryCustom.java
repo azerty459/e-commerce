@@ -13,4 +13,6 @@ public interface CategorieRepositoryCustom {
 
     Categorie findDirectParent(Categorie cat);
 
+    int rearrangerBornes(int bg, int bd, int intervalle);
+
 }
