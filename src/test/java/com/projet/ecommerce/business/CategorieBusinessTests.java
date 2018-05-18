@@ -79,8 +79,36 @@ public class CategorieBusinessTests {
 
     @Test
     public void delete() {
-		Mockito.when(categorieRepository.findCategorieByNomCategorie(Mockito.anyString())).thenReturn(Optional.of(new Categorie()));
-		Assert.assertTrue(categorieBusiness.delete("Fofo"));
+
+		Categorie parent1 = new Categorie();
+		parent1.setNomCategorie("parent1");
+		parent1.setBorneDroit(6);
+		parent1.setBorneGauche(1);
+		categorieRepository.save(parent1);
+
+		Categorie enfant1 = new Categorie();
+		enfant1.setNomCategorie("Enfant1");
+		enfant1.setBorneGauche(2);
+		enfant1.setBorneDroit(3);
+		categorieRepository.save(enfant1);
+
+        Categorie enfant2 = new Categorie();
+        enfant2.setNomCategorie("Enfant2");
+        enfant2.setBorneGauche(4);
+        enfant2.setBorneDroit(5);
+        categorieRepository.save(enfant2);
+
+        Categorie parent2 = new Categorie();
+        parent2.setNomCategorie("parent2");
+        parent2.setBorneDroit(6);
+        parent2.setBorneGauche(1);
+        categorieRepository.save(parent2);
+
+		Mockito.when(categorieRepository.findCategorieByNomCategorie(Mockito.anyString())).thenReturn(Optional.of(enfant2));
+
+        // TODO: MARCHE PAS - A CONTINUER
+        categorieBusiness.delete("enfant2");
+
     }
 
 	@Test

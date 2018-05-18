@@ -250,7 +250,9 @@ public class CategorieBusiness implements ICategorieBusiness {
      */
     @Override
     public boolean delete(String nomCategorie) {
+
         Optional<Categorie> categorie = categorieRepository.findCategorieByNomCategorie(nomCategorie);
+
         if(categorie.isPresent()){
             // Récupération des bornes de la catégorie à supprimer
             int bg = categorie.get().getBorneGauche();

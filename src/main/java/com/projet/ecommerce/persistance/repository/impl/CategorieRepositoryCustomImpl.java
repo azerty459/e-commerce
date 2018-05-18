@@ -28,8 +28,10 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
     private static final String SQL_PARENT_DIRECT = "SELECT c FROM Categorie AS c WHERE c.level =:l AND c.borneGauche < :bg AND c.borneDroit > :bd";
 
     // Réarranger les bornes suite à la suppression d'une catégorie
-    private static final String  SQL_REARRANGER_BORNES_SUITE_SUPPRESSION = "UPDATE Categorie AS c" +
+    private static final String  SQL_DECALER_BORNES_GAUCHES = "UPDATE Categorie AS c " +
             "SET c.borneGauche = c.borneGauche - :i WHERE c.borneGauche > :bg";
+    private static final String SQL_DECALER_BORNES_DROITES = "UPDATE Categorie AS c " +
+            "SET c.borneDroit = c.borneDroit - :i WHERE c.borneDroit > :bg";
 
 
     @Autowired
@@ -121,21 +123,32 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
 
     }
 
+    /**
+     *
+     * @param bg borne gauche de la catégorie supprimée
+     * @param bd borne droite de la catégorie supprimée
+     * @param intervalle intervalle entre les 2
+     * @return ne nombre de catégories réorganisées
+     */
     @Override
     public int rearrangerBornes(int bg, int bd, int intervalle) {
 
-        Query query;
+        Query query1;
+        Query query2;
 
-        query = entityManager.createQuery(SQL_REARRANGER_BORNES_SUITE_SUPPRESSION);
-        query.setParameter("i", intervalle);
-        query.setParameter("bg", bg);
+        query1 = entityManager.createQuery(SQL_DECALER_BORNES_GAUCHES);
+        query1.setParameter("i", intervalle);
+        query1.setParameter("bg", bg);
 
-        int nb = query.executeUpdate();
+        int nb1 = query1.executeUpdate();
 
-        // TODO: A FINIR
+        query2 = entityManager.createQuery(SQL_DECALER_BORNES_DROITES);
+        query2.setParameter("i", intervalle);
+        query2.setParameter("bg", bg);
 
+        int nb2 = query2.executeUpdate();
 
-        return nb;
+        return Math.max(nb1, nb2);
     }
 
     // US#193 - FIN
