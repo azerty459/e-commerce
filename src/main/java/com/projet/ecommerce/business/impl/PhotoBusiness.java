@@ -61,8 +61,12 @@ public class PhotoBusiness implements IPhotoBusiness {
                     Integer nombreDeFichier = Objects.requireNonNull(repertoire.listFiles()).length;
                     Path pathFichier = Paths.get(repertoireImg + refProduit +'/'+Integer.toString(nombreDeFichier)+'-'+fichier.getOriginalFilename());
                     byte[] bytes = fichier.getBytes(); // on va cherche les bits du fichier
-                    Files.write(pathFichier, bytes); // On les écrits à l'endroit voulu
 
+                    if(bytes==null){
+                        throw new GraphQLCustomException("le fichier est vide");
+                    }else {
+                        Files.write(pathFichier, bytes); // On les écrits à l'endroit voulu
+                    }
                     //On lie la photo et son produit dans la base de donnée
                     Produit produit = produitOptional.get();
                     Photo photo = new Photo();
@@ -84,7 +88,12 @@ public class PhotoBusiness implements IPhotoBusiness {
         return  false;
     }
 
-
+    /**
+     * Permet de charger un photo d'un produit
+     * @param nomFichier Le nom de la photo a aller chercher
+     * @param refProduit La reference du produit
+     * @return La resource contenant la photo du produit voulu
+     */
     @Override
     public Resource loadPhotos(String nomFichier,String refProduit) {
         String repertoireImg="src/main/resources/img/"+refProduit; //TODO aller chercher la variable dans le fichier properties
@@ -95,40 +104,54 @@ public class PhotoBusiness implements IPhotoBusiness {
             if (resource.exists() || resource.isReadable()) {
                 return resource;
             } else {
-                throw new RuntimeException("FAIL!");
+                throw new RuntimeException("echec du chargement");
             }
         } catch (MalformedURLException e) {
-            throw new RuntimeException("FAIL!");
+            throw new RuntimeException("echec du chargement");
         }
     }
 
-    @Override
-    public PhotoDTO addPhoto(String url, Produit produit) {
-       return null;
-    }
-
-    @Override
-    public Photo updatePhoto(int idPhoto, String url, Produit produit) {
-        return null;
-    }
-
-    @Override
-    public boolean deletePhoto(int idPhoto) {
-        return false;
-    }
-
-    @Override
-    public List<Photo> getPhoto() {
-        return null;
-    }
-
-    @Override
-    public Photo getPhotoByID(int idPhoto) {
-        return null;
-    }
-
+    /**
+     * Permet d'aller chercher la liste des photo d'un produit
+     * @param ref la référence du produit recherché
+     * @return la liste de photo d'un produit
+     */
     @Override
     public List<PhotoDTO> getAll(String ref) {
         return new ArrayList<>(PhotoTransformer.entityToDto(photoRepository.findAllWithCriteria(ref)));
     }
+
+//    /**
+//     *
+//     * @return
+//     */
+//    @Override
+//    public List<Photo> getPhoto() {
+//        return null;
+//    }
+
+
+//
+//    @Override
+//    public PhotoDTO addPhoto(String url, Produit produit) {
+//       return null;
+//    }
+//
+//    @Override
+//    public Photo updatePhoto(int idPhoto, String url, Produit produit) {
+//        return null;
+//    }
+//
+//    @Override
+//    public boolean deletePhoto(int idPhoto) {
+//        return false;
+//    }
+
+
+//    @Override
+//    public Photo getPhotoByID(int idPhoto) {
+//        return null;
+//    }
+
+
 }

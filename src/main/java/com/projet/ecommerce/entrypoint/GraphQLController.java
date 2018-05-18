@@ -47,7 +47,7 @@ public class GraphQLController {
     }
     @RequestMapping(value="/upload", method=RequestMethod.POST)
     public @ResponseBody Boolean handleFileUpload(
-            @RequestParam("file") MultipartFile file,
+            @RequestParam("fichier") MultipartFile file,
             @RequestParam("ref") String refProduit
     ){
         return photoBusiness.upload(file,refProduit);

@@ -54,6 +54,7 @@ public class Photo {
         this.idPhoto = idPhoto;
     }
 
+
     public Produit getProduit() {
         return produit;
     }
