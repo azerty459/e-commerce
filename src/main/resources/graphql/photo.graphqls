@@ -1,0 +1,7 @@
+type Photo {
+    url: String!
+}
+
+extend type Query {
+    photos(ref: String): [Photo]!
+}
