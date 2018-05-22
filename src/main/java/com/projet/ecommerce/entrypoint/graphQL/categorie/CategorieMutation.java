@@ -24,7 +24,7 @@ public class CategorieMutation {
         );
 
         builder.dataFetcher("deleteCategorie", (DataFetchingEnvironment env) ->
-                categorieBusiness.delete(env.getArgument("nom"))
+                categorieBusiness.delete(env.getArgument("id"))
         );
         return builder.build();
     }

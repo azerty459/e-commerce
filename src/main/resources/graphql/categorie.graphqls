@@ -7,11 +7,11 @@ type Categorie {
 }
 
 type Query {
-    categories(nom: String): [Categorie]!
+    categories(id: Int, nom: String): [Categorie]!
 }
 
 type Mutation {
     addCategorieParent(nom: String!): Categorie!
-    addCategorieEnfant(nom: String!, pere: String): Categorie!
-    deleteCategorie(nom: String!): Boolean!
+    addCategorieEnfant(nom: String!, pere: Int): Categorie!
+    deleteCategorie(id: Int!): Boolean!
 }

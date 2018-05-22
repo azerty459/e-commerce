@@ -45,6 +45,7 @@ public class GraphQLController {
             return graphQlUtility.graphQLErrorHandler(graphQLErrors);
         }
     }
+
     @RequestMapping(value="/upload", method=RequestMethod.POST)
     public @ResponseBody Boolean handleFileUpload(
             @RequestParam("fichier") MultipartFile file,

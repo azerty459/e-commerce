@@ -17,15 +17,15 @@ public class ProduitMutation {
         TypeRuntimeWiring.Builder builder = new TypeRuntimeWiring.Builder();
         builder.typeName("Mutation");
 
-        builder.dataFetcher("addProduit", (DataFetchingEnvironment env) ->
-                produitBusiness.add(env.getArgument("ref"), env.getArgument("nom"), env.getArgument("description"), env.getArgument("prixHT"), env.getArgument("nouvelleCat"))
+        builder.dataFetcher("addProduit", (DataFetchingEnvironment environment) ->
+                produitBusiness.add(environment.getArgument("ref"), environment.getArgument("nom"), environment.getArgument("description"), environment.getArgument("prixHT"), environment.getArgument("nouvelleCat"))
         );
-        builder.dataFetcher("updateProduit", (DataFetchingEnvironment env) ->
-                produitBusiness.update(env.getArgument("ref"), env.getArgument("nom"), env.getArgument("description"), env.getArgument("prixHT"), env.getArgument("nouvelleCat"), env.getArgument("supprimerCat"))
+        builder.dataFetcher("updateProduit", (DataFetchingEnvironment environment) ->
+                produitBusiness.update(environment.getArgument("ref"), environment.getArgument("nom"), environment.getArgument("description"), environment.getArgument("prixHT"), (environment.getArgument("nouvelleCat") != null) ? environment.getArgument("nouvelleCat") : 0, (environment.getArgument("supprimerCat") != null) ? environment.getArgument("supprimerCat") : 0)
         );
 
-        builder.dataFetcher("deleteProduit", (DataFetchingEnvironment env) ->
-                produitBusiness.delete(env.getArgument("ref"))
+        builder.dataFetcher("deleteProduit", (DataFetchingEnvironment environment) ->
+                produitBusiness.delete(environment.getArgument("ref"))
         );
         return builder.build();
 

@@ -21,7 +21,7 @@ public interface IProduitBusiness {
      * @param prixHT           Son prix hors taxe
      * @return le produit ajouté
      */
-    ProduitDTO add(String referenceProduit, String nom, String description, Double prixHT, List<String> nouvelleCat);
+    ProduitDTO add(String referenceProduit, String nom, String description, Double prixHT, List<Integer> nouvelleCat);
 
     /**
      * Méthode définissant la modification d'un produit.
@@ -30,9 +30,11 @@ public interface IProduitBusiness {
      * @param nom              Le nouveau nom
      * @param description      La nouvelle description
      * @param prixHT           Le nouveau prix hors taxe
+     * @param idCatAssocier    ID de la catégorie à associer au produit
+     * @param supprimerCatAssocier ID de la catégorie à supprimer de l'association au produit
      * @return l'objet produit modifié, null si le produit à modifier n'est pas trouvée
      */
-    ProduitDTO update(String referenceProduit, String nom, String description, Double prixHT, String nouvelleCat, String supprimerCat);
+    ProduitDTO update(String referenceProduit, String nom, String description, Double prixHT, int idCatAssocier, int supprimerCatAssocier);
 
     /**
      * Méthode définissant la suppression d'un produit.
@@ -64,13 +66,6 @@ public interface IProduitBusiness {
      * @return le produit rechercher
      */
     ProduitDTO getByRef(String referenceProduit);
-
-    /**
-     * Méthode définissant la recherche de plusieurs produit par le nom d'une catégorie
-     * @param nomCategorie le nom de la catégorie
-     * @return une liste de ProduitDTO
-     */
-    List<ProduitDTO> getByCategorie(String nomCategorie);
 
     /**
      * Méthode définissant la pagination

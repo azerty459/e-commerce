@@ -47,7 +47,7 @@ public class ProduitBusiness implements IProduitBusiness {
      * @return l'objet produit crée ou null, s'il il manque une referenceProduit, un nom et un prixHT.
      */
     @Override
-    public ProduitDTO add(String referenceProduit, String nom, String description, Double prixHT, List<String> nouvelleCatList) {
+    public ProduitDTO add(String referenceProduit, String nom, String description, Double prixHT, List<Integer> nouvelleCatList) {
         if (!referenceProduit.isEmpty() && !nom.isEmpty()) {
             if (produitRepository.findById(referenceProduit).isPresent()){
                 throw new GraphQLCustomException("Le produit à ajouter existe déjà.");
@@ -63,8 +63,8 @@ public class ProduitBusiness implements IProduitBusiness {
 
             List<Categorie> categorieList = new ArrayList<>();
             if(nouvelleCatList != null) {
-                for(String Nomcategorie: nouvelleCatList){
-                    Optional<Categorie> categorie = categorieRepository.findCategorieByNomCategorie(Nomcategorie);
+                for(int idCategorie: nouvelleCatList){
+                    Optional<Categorie> categorie = categorieRepository.findById(idCategorie);
                     if (categorie.isPresent()) {
                         categorieList.add(categorie.get());
                     }
@@ -83,15 +83,16 @@ public class ProduitBusiness implements IProduitBusiness {
 
     /**
      * Modifie le produit dans la base de données.
-     *
      * @param referenceProduit La référence du produit à modifier
      * @param nom              Le nouveau nom
      * @param description      La nouvelle description
      * @param prixHT           Le nouveau prix hors taxe
+     * @param idCatAssocier    ID de la catégorie à associer au produit
+     * @param supprimerCatAssocier ID de la catégorie à supprimer de l'association au produit
      * @return l'objet produit modifié, null si le produit à modifier n'est pas trouvée
      */
     @Override
-    public ProduitDTO update(String referenceProduit, String nom, String description, Double prixHT, String nouvelleCat, String supprimerCat) {
+    public ProduitDTO update(String referenceProduit, String nom, String description, Double prixHT, int idCatAssocier, int supprimerCatAssocier) {
         Optional<Produit> produitOptional = produitRepository.findById(referenceProduit);
         if (produitOptional.isPresent()) {
             Produit produit = produitOptional.get();
@@ -107,8 +108,9 @@ public class ProduitBusiness implements IProduitBusiness {
 
             List<Categorie> categorieList = produit.getCategories();
 
-            if (nouvelleCat != null){
-                Optional<Categorie> categorieAjout = categorieRepository.findCategorieByNomCategorie(nouvelleCat);
+            System.out.println(idCatAssocier);
+            if (idCatAssocier != 0){
+                Optional<Categorie> categorieAjout = categorieRepository.findById(idCatAssocier);
                 if(categorieAjout.isPresent()){
                     categorieList.add(categorieAjout.get());
                 }else{
@@ -116,8 +118,8 @@ public class ProduitBusiness implements IProduitBusiness {
                 }
             }
 
-            if(supprimerCat != null){
-                Optional<Categorie> categorieSupprimer = categorieRepository.findCategorieByNomCategorie(supprimerCat);
+            if(supprimerCatAssocier != 0){
+                Optional<Categorie> categorieSupprimer = categorieRepository.findById(supprimerCatAssocier);
                 if(categorieSupprimer.isPresent()){
                     categorieList.remove(categorieSupprimer.get());
                 }else{
@@ -182,29 +184,6 @@ public class ProduitBusiness implements IProduitBusiness {
         }else{
             throw new GraphQLCustomException("Le produit recherche n'existe pas.");
         }
-    }
-
-    /**
-     * Retourne une liste de produit en fonction de la catégorie recherché.
-     *
-     * @param nomCategorie Le nom de catégorie
-     * @return une liste d'objet produit
-     */
-    @Override
-    public List<ProduitDTO> getByCategorie(String nomCategorie) {
-        Optional<Categorie> optionalCategorie = categorieRepository.findCategorieByNomCategorie(nomCategorie);
-        if (optionalCategorie.isPresent()) {
-            Categorie categorie = optionalCategorie.get();
-            List<Categorie> categorieList = new ArrayList<>(categorieRepository.findAll());
-            List<Produit> produitList = new ArrayList<>();
-            for (Categorie retourCategorie : categorieList) {
-                if (categorie.getBorneGauche() < retourCategorie.getBorneGauche() && categorie.getBorneDroit() > retourCategorie.getBorneDroit()) {
-                    produitList.addAll(retourCategorie.getProduits());
-                }
-            }
-            return new ArrayList<>(ProduitTransformer.entityToDto(produitList));
-        }
-        return null;
     }
 
     /**

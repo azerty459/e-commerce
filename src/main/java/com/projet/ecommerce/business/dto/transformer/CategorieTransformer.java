@@ -32,9 +32,7 @@ public class CategorieTransformer {
         Categorie categorie = new Categorie();
         categorie.setNomCategorie(categorieDTO.getNom());
         categorie.setIdCategorie(categorieDTO.getId());
-        // US#192 - DEBUT
         categorie.setLevel(categorieDTO.getLevel());
-        // US#192 - FIN
         return categorie;
     }
 
@@ -81,13 +79,11 @@ public class CategorieTransformer {
         categorieDTO.setSousCategories(new ArrayList<>(getSousCategorie(categorie, categoriesList)));
         categorieDTO.setId(categorie.getIdCategorie());
 
-        // US#192 - DEBUT
         // Renseignement du level de la catégorie
         categorieDTO.setLevel(categorie.getLevel());
         // Ajout de son chemin
         String ch = chemins.get(categorie);
         categorieDTO.setChemin(ch);
-        // US#192 - FIN
 
         return categorieDTO;
     }
@@ -101,9 +97,8 @@ public class CategorieTransformer {
         CategorieDTO categorieDTO = new CategorieDTO();
         categorieDTO.setNom(categorie.getNomCategorie());
         categorieDTO.setSousCategories(new ArrayList<>());
-        // US#192 - DEBUT
+        categorieDTO.setId(categorie.getIdCategorie());
         categorieDTO.setLevel(categorie.getLevel());
-        // US#192 - FIN
         return categorieDTO;
     }
 
@@ -122,9 +117,7 @@ public class CategorieTransformer {
                 categorieDTO.setNom(categorieList.get(i).getNomCategorie());
                 categorieDTO.setSousCategories(new ArrayList<>(getSousCategorie(categorieList.get(i), categorieList)));
                 categorieDTO.setId(categorieList.get(i).getIdCategorie());
-                // US#192 _ DEBUT
                 categorieDTO.setLevel(categorieList.get(i).getLevel());
-                // US#192 - FIN
                 categorieDTOList.add(categorieDTO);
             }
         }

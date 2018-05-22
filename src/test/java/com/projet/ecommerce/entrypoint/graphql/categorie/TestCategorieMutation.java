@@ -71,14 +71,14 @@ public class TestCategorieMutation {
 
         // On imite le comportement des getArgument
         Mockito.when(dataFetchingEnvironment.getArgument("nom")).thenReturn("Test");
-        Mockito.when(dataFetchingEnvironment.getArgument("pere")).thenReturn("Livre");
+        Mockito.when(dataFetchingEnvironment.getArgument("pere")).thenReturn(1);
 
         Assert.assertNotNull(retourMap.get("addCategorieEnfant"));
         retourMap.get("addCategorieEnfant").get(dataFetchingEnvironment);
         // Test avec nb appel add avec bon param
-        Mockito.verify(categorieBusiness, Mockito.times(1)).addEnfant("Test", "Livre");
+        Mockito.verify(categorieBusiness, Mockito.times(1)).addEnfant("Test", 1);
         // Test avec nb appel add avec mauvais param
-        Mockito.verify(categorieBusiness, Mockito.times(0)).addEnfant("Test", "Test");
+        Mockito.verify(categorieBusiness, Mockito.times(0)).addEnfant("Test", 55);
     }
 
     @Test
@@ -86,13 +86,13 @@ public class TestCategorieMutation {
         Map<String, DataFetcher> retourMap = categorieMutation.produitWiring().getFieldDataFetchers();
 
         // On imite le comportement des getArgument
-        Mockito.when(dataFetchingEnvironment.getArgument("nom")).thenReturn("Livre");
+        Mockito.when(dataFetchingEnvironment.getArgument("id")).thenReturn(1);
 
         Assert.assertNotNull(retourMap.get("deleteCategorie"));
         retourMap.get("deleteCategorie").get(dataFetchingEnvironment);
         // Test avec nb appel add avec bon param
-        Mockito.verify(categorieBusiness, Mockito.times(1)).delete("Livre");
+        Mockito.verify(categorieBusiness, Mockito.times(1)).delete(1);
         // Test avec nb appel add avec mauvais param
-        Mockito.verify(categorieBusiness, Mockito.times(0)).delete("Test");
+        Mockito.verify(categorieBusiness, Mockito.times(0)).delete(55);
     }
 }

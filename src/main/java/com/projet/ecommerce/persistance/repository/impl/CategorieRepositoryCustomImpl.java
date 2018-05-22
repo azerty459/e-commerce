@@ -21,6 +21,8 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
             "AND souscat.borneDroit <= " +
             "(SELECT maincat2.borneDroit FROM Categorie AS maincat2 WHERE maincat2.nomCategorie =:nom)";
 
+    private static final String SQL_CATEGORY_BY_ID = "SELECT c FROM Categorie AS c WHERE c.idCategorie = :id";
+
     @Autowired
     private EntityManager entityManager;
 
@@ -30,15 +32,16 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
      * @return une collection de la / des catégorie(s) trouvée(s)
      */
     @Override
-    public Collection<Categorie> findAllWithCriteria(String nom) {
-
+    public Collection<Categorie> findAllWithCriteria(int id, String nom) {
         Query query = null;
-
-        if(nom == null) {
-            query =  entityManager.createQuery(SQL_ALL_CATEGORIES, Categorie.class);
-
+        System.out.println(id);
+        if(id != 0) {
+            query = entityManager.createQuery(SQL_CATEGORY_BY_ID, Categorie.class);
+            query.setParameter("id", id);
         }
-        else {
+        else if(nom == null) {
+            query =  entityManager.createQuery(SQL_ALL_CATEGORIES, Categorie.class);
+        }else {
             query =  entityManager.createQuery(SQL_CATEGORY_BY_NAME, Categorie.class);
             query.setParameter("nom", nom);
         }

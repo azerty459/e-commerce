@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 public interface CategorieRepositoryCustom {
 
-    Collection<Categorie> findAllWithCriteria(String nom);
+    Collection<Categorie> findAllWithCriteria(int id, String nom);
 
     Collection<Categorie> findParents(HashMap<Integer,Categorie> cats);
 

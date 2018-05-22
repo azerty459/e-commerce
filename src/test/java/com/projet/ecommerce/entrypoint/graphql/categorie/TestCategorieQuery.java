@@ -54,14 +54,18 @@ public class TestCategorieQuery {
     public void categories(){
         Map<String, DataFetcher> retourMap = categorieQuery.produitWiring().getFieldDataFetchers();
 
-        // On imite le comportement des getArgument
-        Mockito.when(dataFetchingEnvironment.getArgument("nom")).thenReturn("Livre");
-
         Assert.assertNotNull(retourMap.get("categories"));
+        // On imite le comportement des getArgument pour le nom
+        Mockito.when(dataFetchingEnvironment.getArgument("id")).thenReturn(0);
+        Mockito.when(dataFetchingEnvironment.getArgument("nom")).thenReturn("Livre");
         retourMap.get("categories").get(dataFetchingEnvironment);
-        // Test avec nb appel add avec bon param
-        Mockito.verify(categorieBusiness, Mockito.times(1)).getCategorie("Livre", false);
+        Mockito.verify(categorieBusiness, Mockito.times(1)).getCategorie(0, "Livre", false);
+        // On imite le comportement des getArgument pour l'id
+        Mockito.when(dataFetchingEnvironment.getArgument("nom")).thenReturn(null);
+        Mockito.when(dataFetchingEnvironment.getArgument("id")).thenReturn(1);
+        retourMap.get("categories").get(dataFetchingEnvironment);
+        Mockito.verify(categorieBusiness, Mockito.times(1)).getCategorie(1, null, false);
         // Test avec nb appel add avec mauvais param
-        Mockito.verify(categorieBusiness, Mockito.times(0)).getCategorie(null, false);
+        Mockito.verify(categorieBusiness, Mockito.times(0)).getCategorie(0, null, false);
     }
 }

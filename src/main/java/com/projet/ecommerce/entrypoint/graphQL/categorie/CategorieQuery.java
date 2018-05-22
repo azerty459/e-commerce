@@ -22,7 +22,7 @@ public class CategorieQuery {
         TypeRuntimeWiring.Builder builder = new TypeRuntimeWiring.Builder();
         builder.typeName("Query");
         builder.dataFetcher("categories", (DataFetchingEnvironment environment) ->
-                categorieBusiness.getCategorie(environment.getArgument("nom"), environment.getFields().toString().contains("sousCategories"))
+                categorieBusiness.getCategorie((environment.getArgument("id") != null) ? environment.getArgument("id") : 0, environment.getArgument("nom"),  environment.getFields().toString().contains("sousCategories"))
         );
         return builder.build();
     }

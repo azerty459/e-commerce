@@ -17,7 +17,4 @@ import java.util.Optional;
 public interface CategorieRepository extends PagingAndSortingRepository<Categorie, Integer>, CategorieRepositoryCustom {
 
     Collection<Categorie> findAll();
-
-    @Query("SELECT categorie from Categorie categorie where categorie.nomCategorie =:nomCategorie")
-    Optional<Categorie> findCategorieByNomCategorie(@Param("nomCategorie") String nomCategorie);
 }

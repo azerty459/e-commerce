@@ -51,7 +51,7 @@ public class CategorieRepositoryTests {
         Categorie save = categorieRepository.save(TEMP_INSERT);
         Assert.assertNotNull(save);
 
-        Categorie temp = categorieRepository.findCategorieByNomCategorie(TEMP_INSERT.getNomCategorie()).orElse(null);
+        Categorie temp = categorieRepository.findById(TEMP_INSERT.getIdCategorie()).orElse(null);
         Assert.assertNotNull(temp);
     }
 
@@ -71,7 +71,7 @@ public class CategorieRepositoryTests {
     public void getCategorieByID() {
         Assert.assertNotNull(categorieRepository.save(TEMP_GET));
 
-        Categorie temp = categorieRepository.findCategorieByNomCategorie(TEMP_GET.getNomCategorie()).orElse(null);
+        Categorie temp = categorieRepository.findById(TEMP_GET.getIdCategorie()).orElse(null);
         Assert.assertNotNull("Produit ne peut pas être null", temp);
         Assert.assertEquals(TEMP_GET.getBorneDroit(), temp.getBorneDroit());
         Assert.assertEquals(TEMP_GET.getBorneGauche(), temp.getBorneGauche());
@@ -81,7 +81,7 @@ public class CategorieRepositoryTests {
     @Test
     public void updateCategorie() {
         categorieRepository.save(TEMP_UPDATE);
-        Categorie retour = categorieRepository.findCategorieByNomCategorie(TEMP_UPDATE.getNomCategorie()).orElse(null);
+        Categorie retour = categorieRepository.findById(TEMP_UPDATE.getIdCategorie()).orElse(null);
         Assert.assertEquals(TEMP_UPDATE.getNomCategorie(), retour.getNomCategorie());
         Assert.assertEquals(TEMP_UPDATE.getBorneGauche(), retour.getBorneGauche());
         Assert.assertEquals(TEMP_UPDATE.getBorneDroit(), retour.getBorneDroit());
@@ -91,7 +91,7 @@ public class CategorieRepositoryTests {
         TEMP_UPDATE.setNomCategorie("Test");
         Assert.assertNotNull(categorieRepository.save(TEMP_UPDATE));
 
-        retour = categorieRepository.findCategorieByNomCategorie(TEMP_UPDATE.getNomCategorie()).orElse(null);
+        retour = categorieRepository.findById(TEMP_UPDATE.getIdCategorie()).orElse(null);
         Assert.assertEquals(TEMP_UPDATE.getNomCategorie(), retour.getNomCategorie());
         Assert.assertEquals(TEMP_UPDATE.getBorneDroit(), retour.getBorneDroit());
         Assert.assertEquals(TEMP_UPDATE.getBorneGauche(), retour.getBorneGauche());
@@ -101,7 +101,7 @@ public class CategorieRepositoryTests {
     public void deleteCategorie() {
         Assert.assertNotNull(categorieRepository.save(TEMP_DELETE));
         categorieRepository.delete(TEMP_DELETE);
-        Assert.assertFalse(categorieRepository.findCategorieByNomCategorie(TEMP_DELETE.getNomCategorie()).isPresent());
+        Assert.assertFalse(categorieRepository.findById(TEMP_DELETE.getIdCategorie()).isPresent());
     }
 
     @After
