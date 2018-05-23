@@ -44,17 +44,16 @@ public class CategorieBusiness implements ICategorieBusiness {
         Categorie parentDirect = null;
 
         // On va chercher les catégories
-        Collection<Categorie> categories = categorieRepository.findAllWithCriteria(id, nom, sousCategorie);
-        int tailleListeCategories = categories.size();
+        Collection<Categorie> categorieCollection = categorieRepository.findAllWithCriteria(id, nom, sousCategorie);
 
         // S'il n'y a pas de résultat: message indiquant aucune catégorie de ce nom.
-        if(tailleListeCategories == 0){
-            throw new GraphQLCustomException("Aucune catégorie trouvé avec le nom " + nom);
+        if(categorieCollection.size() == 0){
+            throw new GraphQLCustomException("Aucune catégorie(s) trouvé(es).");
         }
 
         // On va aussi chercher son parent direct si demandé
         if(parent) {
-            Iterator<Categorie> it = categories.iterator();
+            Iterator<Categorie> it = categorieCollection.iterator();
             Boolean notFound = true;
             while(it.hasNext() && notFound) {
                 Categorie temp = it.next();
@@ -65,8 +64,8 @@ public class CategorieBusiness implements ICategorieBusiness {
             }
         }
         // Mise en forme des objets CategorieDTO
-        HashMap<Categorie,String> chemins = this.construireAssociationEnfantsChemins(categories);
-        return new ArrayList<>(CategorieTransformer.entityToDto(new ArrayList<>(categories), chemins, sousCategorie, parent, parentDirect));
+        HashMap<Categorie,String> chemins = this.construireAssociationEnfantsChemins(categorieCollection);
+        return new ArrayList<>(CategorieTransformer.entityToDto(new ArrayList<>(categorieCollection), chemins, sousCategorie, parent, parentDirect));
 
     }
 

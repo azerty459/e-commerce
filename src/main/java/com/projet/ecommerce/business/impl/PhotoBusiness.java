@@ -49,8 +49,8 @@ public class PhotoBusiness implements IPhotoBusiness {
                 if (produitOptional.isPresent()){
                     File repertoire=new File(repertoireImg + refProduit); // Le repertoire image spécifique au produit
                     //On vérifie que le repertoire correspondant au produit existe sinon on le créé
-                    if(!repertoire.exists() && !repertoire.isDirectory()) {
-                        if (!repertoire.mkdir()) {
+                    if(!repertoire.exists() || !repertoire.isDirectory()) {
+                        if (!repertoire.mkdirs()) {
                             throw new GraphQLCustomException("Le dossier image pour le produit n'a pas pu être créé");
                         } else {
                             System.out.println("Le dossier " + refProduit + " a bien été créé dans le repertoire image");
