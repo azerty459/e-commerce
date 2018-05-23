@@ -48,7 +48,7 @@ public class ProduitBusiness implements IProduitBusiness {
      */
     @Override
     public ProduitDTO add(String referenceProduit, String nom, String description, Double prixHT, List<Integer> nouvelleCatList) {
-        if (!referenceProduit.isEmpty() && !nom.isEmpty()) {
+        if (!referenceProduit.isEmpty() && !nom.isEmpty() && prixHT != null) {
             if (produitRepository.findById(referenceProduit).isPresent()){
                 throw new GraphQLCustomException("Le produit à ajouter existe déjà.");
             }
@@ -74,9 +74,10 @@ public class ProduitBusiness implements IProduitBusiness {
             produit.setCategories(categorieList);
             return ProduitTransformer.entityToDto(produitRepository.save(produit));
         }else{
-            GraphQLCustomException graphQLCustomException = new GraphQLCustomException("Erreur dans l'ajout du produit (la référence du produit et le nom ne peut être null)");
+            GraphQLCustomException graphQLCustomException = new GraphQLCustomException("Erreur dans l'ajout du produit (la référence, le nom et le prixHT ne peut être null)");
             graphQLCustomException.ajouterExtension("Référence", referenceProduit);
             graphQLCustomException.ajouterExtension("Nom", nom);
+            graphQLCustomException.ajouterExtension("PrixHT", prixHT+"");
             throw graphQLCustomException;
         }
     }
