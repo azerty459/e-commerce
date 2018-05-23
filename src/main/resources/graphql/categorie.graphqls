@@ -15,4 +15,5 @@ type Mutation {
     addCategorieParent(nom: String!): Categorie!
     addCategorieEnfant(nom: String!, pere: Int): Categorie!
     deleteCategorie(id: Int!): Boolean!
+    moveCategorie(idADeplacer: Int!, idNouveauParent: Int!): Boolean!
 }

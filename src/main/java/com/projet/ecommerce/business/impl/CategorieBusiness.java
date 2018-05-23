@@ -277,6 +277,48 @@ public class CategorieBusiness implements ICategorieBusiness {
         }
     }
 
+    // TODO:
+    @Override
+    public boolean moveCategorie(int idADeplacer, int idNouveauParent) {
+
+        // Aller chercher la catégorie à déplacer et ses enfants
+        ArrayList<Categorie> categoriesADeplacer = new ArrayList<Categorie>(this.categorieRepositoryCustom.findAllWithCriteria(idADeplacer, null, true));
+
+        // Aller chercher la catégorie parent
+        Categorie nouveauParent = (Categorie) this.categorieRepositoryCustom.findAllWithCriteria(idNouveauParent, null, false).toArray()[0];
+
+
+        // Début récursion
+
+        // Chercher la catégorie de niveau le plus élevé dans les catégories à déplacer
+
+
+        // Sauvegarder son id  et son nom
+
+
+
+        // La rajouter sous le nouveau parent, avec le même nom
+
+
+
+        // Supprimer la catégorie déplacée
+
+
+
+        // Mettre l'id de la catégorie originale pour la nouvelle catégorie
+
+
+        // Remettre en ordre les bornes
+
+
+
+        return true;
+    }
+
+
+
+
+
     /**
      * Retourne la liste complète des catégories liées à la base de données.
      *
