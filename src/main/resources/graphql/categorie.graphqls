@@ -4,6 +4,7 @@ type Categorie {
     sousCategories: [Categorie]!
     level: Int!
     chemin: String!
+    parent: Categorie
 }
 
 type Query {

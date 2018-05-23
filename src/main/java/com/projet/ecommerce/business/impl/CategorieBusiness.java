@@ -6,6 +6,7 @@ import com.projet.ecommerce.business.dto.transformer.CategorieTransformer;
 import com.projet.ecommerce.entrypoint.graphQL.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
+import com.projet.ecommerce.persistance.repository.impl.CategorieRepositoryCustomImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,6 +26,9 @@ public class CategorieBusiness implements ICategorieBusiness {
     @Autowired
     private CategorieRepository categorieRepository;
 
+    @Autowired
+    private CategorieRepositoryCustomImpl categorieRepositoryCustom;
+
     /**
      * Va chercher toutes les catégories, ou la catégorie donnée en nom. Récupère aussi les sous-catégories si demandées.
      *
@@ -33,13 +37,36 @@ public class CategorieBusiness implements ICategorieBusiness {
      * @return Une liste de CategorieDTO
      */
     @Override
-    public List<CategorieDTO> getCategorie(int id, String nom, boolean sousCategorie) {
-        Collection<Categorie> categories = categorieRepository.findAllWithCriteria(id, nom);
-        if (categories.size() == 0) {
-            throw new GraphQLCustomException("Aucune catégorie trouvé avec ce nom ou id");
+
+    public List<CategorieDTO> getCategorie(int id, String nom, boolean sousCategorie, boolean parent) {
+
+        // Initialisation
+        Categorie parentDirect = null;
+
+        // On va chercher les catégories
+        Collection<Categorie> categories = categorieRepository.findAllWithCriteria(id, nom, sousCategorie);
+        int tailleListeCategories = categories.size();
+
+        // S'il n'y a pas de résultat: message indiquant aucune catégorie de ce nom.
+        if(tailleListeCategories == 0){
+            throw new GraphQLCustomException("Aucune catégorie trouvé avec le nom " + nom);
+        }
+
+        // On va aussi chercher son parent direct si demandé
+        if(parent) {
+            Iterator<Categorie> it = categories.iterator();
+            Boolean notFound = true;
+            while(it.hasNext() && notFound) {
+                Categorie temp = it.next();
+                if(temp.getNomCategorie().equals(nom)) {
+                    notFound = false;
+                    parentDirect = categorieRepository.findDirectParent(temp);
+                }
+            }
         }
         // Mise en forme des objets CategorieDTO
-        return new ArrayList<>(CategorieTransformer.entityToDto(new ArrayList<>(categories), this.construireAssociationEnfantsChemins(categories), sousCategorie));
+        HashMap<Categorie,String> chemins = this.construireAssociationEnfantsChemins(categories);
+        return new ArrayList<>(CategorieTransformer.entityToDto(new ArrayList<>(categories), chemins, sousCategorie, parent, parentDirect));
 
     }
 
@@ -117,7 +144,7 @@ public class CategorieBusiness implements ICategorieBusiness {
 
         while (it.hasNext()) {
             Categorie p = it.next();
-            if (enfant != null && p.getLevel() == enfant.getLevel() - 1) {
+            if(enfant != null && p.getLevel() == enfant.getLevel() - 1) {
                 // On est à un niveau au-dessus dans la hiérarchie des catégories
                 // On recherche la borne gauche inférieure la plus proche de celle de l'enfant
                 if (p.getBorneGauche() < enfant.getBorneGauche()) {
@@ -134,7 +161,6 @@ public class CategorieBusiness implements ICategorieBusiness {
         if (tempParent != null) {
             chemin = tempParent.getNomCategorie() + " > " + chemin;
         }
-
 
         return chercherChemin(tempParent, parents, chemin);
     }
@@ -225,15 +251,27 @@ public class CategorieBusiness implements ICategorieBusiness {
     /**
      * Supprime la catégorie dans la base de données.
      *
-     * @param id ID de la catégorie à supprimer
+     * @param idCategorie ID de la catégorie à supprimer
      * @return true
      */
     @Override
-    public boolean delete(int id) {
-        System.out.println("Id: "+id);
-        Optional<Categorie> categorie = categorieRepository.findById(id);
-        if (categorie.isPresent()) {
+    public boolean delete(int idCategorie) {
+
+        Optional<Categorie> categorie = categorieRepository.findById(idCategorie);
+
+        if(categorie.isPresent()){
+            // Récupération des bornes de la catégorie à supprimer
+            int bg = categorie.get().getBorneGauche();
+            int bd = categorie.get().getBorneDroit();
+            int intervalleSupprime = bd - bg + 1;
+
+            // Suppression de la catégorie
             categorieRepository.delete(categorie.get());
+
+            // Réarrangement des index bornes gauches et droites: on décale toutes les bornes à droite
+            // de la catégorie supprimée (> à bd) de l'intervalle supprimé.
+            categorieRepositoryCustom.rearrangerBornes(bg, bd, intervalleSupprime);
+
             return true;
         } else {
             return false;

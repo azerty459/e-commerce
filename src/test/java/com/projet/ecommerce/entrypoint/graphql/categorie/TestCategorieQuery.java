@@ -59,13 +59,13 @@ public class TestCategorieQuery {
         Mockito.when(dataFetchingEnvironment.getArgument("id")).thenReturn(0);
         Mockito.when(dataFetchingEnvironment.getArgument("nom")).thenReturn("Livre");
         retourMap.get("categories").get(dataFetchingEnvironment);
-        Mockito.verify(categorieBusiness, Mockito.times(1)).getCategorie(0, "Livre", false);
+        Mockito.verify(categorieBusiness, Mockito.times(1)).getCategorie(0, "Livre", false, false);
         // On imite le comportement des getArgument pour l'id
         Mockito.when(dataFetchingEnvironment.getArgument("nom")).thenReturn(null);
         Mockito.when(dataFetchingEnvironment.getArgument("id")).thenReturn(1);
         retourMap.get("categories").get(dataFetchingEnvironment);
-        Mockito.verify(categorieBusiness, Mockito.times(1)).getCategorie(1, null, false);
+        Mockito.verify(categorieBusiness, Mockito.times(1)).getCategorie(1, null, false, false);
         // Test avec nb appel add avec mauvais param
-        Mockito.verify(categorieBusiness, Mockito.times(0)).getCategorie(0, null, false);
+        Mockito.verify(categorieBusiness, Mockito.times(0)).getCategorie(0, null, false, false);
     }
 }

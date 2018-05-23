@@ -14,14 +14,28 @@ import java.util.HashMap;
 public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom {
 
     // Requêtes JPQL
+
+    // Requête pour aller chercher toutes les catégories
     private static final String SQL_ALL_CATEGORIES = "SELECT c FROM Categorie AS c ORDER BY c.borneGauche ASC";
 
-    private static final String SQL_CATEGORY_BY_NAME = "SELECT souscat FROM Categorie AS souscat WHERE souscat.borneGauche >= " +
+    // Récupérer une catégorie grâce à son nom
+    private static final String SQL_CATEGORY_BY_NAME = "SELECT c FROM Categorie AS c WHERE c.nomCategorie =:nom";
+
+    // Aller chercher une catégorie grâce à son nom + ses sous-catégories
+    private static final String SQL_CATEGORY_BY_NAME_SOUSCAT = "SELECT souscat FROM Categorie AS souscat WHERE souscat.borneGauche >= " +
             "(SELECT maincat.borneGauche FROM Categorie AS maincat WHERE maincat.nomCategorie =:nom) " +
             "AND souscat.borneDroit <= " +
             "(SELECT maincat2.borneDroit FROM Categorie AS maincat2 WHERE maincat2.nomCategorie =:nom)";
 
     private static final String SQL_CATEGORY_BY_ID = "SELECT c FROM Categorie AS c WHERE c.idCategorie = :id";
+    // Aller chercher une catégorie parente directe d'une catégorie
+    private static final String SQL_PARENT_DIRECT = "SELECT c FROM Categorie AS c WHERE c.level =:l AND c.borneGauche < :bg AND c.borneDroit > :bd";
+
+    // Réarranger les bornes suite à la suppression d'une catégorie
+    private static final String  SQL_DECALER_BORNES_GAUCHES = "UPDATE Categorie AS c " +
+            "SET c.borneGauche = c.borneGauche - :i WHERE c.borneGauche > :bg";
+    private static final String SQL_DECALER_BORNES_DROITES = "UPDATE Categorie AS c " +
+            "SET c.borneDroit = c.borneDroit - :i WHERE c.borneDroit > :bg";
 
     @Autowired
     private EntityManager entityManager;
@@ -32,17 +46,20 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
      * @return une collection de la / des catégorie(s) trouvée(s)
      */
     @Override
-    public Collection<Categorie> findAllWithCriteria(int id, String nom) {
-        Query query = null;
-        System.out.println(id);
+    public Collection<Categorie> findAllWithCriteria(int id, String nom, Boolean sousCat) {
+
+        Query query;
         if(id != 0) {
             query = entityManager.createQuery(SQL_CATEGORY_BY_ID, Categorie.class);
             query.setParameter("id", id);
-        }
-        else if(nom == null) {
+        } else if(nom == null) {
             query =  entityManager.createQuery(SQL_ALL_CATEGORIES, Categorie.class);
-        }else {
+        }
+        else if(!sousCat){
             query =  entityManager.createQuery(SQL_CATEGORY_BY_NAME, Categorie.class);
+            query.setParameter("nom", nom);
+        } else {
+            query =  entityManager.createQuery(SQL_CATEGORY_BY_NAME_SOUSCAT, Categorie.class);
             query.setParameter("nom", nom);
         }
 
@@ -59,7 +76,7 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
     @Override
     public Collection<Categorie> findParents(HashMap<Integer,Categorie> cats) {
 
-        Query query = null;
+        Query query;
 
         // Construire la requête
         String sql = "SELECT p FROM Categorie AS p WHERE ";
@@ -86,4 +103,80 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
 
     }
     // US#192 - FIN
+
+    // US#193 - DEBUT
+
+    /**
+     * Renvoie la catégorie directement parent d'une catégorie donnée en paramètre.
+     * @param cat la catégorie dont on doit chercher le parent.
+     * @return La catégorie parent.
+     */
+    @Override
+    public Categorie findDirectParent(Categorie cat) {
+
+        Categorie resultat;
+
+        // Cas où la catégorie est de niveau au moins 2
+        if(cat.getLevel() > 1) {
+
+            Query query;
+
+            // On crée la requête pour aller chercher le parent direct de cat
+            query = entityManager.createQuery(SQL_PARENT_DIRECT, Categorie.class);
+
+            query.setParameter("l", cat.getLevel() - 1);
+            query.setParameter("bg", cat.getBorneGauche());
+            query.setParameter("bd", cat.getBorneDroit());
+
+            // On retourne la catégorie unique, parent de cat
+
+            resultat = (Categorie) query.getSingleResult();
+
+        }
+
+        // Pas de parent pour une catégorie de niveau 1
+        else {
+
+            resultat = new Categorie();
+            resultat.setNomCategorie("Aucune catégorie parente");
+        }
+
+        return resultat;
+
+
+
+
+
+
+    }
+
+    /**
+     *
+     * @param bg borne gauche de la catégorie supprimée
+     * @param bd borne droite de la catégorie supprimée
+     * @param intervalle intervalle entre les 2
+     * @return ne nombre de catégories réorganisées
+     */
+    @Override
+    public int rearrangerBornes(int bg, int bd, int intervalle) {
+
+        Query query1;
+        Query query2;
+
+        query1 = entityManager.createQuery(SQL_DECALER_BORNES_GAUCHES);
+        query1.setParameter("i", intervalle);
+        query1.setParameter("bg", bg);
+
+        int nb1 = query1.executeUpdate();
+
+        query2 = entityManager.createQuery(SQL_DECALER_BORNES_DROITES);
+        query2.setParameter("i", intervalle);
+        query2.setParameter("bg", bg);
+
+        int nb2 = query2.executeUpdate();
+
+        return Math.max(nb1, nb2);
+    }
+
+    // US#193 - FIN
 }

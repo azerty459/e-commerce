@@ -41,9 +41,11 @@ public class CategorieTransformer {
      * @param categoriesList Une liste de d'objets Categorie
      * @param chemins HashMap associant chaque catégorie à un chemin (sous la forme d'une chaîne de caractères)
      * @param sousCat true si on veut les sous-catégories, false sinon
+     * @param parentDirect la catégorie directement parente de la catégorie unique de categorieList
      * @return une collection d'objets CategorieDTO
      */
-    public static Collection<CategorieDTO> entityToDto(List<Categorie> categoriesList, HashMap<Categorie,String> chemins, Boolean sousCat) {
+    public static Collection<CategorieDTO> entityToDto(List<Categorie> categoriesList, HashMap<Categorie,String> chemins, Boolean sousCat, Boolean parent, Categorie parentDirect) {
+
         List<CategorieDTO> categorieDTOList = new ArrayList<>();
         if(!categoriesList.isEmpty()){
             int levelMin = categoriesList.get(0).getLevel();
@@ -52,13 +54,14 @@ public class CategorieTransformer {
                     levelMin = categorie.getLevel();
                 }
             }
+
             // TODO: changer le if
             for(int i=0; i<categoriesList.size(); i++) {
                 if(sousCat && categoriesList.get(i).getLevel() == levelMin) {
-                    categorieDTOList.add(entityToDto(categoriesList.get(i), categoriesList, chemins));
+                    categorieDTOList.add(entityToDto(categoriesList.get(i), categoriesList, chemins, parent, parentDirect));
                 }
                 else if (!sousCat) {
-                    categorieDTOList.add(entityToDto(categoriesList.get(i), categoriesList, chemins));
+                    categorieDTOList.add(entityToDto(categoriesList.get(i), categoriesList, chemins, parent, parentDirect));
                 }
             }
         }
@@ -71,9 +74,11 @@ public class CategorieTransformer {
      * @param categorie Un objet Categorie
      * @param categoriesList Une liste contenant des objets Categorie
      * @param chemins HashMap associant chaque catégorie à un chemin (sous la forme d'une chaîne de caractères)
+     * @param parentDirect la catégorie directement parente de categorie
      * @return un objet CategorieDTO
      */
-    public static CategorieDTO entityToDto(Categorie categorie, List<Categorie> categoriesList, HashMap<Categorie,String> chemins) {
+    public static CategorieDTO entityToDto(Categorie categorie, List<Categorie> categoriesList, HashMap<Categorie,String> chemins, Boolean parent, Categorie parentDirect) {
+
         CategorieDTO categorieDTO = new CategorieDTO();
         categorieDTO.setNom(categorie.getNomCategorie());
         categorieDTO.setSousCategories(new ArrayList<>(getSousCategorie(categorie, categoriesList)));
@@ -81,9 +86,20 @@ public class CategorieTransformer {
 
         // Renseignement du level de la catégorie
         categorieDTO.setLevel(categorie.getLevel());
+
         // Ajout de son chemin
         String ch = chemins.get(categorie);
         categorieDTO.setChemin(ch);
+
+        // US#193 - DEBUT
+        // Ajout de son parent direct s'il est donné
+        if(parent && parentDirect != null) {
+            categorieDTO.setParent(entityToDto(parentDirect));
+        }
+        else {
+            categorieDTO.setParent(null);
+        }
+        // US#193 - FIN
 
         return categorieDTO;
     }
@@ -101,7 +117,6 @@ public class CategorieTransformer {
         categorieDTO.setLevel(categorie.getLevel());
         return categorieDTO;
     }
-
 
     /**
      * Algorithme pour trouver les sous-catégories d'une catégorie.
