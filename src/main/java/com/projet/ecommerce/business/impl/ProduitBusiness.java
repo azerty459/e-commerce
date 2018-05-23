@@ -55,7 +55,7 @@ public class ProduitBusiness implements IProduitBusiness {
             Produit produit = new Produit();
             produit.setReferenceProduit(referenceProduit);
             produit.setNom(nom);
-            produit.setDescription((description == null) ? "" : description);
+            produit.setDescription(description);
             produit.setPrixHT(prixHT);
             produit.setCaracteristiques(new ArrayList<>());
             produit.setPhotos(new ArrayList<>());
