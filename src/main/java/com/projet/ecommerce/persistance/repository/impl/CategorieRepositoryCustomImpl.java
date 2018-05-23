@@ -18,8 +18,11 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
     // Requête pour aller chercher toutes les catégories
     private static final String SQL_ALL_CATEGORIES = "SELECT c FROM Categorie AS c ORDER BY c.borneGauche ASC";
 
-    // Aller chercher une catégorie grâce à son nom
-    private static final String SQL_CATEGORY_BY_NAME = "SELECT souscat FROM Categorie AS souscat WHERE souscat.borneGauche >= " +
+    // Récupérer une catégorie grâce à son nom
+    private static final String SQL_CATEGORY_BY_NAME = "SELECT c FROM Categorie AS c WHERE c.nomCategorie =:nom";
+
+    // Aller chercher une catégorie grâce à son nom + ses sous-catégories
+    private static final String SQL_CATEGORY_BY_NAME_SOUSCAT = "SELECT souscat FROM Categorie AS souscat WHERE souscat.borneGauche >= " +
             "(SELECT maincat.borneGauche FROM Categorie AS maincat WHERE maincat.nomCategorie =:nom) " +
             "AND souscat.borneDroit <= " +
             "(SELECT maincat2.borneDroit FROM Categorie AS maincat2 WHERE maincat2.nomCategorie =:nom)";
@@ -43,16 +46,18 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
      * @return une collection de la / des catégorie(s) trouvée(s)
      */
     @Override
-    public Collection<Categorie> findAllWithCriteria(String nom) {
+    public Collection<Categorie> findAllWithCriteria(String nom, Boolean sousCat) {
 
         Query query;
 
         if(nom == null) {
             query =  entityManager.createQuery(SQL_ALL_CATEGORIES, Categorie.class);
-
         }
-        else {
+        else if(!sousCat){
             query =  entityManager.createQuery(SQL_CATEGORY_BY_NAME, Categorie.class);
+            query.setParameter("nom", nom);
+        } else {
+            query =  entityManager.createQuery(SQL_CATEGORY_BY_NAME_SOUSCAT, Categorie.class);
             query.setParameter("nom", nom);
         }
 
@@ -107,19 +112,39 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
     @Override
     public Categorie findDirectParent(Categorie cat) {
 
-        // TODO: gérer le cas où on est déjà au level 1 ? (à priori il ne retourne rien car pas de categorie de niveau 0)
+        Categorie resultat;
 
-        Query query;
+        // Cas où la catégorie est de niveau au moins 2
+        if(cat.getLevel() > 1) {
 
-        // On crée la requête pour aller chercher le parent direct de cat
-        query = entityManager.createQuery(SQL_PARENT_DIRECT, Categorie.class);
+            Query query;
 
-        query.setParameter("l", cat.getLevel() - 1);
-        query.setParameter("bg", cat.getBorneGauche());
-        query.setParameter("bd", cat.getBorneDroit());
+            // On crée la requête pour aller chercher le parent direct de cat
+            query = entityManager.createQuery(SQL_PARENT_DIRECT, Categorie.class);
 
-        // On retourne la catégorie unique, parent de cat
-        return (Categorie) query.getSingleResult();
+            query.setParameter("l", cat.getLevel() - 1);
+            query.setParameter("bg", cat.getBorneGauche());
+            query.setParameter("bd", cat.getBorneDroit());
+
+            // On retourne la catégorie unique, parent de cat
+
+            resultat = (Categorie) query.getSingleResult();
+
+        }
+
+        // Pas de parent pour une catégorie de niveau 1
+        else {
+
+            resultat = new Categorie();
+            resultat.setNomCategorie("Aucune catégorie parente");
+        }
+
+        return resultat;
+
+
+
+
+
 
     }
 

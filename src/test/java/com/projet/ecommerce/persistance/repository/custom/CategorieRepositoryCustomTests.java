@@ -58,15 +58,15 @@ public class CategorieRepositoryCustomTests {
 	@Test
 	// Je teste que la méthode si l'on l'appelle avec null dans les deux paramètres, elle retourne une collection de produit.
 	public void findAllWithCriteriaByNull() {
-		Collection<Categorie> produitCollection = categorieRepository.findAllWithCriteria(null);
+		Collection<Categorie> produitCollection = categorieRepository.findAllWithCriteria(null, false);
 		Assert.assertNotNull(produitCollection);
 	}
 
 	@Test
 	public void findAllWithCriteriaByNom() {
-		Collection<Categorie> categorieCollection = categorieRepository.findAllWithCriteria("Livre");
+		Collection<Categorie> categorieCollection = categorieRepository.findAllWithCriteria("Livre", false);
 		Assert.assertEquals(1, categorieCollection.size());
-		Assert.assertEquals(0, categorieRepository.findAllWithCriteria("Toto").size());
+		Assert.assertEquals(0, categorieRepository.findAllWithCriteria("Toto", false).size());
 	}
 
 	@Test

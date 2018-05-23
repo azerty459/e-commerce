@@ -56,6 +56,7 @@ public class CategorieTransformer {
                     levelMin = categorie.getLevel();
                 }
             }
+
             // TODO: changer le if
             for(int i=0; i<categoriesList.size(); i++) {
                 if(sousCat && categoriesList.get(i).getLevel() == levelMin) {

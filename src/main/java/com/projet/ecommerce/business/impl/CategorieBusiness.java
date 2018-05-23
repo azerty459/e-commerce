@@ -42,7 +42,7 @@ public class CategorieBusiness implements ICategorieBusiness {
         Categorie parentDirect = null;
 
         // On va chercher les catégories
-        Collection<Categorie> categories = categorieRepository.findAllWithCriteria(nom);
+        Collection<Categorie> categories = categorieRepository.findAllWithCriteria(nom, sousCategorie);
         int tailleListeCategories = categories.size();
 
         // S'il n'y a pas de résultat: message indiquant aucune catégorie de ce nom.
@@ -50,10 +50,17 @@ public class CategorieBusiness implements ICategorieBusiness {
             throw new GraphQLCustomException("Aucune catégorie trouvé avec le nom " + nom);
         }
 
-        // On va aussi chercher son parent direct si demandé et s'il n'y qu'un élément dont on doit chercher le parent.
-        if(parent && tailleListeCategories == 1) {
+        // On va aussi chercher son parent direct si demandé
+        if(parent) {
             Iterator<Categorie> it = categories.iterator();
-            parentDirect = categorieRepository.findDirectParent(it.next());
+            Boolean notFound = true;
+            while(it.hasNext() && notFound) {
+                Categorie temp = it.next();
+                if(temp.getNomCategorie().equals(nom)) {
+                    notFound = false;
+                    parentDirect = categorieRepository.findDirectParent(temp);
+                }
+            }
         }
 
         // Mise en forme des objets CategorieDTO
