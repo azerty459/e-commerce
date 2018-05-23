@@ -29,7 +29,12 @@ public class Categorie {
     @Column(name = "level")
     private int level;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "categories", fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "produit_categorie",
+            inverseJoinColumns = {@JoinColumn(name = "reference_produit")},
+            joinColumns = {@JoinColumn(name = "id_categorie")}
+    )
     private List<Produit> produits;
 
     /**
