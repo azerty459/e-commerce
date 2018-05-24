@@ -277,7 +277,7 @@ public class CategorieBusiness implements ICategorieBusiness {
         }
     }
 
-    // TODO:
+
     @Override
     public boolean moveCategorie(int idADeplacer, int idNouveauParent) {
 
@@ -287,34 +287,54 @@ public class CategorieBusiness implements ICategorieBusiness {
         // Aller chercher la catégorie parent
         Categorie nouveauParent = (Categorie) this.categorieRepositoryCustom.findAllWithCriteria(idNouveauParent, null, false).toArray()[0];
 
+        // Trouver les bornes min et max de toutes les catégories à déplacer
+        Iterator<Categorie> it = categoriesADeplacer.iterator();
+        Categorie temp = it.next();
+        int borneMin = temp.getBorneGauche();
+        int borneMax = temp.getBorneDroit();
+        while(it.hasNext()) {
+            temp = it.next();
+            if(temp.getBorneGauche() < borneMin) {
+                borneMin = temp.getBorneGauche();
+            }
+            if(temp.getBorneDroit() > borneMax) {
+                borneMax = temp.getBorneDroit();
+            }
+        }
 
-        // Début récursion
+        // Intervalle entre les 2 (c'est à dire l'espace que prend les catégories à déplacer)
+        int interBornes = borneMax - borneMin + 1;
 
-        // Chercher la catégorie de niveau le plus élevé dans les catégories à déplacer
+        // Nombre de bornes dont on doit décaler les catégories à déplacer
+        int intervalleDeDéplacement = nouveauParent.getBorneGauche() + 1 - borneMin;
 
+        // Décaler l'espace entre les bornes du nouveau parent (et des parents du parent direct) de cet intervalle
 
-        // Sauvegarder son id  et son nom
+        // // Aller chercher tous les parenst de la catégorie nouveauParent jusqu'au niveau 1
+        Collection<Categorie> categoriesBorneGaucheSup = this.categorieRepository.findAllCategoriesAvecBorneGaucheSuperieure(nouveauParent);
 
+        // // Décaler les bornes droites de nouveauParent et de tous les parents
+        for(Categorie c: categoriesBorneGaucheSup) {
+            int bdActuelle = c.getBorneDroit();
+            c.setBorneDroit(bdActuelle + interBornes);
+        }
+        int bdActuelle = nouveauParent.getBorneDroit();
+        nouveauParent.setBorneDroit(bdActuelle + interBornes);
 
+        // Déplacer les catégories
+        for(Categorie cat: categoriesADeplacer) {
+            int bg = cat.getBorneGauche();
+            int bd = cat.getBorneDroit();
+            cat.setBorneDroit(bd + intervalleDeDéplacement);
+            cat.setBorneGauche(bg + intervalleDeDéplacement);
+        }
 
-        // La rajouter sous le nouveau parent, avec le même nom
+        // Les catégories déplacées ont laissé un vide dans les bornes à leur emplacement d'origine: les combler
+        this.categorieRepositoryCustom.rearrangerBornes(borneMin, borneMax, interBornes);
 
+        return true; // TODO: utile de retourner ou exception?
 
-
-        // Supprimer la catégorie déplacée
-
-
-
-        // Mettre l'id de la catégorie originale pour la nouvelle catégorie
-
-
-        // Remettre en ordre les bornes
-
-
-
-        return true;
     }
-
 
 
 

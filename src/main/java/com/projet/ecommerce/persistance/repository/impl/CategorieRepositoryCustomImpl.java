@@ -40,6 +40,9 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
     // Aller chercher une catégorie parente directe d'une catégorie
     private static final String SQL_PARENT_DIRECT = "SELECT c FROM Categorie AS c WHERE c.level =:l AND c.borneGauche < :bg AND c.borneDroit > :bd";
 
+    // Aller chercher les catégories de borne gauche supérieure
+    private static final String SQL_CATEGORIES_BORNE_GAUCHE_SUP = "SELECT c FROM Categorie AS c WHERE c.borneGauche > :bg";
+
     // Réarranger les bornes suite à la suppression d'une catégorie
     private static final String  SQL_DECALER_BORNES_GAUCHES = "UPDATE Categorie AS c " +
             "SET c.borneGauche = c.borneGauche - :i WHERE c.borneGauche > :bg";
@@ -165,11 +168,18 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
 
         return resultat;
 
+    }
 
+    @Override
+    public Collection<Categorie> findAllCategoriesAvecBorneGaucheSuperieure(Categorie cat) {
 
+        Collection<Categorie> parents = null;
 
+        Query query = entityManager.createQuery(SQL_CATEGORIES_BORNE_GAUCHE_SUP, Categorie.class);
+        query.setParameter("bg", cat.getBorneGauche());
+        parents = query.getResultList();
 
-
+        return parents;
     }
 
     /**

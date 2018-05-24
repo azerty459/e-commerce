@@ -13,6 +13,13 @@ public interface CategorieRepositoryCustom {
 
     Categorie findDirectParent(Categorie cat);
 
+    /**
+     * Trouve toutes les catégories dont la borne gauche est supérieure à celle de celle donnée en paramètre
+     * @param cat la catégorie de réf"rence pour la borne gauche
+     * @return une collection de catégories qui obt ube borne gauche supérieure à cat
+     */
+    Collection<Categorie> findAllCategoriesAvecBorneGaucheSuperieure(Categorie cat);
+
     int rearrangerBornes(int bg, int bd, int intervalle);
 
 }
