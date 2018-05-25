@@ -5,14 +5,37 @@ import java.util.List;
 /**
  * Entité qui permet d'assurer le découplage entre la couche de présentation et les objets métier stockés sur le serveur (Categorie).
  */
-
 public class CategorieDTO {
 
+    /**
+     * L'id de la catégorie.
+     */
     private int id;
 
+    /**
+     * Le nom de la catégorie.
+     */
     private String nom;
 
+    /**
+     * La liste des sous-catégories de la catégorie.
+     */
     private List<CategorieDTO> sousCategories;
+
+    /**
+     * Liste des parents de la catégories.
+     */
+    private String chemin;
+
+     /**
+     * Niveau de la catégorie dans l'arborescence des catégories (Niveau 1 = niveau le plus élevé).
+     */
+    private int level;
+
+    /**
+     * Le parent direct de la catégorie
+     */
+    private CategorieDTO parent;
 
     /**
      * Retourne le nom de la categorieDTO.
@@ -61,4 +84,50 @@ public class CategorieDTO {
     public void setId(int id) {
         this.id = id;
     }
+
+    /**
+     * Retourne le chemin pour arriver à la catégorie depuis la catégorie parente de niveau 1
+     * @return une chaîne de caractères représentant ce chemin.
+     */
+    public String getChemin() {
+        return this.chemin;
+    }
+
+    /**
+     * Fixe le chemin de la catégorie.
+     * @param c la chaîne de caractères représentant le chemin.
+     */
+    public void setChemin(String c) {
+        this.chemin = c;
+    }
+
+    /**
+     * Retourne le niveau de la catégorie dans l'arborescence des catégories.
+     * @return le niveau (1 = catégorie de niveau 1, tout en haut de l'arborescence).
+     */
+    public int getLevel() { return this.level; }
+
+    /**
+     * Fixe le niveau de la catégorie.
+     * @param l le niveau de la catégorie.
+     */
+    public void setLevel(int l) { this.level = l; }
+
+    /**
+     * Retourne le parent direct de la catégorie
+     * @return le CategorieDTO représentant le parent
+     */
+    public CategorieDTO getParent() {
+        return this.parent;
+    }
+
+    /**
+     * Fixe le parent de la catégorie
+     * @param p le parent
+     */
+    public void setParent(CategorieDTO p) {
+        this.parent = p;
+    }
+
+
 }

@@ -1,17 +1,14 @@
 package com.projet.ecommerce.business.transformer;
 
-import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
 import com.projet.ecommerce.business.dto.CategorieDTO;
-import com.projet.ecommerce.business.dto.transformer.CaracteristiqueTransformer;
 import com.projet.ecommerce.business.dto.transformer.CategorieTransformer;
-import com.projet.ecommerce.persistance.entity.Caracteristique;
 import com.projet.ecommerce.persistance.entity.Categorie;
-import com.projet.ecommerce.persistance.entity.TypeCaracteristique;
-import org.junit.Assert;
 import org.junit.Test;
+import org.junit.Assert;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @SpringBootTest
@@ -22,8 +19,11 @@ public class CategorieTransformerTests {
     private static final Categorie CATEGORIE_3;
     private static final Categorie CATEGORIE_4;
     private static final Categorie CATEGORIE_5;
+    private static final Categorie PARENT;
 
     private static final List<Categorie> CATEGORIE_LIST;
+
+    private static final HashMap<Categorie,String> CHEMINS;
 
     static {
         CATEGORIE_1 = new Categorie();
@@ -67,22 +67,36 @@ public class CategorieTransformerTests {
         CATEGORIE_LIST.add(CATEGORIE_3);
         CATEGORIE_LIST.add(CATEGORIE_4);
         CATEGORIE_LIST.add(CATEGORIE_5);
+
+        CHEMINS = new HashMap<Categorie,String>();
+
+        PARENT = new Categorie();
+        PARENT.setNomCategorie("Parent");
+
+
     }
 
     @Test
     public void entityToDto(){
-        CategorieDTO categorieDTO = CategorieTransformer.entityToDto(CATEGORIE_1, CATEGORIE_LIST);
+
+        // Test sans parent
+        CategorieDTO categorieDTO = CategorieTransformer.entityToDto(CATEGORIE_1, CATEGORIE_LIST, CHEMINS, false, null);
         Assert.assertNotNull(categorieDTO);
         Assert.assertEquals(categorieDTO.getNom(), CATEGORIE_1.getNomCategorie());
         Assert.assertEquals(categorieDTO.getSousCategories().get(0).getNom(), CATEGORIE_2.getNomCategorie());
         Assert.assertEquals(categorieDTO.getSousCategories().get(1).getNom(), CATEGORIE_5.getNomCategorie());
         Assert.assertEquals(categorieDTO.getSousCategories().get(0).getSousCategories().get(0).getNom(), CATEGORIE_3.getNomCategorie());
         Assert.assertEquals(categorieDTO.getSousCategories().get(0).getSousCategories().get(1).getNom(), CATEGORIE_4.getNomCategorie());
+
+        // Test avec parents
+        CategorieDTO categorieDTO2 = CategorieTransformer.entityToDto(CATEGORIE_1, CATEGORIE_LIST, CHEMINS, true, PARENT);
+        Assert.assertNotNull(categorieDTO2);
+        Assert.assertEquals(categorieDTO2.getParent().getNom(), PARENT.getNomCategorie());
     }
 
     @Test
     public void listEntityToDto(){
-        List<CategorieDTO> categorieDTOList = new ArrayList<>(CategorieTransformer.entityToDto(CATEGORIE_LIST, true));
+        List<CategorieDTO> categorieDTOList = new ArrayList<>(CategorieTransformer.entityToDto(CATEGORIE_LIST, CHEMINS, true, false, null));
         Assert.assertEquals(1, categorieDTOList.size());
         Assert.assertEquals(categorieDTOList.get(0).getNom(), CATEGORIE_1.getNomCategorie());
         Assert.assertEquals(categorieDTOList.get(0).getSousCategories().get(0).getNom(), CATEGORIE_2.getNomCategorie());

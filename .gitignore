@@ -26,3 +26,4 @@ nbdist/
 
 classes/
 META-INF/
+src/main/resources/img/**

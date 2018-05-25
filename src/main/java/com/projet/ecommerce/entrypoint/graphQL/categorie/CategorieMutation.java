@@ -24,7 +24,11 @@ public class CategorieMutation {
         );
 
         builder.dataFetcher("deleteCategorie", (DataFetchingEnvironment env) ->
-                categorieBusiness.delete(env.getArgument("nom"))
+                categorieBusiness.delete(env.getArgument("id"))
+        );
+
+        builder.dataFetcher("moveCategorie", (DataFetchingEnvironment env) ->
+                categorieBusiness.moveCategorie(env.getArgument("idADeplacer"), env.getArgument("idNouveauParent"))
         );
         return builder.build();
     }

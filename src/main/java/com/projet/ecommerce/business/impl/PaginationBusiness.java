@@ -6,8 +6,6 @@ import com.projet.ecommerce.business.IProduitBusiness;
 import com.projet.ecommerce.business.dto.PaginationDTO;
 import com.projet.ecommerce.business.dto.transformer.CategorieTransformer;
 import com.projet.ecommerce.business.dto.transformer.ProduitTransformer;
-import com.projet.ecommerce.persistance.entity.Categorie;
-import com.projet.ecommerce.persistance.entity.Produit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -52,7 +50,7 @@ public class PaginationBusiness implements IPaginationBusiness {
             paginationDTO.setTotal(pageProduit.getTotalElements());
             paginationDTO.setCategories(new ArrayList<>());
             paginationDTO.setProduits(new ArrayList<>(ProduitTransformer.entityToDto(pageProduit.getContent())));
-        }else if(type.equals("categorie")){
+        } else if(type.equals("categorie")){
             Page pageCategorie = categorieBusiness.getPage(page, npp);
             paginationDTO.setPageMin(1);
             paginationDTO.setPageActuelle(page);
@@ -62,7 +60,9 @@ public class PaginationBusiness implements IPaginationBusiness {
             }
             paginationDTO.setPageMax(pageCategorie.getTotalPages());
             paginationDTO.setTotal(pageCategorie.getTotalElements());
-            paginationDTO.setCategories(new ArrayList<>(CategorieTransformer.entityToDto(pageCategorie.getContent(), false)));
+
+
+            paginationDTO.setCategories(new ArrayList<>(CategorieTransformer.entityToDto(pageCategorie.getContent(), this.categorieBusiness.construireAssociationEnfantsChemins(pageCategorie.getContent()), false, false, null)));
             paginationDTO.setProduits(new ArrayList<>());
         }
         return paginationDTO;

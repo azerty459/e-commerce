@@ -3,6 +3,7 @@ package com.projet.ecommerce.entrypoint.graphQL;
 import com.projet.ecommerce.entrypoint.graphQL.categorie.CategorieMutation;
 import com.projet.ecommerce.entrypoint.graphQL.categorie.CategorieQuery;
 import com.projet.ecommerce.entrypoint.graphQL.pagination.PaginationQuery;
+import com.projet.ecommerce.entrypoint.graphQL.photo.PhotoQuery;
 import com.projet.ecommerce.entrypoint.graphQL.produit.ProduitMutation;
 import com.projet.ecommerce.entrypoint.graphQL.produit.ProduitQuery;
 import graphql.ExceptionWhileDataFetching;
@@ -42,6 +43,9 @@ public class GraphQlUtility {
     private CategorieMutation categorieMutation;
 
     @Autowired
+    private PhotoQuery photoQuery;
+
+    @Autowired
     private PaginationQuery paginationQuery;
 
     @PostConstruct
@@ -74,6 +78,7 @@ public class GraphQlUtility {
         return  RuntimeWiring.newRuntimeWiring()
                 .type(produitQuery.produitWiring())
                 .type(produitMutation.produitWiring())
+                .type(photoQuery.produitWiring())
                 .type(categorieQuery.produitWiring())
                 .type(categorieMutation.produitWiring())
                 .type(paginationQuery.produitWiring())
@@ -82,15 +87,17 @@ public class GraphQlUtility {
 
     private GraphQLSchema graphQLSchema() {
 
-        File produitSchemaFile = new File("src/main/resources/graphql/produit.graphqls");
         File categorieSchemaFile = new File("src/main/resources/graphql/categorie.graphqls");
+        File photoSchemaFile = new File("src/main/resources/graphql/photo.graphqls");
+        File produitSchemaFile = new File("src/main/resources/graphql/produit.graphqls");
         File paginationSchemaFile = new File("src/main/resources/graphql/pagination.graphqls");
 
         SchemaParser schemaParser = new SchemaParser();
         TypeDefinitionRegistry typeRegistry = new TypeDefinitionRegistry();
         // chaque registre est fusionné dans le registre principal
-        typeRegistry.merge(schemaParser.parse(produitSchemaFile));
         typeRegistry.merge(schemaParser.parse(categorieSchemaFile));
+        typeRegistry.merge(schemaParser.parse(photoSchemaFile));
+        typeRegistry.merge(schemaParser.parse(produitSchemaFile));
         typeRegistry.merge(schemaParser.parse(paginationSchemaFile));
 
         RuntimeWiring wiring = buildRuntimeWiring();

@@ -4,6 +4,8 @@ import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import org.springframework.data.domain.Page;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -14,10 +16,20 @@ public interface ICategorieBusiness {
 
     /**
      * Méthode allant chercher les catégories
+     *
+     * @param id  l'id de la catégorie à rechercher
      * @param nom le nom de la catégorie à aller chercher. "null" si on cherche à lister toutes les catégories.
      * @return liste des catégories recherchées
      */
-    List<CategorieDTO> getCategorie(String nom, boolean sousCategorie);
+    List<CategorieDTO> getCategorie(int id, String nom, boolean sousCategorie, boolean parent);
+
+    /**
+     * Construit un HashMap associant chaque catégorie à un chemin représentant l'arborescence jusqu'à la catégorie.
+     *
+     * @param categories la collection des catégories dont on cheche les chemins.
+     * @return Un HashMap associant chaque catégorie à une chaîne de caractère représentant le chemin.
+     */
+    HashMap<Categorie, String> construireAssociationEnfantsChemins(Collection<Categorie> categories);
 
     /**
      * Méthode définissant l'ajout d'une catégorie parent.
@@ -32,39 +44,32 @@ public interface ICategorieBusiness {
      * Méthode définissant l'ajout d'une catégorie enfant.
      *
      * @param nomCategorie Le nom de la catégorie
-     * @param parent       Le parent de la catégorie à insérer
+     * @param idParent     L'ID parent de la catégorie
      * @return la catégorie crée
      */
-    CategorieDTO addEnfant(String nomCategorie, String parent);
+    CategorieDTO addEnfant(String nomCategorie, int idParent);
 
     /**
      * Méthode définissant le supprésion d'une catégorie.
      *
-     * @param nomCategorie Nom de la catégorie à supprimer
+     * @param id ID de la catégorie à supprimer
      * @return true
      */
-    boolean delete(String nomCategorie);
+    boolean delete(int id);
 
     /**
-     * Méthode définissant la recherche de toutes les catégories.
-     *
-     * @return Une liste d'objet categorie
+     * Déplace une catégorie (et ses enfants) d'un parent à un autre
+     * @param idADeplacer id de la catégorie à déplacer
+     * @param idReceptrice id du nouveau parent
+     * @return true si l'opération a été un succès, false sinon.
      */
-    List<CategorieDTO> getAll();
-
-    /**
-     * Méthode définissant la recherche d'une categorie selon son nom.
-     *
-     * @param nomCategorie Le nom de la catégorie à rechercher
-     * @return l'objet categorie recherché
-     */
-    CategorieDTO getByNom(String nomCategorie);
-
+    boolean moveCategorie(int idADeplacer, int idReceptrice);
 
     /**
      * Méthode définissant la pagination
+     *
      * @param pageNumber le page souhaitée
-     * @param nb le nombre de produit à afficher dans la page
+     * @param nb         le nombre de produit à afficher dans la page
      * @return une page de categorie
      */
     Page<Categorie> getPage(int pageNumber, int nb);
