@@ -310,16 +310,16 @@ public class CategorieBusiness implements ICategorieBusiness {
 
         // Décaler l'espace entre les bornes du nouveau parent (et des parents du parent direct) de cet intervalle
 
-        // // Aller chercher tous les parenst de la catégorie nouveauParent jusqu'au niveau 1
+        // // Aller chercher toutes les catégories qui ont une borne gauche supérieure à celle du nouveau parent
         Collection<Categorie> categoriesBorneGaucheSup = this.categorieRepository.findAllCategoriesAvecBorneGaucheSuperieure(nouveauParent);
 
-        // // Décaler les bornes droites de nouveauParent et de tous les parents
+        // // Décaler les bornes droites de nouveauParent et de toutes les catégories de borne gauche supérieure
         for(Categorie c: categoriesBorneGaucheSup) {
             int bdActuelle = c.getBorneDroit();
             c.setBorneDroit(bdActuelle + interBornes);
         }
-        int bdActuelle = nouveauParent.getBorneDroit();
-        nouveauParent.setBorneDroit(bdActuelle + interBornes);
+        int bdActuelleNouveauParent = nouveauParent.getBorneDroit();
+        nouveauParent.setBorneDroit(bdActuelleNouveauParent + interBornes);
 
         // Déplacer les catégories
         for(Categorie cat: categoriesADeplacer) {
