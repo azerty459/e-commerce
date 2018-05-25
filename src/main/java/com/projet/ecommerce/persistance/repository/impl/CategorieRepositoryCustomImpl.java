@@ -13,7 +13,7 @@ import java.util.HashMap;
 @Repository
 public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom {
 
-    // Requêtes JPQL
+    /* ***** Requêtes JPQL ***** */
 
     // Requête pour aller chercher toutes les catégories
     private static final String SQL_ALL_CATEGORIES = "SELECT c FROM Categorie AS c ORDER BY c.borneGauche ASC";
@@ -27,9 +27,21 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
             "AND souscat.borneDroit <= " +
             "(SELECT maincat2.borneDroit FROM Categorie AS maincat2 WHERE maincat2.nomCategorie =:nom)";
 
+    // Aller chercher une seule catégorie d'id donnée en paramètre.
     private static final String SQL_CATEGORY_BY_ID = "SELECT c FROM Categorie AS c WHERE c.idCategorie = :id";
+
+    // Aller chercher une catégorie par son id + ses sous-catégories
+    private static final String SQL_CATEGORY_BY_ID_SOUSCAT = "SELECT souscat FROM Categorie AS souscat WHERE souscat.borneGauche >= " +
+            "(SELECT maincat.borneGauche FROM Categorie AS maincat WHERE maincat.idCategorie =:id) " +
+            "AND souscat.borneDroit <= " +
+            "(SELECT maincat2.borneDroit FROM Categorie AS maincat2 WHERE maincat2.idCategorie =:id)";
+
+
     // Aller chercher une catégorie parente directe d'une catégorie
     private static final String SQL_PARENT_DIRECT = "SELECT c FROM Categorie AS c WHERE c.level =:l AND c.borneGauche < :bg AND c.borneDroit > :bd";
+
+    // Aller chercher les catégories de borne gauche supérieure
+    private static final String SQL_CATEGORIES_BORNE_GAUCHE_SUP = "SELECT c FROM Categorie AS c WHERE c.borneGauche > :bg";
 
     // Réarranger les bornes suite à la suppression d'une catégorie
     private static final String  SQL_DECALER_BORNES_GAUCHES = "UPDATE Categorie AS c " +
@@ -48,19 +60,32 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
     @Override
     public Collection<Categorie> findAllWithCriteria(int id, String nom, Boolean sousCat) {
 
-        Query query;
-        if(id != 0) {
-            query = entityManager.createQuery(SQL_CATEGORY_BY_ID, Categorie.class);
-            query.setParameter("id", id);
-        } else if(nom == null) {
-            query =  entityManager.createQuery(SQL_ALL_CATEGORIES, Categorie.class);
-        }
-        else if(!sousCat){
-            query =  entityManager.createQuery(SQL_CATEGORY_BY_NAME, Categorie.class);
-            query.setParameter("nom", nom);
+        Query query = null;
+
+        // Si on ne demande pas les sous-catégories: son recherche soit par id, soit par nom.
+        // Si id = 0: on recherche la catégorie unique d'id donnée
+        // Si id = 0 et nom == null, on retourne toutes les catégories
+        if(!sousCat) {
+            if(id != 0) {
+                query = entityManager.createQuery(SQL_CATEGORY_BY_ID, Categorie.class);
+                query.setParameter("id", id);
+            } else if(nom == null) {
+                query =  entityManager.createQuery(SQL_ALL_CATEGORIES, Categorie.class);
+            } else if(nom != null) {
+                query =  entityManager.createQuery(SQL_CATEGORY_BY_NAME, Categorie.class);
+                query.setParameter("nom", nom);
+            }
         } else {
-            query =  entityManager.createQuery(SQL_CATEGORY_BY_NAME_SOUSCAT, Categorie.class);
-            query.setParameter("nom", nom);
+            // On demande de retourner les sous-catégories
+            // Si id != 0, on retourne une seule catégorie d'id donnée et ses sous-catégories
+            // Si id = 0 et nom != null, on retourne la catégorie de nom donné et ses sous-catégories
+            if(id != 0) {
+                query = entityManager.createQuery(SQL_CATEGORY_BY_ID_SOUSCAT, Categorie.class);
+                query.setParameter("id", id);
+            } else if(nom != null) {
+                query =  entityManager.createQuery(SQL_CATEGORY_BY_NAME_SOUSCAT, Categorie.class);
+                query.setParameter("nom", nom);
+            }
         }
 
         return query.getResultList();
@@ -143,11 +168,18 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
 
         return resultat;
 
+    }
 
+    @Override
+    public Collection<Categorie> findAllCategoriesAvecBorneGaucheSuperieure(Categorie cat) {
 
+        Collection<Categorie> parents = null;
 
+        Query query = entityManager.createQuery(SQL_CATEGORIES_BORNE_GAUCHE_SUP, Categorie.class);
+        query.setParameter("bg", cat.getBorneGauche());
+        parents = query.getResultList();
 
-
+        return parents;
     }
 
     /**

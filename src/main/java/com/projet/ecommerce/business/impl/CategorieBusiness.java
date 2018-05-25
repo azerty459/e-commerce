@@ -277,6 +277,68 @@ public class CategorieBusiness implements ICategorieBusiness {
         }
     }
 
+
+    @Override
+    public boolean moveCategorie(int idADeplacer, int idNouveauParent) {
+
+        // Aller chercher la catégorie à déplacer et ses enfants
+        ArrayList<Categorie> categoriesADeplacer = new ArrayList<Categorie>(this.categorieRepositoryCustom.findAllWithCriteria(idADeplacer, null, true));
+
+        // Aller chercher la catégorie parent
+        Categorie nouveauParent = (Categorie) this.categorieRepositoryCustom.findAllWithCriteria(idNouveauParent, null, false).toArray()[0];
+
+        // Trouver les bornes min et max de toutes les catégories à déplacer
+        Iterator<Categorie> it = categoriesADeplacer.iterator();
+        Categorie temp = it.next();
+        int borneMin = temp.getBorneGauche();
+        int borneMax = temp.getBorneDroit();
+        while(it.hasNext()) {
+            temp = it.next();
+            if(temp.getBorneGauche() < borneMin) {
+                borneMin = temp.getBorneGauche();
+            }
+            if(temp.getBorneDroit() > borneMax) {
+                borneMax = temp.getBorneDroit();
+            }
+        }
+
+        // Intervalle entre les 2 (c'est à dire l'espace que prend les catégories à déplacer)
+        int interBornes = borneMax - borneMin + 1;
+
+        // Nombre de bornes dont on doit décaler les catégories à déplacer
+        int intervalleDeDéplacement = nouveauParent.getBorneGauche() + 1 - borneMin;
+
+        // Décaler l'espace entre les bornes du nouveau parent (et des parents du parent direct) de cet intervalle
+
+        // // Aller chercher toutes les catégories qui ont une borne gauche supérieure à celle du nouveau parent
+        Collection<Categorie> categoriesBorneGaucheSup = this.categorieRepository.findAllCategoriesAvecBorneGaucheSuperieure(nouveauParent);
+
+        // // Décaler les bornes droites de nouveauParent et de toutes les catégories de borne gauche supérieure
+        for(Categorie c: categoriesBorneGaucheSup) {
+            int bdActuelle = c.getBorneDroit();
+            c.setBorneDroit(bdActuelle + interBornes);
+        }
+        int bdActuelleNouveauParent = nouveauParent.getBorneDroit();
+        nouveauParent.setBorneDroit(bdActuelleNouveauParent + interBornes);
+
+        // Déplacer les catégories
+        for(Categorie cat: categoriesADeplacer) {
+            int bg = cat.getBorneGauche();
+            int bd = cat.getBorneDroit();
+            cat.setBorneDroit(bd + intervalleDeDéplacement);
+            cat.setBorneGauche(bg + intervalleDeDéplacement);
+        }
+
+        // Les catégories déplacées ont laissé un vide dans les bornes à leur emplacement d'origine: les combler
+        this.categorieRepositoryCustom.rearrangerBornes(borneMin, borneMax, interBornes);
+
+        return true; // TODO: utile de retourner ou exception?
+
+    }
+
+
+
+
     /**
      * Retourne la liste complète des catégories liées à la base de données.
      *

@@ -58,6 +58,14 @@ public interface ICategorieBusiness {
     boolean delete(int id);
 
     /**
+     * Déplace une catégorie (et ses enfants) d'un parent à un autre
+     * @param idADeplacer id de la catégorie à déplacer
+     * @param idReceptrice id du nouveau parent
+     * @return true si l'opération a été un succès, false sinon.
+     */
+    boolean moveCategorie(int idADeplacer, int idReceptrice);
+
+    /**
      * Méthode définissant la pagination
      *
      * @param pageNumber le page souhaitée
