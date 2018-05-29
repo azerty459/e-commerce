@@ -51,12 +51,7 @@ public class PaginationBusinessTests {
 	@Test
 	public void getPaginationEmpty() {
 		PaginationDTO paginationDTO = paginationBusiness.getPagination("toto", 1, 5);
-		Assert.assertNull(paginationDTO.getCategories());
-		Assert.assertNull(paginationDTO.getProduits());
-		Assert.assertEquals(paginationDTO.getPageActuelle(), 0);
-		Assert.assertEquals(paginationDTO.getPageMax(), 0);
-		Assert.assertEquals(paginationDTO.getPageMin(), 0);
-		Assert.assertEquals(paginationDTO.getTotal(), 0);
+		Assert.assertNull(paginationDTO);
 	}
 
 	@Test

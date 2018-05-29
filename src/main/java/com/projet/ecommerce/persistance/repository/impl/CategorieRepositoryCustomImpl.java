@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -102,30 +103,33 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
     public Collection<Categorie> findParents(HashMap<Integer,Categorie> cats) {
 
         Query query;
+        if(!cats.isEmpty()){
+            // Construire la requête
+            String sql = "SELECT p FROM Categorie AS p WHERE ";
 
-        // Construire la requête
-        String sql = "SELECT p FROM Categorie AS p WHERE ";
-
-        // // Itérer sur le HashMap de catégories à rechercher
-        int taille = cats.size();
-        for(int i = 1; i < taille; i++) {
+            // // Itérer sur le HashMap de catégories à rechercher
+            int taille = cats.size();
+            for(int i = 1; i < taille; i++) {
+                sql += "(p.borneGauche >= ";
+                sql += cats.get(i).getBorneGauche();
+                sql += " AND p.borneDroit <= ";
+                sql += cats.get(i).getBorneDroit();
+                sql += ") OR ";
+            }
             sql += "(p.borneGauche >= ";
-            sql += cats.get(i).getBorneGauche();
+            sql += cats.get(taille).getBorneGauche();
             sql += " AND p.borneDroit <= ";
-            sql += cats.get(i).getBorneDroit();
-            sql += ") OR ";
+            sql += cats.get(taille).getBorneDroit();
+            sql += ")";
+
+            // Lancer la requête
+            query = entityManager.createQuery(sql, Categorie.class);
+
+            return query.getResultList();
+        }else{
+            Collection<Categorie> retour = new ArrayList<Categorie>();
+            return retour;
         }
-        sql += "(p.borneGauche >= ";
-        sql += cats.get(taille).getBorneGauche();
-        sql += " AND p.borneDroit <= ";
-        sql += cats.get(taille).getBorneDroit();
-        sql += ")";
-
-        // Lancer la requête
-        query = entityManager.createQuery(sql, Categorie.class);
-
-        return query.getResultList();
-
     }
     // US#192 - FIN
 

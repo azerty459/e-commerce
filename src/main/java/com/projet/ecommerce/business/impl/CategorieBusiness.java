@@ -336,36 +336,6 @@ public class CategorieBusiness implements ICategorieBusiness {
 
     }
 
-
-
-
-    /**
-     * Retourne la liste complète des catégories liées à la base de données.
-     *
-     * @return une liste de catégorie
-     */
-    // TODO: A SUPPRIMER
-//    @Override
-//    public List<CategorieDTO> getAll() {
-//        return new ArrayList<>(CategorieTransformer.entityToDto(new ArrayList<>(categorieRepository.findAll()), false));
-//    }
-
-    /**
-     * Retourne une categorieDTO parent et ses éventuelle enfants.
-     *
-     * @param nomCategorie Le nom de la catégorie parent à rechercher.
-     * @return une categorieDTO parent et ses éventuelle enfants, null si la catégorie parent n'est pas trouvé
-     */
-    // TODO: A SUPPRIMER
-//    @Override
-//    public CategorieDTO getByNom(String nomCategorie) {
-//        Optional<Categorie> categorie = categorieRepository.findCategorieByNomCategorie(nomCategorie);
-//        if (categorie.isPresent()) {
-//            return CategorieTransformer.entityToDto(categorie.get(), new ArrayList<>(categorieRepository.findAll()));
-//        }
-//        return null;
-//    }
-
     /**
      * Retourne un objet page de catégorie.
      *
@@ -375,6 +345,7 @@ public class CategorieBusiness implements ICategorieBusiness {
      */
     @Override
     public Page<Categorie> getPage(int pageNumber, int nb) {
-        return categorieRepository.findAll(PageRequest.of(pageNumber - 1, nb));
+        PageRequest page = (pageNumber == 0)? PageRequest.of(pageNumber, nb): PageRequest.of(pageNumber-1, nb);
+        return categorieRepository.findAll(page);
     }
 }

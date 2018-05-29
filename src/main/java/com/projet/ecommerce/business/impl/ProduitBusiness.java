@@ -197,6 +197,7 @@ public class ProduitBusiness implements IProduitBusiness {
      */
     @Override
     public Page<Produit> getPage(int pageNumber, int nb) {
-        return  produitRepository.findAll(PageRequest.of(pageNumber - 1, nb));
+        PageRequest page = (pageNumber == 0)? PageRequest.of(pageNumber, nb): PageRequest.of(pageNumber-1, nb);
+        return produitRepository.findAll(page);
     }
 }

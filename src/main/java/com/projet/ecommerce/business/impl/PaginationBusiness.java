@@ -27,44 +27,60 @@ public class PaginationBusiness implements IPaginationBusiness {
 
     /**
      * Retourne une liste paginée selon le type voulu, la page voulu et le nombre de produits à afficher.
+     *
      * @param type le type de la liste voulu
-     * @param page la page souhaité
-     * @param npp le nombre de produits à afficher dans la page paginée
+     * @param pageActuelle la page souhaité
+     * @param npp  le nombre de produits à afficher dans la page paginée
      * @return une objet PaginationDTO
      */
     @Override
-    public PaginationDTO getPagination(String type, int page, int npp) {
+    public PaginationDTO getPagination(String type, int pageActuelle, int npp) {
+        if (pageActuelle <= 0) {
+            pageActuelle = 1;
+        }
+        PaginationDTO paginationDTO = null;
+        switch (type) {
+            case "produit":
+                Page pageProduit = produitBusiness.getPage(pageActuelle, npp);
+                if (pageActuelle > pageProduit.getTotalPages()) {
+                    pageProduit = produitBusiness.getPage(pageProduit.getTotalPages(), npp);
+                }
+                paginationDTO = getPaginationDTO(pageProduit, pageActuelle);
+                paginationDTO.setCategories(new ArrayList<>());
+                paginationDTO.setProduits(new ArrayList<>(ProduitTransformer.entityToDto(pageProduit.getContent())));
+                break;
+            case "categorie":
+                Page pageCategorie = categorieBusiness.getPage(pageActuelle, npp);
+                if (pageActuelle > pageCategorie.getTotalPages()) {
+                    pageCategorie = categorieBusiness.getPage(pageCategorie.getTotalPages(), npp);
+                }
+                paginationDTO = getPaginationDTO(pageCategorie, pageActuelle);
+                paginationDTO.setCategories(new ArrayList<>(CategorieTransformer.entityToDto(pageCategorie.getContent(), this.categorieBusiness.construireAssociationEnfantsChemins(pageCategorie.getContent()), false, false, null)));
+                paginationDTO.setProduits(new ArrayList<>());
+                break;
+            default:
+                return paginationDTO;
+
+        }
+        return paginationDTO;
+    }
+
+    /**
+     * Méthode permettante de créer un objet PaginationDTO.
+     * @param page Un objet de type page
+     * @param pageActuelle la page souhaité
+     * @returnun objet PaginationDTO
+     */
+    private PaginationDTO getPaginationDTO(Page page, int pageActuelle) {
         PaginationDTO paginationDTO = new PaginationDTO();
-        if(page < 0) {
-            page = 1;
+        paginationDTO.setPageMin(1);
+        if(pageActuelle > page.getTotalPages()){
+            paginationDTO.setPageActuelle(page.getTotalPages());
+        }else{
+            paginationDTO.setPageActuelle(pageActuelle);
         }
-        if(type.equals("produit")){
-            Page pageProduit = produitBusiness.getPage(page, npp);
-            paginationDTO.setPageMin(1);
-            paginationDTO.setPageActuelle(page);
-            if(page > pageProduit.getTotalPages()){
-                pageProduit = produitBusiness.getPage(pageProduit.getTotalPages(), npp);
-                paginationDTO.setPageActuelle(pageProduit.getTotalPages());
-            }
-            paginationDTO.setPageMax(pageProduit.getTotalPages());
-            paginationDTO.setTotal(pageProduit.getTotalElements());
-            paginationDTO.setCategories(new ArrayList<>());
-            paginationDTO.setProduits(new ArrayList<>(ProduitTransformer.entityToDto(pageProduit.getContent())));
-        } else if(type.equals("categorie")){
-            Page pageCategorie = categorieBusiness.getPage(page, npp);
-            paginationDTO.setPageMin(1);
-            paginationDTO.setPageActuelle(page);
-            if(page > pageCategorie.getTotalPages()){
-                pageCategorie = categorieBusiness.getPage(pageCategorie.getTotalPages(), npp);
-                paginationDTO.setPageActuelle(pageCategorie.getTotalPages());
-            }
-            paginationDTO.setPageMax(pageCategorie.getTotalPages());
-            paginationDTO.setTotal(pageCategorie.getTotalElements());
-
-
-            paginationDTO.setCategories(new ArrayList<>(CategorieTransformer.entityToDto(pageCategorie.getContent(), this.categorieBusiness.construireAssociationEnfantsChemins(pageCategorie.getContent()), false, false, null)));
-            paginationDTO.setProduits(new ArrayList<>());
-        }
+        paginationDTO.setPageMax(page.getTotalPages());
+        paginationDTO.setTotal(page.getTotalElements());
         return paginationDTO;
     }
 }
