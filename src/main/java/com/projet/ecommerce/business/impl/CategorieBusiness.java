@@ -331,11 +331,15 @@ public class CategorieBusiness implements ICategorieBusiness {
             int level = cat.getLevel();
             cat.setBorneDroit(bd + intervalleDeDeplacement);
             cat.setBorneGauche(bg + intervalleDeDeplacement);
+            System.out.println("Level du nouveau parent:");
             System.out.println(levelNouveauParent);
+            System.out.println("Level de la catégorie examinée:");
             System.out.println(level);
+            System.out.println("Level de la catégorie la plus élevée des catégories à déplacer");
             System.out.println(levelCatADeplacer);
             System.out.println("set Level à: ");
             System.out.println(levelNouveauParent + 1 + level - levelCatADeplacer);
+            System.out.println();
             cat.setLevel(levelNouveauParent + 1 + level - levelCatADeplacer);
 
             // categorieRepository.save(cat);

@@ -10,6 +10,7 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,6 +30,12 @@ public class CategorieBusinessTests {
     private static final Categorie CINEMA = new Categorie();
     private static final Categorie DRAME = new Categorie();
 
+    private static Collection<Categorie> romanEtEnfants = null;
+
+    private static Collection<Categorie> toutesLesCategories;
+
+    private static Collection<Categorie> nouveauParent;
+
 
     static {
 
@@ -37,16 +44,17 @@ public class CategorieBusinessTests {
 
         buildCategories();
 
-
     }
 
     private static void buildCategories() {
         // Arbre des catégories
+        LIVRE.setIdCategorie(1);
         LIVRE.setNomCategorie("Livre");
         LIVRE.setBorneGauche(1);
         LIVRE.setBorneDroit(10);
         LIVRE.setLevel(1);
 
+        ROMAN.setIdCategorie(2);
         ROMAN.setNomCategorie("Roman");
         ROMAN.setBorneGauche(2);
         ROMAN.setBorneDroit(7);
@@ -72,6 +80,7 @@ public class CategorieBusinessTests {
         CINEMA.setBorneDroit(14);
         CINEMA.setLevel(1);
 
+        DRAME.setIdCategorie(7);
         DRAME.setNomCategorie("Drame");
         DRAME.setBorneGauche(12);
         DRAME.setBorneDroit(13);
@@ -89,6 +98,27 @@ public class CategorieBusinessTests {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 
+        // Construire un ArrayList avec toutes les catégories
+        toutesLesCategories = new ArrayList<Categorie>();
+        toutesLesCategories.add(LIVRE);
+        toutesLesCategories.add(ROMAN);
+        toutesLesCategories.add(BIO);
+        toutesLesCategories.add(FRANCE);
+        toutesLesCategories.add(US);
+        toutesLesCategories.add(CINEMA);
+        toutesLesCategories.add(DRAME);
+
+        // Construire un ArrayList des catégories à déplacer si on veut bouger ROMAN
+        romanEtEnfants = new ArrayList<Categorie>();
+        romanEtEnfants.add(ROMAN);
+        romanEtEnfants.add(FRANCE);
+        romanEtEnfants.add(US);
+
+        // Array ne contenant que le nouveau parent, c'est à dire DRAME
+        nouveauParent = new ArrayList<Categorie>();
+        nouveauParent.add(DRAME);
+
+
 
     }
 
@@ -96,58 +126,45 @@ public class CategorieBusinessTests {
     public ExpectedException thrown = ExpectedException.none();
 
     @Test
-    public void moveCategorie() {
+    public void moveCategorieRomanVersDrame() {
 
-        // TODO: à faire en mockant le repo.
-//        // Déplacer une catégorie et ses sous-catégories vers une autre: Roman -> Drame
-//        int idRoman = this.findACat("Roman").getIdCategorie();
-//        int idDrame = this.findACat("Drame").getIdCategorie();
-////
-//        categorieBusiness.moveCategorie(idRoman, idDrame);
-//
-//        Assert.assertTrue(this.checkBornes("Livre", 1, 4));
-//        Assert.assertTrue(this.checkBornes("Bio", 2, 3));
+        // TODO: finir
+
+        // Si on veut bouger ROMAN
+        Mockito.when(categorieRepository.findAllWithCriteria(2, null, true)).thenReturn(romanEtEnfants);
+
+        // Et le déplacer vers DRAME
+        Mockito.when(categorieRepository.findAllWithCriteria(7, null, false)).thenReturn(nouveauParent);
+
+        // Mock de l'écartement des bornes // TODO: on fait rien?
+        Mockito.doNothing().when(categorieRepository).ecarterBornes(Mockito.any(), Mockito.anyInt());
+        DRAME.setBorneDroit(19); // TODO: c'est ça qu'il faut faire?
+        CINEMA.setBorneDroit(18);
+
+        // Simuler le réarrangement des bornes
+        Mockito.doNothing().when(categorieRepository).rearrangerBornes(Mockito.anyInt(), Mockito.anyInt(), Mockito.anyInt());
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+        // La borne maximale de la base de données doit être 14
+        Mockito.when(categorieRepository.findBorneMax()).thenReturn(14);
 
 
     }
 
 
-    /**
-     * Va chercher toutes les catégories et retourne celle dont le nom correspond au paramères.
-     * @param name le nom de la catégorie qu'on cherche
-     * @return la catégorie recherchée, ou null si elle n'a pas été trouvée
-     */
-    private Categorie findACat(String name) {
-
-        Collection<Categorie> res = categorieRepository.findAll();
-        ArrayList<Categorie> newcatList = new ArrayList<Categorie>(res);
-
-        for(Categorie cat: newcatList) {
-            if(cat.getNomCategorie().equals(name)) {
-                return cat;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Vérifie que la catégorie de nom donné a bien les bornes données
-     * @param bg borne gauche
-     * @param bd borne droite
-     * @param nomCat catégorie à vérifier
-     * @return true si la catégorie a bien les bornes données, false sinon
-     */
-    private boolean checkBornes(String nomCat, int bg, int bd) {
-
-        Categorie cat = this.findACat(nomCat);
-
-        return cat.getBorneGauche() == bg && cat.getBorneDroit() == bd;
-    }
 
 
 
