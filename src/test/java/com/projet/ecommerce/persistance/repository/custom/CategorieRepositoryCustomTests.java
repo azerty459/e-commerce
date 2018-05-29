@@ -1,4 +1,4 @@
-/*package com.projet.ecommerce.persistance.repository.custom;
+package com.projet.ecommerce.persistance.repository.custom;
 
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -19,157 +20,253 @@ import java.util.HashMap;
 @ActiveProfiles("test")
 public class CategorieRepositoryCustomTests {
 
-<<<<<<< HEAD
-    private static final Categorie TEMP_CATEGORIE = new Categorie();
+    private static final Categorie LIVRE = new Categorie();
+    private static final Categorie ROMAN = new Categorie();
+    private static final Categorie BIO = new Categorie();
+    private static final Categorie FRANCE = new Categorie();
+    private static final Categorie US = new Categorie();
+    private static final Categorie CINEMA = new Categorie();
+    private static final Categorie DRAME = new Categorie();
 
     static {
+
         //Permet d'écraser la config application.properties par application-test.properties
         System.setProperty("spring.config.location", "classpath:application-test.properties");
+        buildCategories();
+    }
 
-        // On créer une nouvelle catégorie pour que les tests fonctionne
-        TEMP_CATEGORIE.setNomCategorie("Livre");
-        TEMP_CATEGORIE.setBorneGauche(1);
-        TEMP_CATEGORIE.setBorneDroit(2);
-        TEMP_CATEGORIE.setLevel(1);
+    private static void buildCategories() {
+        // Arbre des catégories
+        LIVRE.setNomCategorie("Livre");
+        LIVRE.setBorneGauche(1);
+        LIVRE.setBorneDroit(10);
+        LIVRE.setLevel(1);
+
+        ROMAN.setNomCategorie("Roman");
+        ROMAN.setBorneGauche(2);
+        ROMAN.setBorneDroit(7);
+        ROMAN.setLevel(2);
+
+        BIO.setNomCategorie("Bio");
+        BIO.setBorneGauche(8);
+        BIO.setBorneDroit(9);
+        BIO.setLevel(2);
+
+        FRANCE.setNomCategorie("France");
+        FRANCE.setBorneGauche(3);
+        FRANCE.setBorneDroit(4);
+        FRANCE.setLevel(3);
+
+        US.setNomCategorie("US");
+        US.setBorneGauche(5);
+        US.setBorneDroit(6);
+        US.setLevel(3);
+
+        CINEMA.setNomCategorie("Ciné");
+        CINEMA.setBorneGauche(11);
+        CINEMA.setBorneDroit(14);
+        CINEMA.setLevel(1);
+
+        DRAME.setNomCategorie("Drame");
+        DRAME.setBorneGauche(12);
+        DRAME.setBorneDroit(13);
+        DRAME.setLevel(2);
     }
 
     @Before
-    public void insertProduit() {
-        categorieRepository.save(TEMP_CATEGORIE);
+    public void insertCategorie() {
+        categorieRepository.save(LIVRE);
+        categorieRepository.save(ROMAN);
+        categorieRepository.save(BIO);
+        categorieRepository.save(FRANCE);
+        categorieRepository.save(US);
+        categorieRepository.save(CINEMA);
+        categorieRepository.save(DRAME);
+
     }
 
     @Autowired
     private CategorieRepository categorieRepository;
 
-    @Test
-    // Je teste que la méthode si l'on l'appelle avec null dans les deux paramètres, elle retourne une collection de produit.
-    public void findAllWithCriteriaByNull() {
-        Collection<Categorie> produitCollection = categorieRepository.findAllWithCriteria(0, null);
-        Assert.assertNotNull(produitCollection);
-    }
 
-    @Test
-    public void findAllWithCriteriaByNom() {
-        Collection<Categorie> categorieCollection = categorieRepository.findAllWithCriteria(0, "Livre");
-        Assert.assertEquals(1, categorieCollection.size());
-        Assert.assertEquals(0, categorieRepository.findAllWithCriteria(0, "Toto").size());
-    }
+//    @Test
+//    // Je teste que la méthode si l'on l'appelle avec null dans les deux paramètres, elle retourne une collection de produit.
+//    public void findAllWithCriteriaByNull() {
+//        Collection<Categorie> produitCollection = categorieRepository.findAllWithCriteria(0, null);
+//        Assert.assertNotNull(produitCollection);
+//    }
 
-    @Test
-    public void findAllWithCriteriaByBadNom() {
-        Collection<Categorie> categorieCollection = categorieRepository.findAllWithCriteria(0, "test");
-        Assert.assertEquals(0, categorieCollection.size());
-    }
-
-    @Test
-    public void findAllWithCriteriaById() {
-        Collection<Categorie> categorieCollection = categorieRepository.findAllWithCriteria(1, null);
-        Assert.assertEquals(1, categorieCollection.size());
-        Assert.assertEquals(0, categorieRepository.findAllWithCriteria(0, "Toto").size());
-    }
-
-    @Test
-    public void findAllWithCriteriaByBadId() {
-        Collection<Categorie> categorieCollection = categorieRepository.findAllWithCriteria(5, null);
-        Assert.assertEquals(0, categorieCollection.size());
-    }
-=======
-	private static final Categorie TEMP_CATEGORIE = new Categorie();
-	private static final Categorie TEMP_ENFANT1 = new Categorie();
-	private static final Categorie TEMP_ENFANT2 = new Categorie();
-
-	static {
-		//Permet d'écraser la config application.properties par application-test.properties
-		System.setProperty("spring.config.location", "classpath:application-test.properties");
-
-		// On créer une nouvelle catégorie pour que les tests fonctionnent
-		TEMP_CATEGORIE.setNomCategorie("Livre");
-		TEMP_CATEGORIE.setBorneGauche(1);
-		TEMP_CATEGORIE.setBorneDroit(8);
-		TEMP_CATEGORIE.setLevel(1);
-
-		// Création de 2 catégories enfant de Livre
-		TEMP_ENFANT1.setNomCategorie("Droit");
-		TEMP_ENFANT1.setBorneGauche(4);
-		TEMP_ENFANT1.setBorneDroit(7);
-		TEMP_ENFANT1.setLevel(2);
-
-		TEMP_ENFANT2.setNomCategorie("Culture");
-		TEMP_ENFANT2.setBorneGauche(5);
-		TEMP_ENFANT2.setBorneDroit(6);
-		TEMP_ENFANT2.setLevel(3);
-
-	}
-
-	@Before
-	public void insertProduit(){
-		categorieRepository.save(TEMP_CATEGORIE);
-	}
-
-	@Autowired
-	private CategorieRepository categorieRepository;
-
-	@Test
-	// Je teste que la méthode si l'on l'appelle avec null dans les deux paramètres, elle retourne une collection de produit.
-	public void findAllWithCriteriaByNull() {
-		Collection<Categorie> produitCollection = categorieRepository.findAllWithCriteria(null, false);
-		Assert.assertNotNull(produitCollection);
-	}
-
-	@Test
-	public void findAllWithCriteriaByNom() {
-		Collection<Categorie> categorieCollection = categorieRepository.findAllWithCriteria("Livre", false);
-		Assert.assertEquals(1, categorieCollection.size());
-		Assert.assertEquals(0, categorieRepository.findAllWithCriteria("Toto", false).size());
-	}
+//    @Test
+//    public void findAllWithCriteriaByNom() {
+//        Collection<Categorie> categorieCollection = categorieRepository.findAllWithCriteria(0, "Livre");
+//        Assert.assertEquals(1, categorieCollection.size());
+//        Assert.assertEquals(0, categorieRepository.findAllWithCriteria(0, "Toto").size());
+//    }
+//
+//    @Test
+//    public void findAllWithCriteriaByBadNom() {
+//        Collection<Categorie> categorieCollection = categorieRepository.findAllWithCriteria(0, "test");
+//        Assert.assertEquals(0, categorieCollection.size());
+//    }
+//
+//    @Test
+//    public void findAllWithCriteriaById() {
+//        Collection<Categorie> categorieCollection = categorieRepository.findAllWithCriteria(1, null);
+//        Assert.assertEquals(1, categorieCollection.size());
+//        Assert.assertEquals(0, categorieRepository.findAllWithCriteria(0, "Toto").size());
+//    }
+//
+//    @Test
+//    public void findAllWithCriteriaByBadId() {
+//        Collection<Categorie> categorieCollection = categorieRepository.findAllWithCriteria(5, null);
+//        Assert.assertEquals(0, categorieCollection.size());
+//    }
 
 	@Test
 	public void findParents() {
 
-		categorieRepository.save(TEMP_CATEGORIE);
-		categorieRepository.save(TEMP_ENFANT1);
-		categorieRepository.save(TEMP_ENFANT2);
 
 		// Création du HashMap d'entrée
 		HashMap<Integer,Categorie> entree = new HashMap<Integer, Categorie>();
-		entree.put(1, TEMP_ENFANT1);
-		entree.put(2, TEMP_ENFANT2);
+		entree.put(1, ROMAN);
 
 		// Exécution de la méthode findParents
 		Collection<Categorie> resultat = categorieRepository.findParents(entree);
 
 		Assert.assertNotNull(resultat);
-		Assert.assertEquals(2, resultat.size());
+		Assert.assertEquals(3, resultat.size());
 
 		ArrayList<Categorie> liste = new ArrayList<Categorie>(resultat);
 
-		Assert.assertEquals(liste.get(0).getNomCategorie(), TEMP_ENFANT1.getNomCategorie());
-		Assert.assertEquals(liste.get(0).getBorneDroit(), TEMP_ENFANT1.getBorneDroit());
-		Assert.assertEquals(liste.get(0).getBorneGauche(), TEMP_ENFANT1.getBorneGauche());
-		Assert.assertEquals(liste.get(0).getLevel(), TEMP_ENFANT1.getLevel());
+		Assert.assertEquals(liste.get(0).getNomCategorie(), ROMAN.getNomCategorie());
+		Assert.assertEquals(liste.get(0).getBorneDroit(), ROMAN.getBorneDroit());
+		Assert.assertEquals(liste.get(0).getBorneGauche(), ROMAN.getBorneGauche());
+		Assert.assertEquals(liste.get(0).getLevel(), ROMAN.getLevel());
 
-		Assert.assertEquals(liste.get(1).getNomCategorie(), TEMP_ENFANT2.getNomCategorie());
-		Assert.assertEquals(liste.get(1).getBorneDroit(), TEMP_ENFANT2.getBorneDroit());
-		Assert.assertEquals(liste.get(1).getBorneGauche(), TEMP_ENFANT2.getBorneGauche());
-		Assert.assertEquals(liste.get(1).getLevel(), TEMP_ENFANT2.getLevel());
+		Assert.assertEquals(liste.get(1).getNomCategorie(), FRANCE.getNomCategorie());
+		Assert.assertEquals(liste.get(1).getBorneDroit(), FRANCE.getBorneDroit());
+		Assert.assertEquals(liste.get(1).getBorneGauche(), FRANCE.getBorneGauche());
+		Assert.assertEquals(liste.get(1).getLevel(), FRANCE.getLevel());
+
+        Assert.assertEquals(liste.get(2).getNomCategorie(), US.getNomCategorie());
+        Assert.assertEquals(liste.get(2).getBorneDroit(), US.getBorneDroit());
+        Assert.assertEquals(liste.get(2).getBorneGauche(), US.getBorneGauche());
+        Assert.assertEquals(liste.get(2).getLevel(), US.getLevel());
 
 	}
 
 	@Test
-	public void findDirectParent() {
-
-		categorieRepository.save(TEMP_CATEGORIE);
-		categorieRepository.save(TEMP_ENFANT1);
-		categorieRepository.save(TEMP_ENFANT2);
+	public void findDirectParent() {;
 
 		// Exécution de la méthode
-		Categorie resultat = categorieRepository.findDirectParent(TEMP_ENFANT2);
+		Categorie resultat = categorieRepository.findDirectParent(ROMAN);
 
 		// Test du résultat
 		Assert.assertNotNull(resultat);
-		Assert.assertEquals(resultat.getLevel(), 2);
-		Assert.assertEquals(resultat.getNomCategorie(), "Droit");
+		Assert.assertEquals(resultat.getLevel(), 1);
+		Assert.assertEquals(resultat.getNomCategorie(), "Livre");
 
 	}
->>>>>>> US#193
-}*/
+
+	@Test
+    public void ecarterBornes() {
+
+	    // Ecartement de bones de 2
+	    categorieRepository.ecarterBornes(DRAME, 2);
+
+        Categorie newDrame = this.findACat("Drame");
+
+	    Assert.assertEquals(newDrame.getNomCategorie(), "Drame");
+	    Assert.assertEquals(newDrame.getLevel(), 2);
+	    Assert.assertEquals(newDrame.getBorneGauche(), 12);
+	    Assert.assertEquals(newDrame.getBorneDroit(), 15);
+
+	    Categorie newCinema = this.findACat("Ciné");
+	    Assert.assertEquals(newCinema.getBorneGauche(), 11);
+        Assert.assertEquals(newCinema.getBorneDroit(), 16);
+;
+    }
+
+    @Test
+    public void rearrangerBornes() {
+
+        // trouver un id
+        int id = this.findACat("US").getIdCategorie();
+
+	    // Supprimer une categorie (US)
+        categorieRepository.deleteById(id);
+
+        // La rechercher
+        Assert.assertNull(this.findACat("US"));
+
+        // Réorganiser les bornes
+        categorieRepository.rearrangerBornes(5, 6, 2);
+
+        // Vérification des modifications
+        Assert.assertTrue(this.checkBornes("Livre", 1, 8));
+        Assert.assertTrue(this.checkBornes("Roman", 2, 5));
+        Assert.assertTrue(this.checkBornes("Bio", 6, 7));
+        Assert.assertTrue(this.checkBornes("France", 3, 4));
+        Assert.assertTrue(this.checkBornes("Ciné", 9, 12));
+        Assert.assertTrue(this.checkBornes("Drame", 10, 11));
+
+
+    }
+
+    @Test
+    public void findBorneMax() {
+
+	    // Aller chercher la vraie borne maximale de la BDD
+	    ArrayList<Categorie> categories = new ArrayList<Categorie>(categorieRepository.findAll());
+
+	    int bornemax = 0;
+
+	    for(Categorie c: categories) {
+	        if(c.getBorneDroit() > bornemax) {
+	            bornemax = c.getBorneDroit();
+            }
+        }
+
+        // Faire de même avec la méthode à tester
+        int res = categorieRepository.findBorneMax();
+
+	    Assert.assertEquals(res, bornemax);
+
+    }
+
+    /**
+     * Va chercher toutes les catégories et retourne celle dont le nom correspond au paramères.
+     * @param name le nom de la catégorie qu'on cherche
+     * @return la catégorie recherchée, ou null si elle n'a pas été trouvée
+     */
+    private Categorie findACat(String name) {
+
+        Collection<Categorie> res = categorieRepository.findAll();
+        ArrayList<Categorie> newcatList = new ArrayList<Categorie>(res);
+
+        for(Categorie cat: newcatList) {
+            if(cat.getNomCategorie().equals(name)) {
+                return cat;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Vérifie que la catégorie de nom donné a bien les bornes données
+     * @param bg borne gauche
+     * @param bd borne droite
+     * @param nomCat catégorie à vérifier
+     * @return true si la catégorie a bien les bornes données, false sinon
+     */
+    private boolean checkBornes(String nomCat, int bg, int bd) {
+
+        Categorie cat = this.findACat(nomCat);
+
+        return cat.getBorneGauche() == bg && cat.getBorneDroit() == bd;
+    }
+
+
+
+}

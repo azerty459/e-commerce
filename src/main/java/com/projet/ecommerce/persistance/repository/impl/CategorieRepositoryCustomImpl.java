@@ -4,6 +4,7 @@ import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.repository.CategorieRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -99,7 +100,7 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
 
     }
 
-    // US#192 - DEBUT
+
     /**
      * Récupérer les catégories parents de la catégorie de nom donné en paramètre
      * @param cats les catégories dont on doit rechercher les parents
@@ -134,9 +135,7 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
         return query.getResultList();
 
     }
-    // US#192 - FIN
 
-    // US#193 - DEBUT
 
     /**
      * Renvoie la catégorie directement parent d'une catégorie donnée en paramètre.
@@ -178,6 +177,7 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
     }
 
     @Override
+    @Transactional
     public void ecarterBornes(Categorie cat, int decalage) {
 
         Query query1;
@@ -197,6 +197,7 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
 
 
     @Override
+    @Transactional
     public int rearrangerBornes(int bg, int bd, int intervalle) {
 
         Query query1;
@@ -218,6 +219,7 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
     }
 
     @Override
+    @Transactional
     public int findBorneMax() {
 
         Query query;
@@ -225,10 +227,6 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
 
         Integer a = (Integer) query.getSingleResult();
         System.out.println(a);
-
-
-
-
 
         return a;
 
