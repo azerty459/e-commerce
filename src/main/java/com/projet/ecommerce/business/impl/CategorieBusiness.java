@@ -281,10 +281,15 @@ public class CategorieBusiness implements ICategorieBusiness {
     @Override
     public boolean moveCategorie(int idADeplacer, int idNouveauParent) {
 
+        // Test qu'on a bien un déplacement
+        if(idADeplacer == idNouveauParent) {
+            return false;
+        }
+
         // Aller chercher la catégorie à déplacer et ses enfants
         ArrayList<Categorie> categoriesADeplacer = new ArrayList<Categorie>(this.categorieRepositoryCustom.findAllWithCriteria(idADeplacer, null, true));
 
-        // Trouver les bornes min et max de toutes les catégories à déplacer + leur level max
+        // Trouver les bornes min et max de toutes les catégories à déplacer + leur level le plus haut (le plus petit donc)
         int borneMin = categoriesADeplacer.get(0).getBorneGauche();
         int borneMax = categoriesADeplacer.get(0).getBorneDroit();
         int levelCatADeplacer = categoriesADeplacer.get(0).getLevel();
@@ -353,7 +358,7 @@ public class CategorieBusiness implements ICategorieBusiness {
             this.categorieRepositoryCustom.rearrangerBornes(borneMax, borneMax + interBornes, interBornes);
         }
 
-        return true; // TODO: utile de retourner ou exception?
+        return true;
 
     }
 
@@ -363,7 +368,7 @@ public class CategorieBusiness implements ICategorieBusiness {
      * @param borneMin la borne minimale de toutes les catégories à déplacer
      * @param borneMax la borne maximale de toutes les catégories à déplacer
      * @param levelCatADeplacer le level de la catégorie à déplacer (celle tout en haut de l'arborescence à déplacer)
-     * @return true si le déplacement a été effectué sans problème, false sinon
+     * @return true
      */
     private boolean deplacerSansParent(List<Categorie> categoriesADeplacer, int borneMin, int borneMax, int levelCatADeplacer) {
 
@@ -386,7 +391,7 @@ public class CategorieBusiness implements ICategorieBusiness {
         // Les catégories déplacées ont laissé un vide dans les bornes à leur emplacement d'origine: les combler
         this.categorieRepositoryCustom.rearrangerBornes(borneMin, borneMax, borneMax - borneMin + 1);
 
-        return true; // TODO: prévoir les cas d'erreurs
+        return true;
     }
 
 
