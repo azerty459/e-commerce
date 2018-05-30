@@ -394,6 +394,25 @@ public class CategorieBusiness implements ICategorieBusiness {
         return true;
     }
 
+    @Override
+    public CategorieDTO updateNameCategorie(int id, String newName) {
+
+        Categorie cat = null;
+        CategorieDTO catDto = null;
+
+        // Trouver la catégorie à modifier et la transformer en DTO
+        if(this.categorieRepository.findById(id).isPresent()) {
+            cat = this.categorieRepository.findById(id).get();
+            cat.setNomCategorie(newName);
+            categorieRepository.save(cat);
+            catDto = CategorieTransformer.entityToDto(cat);
+        }
+        // Si elle n'est pas trouvée, on retourne null
+
+        return catDto;
+
+    }
+
 
     /**
      * Retourne un objet page de catégorie.

@@ -66,6 +66,14 @@ public interface ICategorieBusiness {
     boolean moveCategorie(int idADeplacer, int idReceptrice);
 
     /**
+     * Méthode permettant de modifier le nom d'une catégorie.
+     * @param id l'id de la catégorie à modifier.
+     * @param nom le nouveau nom de la catégorie
+     * @return la catégorie modifiée ou null si elle n'a pas été trouvée
+     */
+    CategorieDTO updateNameCategorie(int id, String nom);
+
+    /**
      * Méthode définissant la pagination
      *
      * @param pageNumber le page souhaitée
