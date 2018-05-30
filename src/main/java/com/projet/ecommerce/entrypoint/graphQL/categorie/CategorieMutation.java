@@ -31,8 +31,8 @@ public class CategorieMutation {
                 categorieBusiness.moveCategorie(env.getArgument("idADeplacer"), env.getArgument("idNouveauParent"))
         );
 
-        builder.dataFetcher("updateNameCategorie", (DataFetchingEnvironment env) ->
-                categorieBusiness.updateNameCategorie(env.getArgument("id"), env.getArgument("nom"))
+        builder.dataFetcher("updateCategorie", (DataFetchingEnvironment env) ->
+                categorieBusiness.updateCategorie(env.getArgument("id"), env.getArgument("nom"))
         );
 
 

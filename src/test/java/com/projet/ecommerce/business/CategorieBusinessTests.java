@@ -2,6 +2,7 @@ package com.projet.ecommerce.business;
 
 import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.business.impl.CategorieBusiness;
+import com.projet.ecommerce.entrypoint.graphQL.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import org.junit.Assert;
@@ -168,9 +169,26 @@ public class CategorieBusinessTests {
     }
 
 
+    @Test
+    public void updateCategorieIdOk() {
 
+        Mockito.when(categorieRepository.findById(1)).thenReturn(Optional.of(LIVRE));
+        Mockito.when(categorieRepository.save(Mockito.any())).thenReturn(LIVRE);
 
+        CategorieDTO retour = categorieBusiness.updateCategorie(LIVRE.getIdCategorie(), "Bouquin");
 
+        Assert.assertEquals(retour.getNom(), "Bouquin");
+
+    }
+
+    @Test(expected = GraphQLCustomException.class)
+    public void updateCategorieIdKO() {
+
+        Mockito.when(categorieRepository.findById(1)).thenReturn(Optional.empty());
+
+        categorieBusiness.updateCategorie(1000, "Truc");
+
+    }
 
     @Test
     public void insertParent() {

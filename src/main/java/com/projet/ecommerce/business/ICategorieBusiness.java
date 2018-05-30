@@ -69,9 +69,9 @@ public interface ICategorieBusiness {
      * Méthode permettant de modifier le nom d'une catégorie.
      * @param id l'id de la catégorie à modifier.
      * @param nom le nouveau nom de la catégorie
-     * @return la catégorie modifiée ou null si elle n'a pas été trouvée
+     * @return la catégorie modifiée ou une exception GraphQL si elle n'a pas été trouvée.
      */
-    CategorieDTO updateNameCategorie(int id, String nom);
+    CategorieDTO updateCategorie(int id, String nom);
 
     /**
      * Méthode définissant la pagination

@@ -395,19 +395,21 @@ public class CategorieBusiness implements ICategorieBusiness {
     }
 
     @Override
-    public CategorieDTO updateNameCategorie(int id, String newName) {
+    public CategorieDTO updateCategorie(int id, String newName) {
 
         Categorie cat = null;
         CategorieDTO catDto = null;
 
+        Optional<Categorie> optionalCategorie = this.categorieRepository.findById(id);
+
         // Trouver la catégorie à modifier et la transformer en DTO
-        if(this.categorieRepository.findById(id).isPresent()) {
-            cat = this.categorieRepository.findById(id).get();
+        if(optionalCategorie.isPresent()) {
+            cat = optionalCategorie.get();
             cat.setNomCategorie(newName);
-            categorieRepository.save(cat);
-            catDto = CategorieTransformer.entityToDto(cat);
+            catDto = CategorieTransformer.entityToDto(categorieRepository.save(cat));
+        } else {
+            throw new GraphQLCustomException("La catégorie n'a pas été trouvée");
         }
-        // Si elle n'est pas trouvée, on retourne null
 
         return catDto;
 
