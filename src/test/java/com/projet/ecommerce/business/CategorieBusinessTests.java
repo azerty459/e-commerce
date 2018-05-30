@@ -132,10 +132,11 @@ public class CategorieBusinessTests {
         // TODO: finir
 
         // Si on veut bouger ROMAN
-        Mockito.when(categorieRepository.findAllWithCriteria(2, null, true)).thenReturn(romanEtEnfants);
+        Mockito.when(categorieRepository.findByIdCategorieWithSousCat(2)).thenReturn(romanEtEnfants);
 
         // Et le déplacer vers DRAME
-        Mockito.when(categorieRepository.findAllWithCriteria(7, null, false)).thenReturn(nouveauParent);
+        //TODO s'adapter à une seule catégorie
+      //  Mockito.when(categorieRepository.findById(7).get()).thenReturn(nouveauParent);
 
         // Mock de l'écartement des bornes // TODO: on fait rien?
         Mockito.doNothing().when(categorieRepository).ecarterBornes(Mockito.any(), Mockito.anyInt());

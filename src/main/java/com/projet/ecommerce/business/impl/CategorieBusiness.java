@@ -31,8 +31,8 @@ public class CategorieBusiness implements ICategorieBusiness {
 
     /**
      * Va chercher toutes les catégories, ou la catégorie donnée en nom. Récupère aussi les sous-catégories si demandées.
-     *
-     * @param nom           le nom de la catégorie à aller chercher. "null" si on cherche à lister toutes les catégories.
+     * @param id            l'id de la catégorie à aller chercher, "null" si on cherche à lister toutes les catégories.
+     * @param nom           le nom de la catégorie à aller chercher, "null" si on cherche à lister toutes les catégories.
      * @param sousCategorie true si on veut lister les sous-catégories sous forme d'arbre, false si on souhaite lister toutes les catégories
      * @return Une liste de CategorieDTO
      */
@@ -42,13 +42,15 @@ public class CategorieBusiness implements ICategorieBusiness {
 
         // Initialisation
         Categorie parentDirect = null;
+        Collection<Categorie> categorieCollection = null;
 
         // On va chercher les catégories
-        Collection<Categorie> categorieCollection = categorieRepository.findAllWithCriteria(id, nom, sousCategorie);
-
-        // S'il n'y a pas de résultat: message indiquant aucune catégorie de ce nom.
-        if(categorieCollection.size() == 0){
-            throw new GraphQLCustomException("Aucune catégorie(s) trouvé(es).");
+        if(nom != null){
+            categorieCollection = findByNom(nom, sousCategorie);
+        }else if(id != 0){
+            categorieCollection = findById(id, sousCategorie);
+        } else {
+            categorieCollection = categorieRepository.findAll();
         }
 
         // On va aussi chercher son parent direct si demandé
@@ -163,9 +165,6 @@ public class CategorieBusiness implements ICategorieBusiness {
 
         return chercherChemin(tempParent, parents, chemin);
     }
-
-    // US#192 - FIN
-
 
     /**
      * Ajout d'une catégorie parent
@@ -287,7 +286,7 @@ public class CategorieBusiness implements ICategorieBusiness {
         }
 
         // Aller chercher la catégorie à déplacer et ses enfants
-        ArrayList<Categorie> categoriesADeplacer = new ArrayList<Categorie>(this.categorieRepositoryCustom.findAllWithCriteria(idADeplacer, null, true));
+        ArrayList<Categorie> categoriesADeplacer = new ArrayList<Categorie>(findById(idADeplacer, true));
 
         // Trouver les bornes min et max de toutes les catégories à déplacer + leur level le plus haut (le plus petit donc)
         int borneMin = categoriesADeplacer.get(0).getBorneGauche();
@@ -314,7 +313,7 @@ public class CategorieBusiness implements ICategorieBusiness {
         // Dans le cas où on affecte à un nouveau parent
         // Aller chercher la catégorie parent
         Categorie nouveauParent = null;
-        nouveauParent = (Categorie) this.categorieRepositoryCustom.findAllWithCriteria(idNouveauParent, null, false).toArray()[0];
+        nouveauParent = (Categorie) findById(idNouveauParent, false).toArray()[0];
 
         // Sauvegarder le level du nouveau parent
         int levelNouveauParent = nouveauParent.getLevel();
@@ -394,6 +393,46 @@ public class CategorieBusiness implements ICategorieBusiness {
         return true;
     }
 
+    /**
+     * Retourne un tableau de catégorie en fonction du nom.
+     * @param nom Nom de la catégorie à rechercher
+     * @param sousCategorie true si on veut lister les sous-catégories sous forme d'arbre sinon false
+     * @return un tableau de catégorie.
+     */
+    private Collection<Categorie> findByNom(String nom, boolean sousCategorie){
+        Collection<Categorie> categorieCollection;
+        if(sousCategorie){
+            categorieCollection = categorieRepository.findByNomCategorieWithSousCat(nom);
+        }else{
+            categorieCollection = categorieRepository.findByNomCategorie(nom);
+        }
+        if(categorieCollection.isEmpty()){
+            throw new GraphQLCustomException("Aucune catégorie avec ce nom.");
+        }
+        return categorieCollection;
+    }
+
+    /**
+     * Retourne un tableau de catégorie en fonction de l'id recherchée et du paramètre sousCat.
+     * @param id ID de la catégorie à rechercher
+     * @param sousCategorie true si on veut lister les sous-catégories sous forme d'arbre sinon false
+     * @return un tableau de catégorie.
+     */
+    private Collection<Categorie> findById(int id, boolean sousCategorie){
+        Collection<Categorie> categorieCollection = new ArrayList<>();
+        if(sousCategorie){
+            categorieCollection = categorieRepository.findByIdCategorieWithSousCat(id);
+        }else{
+            Optional<Categorie> categorieOptional = categorieRepository.findById(id);
+            if(categorieOptional.isPresent()){
+                categorieCollection.add(categorieOptional.get());
+            }
+        }
+        if(categorieCollection.isEmpty()){
+            throw new GraphQLCustomException("Aucune catégorie avec cet ID.");
+        }
+        return categorieCollection;
+    }
 
     /**
      * Retourne un objet page de catégorie.

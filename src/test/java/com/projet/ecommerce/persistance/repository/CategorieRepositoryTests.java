@@ -79,6 +79,22 @@ public class CategorieRepositoryTests {
     }
 
     @Test
+    public void findByIdCategorieWithSousCat(){
+        Collection<Categorie> categorieCollection = categorieRepository.findByIdCategorieWithSousCat(TEMP_INSERT.getIdCategorie());
+        System.out.println(categorieCollection.size());
+    }
+
+    @Test
+    public void findByNomCategorie(){
+
+    }
+
+    @Test
+    public void findByNomCategorieWithSousCat(){
+
+    }
+
+    @Test
     public void updateCategorie() {
         categorieRepository.save(TEMP_UPDATE);
         Categorie retour = categorieRepository.findById(TEMP_UPDATE.getIdCategorie()).orElse(null);
