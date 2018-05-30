@@ -32,13 +32,15 @@ public class CategorieBusiness implements ICategorieBusiness {
     /**
      * Va chercher toutes les catégories, ou la catégorie donnée en nom. Récupère aussi les sous-catégories si demandées.
      *
+     * @param id            l'id de la catégorie à recherché
      * @param nom           le nom de la catégorie à aller chercher. "null" si on cherche à lister toutes les catégories.
      * @param sousCategorie true si on veut lister les sous-catégories sous forme d'arbre, false si on souhaite lister toutes les catégories
+     * @param parent        true si on souhaite avoir le parent des catégories
      * @return Une liste de CategorieDTO
      */
     @Override
 
-    public List<CategorieDTO> getCategorie(int id, String nom, boolean sousCategorie, boolean parent) {
+    public List<CategorieDTO> getCategorie(Integer id, String nom, boolean sousCategorie, boolean parent) {
 
         // Initialisation
         Categorie parentDirect = null;

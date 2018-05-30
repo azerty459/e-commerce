@@ -1,10 +1,11 @@
 type Categorie {
     id: Int!
     nom: String!
-    sousCategories: [Categorie]!
     level: Int!
     chemin: String!
     parent: Categorie
+    profondeur: Int!
+    sousCategories: [Categorie]!
 }
 
 type Query {
