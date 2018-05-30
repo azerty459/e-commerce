@@ -281,60 +281,119 @@ public class CategorieBusiness implements ICategorieBusiness {
     @Override
     public boolean moveCategorie(int idADeplacer, int idNouveauParent) {
 
+        // Test qu'on a bien un déplacement
+        if(idADeplacer == idNouveauParent) {
+            return false;
+        }
+
         // Aller chercher la catégorie à déplacer et ses enfants
         ArrayList<Categorie> categoriesADeplacer = new ArrayList<Categorie>(this.categorieRepositoryCustom.findAllWithCriteria(idADeplacer, null, true));
 
-        // Aller chercher la catégorie parent
-        Categorie nouveauParent = (Categorie) this.categorieRepositoryCustom.findAllWithCriteria(idNouveauParent, null, false).toArray()[0];
+        // Trouver les bornes min et max de toutes les catégories à déplacer + leur level le plus haut (le plus petit donc)
+        int borneMin = categoriesADeplacer.get(0).getBorneGauche();
+        int borneMax = categoriesADeplacer.get(0).getBorneDroit();
+        int levelCatADeplacer = categoriesADeplacer.get(0).getLevel();
+        for(Categorie c: categoriesADeplacer) {
 
-        // Trouver les bornes min et max de toutes les catégories à déplacer
-        Iterator<Categorie> it = categoriesADeplacer.iterator();
-        Categorie temp = it.next();
-        int borneMin = temp.getBorneGauche();
-        int borneMax = temp.getBorneDroit();
-        while(it.hasNext()) {
-            temp = it.next();
-            if(temp.getBorneGauche() < borneMin) {
-                borneMin = temp.getBorneGauche();
+            if(c.getBorneGauche() < borneMin) {
+                borneMin = c.getBorneGauche();
             }
-            if(temp.getBorneDroit() > borneMax) {
-                borneMax = temp.getBorneDroit();
+            if(c.getBorneDroit() > borneMax) {
+                borneMax = c.getBorneDroit();
+            }
+            if(c.getLevel() < levelCatADeplacer) {
+                levelCatADeplacer = c.getLevel();
             }
         }
+
+        // Si l'id du nouveau parent est 0, on déplace sans affecter à un nouveau parent
+        if(idNouveauParent == 0) {
+            return this.deplacerSansParent(categoriesADeplacer, borneMin, borneMax, levelCatADeplacer);
+        }
+
+        // Dans le cas où on affecte à un nouveau parent
+        // Aller chercher la catégorie parent
+        Categorie nouveauParent = null;
+        nouveauParent = (Categorie) this.categorieRepositoryCustom.findAllWithCriteria(idNouveauParent, null, false).toArray()[0];
+
+        // Sauvegarder le level du nouveau parent
+        int levelNouveauParent = nouveauParent.getLevel();
 
         // Intervalle entre les 2 (c'est à dire l'espace que prend les catégories à déplacer)
         int interBornes = borneMax - borneMin + 1;
 
         // Nombre de bornes dont on doit décaler les catégories à déplacer
-        int intervalleDeDéplacement = nouveauParent.getBorneGauche() + 1 - borneMin;
+        int intervalleDeDeplacement = nouveauParent.getBorneGauche() + 1 - borneMin;
 
-        // Décaler l'espace entre les bornes du nouveau parent (et des parents du parent direct) de cet intervalle
+        // Décaler toutes les bornes supérieures à la borne gauche du nouveau parent de l'intervalle que prennent les
+        // catégories à déplacer
+        categorieRepository.ecarterBornes(nouveauParent, interBornes);
 
-        // // Aller chercher toutes les catégories qui ont une borne gauche supérieure à celle du nouveau parent
-        Collection<Categorie> categoriesBorneGaucheSup = this.categorieRepository.findAllCategoriesAvecBorneGaucheSuperieure(nouveauParent);
-
-        // // Décaler les bornes droites de nouveauParent et de toutes les catégories de borne gauche supérieure
-        for(Categorie c: categoriesBorneGaucheSup) {
-            int bdActuelle = c.getBorneDroit();
-            c.setBorneDroit(bdActuelle + interBornes);
-        }
-        int bdActuelleNouveauParent = nouveauParent.getBorneDroit();
-        nouveauParent.setBorneDroit(bdActuelleNouveauParent + interBornes);
-
-        // Déplacer les catégories
+        // Déplacer les catégories de intervalleDeDeplacement et réarranger leur levels
         for(Categorie cat: categoriesADeplacer) {
             int bg = cat.getBorneGauche();
             int bd = cat.getBorneDroit();
-            cat.setBorneDroit(bd + intervalleDeDéplacement);
-            cat.setBorneGauche(bg + intervalleDeDéplacement);
+            int level = cat.getLevel();
+            cat.setBorneDroit(bd + intervalleDeDeplacement);
+            cat.setBorneGauche(bg + intervalleDeDeplacement);
+            System.out.println("Level du nouveau parent:");
+            System.out.println(levelNouveauParent);
+            System.out.println("Level de la catégorie examinée:");
+            System.out.println(level);
+            System.out.println("Level de la catégorie la plus élevée des catégories à déplacer");
+            System.out.println(levelCatADeplacer);
+            System.out.println("set Level à: ");
+            System.out.println(levelNouveauParent + 1 + level - levelCatADeplacer);
+            System.out.println();
+            cat.setLevel(levelNouveauParent + 1 + level - levelCatADeplacer);
+
+            // categorieRepository.save(cat);
+        }
+
+        // Les catégories déplacées ont laissé un vide dans les bornes à leur emplacement d'origine: combler le vide
+        if(intervalleDeDeplacement >= 0) {
+            this.categorieRepositoryCustom.rearrangerBornes(borneMin, borneMax, interBornes);
+        }
+        else {
+            this.categorieRepositoryCustom.rearrangerBornes(borneMax, borneMax + interBornes, interBornes);
+        }
+
+        return true;
+
+    }
+
+    /**
+     * Déplace une catégorie (et ses enfants) vers le level 1 (c'est à dire sans parent)
+     * @param categoriesADeplacer Liste des catégories à déplacer
+     * @param borneMin la borne minimale de toutes les catégories à déplacer
+     * @param borneMax la borne maximale de toutes les catégories à déplacer
+     * @param levelCatADeplacer le level de la catégorie à déplacer (celle tout en haut de l'arborescence à déplacer)
+     * @return true
+     */
+    private boolean deplacerSansParent(List<Categorie> categoriesADeplacer, int borneMin, int borneMax, int levelCatADeplacer) {
+
+        // Aller chercler la borne maximale de toutes les catégories de la base de donbées
+        int borneMaxDeBddEntiere = this.categorieRepositoryCustom.findBorneMax();
+
+        // Calculer le déplacement
+        int intervalleDeDeplacement = borneMaxDeBddEntiere - borneMin + 1;
+
+        // Déplacer toutes les bornes des catégories à déplacer de cet intervalle + Ajuster le level
+        for(Categorie cat: categoriesADeplacer) {
+            int bg = cat.getBorneGauche();
+            int bd = cat.getBorneDroit();
+            int level = cat.getLevel();
+            cat.setBorneDroit(bd + intervalleDeDeplacement);
+            cat.setBorneGauche(bg + intervalleDeDeplacement);
+            cat.setLevel(1 - levelCatADeplacer + level);
         }
 
         // Les catégories déplacées ont laissé un vide dans les bornes à leur emplacement d'origine: les combler
-        this.categorieRepositoryCustom.rearrangerBornes(borneMin, borneMax, interBornes);
+        this.categorieRepositoryCustom.rearrangerBornes(borneMin, borneMax, borneMax - borneMin + 1);
 
-        return true; // TODO: utile de retourner ou exception?
-
+        return true;
     }
+
 
     /**
      * Retourne un objet page de catégorie.

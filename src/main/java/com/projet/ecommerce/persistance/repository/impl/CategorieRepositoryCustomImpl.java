@@ -4,6 +4,7 @@ import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.repository.CategorieRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -41,14 +42,21 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
     // Aller chercher une catégorie parente directe d'une catégorie
     private static final String SQL_PARENT_DIRECT = "SELECT c FROM Categorie AS c WHERE c.level =:l AND c.borneGauche < :bg AND c.borneDroit > :bd";
 
-    // Aller chercher les catégories de borne gauche supérieure
-    private static final String SQL_CATEGORIES_BORNE_GAUCHE_SUP = "SELECT c FROM Categorie AS c WHERE c.borneGauche > :bg";
+    // Ecarter d'un intervalle i les bornes gauches ou droites supérieures à un nombre limite
+    private static final String SQL_CATEGORIES_ECARTER_BORNES_GAUCHES = "UPDATE Categorie as c " +
+            "SET c.borneGauche = c.borneGauche + :i WHERE c.borneGauche > :limite";
+    private static final String SQL_CATEGORIES_ECARTER_BORNES_DROITES = "UPDATE Categorie as c " +
+            "SET c.borneDroit = c.borneDroit + :i WHERE c.borneDroit > :limite";
 
     // Réarranger les bornes suite à la suppression d'une catégorie
     private static final String  SQL_DECALER_BORNES_GAUCHES = "UPDATE Categorie AS c " +
             "SET c.borneGauche = c.borneGauche - :i WHERE c.borneGauche > :bg";
     private static final String SQL_DECALER_BORNES_DROITES = "UPDATE Categorie AS c " +
             "SET c.borneDroit = c.borneDroit - :i WHERE c.borneDroit > :bg";
+
+
+    // Chercher la borne maximale dans toute la base de données
+    private static final String SQL_BORNE_MAX = "SELECT MAX(borneDroit) FROM Categorie";
 
     @Autowired
     private EntityManager entityManager;
@@ -93,7 +101,7 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
 
     }
 
-    // US#192 - DEBUT
+
     /**
      * Récupérer les catégories parents de la catégorie de nom donné en paramètre
      * @param cats les catégories dont on doit rechercher les parents
@@ -131,9 +139,7 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
             return retour;
         }
     }
-    // US#192 - FIN
 
-    // US#193 - DEBUT
 
     /**
      * Renvoie la catégorie directement parent d'une catégorie donnée en paramètre.
@@ -175,25 +181,27 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
     }
 
     @Override
-    public Collection<Categorie> findAllCategoriesAvecBorneGaucheSuperieure(Categorie cat) {
+    @Transactional
+    public void ecarterBornes(Categorie cat, int decalage) {
 
-        Collection<Categorie> parents = null;
+        Query query1;
+        Query query2;
 
-        Query query = entityManager.createQuery(SQL_CATEGORIES_BORNE_GAUCHE_SUP, Categorie.class);
-        query.setParameter("bg", cat.getBorneGauche());
-        parents = query.getResultList();
+        query1 = entityManager.createQuery(SQL_CATEGORIES_ECARTER_BORNES_GAUCHES);
+        query1.setParameter("i", decalage);
+        query1.setParameter("limite", cat.getBorneGauche());
+        query1.executeUpdate();
 
-        return parents;
+        query2 = entityManager.createQuery(SQL_CATEGORIES_ECARTER_BORNES_DROITES);
+        query2.setParameter("i", decalage);
+        query2.setParameter("limite", cat.getBorneGauche());
+        query2.executeUpdate();
+
     }
 
-    /**
-     *
-     * @param bg borne gauche de la catégorie supprimée
-     * @param bd borne droite de la catégorie supprimée
-     * @param intervalle intervalle entre les 2
-     * @return ne nombre de catégories réorganisées
-     */
+
     @Override
+    @Transactional
     public int rearrangerBornes(int bg, int bd, int intervalle) {
 
         Query query1;
@@ -214,5 +222,17 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
         return Math.max(nb1, nb2);
     }
 
-    // US#193 - FIN
+    @Override
+    @Transactional
+    public int findBorneMax() {
+
+        Query query;
+        query = entityManager.createQuery(SQL_BORNE_MAX);
+
+        Integer a = (Integer) query.getSingleResult();
+        System.out.println(a);
+
+        return a;
+
+    }
 }

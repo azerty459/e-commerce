@@ -14,12 +14,27 @@ public interface CategorieRepositoryCustom {
     Categorie findDirectParent(Categorie cat);
 
     /**
-     * Trouve toutes les catégories dont la borne gauche est supérieure à celle de celle donnée en paramètre
-     * @param cat la catégorie de réf"rence pour la borne gauche
-     * @return une collection de catégories qui obt ube borne gauche supérieure à cat
+     * Décale toutes les bornes supérieures à la borne gauche de cat vers la droite
+     * Le but est d'inser une ou plusieurs catégories.
+     * @param cat la catégorie de référence pour la borne gauche
+     * @param decalage le nombre d'indices à décaler
      */
-    Collection<Categorie> findAllCategoriesAvecBorneGaucheSuperieure(Categorie cat);
+    void ecarterBornes(Categorie cat, int decalage);
 
+
+    /**
+     * Réarranger les bornes pour éviter qu'il y ait des trous après suppression ou déplacement d'une catégorie
+     * @param bg borne gauche de la catégorie supprimée
+     * @param bd borne droite de la catégorie supprimée
+     * @param intervalle intervalle entre les 2
+     * @return ne nombre de catégories réorganisées
+     */
     int rearrangerBornes(int bg, int bd, int intervalle);
+
+    /**
+     * Trouve la borne max de toute la base de données
+     * @return la borne maximale
+     */
+    int findBorneMax();
 
 }
