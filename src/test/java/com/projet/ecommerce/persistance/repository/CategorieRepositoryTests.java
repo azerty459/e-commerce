@@ -11,6 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 @RunWith(SpringRunner.class)
@@ -48,10 +49,11 @@ public class CategorieRepositoryTests {
 
     @Test
     public void insertCategorie() {
+        // On stocke le retour du save pour avoir l'id de la catégorie qui a été sauvegardé
         Categorie save = categorieRepository.save(TEMP_INSERT);
         Assert.assertNotNull(save);
 
-        Categorie temp = categorieRepository.findById(TEMP_INSERT.getIdCategorie()).orElse(null);
+        Categorie temp = categorieRepository.findById(save.getIdCategorie()).get();
         Assert.assertNotNull(temp);
     }
 
@@ -68,14 +70,45 @@ public class CategorieRepositoryTests {
     }
 
     @Test
-    public void getCategorieByID() {
-        Assert.assertNotNull(categorieRepository.save(TEMP_GET));
+    public void findById() {
+        // On stocke le retour du save pour avoir l'id de la catégorie qui a été sauvegardé
+        Categorie save = categorieRepository.save(TEMP_GET);
+        Assert.assertNotNull(save);
 
-        Categorie temp = categorieRepository.findById(TEMP_GET.getIdCategorie()).orElse(null);
+        Categorie temp = categorieRepository.findById(save.getIdCategorie()).orElse(null);
         Assert.assertNotNull("Produit ne peut pas être null", temp);
         Assert.assertEquals(TEMP_GET.getBorneDroit(), temp.getBorneDroit());
         Assert.assertEquals(TEMP_GET.getBorneGauche(), temp.getBorneGauche());
         Assert.assertEquals(TEMP_GET.getNomCategorie(), temp.getNomCategorie());
+    }
+
+    @Test
+    public void findByIdCategorieWithSousCat(){
+        // On sauvegarde tout pour avoir des données dans la BDD
+        categorieRepository.save(TEMP_GET);
+        categorieRepository.save(TEMP_DELETE);
+        categorieRepository.save(TEMP_UPDATE);
+        // On stocke le retour du save pour avoir l'id de la catégorie qui a été sauvegardé
+        Categorie save = categorieRepository.save(TEMP_INSERT);
+        Collection<Categorie> categorieCollection = categorieRepository.findByIdCategorieWithSousCat(save.getIdCategorie());
+        Assert.assertEquals(4, categorieCollection.size());
+    }
+
+    @Test
+    public void findByNomCategorie(){
+        categorieRepository.save(TEMP_GET);
+        Collection<Categorie> categorieCollection = categorieRepository.findByNomCategorie(TEMP_GET.getNomCategorie());
+        Assert.assertEquals(1, categorieCollection.size());
+    }
+
+    @Test
+    public void findByNomCategorieWithSousCat(){
+        categorieRepository.save(TEMP_GET);
+        categorieRepository.save(TEMP_DELETE);
+        categorieRepository.save(TEMP_INSERT);
+        categorieRepository.save(TEMP_UPDATE);
+        Collection<Categorie> categorieCollection = categorieRepository.findByNomCategorieWithSousCat(TEMP_INSERT.getNomCategorie());
+        Assert.assertEquals(4, categorieCollection.size());
     }
 
     @Test
@@ -106,9 +139,6 @@ public class CategorieRepositoryTests {
 
     @After
     public void end() {
-        categorieRepository.delete(TEMP_DELETE);
-        categorieRepository.delete(TEMP_GET);
-        categorieRepository.delete(TEMP_INSERT);
-        categorieRepository.delete(TEMP_UPDATE);
+        categorieRepository.deleteAll();
     }
 }

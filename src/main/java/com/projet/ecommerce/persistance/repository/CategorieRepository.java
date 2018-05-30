@@ -17,4 +17,20 @@ import java.util.Optional;
 public interface CategorieRepository extends PagingAndSortingRepository<Categorie, Integer>, CategorieRepositoryCustom {
 
     Collection<Categorie> findAll();
+
+    @Query("SELECT souscat FROM Categorie AS souscat WHERE souscat.borneGauche >= " +
+            "(SELECT maincat.borneGauche FROM Categorie AS maincat WHERE maincat.idCategorie =:id) " +
+            "AND souscat.borneDroit <= " +
+            "(SELECT maincat2.borneDroit FROM Categorie AS maincat2 WHERE maincat2.idCategorie =:id)")
+    Collection<Categorie> findByIdCategorieWithSousCat(@Param("id")  int id);
+
+    Collection<Categorie> findByNomCategorie(String nom);
+
+    @Query("SELECT souscat FROM Categorie AS souscat WHERE souscat.borneGauche >= " +
+            "(SELECT maincat.borneGauche FROM Categorie AS maincat WHERE maincat.nomCategorie =:nom) " +
+            "AND souscat.borneDroit <= " +
+            "(SELECT maincat2.borneDroit FROM Categorie AS maincat2 WHERE maincat2.nomCategorie =:nom)")
+    Collection<Categorie> findByNomCategorieWithSousCat(@Param("nom") String nom);
+
+    Collection<Categorie> findByNomCategorieContainingIgnoreCase(String nom);
 }
