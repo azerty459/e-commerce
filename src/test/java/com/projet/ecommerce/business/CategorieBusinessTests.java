@@ -153,10 +153,14 @@ public class CategorieBusinessTests {
     @Test
     public void moveCategorieVersAutreCategorieVersBornesPlusPetites() {
 
+        // TODO
+
     }
 
     @Test
     public void moveCategorieVersLevel1() {
+
+        // TODO
 
         // La borne maximale de la base de données doit être 14
         Mockito.when(categorieRepository.findBorneMax()).thenReturn(14);
