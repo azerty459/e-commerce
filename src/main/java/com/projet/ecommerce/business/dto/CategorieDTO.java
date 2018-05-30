@@ -38,6 +38,11 @@ public class CategorieDTO {
     private CategorieDTO parent;
 
     /**
+     * La profondeur de l'arbre formé par ses sous-catégories
+     */
+    private int profondeur;
+
+    /**
      * Retourne le nom de la categorieDTO.
      * @return le nom de la categorie.
      */
@@ -129,5 +134,19 @@ public class CategorieDTO {
         this.parent = p;
     }
 
+    /**
+     * Retourne la profondeur formé par ses sous-catégories
+     * @return la profondeur formé par ses sous-catégories
+     */
+    public int getProfondeur() {
+        return profondeur;
+    }
 
+    /**
+     * Remplace la profondeur par celui mis en paramètre.
+     * @param profondeur la nouvelle profondeur
+     */
+    public void setProfondeur(int profondeur) {
+        this.profondeur = profondeur;
+    }
 }

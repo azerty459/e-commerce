@@ -85,6 +85,8 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
             } else if(nom != null) {
                 query =  entityManager.createQuery(SQL_CATEGORY_BY_NAME_SOUSCAT, Categorie.class);
                 query.setParameter("nom", nom);
+            }else{
+                query =  entityManager.createQuery(SQL_ALL_CATEGORIES, Categorie.class);
             }
         }
 

@@ -84,6 +84,14 @@ public class CategorieTransformer {
         categorieDTO.setSousCategories(new ArrayList<>(getSousCategorie(categorie, categoriesList)));
         categorieDTO.setId(categorie.getIdCategorie());
 
+        int levelMax = Integer.MIN_VALUE;
+        for(Categorie retourCategorie: categoriesList){
+            if(retourCategorie.getLevel() > levelMax){
+                levelMax = retourCategorie.getLevel();
+            }
+        }
+        categorieDTO.setProfondeur(levelMax);
+
         // Renseignement du level de la catégorie
         categorieDTO.setLevel(categorie.getLevel());
 
@@ -91,7 +99,6 @@ public class CategorieTransformer {
         String ch = chemins.get(categorie);
         categorieDTO.setChemin(ch);
 
-        // US#193 - DEBUT
         // Ajout de son parent direct s'il est donné
         if(parent && parentDirect != null) {
             categorieDTO.setParent(entityToDto(parentDirect));
@@ -99,7 +106,6 @@ public class CategorieTransformer {
         else {
             categorieDTO.setParent(null);
         }
-        // US#193 - FIN
 
         return categorieDTO;
     }
