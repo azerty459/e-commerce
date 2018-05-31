@@ -4,7 +4,7 @@ CREATE TABLE produit
 (
   reference_produit VARCHAR(255) NOT NULL,
   nom VARCHAR(255) NOT NULL,
-  description TEXT,
+  description TEXT DEFAULT '',
   prix_ht FLOAT NOT NULL,
   PRIMARY KEY (reference_produit)
 );

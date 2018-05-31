@@ -32,7 +32,6 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
     private static final String SQL_DECALER_BORNES_DROITES = "UPDATE Categorie AS c " +
             "SET c.borneDroit = c.borneDroit - :i WHERE c.borneDroit > :bg";
 
-
     // Chercher la borne maximale dans toute la base de données
     private static final String SQL_BORNE_MAX = "SELECT MAX(borneDroit) FROM Categorie";
 

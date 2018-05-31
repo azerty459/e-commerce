@@ -10,6 +10,4 @@
     <include file="changelog/04-insert-produit_categorie.sql" relativeToChangelogFile="true"/>
     <include file="changelog/05-insert-type_caracteristique.sql" relativeToChangelogFile="true"/>
     <include file="changelog/06-insert-caracteristique.sql" relativeToChangelogFile="true"/>
-    <include file="changelog/07-insert-photo.sql" relativeToChangelogFile="true"/>
-    <include file="changelog/08-alter-table-produit.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>

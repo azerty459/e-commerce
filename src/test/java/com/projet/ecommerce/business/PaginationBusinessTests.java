@@ -1,13 +1,9 @@
 package com.projet.ecommerce.business;
 
-import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.business.dto.PaginationDTO;
-import com.projet.ecommerce.business.impl.CategorieBusiness;
 import com.projet.ecommerce.business.impl.PaginationBusiness;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Produit;
-import com.projet.ecommerce.persistance.repository.CategorieRepository;
-import com.projet.ecommerce.persistance.repository.CategorieRepositoryCustom;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,9 +18,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
