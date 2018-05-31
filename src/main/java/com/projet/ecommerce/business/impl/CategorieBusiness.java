@@ -265,7 +265,7 @@ public class CategorieBusiness implements ICategorieBusiness {
         }
 
         // Récupération des enfants éventuels de la catégorie
-        ArrayList<Categorie> cats = new ArrayList<Categorie>(categorieRepository.findAllWithCriteria(idCategorie, null, true));
+        ArrayList<Categorie> cats = new ArrayList<Categorie>(categorieRepository.findByIdCategorieWithSousCat(idCategorie));
 
         // On cherche la borne gauche minimale et la borne droite maximale et suppression de la BDD
         int bgMin = cats.get(0).getBorneGauche();
@@ -281,7 +281,6 @@ public class CategorieBusiness implements ICategorieBusiness {
 
             // Suppression de la catégorie
             categorieRepository.delete(c);
-
         }
 
         // Intervalle supporimé
@@ -292,10 +291,7 @@ public class CategorieBusiness implements ICategorieBusiness {
         // de la catégorie supprimée (> à bd) de l'intervalle supprimé.
         categorieRepositoryCustom.rearrangerBornes(bgMin, bdMax, intervalleSupprime);
 
-
-
         return true;
-
     }
 
     /**
