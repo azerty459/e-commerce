@@ -248,33 +248,84 @@ public class CategorieBusiness implements ICategorieBusiness {
     }
 
     /**
-     * Supprime la catégorie dans la base de données.
+     * Supprime la catégorie donnée en paramètre et tous ses enfants de la base de données.
      *
      * @param idCategorie ID de la catégorie à supprimer
-     * @return true
+     * @return true si la catégorie a été trouvée, false sinon
      */
     @Override
     public boolean delete(int idCategorie) {
 
         Optional<Categorie> categorie = categorieRepository.findById(idCategorie);
 
-        if(categorie.isPresent()){
-            // Récupération des bornes de la catégorie à supprimer
-            int bg = categorie.get().getBorneGauche();
-            int bd = categorie.get().getBorneDroit();
-            int intervalleSupprime = bd - bg + 1;
-
-            // Suppression de la catégorie
-            categorieRepository.delete(categorie.get());
-
-            // Réarrangement des index bornes gauches et droites: on décale toutes les bornes à droite
-            // de la catégorie supprimée (> à bd) de l'intervalle supprimé.
-            categorieRepositoryCustom.rearrangerBornes(bg, bd, intervalleSupprime);
-
-            return true;
-        } else {
+        // Si on ne trouve pas de catégorie correspondant à l'id
+        if(!categorie.isPresent()) {
             return false;
         }
+
+        // Récupération des enfants éventuels de la catégorie
+        ArrayList<Categorie> cats = new ArrayList<Categorie>(categorieRepository.findAllWithCriteria(idCategorie, null, true));
+
+        // On cherche la borne gauche minimale et la borne droite maximale et suppression de la BDD
+        int bgMin = cats.get(0).getBorneGauche();
+        int bdMax = cats.get(0).getBorneDroit();
+
+        for(Categorie c: cats) {
+            if(c.getBorneGauche() < bgMin) {
+                bgMin = c.getBorneGauche();
+            }
+            if(c.getBorneDroit() > bdMax) {
+                bdMax = c.getBorneDroit();
+            }
+
+            // Suppression de la catégorie
+            categorieRepository.delete(c);
+
+        }
+
+        // Intervalle supporimé
+        int intervalleSupprime = bdMax - bgMin + 1;
+
+
+        // Réarrangement des index bornes gauches et droites: on décale toutes les bornes à droite
+        // de la catégorie supprimée (> à bd) de l'intervalle supprimé.
+        categorieRepositoryCustom.rearrangerBornes(bgMin, bdMax, intervalleSupprime);
+
+
+
+        return true;
+
+    }
+
+    /**
+     * Classe les catégories eb fonction de leur level, les plus petits en premier.
+     * @param cats les catégories à classer
+     * @return une collection de catégories classées
+     */
+    private static Collection<Categorie> sortAccordingToLevelDesc(Collection<Categorie> cats) {
+
+        Collection<Categorie> result = new ArrayList<Categorie>();
+
+        while(!cats.isEmpty()) {
+
+            Iterator<Categorie> it = cats.iterator();
+
+            int levelMax = 0;
+            Categorie catWithMaxLevel = null;
+
+            while (it.hasNext()) {
+                Categorie c = it.next();
+                if (c.getLevel() > levelMax) {
+                    levelMax = c.getLevel();
+                    catWithMaxLevel = c;
+                }
+            }
+
+            result.add(catWithMaxLevel);
+            cats.remove(catWithMaxLevel);
+        }
+
+        return result;
     }
 
 
