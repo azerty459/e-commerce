@@ -214,6 +214,42 @@ public class CategorieRepositoryCustomTests {
     }
 
     @Test
+    public void rearrangerBornesAvecSuppressionsMultiples() {
+
+	    int id = this.findACat("Roman").getIdCategorie();
+	    int bg = this.findACat("Roman").getBorneGauche();
+	    int bd = this.findACat("Roman").getBorneDroit();
+
+
+	    categorieRepository.delete(ROMAN);
+	    categorieRepository.delete(FRANCE);
+	    categorieRepository.delete(US);
+
+        Assert.assertNull(this.findACat("Roman"));
+        Assert.assertNull(this.findACat("France"));
+        Assert.assertNull(this.findACat("US"));
+
+        // Réorganiser les bornes
+        categorieRepository.rearrangerBornes(bg, bd, bd - bg + 1);
+
+        // Vérification des modifications
+        Assert.assertTrue(this.checkBornes("Livre", 1, 4));
+        Assert.assertTrue(this.checkBornes("Bio", 2, 3));
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+    @Test
     public void findBorneMax() {
 
 	    // Aller chercher la vraie borne maximale de la BDD
