@@ -281,10 +281,11 @@ public class CategorieBusinessTests {
 //
 //    }
 
-//	@Test
-//	public void deleteNull() {
-//		Assert.assertFalse(categorieBusiness.delete("Fofo"));
-//	}
+	@Test
+	public void deleteNull() {
+		Assert.assertFalse(categorieBusiness.delete(99999999));
+	}
+
 
 //	@Test
 //	public void getAll() {
