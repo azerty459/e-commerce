@@ -66,7 +66,7 @@ public class PhotoBusinessTests {
         ArrayList<Categorie> categories = new ArrayList<>();
         produit.setPhotos(photos);
         produit.setDescription("description");
-        produit.setPrixHT(5.2);
+        produit.setPrixHT(5.2f);
         produit.setReferenceProduit("test");
         produit.setCategories(categories);
         produit.setCaracteristiques(caracteristiques);
@@ -114,7 +114,7 @@ public class PhotoBusinessTests {
         ArrayList<Categorie> categories = new ArrayList<>();
         produit.setPhotos(photos);
         produit.setDescription("description");
-        produit.setPrixHT(5.2);
+        produit.setPrixHT(5.2f);
         produit.setReferenceProduit("A06A02");
         produit.setCategories(categories);
         produit.setCaracteristiques(caracteristiques);

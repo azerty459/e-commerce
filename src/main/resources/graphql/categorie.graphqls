@@ -1,3 +1,8 @@
+input CategorieInput {
+    idCategorie: Int!
+    nomCategorie: String!
+}
+
 type Categorie {
     id: Int!
     nom: String!

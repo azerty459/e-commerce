@@ -25,19 +25,19 @@ public class ProduitRepositoryTests {
 		System.setProperty("spring.config.location", "classpath:application-test.properties");
 
 		TEMP_INSERT.setReferenceProduit("A05A87");
-		TEMP_INSERT.setPrixHT(8.7);
+		TEMP_INSERT.setPrixHT(8.7f);
 		TEMP_INSERT.setDescription("joli produit");
 
 		TEMP_DELETE.setReferenceProduit("A05A88");
-		TEMP_DELETE.setPrixHT(11.7);
+		TEMP_DELETE.setPrixHT(11.7f);
 		TEMP_DELETE.setDescription("produit");
 
 		TEMP_UPDATE.setReferenceProduit("A05A89");
-		TEMP_UPDATE.setPrixHT(10.875);
+		TEMP_UPDATE.setPrixHT(10.875f);
 		TEMP_UPDATE.setDescription("joli truc");
 
 		TEMP_GET.setReferenceProduit("A05A90");
-		TEMP_GET.setPrixHT(9.214);
+		TEMP_GET.setPrixHT(9.214f);
 		TEMP_GET.setDescription("bas de gamme");
 	}
 
@@ -81,7 +81,7 @@ public class ProduitRepositoryTests {
 		Assert.assertEquals(TEMP_UPDATE.getDescription(), temp.getDescription());
 
 		TEMP_UPDATE.setReferenceProduit("A05A100");
-		TEMP_UPDATE.setPrixHT(15.5);
+		TEMP_UPDATE.setPrixHT(15.5f);
 		TEMP_UPDATE.setDescription("joli chose");
 		Assert.assertNotNull(produitRepository.save(TEMP_UPDATE));
 		temp = produitRepository.findById(TEMP_UPDATE.getReferenceProduit()).orElse(null);

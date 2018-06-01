@@ -1,3 +1,12 @@
+input ProduitInput {
+    referenceProduit: String!
+    nom: String!
+    description: String
+    prixHT: Float
+    categories: [CategorieInput]
+    photos: [PhotoInput]
+}
+
 type Produit {
     ref: String!
     nom: String!
@@ -13,6 +22,6 @@ extend type Query {
 
 extend type Mutation {
     addProduit(ref: String!, nom: String!, description: String, prixHT: Float!, nouvelleCat: [Int]): Produit!
-    updateProduit(ref: String!, nom: String, description: String, prixHT: Float, nouvelleCat: Int, supprimerCat: Int): Produit
+    updateProduit(produit: ProduitInput!): Produit!
     deleteProduit(ref: String!): Boolean!
 }

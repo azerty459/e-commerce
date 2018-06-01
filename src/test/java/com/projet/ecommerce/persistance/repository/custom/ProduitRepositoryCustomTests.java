@@ -32,7 +32,7 @@ public class ProduitRepositoryCustomTests {
 
         TEMP_INSERT = new Produit();
         TEMP_INSERT.setReferenceProduit("A05A87");
-        TEMP_INSERT.setPrixHT(8.7);
+        TEMP_INSERT.setPrixHT(8.7f);
         TEMP_INSERT.setDescription("joli produit");
         TEMP_INSERT.setCategories(new ArrayList<>());
 

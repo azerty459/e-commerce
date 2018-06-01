@@ -1,10 +1,20 @@
 package com.projet.ecommerce.entrypoint.graphQL.produit;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.projet.ecommerce.business.IProduitBusiness;
+import com.projet.ecommerce.persistance.entity.Produit;
+import graphql.TypeResolutionEnvironment;
+import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
+import graphql.schema.GraphQLObjectType;
+import graphql.schema.TypeResolver;
 import graphql.schema.idl.TypeRuntimeWiring;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Set;
 
 @Component
 public class ProduitMutation {
@@ -20,8 +30,13 @@ public class ProduitMutation {
         builder.dataFetcher("addProduit", (DataFetchingEnvironment environment) ->
                 produitBusiness.add(environment.getArgument("ref"), environment.getArgument("nom"), environment.getArgument("description"), environment.getArgument("prixHT"), environment.getArgument("nouvelleCat"))
         );
-        builder.dataFetcher("updateProduit", (DataFetchingEnvironment environment) ->
-                produitBusiness.update(environment.getArgument("ref"), environment.getArgument("nom"), environment.getArgument("description"), environment.getArgument("prixHT"), (environment.getArgument("nouvelleCat") != null) ? environment.getArgument("nouvelleCat") : 0, (environment.getArgument("supprimerCat") != null) ? environment.getArgument("supprimerCat") : 0)
+
+        builder.dataFetcher("updateProduit", (DataFetchingEnvironment environment) -> {
+                    ObjectMapper mapper = new ObjectMapper();
+                    Object rawInput = environment.getArgument("produit");
+                    Produit produit = mapper.convertValue(rawInput, Produit.class);
+                    return produitBusiness.update(produit);
+                }
         );
 
         builder.dataFetcher("deleteProduit", (DataFetchingEnvironment environment) ->

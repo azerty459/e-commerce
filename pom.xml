@@ -24,8 +24,8 @@
         <java.version>1.8</java.version>
         <graphql-java-tools.version>4.3.0</graphql-java-tools.version>
         <com.graphql-java.version>3.6.0</com.graphql-java.version>
-        <mockito-all.version>1.9.5</mockito-all.version>
-        <jacoco-maven-plugin>0.8.0</jacoco-maven-plugin>
+        <mockito-all.version>1.10.19</mockito-all.version>
+        <jacoco-maven-plugin>0.8.1</jacoco-maven-plugin>
 
         <sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
