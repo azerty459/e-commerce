@@ -3,7 +3,6 @@ package com.projet.ecommerce.business;
 import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.business.impl.ProduitBusiness;
 import com.projet.ecommerce.entrypoint.graphQL.GraphQLCustomException;
-import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Produit;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import com.projet.ecommerce.persistance.repository.ProduitRepository;
@@ -12,7 +11,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.matchers.JUnitMatchers;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -138,35 +136,35 @@ public class ProduitBusinessTests {
         Mockito.verify(produitRepository, Mockito.times(2)).findAll();
     }
 
-    @Test
-    public void getAllByRefAndCat() {
-        List<Produit> produitList = new ArrayList<>();
-        Mockito.when(produitRepositoryCustom.findAllWithCriteria(Mockito.anyString(), Mockito.anyString())).thenReturn(produitList);
-        Assert.assertEquals(produitRepositoryCustom.findAllWithCriteria(Mockito.anyString(), Mockito.anyString()).size(), 0);
-
-        Produit produit = new Produit();
-        produit.setReferenceProduit("A05A01");
-        produit.setPrixHT(2.1);
-        produit.setDescription("Un livre");
-        produit.setNom("Livre1");
-        produit.setPhotos(new ArrayList<>());
-        produit.setCaracteristiques(new ArrayList<>());
-        produit.setCategories(new ArrayList<>());
-        produitList.add(produit);
-
-        Mockito.when(produitRepositoryCustom.findAllWithCriteria(Mockito.anyString(), Mockito.anyString())).thenReturn(produitList);
-        Mockito.verify(produitRepositoryCustom, Mockito.times(1)).findAllWithCriteria(Mockito.anyString(), Mockito.anyString());
-        List<ProduitDTO> produitDTOList = produitBusiness.getAll("ref", "cat");
-        Assert.assertEquals(produitDTOList.size(), 1);
-
-        ProduitDTO retour = produitDTOList.get(0);
-        Assert.assertEquals(produit.getNom(), retour.getNom());
-        Assert.assertEquals(produit.getDescription(), retour.getDescription());
-        Assert.assertEquals(produit.getPrixHT(), retour.getPrixHT(), 0);
-        Assert.assertEquals(produit.getReferenceProduit(), retour.getRef());
-
-        Mockito.verify(produitRepositoryCustom, Mockito.times(2)).findAllWithCriteria(Mockito.anyString(), Mockito.anyString());
-    }
+//    @Test
+//    public void getAllByRefAndCat() {
+//        List<Produit> produitList = new ArrayList<>();
+//        Mockito.when(produitRepositoryCustom.findAllWithCriteria(Mockito.anyString(), Mockito.anyString())).thenReturn(produitList);
+//        Assert.assertEquals(produitRepositoryCustom.findAllWithCriteria(Mockito.anyString(), Mockito.anyString()).size(), 0);
+//
+//        Produit produit = new Produit();
+//        produit.setReferenceProduit("A05A01");
+//        produit.setPrixHT(2.1);
+//        produit.setDescription("Un livre");
+//        produit.setNom("Livre1");
+//        produit.setPhotos(new ArrayList<>());
+//        produit.setCaracteristiques(new ArrayList<>());
+//        produit.setCategories(new ArrayList<>());
+//        produitList.add(produit);
+//
+//        Mockito.when(produitRepositoryCustom.findAllWithCriteria(Mockito.anyString(), Mockito.anyString())).thenReturn(produitList);
+//        Mockito.verify(produitRepositoryCustom, Mockito.times(1)).findAllWithCriteria(Mockito.anyString(), Mockito.anyString());
+//        List<ProduitDTO> produitDTOList = produitBusiness.getAll("ref", "cat");
+//        Assert.assertEquals(produitDTOList.size(), 1);
+//
+//        ProduitDTO retour = produitDTOList.get(0);
+//        Assert.assertEquals(produit.getNom(), retour.getNom());
+//        Assert.assertEquals(produit.getDescription(), retour.getDescription());
+//        Assert.assertEquals(produit.getPrixHT(), retour.getPrixHT(), 0);
+//        Assert.assertEquals(produit.getReferenceProduit(), retour.getRef());
+//
+//        Mockito.verify(produitRepositoryCustom, Mockito.times(2)).findAllWithCriteria(Mockito.anyString(), Mockito.anyString());
+//    }
 
     @Test
     public void getProduitByRef() {

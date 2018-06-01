@@ -14,4 +14,6 @@ import java.util.Collection;
 public interface ProduitRepository extends PagingAndSortingRepository<Produit, String>, ProduitRepositoryCustom {
 
     Collection<Produit> findAll();
+
+    Collection<Produit> findByNomContainingIgnoreCase(String nom);
 }

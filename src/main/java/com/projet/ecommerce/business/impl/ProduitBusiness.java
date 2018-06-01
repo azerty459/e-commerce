@@ -163,15 +163,23 @@ public class ProduitBusiness implements IProduitBusiness {
      * @return une liste de produits selon les paramètres ci-dessous
      */
     @Override
-    public List<ProduitDTO> getAll(String ref, String cat) {
-        Collection<Produit> produitCollection = produitRepositoryCustom.findAllWithCriteria(ref, cat);
+    public List<ProduitDTO> getAll(String ref, String nom, String cat) {
+
+        Collection<Produit> produitCollection;
+
+        if(nom == null) {
+            produitCollection = produitRepositoryCustom.findAllWithCriteria(ref, cat);
+
+        } else {
+            produitCollection = produitRepository.findByNomContainingIgnoreCase(nom);
+        }
+
         if(produitCollection.size() == 0){
             throw new GraphQLCustomException("Aucun produit(s) trouvé(s).");
         }
+
         return new ArrayList<>(ProduitTransformer.entityToDto(new ArrayList<>(produitCollection)));
     }
-
-
 
     /**
      * Retourne le produit recherché.

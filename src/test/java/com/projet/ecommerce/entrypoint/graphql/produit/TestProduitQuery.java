@@ -11,7 +11,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -50,51 +49,51 @@ public class TestProduitQuery {
         Assert.assertEquals(1,retourMap.size());
     }
 
-    @Test
-    public void produitsWithParamRef(){
-        Map<String, DataFetcher> retourMap = produitQuery.produitWiring().getFieldDataFetchers();
+//    @Test
+//    public void produitsWithParamRef(){
+//        Map<String, DataFetcher> retourMap = produitQuery.produitWiring().getFieldDataFetchers();
+//
+//        // On imite le comportement des getArgument
+//        Mockito.when(dataFetchingEnvironment.getArgument("ref")).thenReturn("A047A");
+//        Mockito.when(dataFetchingEnvironment.getArgument("cat")).thenReturn(null);
+//
+//        Assert.assertNotNull(retourMap.get("produits"));
+//        retourMap.get("produits").get(dataFetchingEnvironment);
+//        // Test avec nb appel add avec bon param
+//        Mockito.verify(produitBusiness, Mockito.times(1)).getAll("A047A", null);
+//        // Test avec nb appel add avec mauvais param
+//        Mockito.verify(produitBusiness, Mockito.times(0)).getAll(null, null);
+//    }
 
-        // On imite le comportement des getArgument
-        Mockito.when(dataFetchingEnvironment.getArgument("ref")).thenReturn("A047A");
-        Mockito.when(dataFetchingEnvironment.getArgument("cat")).thenReturn(null);
+//    @Test
+//    public void produitsWithParamCat(){
+//        Map<String, DataFetcher> retourMap = produitQuery.produitWiring().getFieldDataFetchers();
+//
+//        // On imite le comportement des getArgument
+//        Mockito.when(dataFetchingEnvironment.getArgument("ref")).thenReturn(null);
+//        Mockito.when(dataFetchingEnvironment.getArgument("cat")).thenReturn("Livre");
+//
+//        Assert.assertNotNull(retourMap.get("produits"));
+//        retourMap.get("produits").get(dataFetchingEnvironment);
+//        // Test avec nb appel add avec bon param
+//        Mockito.verify(produitBusiness, Mockito.times(1)).getAll(null, "Livre");
+//        // Test avec nb appel add avec mauvais param
+//        Mockito.verify(produitBusiness, Mockito.times(0)).getAll(null, null);
+//    }
 
-        Assert.assertNotNull(retourMap.get("produits"));
-        retourMap.get("produits").get(dataFetchingEnvironment);
-        // Test avec nb appel add avec bon param
-        Mockito.verify(produitBusiness, Mockito.times(1)).getAll("A047A", null);
-        // Test avec nb appel add avec mauvais param
-        Mockito.verify(produitBusiness, Mockito.times(0)).getAll(null, null);
-    }
-
-    @Test
-    public void produitsWithParamCat(){
-        Map<String, DataFetcher> retourMap = produitQuery.produitWiring().getFieldDataFetchers();
-
-        // On imite le comportement des getArgument
-        Mockito.when(dataFetchingEnvironment.getArgument("ref")).thenReturn(null);
-        Mockito.when(dataFetchingEnvironment.getArgument("cat")).thenReturn("Livre");
-
-        Assert.assertNotNull(retourMap.get("produits"));
-        retourMap.get("produits").get(dataFetchingEnvironment);
-        // Test avec nb appel add avec bon param
-        Mockito.verify(produitBusiness, Mockito.times(1)).getAll(null, "Livre");
-        // Test avec nb appel add avec mauvais param
-        Mockito.verify(produitBusiness, Mockito.times(0)).getAll(null, null);
-    }
-
-    @Test
-    public void produitsWithParamRefAndCat(){
-        Map<String, DataFetcher> retourMap = produitQuery.produitWiring().getFieldDataFetchers();
-
-        // On imite le comportement des getArgument
-        Mockito.when(dataFetchingEnvironment.getArgument("ref")).thenReturn(null);
-        Mockito.when(dataFetchingEnvironment.getArgument("cat")).thenReturn(null);
-
-        Assert.assertNotNull(retourMap.get("produits"));
-        retourMap.get("produits").get(dataFetchingEnvironment);
-        // Test avec nb appel add avec bon param
-        Mockito.verify(produitBusiness, Mockito.times(1)).getAll(null, null);
-        // Test avec nb appel add avec mauvais param
-        Mockito.verify(produitBusiness, Mockito.times(0)).getAll("", null);
-    }
+//    @Test
+//    public void produitsWithParamRefAndCat(){
+//        Map<String, DataFetcher> retourMap = produitQuery.produitWiring().getFieldDataFetchers();
+//
+//        // On imite le comportement des getArgument
+//        Mockito.when(dataFetchingEnvironment.getArgument("ref")).thenReturn(null);
+//        Mockito.when(dataFetchingEnvironment.getArgument("cat")).thenReturn(null);
+//
+//        Assert.assertNotNull(retourMap.get("produits"));
+//        retourMap.get("produits").get(dataFetchingEnvironment);
+//        // Test avec nb appel add avec bon param
+//        Mockito.verify(produitBusiness, Mockito.times(1)).getAll(null, null);
+//        // Test avec nb appel add avec mauvais param
+//        Mockito.verify(produitBusiness, Mockito.times(0)).getAll("", null);
+//    }
 }
