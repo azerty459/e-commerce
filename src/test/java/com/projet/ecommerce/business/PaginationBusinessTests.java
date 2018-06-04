@@ -55,7 +55,7 @@ public class PaginationBusinessTests {
 		produit.setPhotos(new ArrayList<>());
 		produit.setCategories(new ArrayList<>());
 		produit.setReferenceProduit("A01A47");
-		produit.setPrixHT(4.7);
+		produit.setPrixHT(4.7f);
 		produit.setNom("Un test");
 		produit.setDescription("");
 		produitArrayList.add(produit);

@@ -25,7 +25,7 @@ public class ProduitDTO {
     /**
      * le prix hors taxes du produit
      */
-    private double prixHT;
+    private float prixHT;
 
     /**
      * la liste des catégories auxquelles appartient le produit
@@ -94,7 +94,7 @@ public class ProduitDTO {
      * Obtenir le prix hors taxes du produit
      * @return le prix hors taxes du produit
      */
-    public double getPrixHT() {
+    public float getPrixHT() {
         return prixHT;
     }
 
@@ -102,7 +102,7 @@ public class ProduitDTO {
      * Définir le prix hors taxes du produit
      * @param prixHT le prix hors taxes du produit
      */
-    public void setPrixHT(double prixHT) {
+    public void setPrixHT(float prixHT) {
         this.prixHT = prixHT;
     }
 

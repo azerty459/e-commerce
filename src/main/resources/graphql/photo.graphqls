@@ -1,3 +1,7 @@
+input PhotoInput {
+    url: String!
+}
+
 type Photo {
     url: String!
 }

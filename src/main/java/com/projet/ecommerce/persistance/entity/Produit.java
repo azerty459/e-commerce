@@ -25,7 +25,7 @@ public class Produit {
     private String description;
 
     @Column(name = "prix_ht")
-    private double prixHT;
+    private float prixHT;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinTable(
@@ -77,7 +77,7 @@ public class Produit {
      * Retourne le prix hors taxe du produit.
      * @return le prix hors taxe du produit
      */
-    public double getPrixHT() {
+    public float getPrixHT() {
         return prixHT;
     }
 
@@ -85,7 +85,7 @@ public class Produit {
      * Remplace le prix hors taxe du produit par celui-ci mit en paramètre.
      * @param prixHT Le nouveau prix hors taxe
      */
-    public void setPrixHT(double prixHT) {
+    public void setPrixHT(float prixHT) {
         this.prixHT = prixHT;
     }
 
