@@ -88,103 +88,70 @@ public class CategorieRepositoryCustomTests {
     @Autowired
     private CategorieRepository categorieRepository;
 
-
-//    @Test
-//    // Je teste que la méthode si l'on l'appelle avec null dans les deux paramètres, elle retourne une collection de produit.
-//    public void findAllWithCriteriaByNull() {
-//        Collection<Categorie> produitCollection = categorieRepository.findAllWithCriteria(0, null);
-//        Assert.assertNotNull(produitCollection);
-//    }
-
-//    @Test
-//    public void findAllWithCriteriaByNom() {
-//        Collection<Categorie> categorieCollection = categorieRepository.findAllWithCriteria(0, "Livre");
-//        Assert.assertEquals(1, categorieCollection.size());
-//        Assert.assertEquals(0, categorieRepository.findAllWithCriteria(0, "Toto").size());
-//    }
-//
-//    @Test
-//    public void findAllWithCriteriaByBadNom() {
-//        Collection<Categorie> categorieCollection = categorieRepository.findAllWithCriteria(0, "test");
-//        Assert.assertEquals(0, categorieCollection.size());
-//    }
-//
-//    @Test
-//    public void findAllWithCriteriaById() {
-//        Collection<Categorie> categorieCollection = categorieRepository.findAllWithCriteria(1, null);
-//        Assert.assertEquals(1, categorieCollection.size());
-//        Assert.assertEquals(0, categorieRepository.findAllWithCriteria(0, "Toto").size());
-//    }
-//
-//    @Test
-//    public void findAllWithCriteriaByBadId() {
-//        Collection<Categorie> categorieCollection = categorieRepository.findAllWithCriteria(5, null);
-//        Assert.assertEquals(0, categorieCollection.size());
-//    }
-
-	@Test
-	public void findParents() {
+    @Test
+    public void findParents() {
 
 
-		// Création du HashMap d'entrée
-		HashMap<Integer,Categorie> entree = new HashMap<Integer, Categorie>();
-		entree.put(1, ROMAN);
+        // Création du HashMap d'entrée
+        HashMap<Integer, Categorie> entree = new HashMap<Integer, Categorie>();
+        entree.put(1, ROMAN);
 
-		// Exécution de la méthode findParents
-		Collection<Categorie> resultat = categorieRepository.findParents(entree);
+        // Exécution de la méthode findParents
+        Collection<Categorie> resultat = categorieRepository.findParents(entree);
 
-		Assert.assertNotNull(resultat);
-		Assert.assertEquals(3, resultat.size());
+        Assert.assertNotNull(resultat);
+        Assert.assertEquals(3, resultat.size());
 
-		ArrayList<Categorie> liste = new ArrayList<Categorie>(resultat);
+        ArrayList<Categorie> liste = new ArrayList<Categorie>(resultat);
 
-		Assert.assertEquals(liste.get(0).getNomCategorie(), ROMAN.getNomCategorie());
-		Assert.assertEquals(liste.get(0).getBorneDroit(), ROMAN.getBorneDroit());
-		Assert.assertEquals(liste.get(0).getBorneGauche(), ROMAN.getBorneGauche());
-		Assert.assertEquals(liste.get(0).getLevel(), ROMAN.getLevel());
+        Assert.assertEquals(liste.get(0).getNomCategorie(), ROMAN.getNomCategorie());
+        Assert.assertEquals(liste.get(0).getBorneDroit(), ROMAN.getBorneDroit());
+        Assert.assertEquals(liste.get(0).getBorneGauche(), ROMAN.getBorneGauche());
+        Assert.assertEquals(liste.get(0).getLevel(), ROMAN.getLevel());
 
-		Assert.assertEquals(liste.get(1).getNomCategorie(), FRANCE.getNomCategorie());
-		Assert.assertEquals(liste.get(1).getBorneDroit(), FRANCE.getBorneDroit());
-		Assert.assertEquals(liste.get(1).getBorneGauche(), FRANCE.getBorneGauche());
-		Assert.assertEquals(liste.get(1).getLevel(), FRANCE.getLevel());
+        Assert.assertEquals(liste.get(1).getNomCategorie(), FRANCE.getNomCategorie());
+        Assert.assertEquals(liste.get(1).getBorneDroit(), FRANCE.getBorneDroit());
+        Assert.assertEquals(liste.get(1).getBorneGauche(), FRANCE.getBorneGauche());
+        Assert.assertEquals(liste.get(1).getLevel(), FRANCE.getLevel());
 
         Assert.assertEquals(liste.get(2).getNomCategorie(), US.getNomCategorie());
         Assert.assertEquals(liste.get(2).getBorneDroit(), US.getBorneDroit());
         Assert.assertEquals(liste.get(2).getBorneGauche(), US.getBorneGauche());
         Assert.assertEquals(liste.get(2).getLevel(), US.getLevel());
 
-	}
+    }
 
-	@Test
-	public void findDirectParent() {;
+    @Test
+    public void findDirectParent() {
+        ;
 
-		// Exécution de la méthode
-		Categorie resultat = categorieRepository.findDirectParent(ROMAN);
+        // Exécution de la méthode
+        Categorie resultat = categorieRepository.findDirectParent(ROMAN);
 
-		// Test du résultat
-		Assert.assertNotNull(resultat);
-		Assert.assertEquals(resultat.getLevel(), 1);
-		Assert.assertEquals(resultat.getNomCategorie(), "Livre");
+        // Test du résultat
+        Assert.assertNotNull(resultat);
+        Assert.assertEquals(resultat.getLevel(), 1);
+        Assert.assertEquals(resultat.getNomCategorie(), "Livre");
 
-	}
+    }
 
-	@Test
+    @Test
     public void ecarterBornes() {
 
-	    // Ecartement de bones de 2
-	    categorieRepository.ecarterBornes(DRAME, 2);
+        // Ecartement de bones de 2
+        categorieRepository.ecarterBornes(DRAME, 2);
 
         Categorie newDrame = this.findACat("Drame");
 
-	    Assert.assertEquals(newDrame.getNomCategorie(), "Drame");
-	    Assert.assertEquals(newDrame.getLevel(), 2);
-	    Assert.assertEquals(newDrame.getBorneGauche(), 12);
-	    Assert.assertEquals(newDrame.getBorneDroit(), 15);
+        Assert.assertEquals(newDrame.getNomCategorie(), "Drame");
+        Assert.assertEquals(newDrame.getLevel(), 2);
+        Assert.assertEquals(newDrame.getBorneGauche(), 12);
+        Assert.assertEquals(newDrame.getBorneDroit(), 15);
 
-	    Categorie newCinema = this.findACat("Ciné");
-	    Assert.assertEquals(newCinema.getBorneGauche(), 11);
+        Categorie newCinema = this.findACat("Ciné");
+        Assert.assertEquals(newCinema.getBorneGauche(), 11);
         Assert.assertEquals(newCinema.getBorneDroit(), 16);
-;
+        ;
     }
 
     @Test
@@ -193,7 +160,7 @@ public class CategorieRepositoryCustomTests {
         // trouver un id
         int id = this.findACat("US").getIdCategorie();
 
-	    // Supprimer une categorie (US)
+        // Supprimer une categorie (US)
         categorieRepository.deleteById(id);
 
         // La rechercher
@@ -216,14 +183,14 @@ public class CategorieRepositoryCustomTests {
     @Test
     public void rearrangerBornesAvecSuppressionsMultiples() {
 
-	    int id = this.findACat("Roman").getIdCategorie();
-	    int bg = this.findACat("Roman").getBorneGauche();
-	    int bd = this.findACat("Roman").getBorneDroit();
+        int id = this.findACat("Roman").getIdCategorie();
+        int bg = this.findACat("Roman").getBorneGauche();
+        int bd = this.findACat("Roman").getBorneDroit();
 
 
-	    categorieRepository.delete(ROMAN);
-	    categorieRepository.delete(FRANCE);
-	    categorieRepository.delete(US);
+        categorieRepository.delete(ROMAN);
+        categorieRepository.delete(FRANCE);
+        categorieRepository.delete(US);
 
         Assert.assertNull(this.findACat("Roman"));
         Assert.assertNull(this.findACat("France"));
@@ -239,39 +206,30 @@ public class CategorieRepositoryCustomTests {
 
     }
 
-
-
-
-
-
-
-
-
-
-
     @Test
     public void findBorneMax() {
 
-	    // Aller chercher la vraie borne maximale de la BDD
-	    ArrayList<Categorie> categories = new ArrayList<Categorie>(categorieRepository.findAll());
+        // Aller chercher la vraie borne maximale de la BDD
+        ArrayList<Categorie> categories = new ArrayList<Categorie>(categorieRepository.findAll());
 
-	    int bornemax = 0;
+        int bornemax = 0;
 
-	    for(Categorie c: categories) {
-	        if(c.getBorneDroit() > bornemax) {
-	            bornemax = c.getBorneDroit();
+        for (Categorie c : categories) {
+            if (c.getBorneDroit() > bornemax) {
+                bornemax = c.getBorneDroit();
             }
         }
 
         // Faire de même avec la méthode à tester
         int res = categorieRepository.findBorneMax();
 
-	    Assert.assertEquals(res, bornemax);
+        Assert.assertEquals(res, bornemax);
 
     }
 
     /**
      * Va chercher toutes les catégories et retourne celle dont le nom correspond au paramères.
+     *
      * @param name le nom de la catégorie qu'on cherche
      * @return la catégorie recherchée, ou null si elle n'a pas été trouvée
      */
@@ -280,8 +238,8 @@ public class CategorieRepositoryCustomTests {
         Collection<Categorie> res = categorieRepository.findAll();
         ArrayList<Categorie> newcatList = new ArrayList<Categorie>(res);
 
-        for(Categorie cat: newcatList) {
-            if(cat.getNomCategorie().equals(name)) {
+        for (Categorie cat : newcatList) {
+            if (cat.getNomCategorie().equals(name)) {
                 return cat;
             }
         }
@@ -291,8 +249,9 @@ public class CategorieRepositoryCustomTests {
 
     /**
      * Vérifie que la catégorie de nom donné a bien les bornes données
-     * @param bg borne gauche
-     * @param bd borne droite
+     *
+     * @param bg     borne gauche
+     * @param bd     borne droite
      * @param nomCat catégorie à vérifier
      * @return true si la catégorie a bien les bornes données, false sinon
      */
@@ -302,7 +261,4 @@ public class CategorieRepositoryCustomTests {
 
         return cat.getBorneGauche() == bg && cat.getBorneDroit() == bd;
     }
-
-
-
 }

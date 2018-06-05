@@ -2,6 +2,7 @@ package com.projet.ecommerce.entrypoint.graphql.produit;
 
 import com.projet.ecommerce.business.impl.ProduitBusiness;
 import com.projet.ecommerce.entrypoint.graphQL.produit.ProduitMutation;
+import com.projet.ecommerce.persistance.entity.Produit;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.idl.TypeRuntimeWiring;
@@ -20,7 +21,7 @@ import java.util.Map;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
-public class TestProduitMutation {
+public class ProduitMutationTest {
     @Mock
     private ProduitBusiness produitBusiness;
 
@@ -58,7 +59,7 @@ public class TestProduitMutation {
         Mockito.when(dataFetchingEnvironment.getArgument("ref")).thenReturn("A09A87");
         Mockito.when(dataFetchingEnvironment.getArgument("nom")).thenReturn("test");
         Mockito.when(dataFetchingEnvironment.getArgument("description")).thenReturn("test");
-        Mockito.when(dataFetchingEnvironment.getArgument("prixHT")).thenReturn(4.7);
+        Mockito.when(dataFetchingEnvironment.getArgument("prixHT")).thenReturn(4.7f);
 
         Assert.assertNotNull(retourMap.get("addProduit"));
         retourMap.get("addProduit").get(dataFetchingEnvironment);
@@ -68,25 +69,22 @@ public class TestProduitMutation {
         Mockito.verify(produitBusiness, Mockito.times(0)).add("A09A82", "test", "test", 4.7f, null);
     }
 
-//    @Test
-//    public void updateProduit(){
-//        Map<String, DataFetcher> retourMap = produitMutation.produitWiring().getFieldDataFetchers();
-//
-//        // On imite le comportement des getArgument
-//        Mockito.when(dataFetchingEnvironment.getArgument("ref")).thenReturn("A09A87");
-//        Mockito.when(dataFetchingEnvironment.getArgument("nom")).thenReturn("test");
-//        Mockito.when(dataFetchingEnvironment.getArgument("description")).thenReturn("test");
-//        Mockito.when(dataFetchingEnvironment.getArgument("prixHT")).thenReturn(4.7);
-//        Mockito.when(dataFetchingEnvironment.getArgument("nouvelleCat")).thenReturn(0);
-//        Mockito.when(dataFetchingEnvironment.getArgument("supprimerCat")).thenReturn(0);
-//
-//        Assert.assertNotNull(retourMap.get("updateProduit"));
-//        retourMap.get("updateProduit").get(dataFetchingEnvironment);
-//        // Test avec nb appel add avec bon param
-//        Mockito.verify(produitBusiness, Mockito.times(1)).update("A09A87", "test", "test", 4.7, 0, 0);
-//        // Test avec nb appel add avec mauvais param
-//        Mockito.verify(produitBusiness, Mockito.times(0)).update("A09A82", "test", "test", 4.7, 0, 0);
-//    }
+    @Test
+    //TODO Revoir le test
+    public void updateProduit(){
+        Map<String, DataFetcher> retourMap = produitMutation.produitWiring().getFieldDataFetchers();
+
+        // On imite le comportement des getArgument
+        Produit produit = new Produit();
+        Mockito.when(dataFetchingEnvironment.getArgument("produit")).thenReturn(produit);
+
+        Assert.assertNotNull(retourMap.get("updateProduit"));
+        retourMap.get("updateProduit").get(dataFetchingEnvironment);
+        // Test avec nb appel add avec bon param
+        Mockito.verify(produitBusiness, Mockito.times(1)).update(produit);
+        // Test avec nb appel add avec mauvais param
+        Mockito.verify(produitBusiness, Mockito.times(0)).update(new Produit());
+    }
 
     @Test
     public void deleteProduit(){

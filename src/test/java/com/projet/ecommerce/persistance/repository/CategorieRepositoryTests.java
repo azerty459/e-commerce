@@ -113,6 +113,7 @@ public class CategorieRepositoryTests {
     public void updateCategorie() {
         categorieRepository.save(TEMP_UPDATE);
         Categorie retour = categorieRepository.findById(TEMP_UPDATE.getIdCategorie()).orElse(null);
+        Assert.assertNotNull(retour.getNomCategorie());
         Assert.assertEquals(TEMP_UPDATE.getNomCategorie(), retour.getNomCategorie());
         Assert.assertEquals(TEMP_UPDATE.getBorneGauche(), retour.getBorneGauche());
         Assert.assertEquals(TEMP_UPDATE.getBorneDroit(), retour.getBorneDroit());
@@ -123,6 +124,7 @@ public class CategorieRepositoryTests {
         Assert.assertNotNull(categorieRepository.save(TEMP_UPDATE));
 
         retour = categorieRepository.findById(TEMP_UPDATE.getIdCategorie()).orElse(null);
+        Assert.assertNotNull(retour.getNomCategorie());
         Assert.assertEquals(TEMP_UPDATE.getNomCategorie(), retour.getNomCategorie());
         Assert.assertEquals(TEMP_UPDATE.getBorneDroit(), retour.getBorneDroit());
         Assert.assertEquals(TEMP_UPDATE.getBorneGauche(), retour.getBorneGauche());

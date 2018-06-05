@@ -20,7 +20,7 @@ import java.util.Map;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
-public class TestCategorieQuery {
+public class CategorieQueryTest {
     @Mock
     private CategorieBusiness categorieBusiness;
 
