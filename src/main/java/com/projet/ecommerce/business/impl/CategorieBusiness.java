@@ -88,7 +88,7 @@ public class CategorieBusiness implements ICategorieBusiness {
         Collection<Categorie> parents = this.categorieRepository.findParents(categoriesPourParents);
 
         // Classer cette collection pour mettre chaque parents en face de chaque catégorie de départ
-        HashMap<Categorie, String> associationsEnfantsChemins = new HashMap<Categorie, String>();
+        HashMap<Categorie, String> associationsEnfantsChemins;
         associationsEnfantsChemins = associer(categories, parents);
 
         return associationsEnfantsChemins;

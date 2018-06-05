@@ -4,6 +4,7 @@ import graphql.ErrorType;
 import graphql.GraphQLError;
 import graphql.language.SourceLocation;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.Map;
 
 public class GraphQLCustomException extends RuntimeException implements GraphQLError {
 
-    private Map<String, Object> extensions = new HashMap<>();
+    private transient Map<String, Object> extensions = new HashMap<>();
 
     /**
      *  Créer un objet GraphQLCustomException.
