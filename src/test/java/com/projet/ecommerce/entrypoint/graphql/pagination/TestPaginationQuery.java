@@ -11,7 +11,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -50,20 +49,20 @@ public class TestPaginationQuery {
         Assert.assertEquals(1,retourMap.size());
     }
 
-    @Test
-    public void categories(){
-        Map<String, DataFetcher> retourMap = paginationQuery.produitWiring().getFieldDataFetchers();
-
-        // On imite le comportement des getArgument
-        Mockito.when(dataFetchingEnvironment.getArgument("type")).thenReturn("produit");
-        Mockito.when(dataFetchingEnvironment.getArgument("page")).thenReturn(1);
-        Mockito.when(dataFetchingEnvironment.getArgument("npp")).thenReturn(5);
-
-        Assert.assertNotNull(retourMap.get("pagination"));
-        retourMap.get("pagination").get(dataFetchingEnvironment);
-        // Test avec nb appel add avec bon param
-        Mockito.verify(paginationBusiness, Mockito.times(1)).getPagination("produit",1,5);
-        // Test avec nb appel add avec mauvais param
-        Mockito.verify(paginationBusiness, Mockito.times(0)).getPagination(null,0,0);
-    }
+//    @Test
+//    public void categories(){
+//        Map<String, DataFetcher> retourMap = paginationQuery.produitWiring().getFieldDataFetchers();
+//
+//        // On imite le comportement des getArgument
+//        Mockito.when(dataFetchingEnvironment.getArgument("type")).thenReturn("produit");
+//        Mockito.when(dataFetchingEnvironment.getArgument("page")).thenReturn(1);
+//        Mockito.when(dataFetchingEnvironment.getArgument("npp")).thenReturn(5);
+//
+//        Assert.assertNotNull(retourMap.get("pagination"));
+//        retourMap.get("pagination").get(dataFetchingEnvironment);
+//        // Test avec nb appel add avec bon param
+//        Mockito.verify(paginationBusiness, Mockito.times(1)).getPagination("produit",1,5);
+//        // Test avec nb appel add avec mauvais param
+//        Mockito.verify(paginationBusiness, Mockito.times(0)).getPagination(null,0,0);
+//    }
 }

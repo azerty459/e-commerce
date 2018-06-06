@@ -197,15 +197,17 @@ public class ProduitBusiness implements IProduitBusiness {
         }
     }
 
-    /**
-     * Retourne un objet page de produit
-     * @param pageNumber la page souhaitée
-     * @param nb le nombre de produit à afficher dans la page
-     * @return un objet page de produit
-     */
     @Override
-    public Page<Produit> getPage(int pageNumber, int nb) {
+    public Page<Produit> getPage(int pageNumber, int nb, String nom) {
+
         PageRequest page = (pageNumber == 0)? PageRequest.of(pageNumber, nb): PageRequest.of(pageNumber-1, nb);
-        return produitRepository.findAll(page);
+
+        if(nom == null) {
+            return produitRepository.findAll(page);
+        } else {
+            // On recherche un produit selon son nom
+            return produitRepository.findByNomContainingIgnoreCase(page, nom);
+        }
+
     }
 }
