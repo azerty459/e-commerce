@@ -34,16 +34,19 @@ public class PaginationBusiness implements IPaginationBusiness {
      * @return une objet PaginationDTO
      */
     @Override
-    public PaginationDTO getPagination(String type, int pageActuelle, int npp) {
+    public PaginationDTO getPagination(String type, int pageActuelle, int npp, String nom) {
+
         if (pageActuelle <= 0) {
             pageActuelle = 1;
         }
+
         PaginationDTO paginationDTO = null;
+
         switch (type) {
             case "produit":
-                Page pageProduit = produitBusiness.getPage(pageActuelle, npp);
+                Page pageProduit = produitBusiness.getPage(pageActuelle, npp, nom);
                 if (pageActuelle > pageProduit.getTotalPages()) {
-                    pageProduit = produitBusiness.getPage(pageProduit.getTotalPages(), npp);
+                    pageProduit = produitBusiness.getPage(pageProduit.getTotalPages(), npp, nom);
                 }
                 paginationDTO = getPaginationDTO(pageProduit, pageActuelle);
                 paginationDTO.setCategories(new ArrayList<>());

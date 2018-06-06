@@ -17,7 +17,7 @@ type Produit {
 }
 
 extend type Query {
-    produits(ref: String, cat: String): [Produit]!
+    produits(ref: String, nom: String, cat: String): [Produit]!
 }
 
 extend type Mutation {

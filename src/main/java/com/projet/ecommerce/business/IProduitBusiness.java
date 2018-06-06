@@ -54,10 +54,11 @@ public interface IProduitBusiness {
     /**
      * Méthode définissant la recherche des produits selon les paramètres ci-dessous
      * @param ref la référence du produit recherché
+     * @param nom le nom du produit recherché
      * @param cat la catégorie du /des produit(s) recherché(s)
      * @return la liste des produits trouvés
      */
-    List<ProduitDTO> getAll(String ref, String cat);
+    List<ProduitDTO> getAll(String ref, String nom, String cat);
 
     /**
      * Méthode définissant la recherche d'un produit selon la référence du produit recherché.
@@ -71,8 +72,10 @@ public interface IProduitBusiness {
      * Méthode définissant la pagination
      * @param pageNumber la page souhaitée
      * @param nb le nombre de produit à afficher dans la page
+     * @param nom le nom du produit recherché
      * @return une page de produit
      */
-    Page<Produit> getPage(int pageNumber, int nb);
+    Page<Produit> getPage(int pageNumber, int nb, String nom);
+
 
 }

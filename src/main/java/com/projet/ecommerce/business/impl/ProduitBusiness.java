@@ -178,11 +178,21 @@ public class ProduitBusiness implements IProduitBusiness {
      * @return une liste de produits selon les paramètres ci-dessous
      */
     @Override
-    public List<ProduitDTO> getAll(String ref, String cat) {
-        Collection<Produit> produitCollection = produitRepositoryCustom.findAllWithCriteria(ref, cat);
-        if (produitCollection.size() == 0) {
+    public List<ProduitDTO> getAll(String ref, String nom, String cat) {
+
+        Collection<Produit> produitCollection;
+
+        if(nom == null) {
+            produitCollection = produitRepositoryCustom.findAllWithCriteria(ref, cat);
+
+        } else {
+            produitCollection = produitRepository.findByNomContainingIgnoreCase(nom);
+        }
+
+        if(produitCollection.size() == 0){
             throw new GraphQLCustomException("Aucun produit(s) trouvé(s).");
         }
+
         return new ArrayList<>(ProduitTransformer.entityToDto(new ArrayList<>(produitCollection)));
     }
 
@@ -211,8 +221,16 @@ public class ProduitBusiness implements IProduitBusiness {
      * @return un objet page de produit
      */
     @Override
-    public Page<Produit> getPage(int pageNumber, int nb) {
-        PageRequest page = (pageNumber == 0) ? PageRequest.of(pageNumber, nb) : PageRequest.of(pageNumber - 1, nb);
-        return produitRepository.findAll(page);
+    public Page<Produit> getPage(int pageNumber, int nb, String nom) {
+
+        PageRequest page = (pageNumber == 0)? PageRequest.of(pageNumber, nb): PageRequest.of(pageNumber-1, nb);
+
+        if(nom == null) {
+            return produitRepository.findAll(page);
+        } else {
+            // On recherche un produit selon son nom
+            return produitRepository.findByNomContainingIgnoreCase(page, nom);
+        }
+
     }
 }

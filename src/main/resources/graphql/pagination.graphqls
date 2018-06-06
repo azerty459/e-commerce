@@ -8,7 +8,7 @@ type Pagination {
 }
 
 extend type Query {
-    pagination(type: String!, page: Int!, npp: Int!): Pagination!
+    pagination(type: String!, page: Int!, npp: Int!, nom: String): Pagination!
 }
 
 schema {
