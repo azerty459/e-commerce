@@ -3,7 +3,6 @@ package com.projet.ecommerce.business;
 import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.business.impl.ProduitBusiness;
 import com.projet.ecommerce.entrypoint.graphQL.GraphQLCustomException;
-import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Produit;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import com.projet.ecommerce.persistance.repository.ProduitRepository;
@@ -12,7 +11,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.matchers.JUnitMatchers;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -156,7 +154,7 @@ public class ProduitBusinessTests {
 
         Mockito.when(produitRepositoryCustom.findAllWithCriteria(Mockito.anyString(), Mockito.anyString())).thenReturn(produitList);
         Mockito.verify(produitRepositoryCustom, Mockito.times(1)).findAllWithCriteria(Mockito.anyString(), Mockito.anyString());
-        List<ProduitDTO> produitDTOList = produitBusiness.getAll("ref", "cat");
+        List<ProduitDTO> produitDTOList = produitBusiness.getAll("ref", "nom","cat");
         Assert.assertEquals(produitDTOList.size(), 1);
 
         ProduitDTO retour = produitDTOList.get(0);
