@@ -1,7 +1,6 @@
 package com.projet.ecommerce.entrypoint.graphql.pagination;
 
 import com.projet.ecommerce.business.impl.PaginationBusiness;
-import com.projet.ecommerce.entrypoint.graphQL.pagination.PaginationQuery;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.idl.TypeRuntimeWiring;
@@ -38,6 +37,7 @@ public class PaginationQueryTest {
     @Test
     public void produitWiring(){
         TypeRuntimeWiring typeRuntimeWiring = paginationQuery.produitWiring();
+        Assert.assertEquals(1, typeRuntimeWiring.getFieldDataFetchers().size());
         Assert.assertEquals(typeRuntimeWiring.getTypeName(), "Query");
         Assert.assertEquals(typeRuntimeWiring.getTypeResolver(), null);
         Assert.assertNotNull(typeRuntimeWiring);
@@ -51,7 +51,7 @@ public class PaginationQueryTest {
     }
 
     @Test
-    public void categories(){
+    public void pagination(){
         Map<String, DataFetcher> retourMap = paginationQuery.produitWiring().getFieldDataFetchers();
 
         // On imite le comportement des getArgument

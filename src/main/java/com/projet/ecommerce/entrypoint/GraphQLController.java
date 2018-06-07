@@ -1,7 +1,7 @@
 package com.projet.ecommerce.entrypoint;
 
 import com.projet.ecommerce.business.IPhotoBusiness;
-import com.projet.ecommerce.entrypoint.graphQL.GraphQlUtility;
+import com.projet.ecommerce.entrypoint.graphql.GraphQlUtility;
 import graphql.ExecutionResult;
 import graphql.GraphQL;
 import graphql.GraphQLError;
@@ -17,7 +17,7 @@ import java.util.Map;
 
 
 /**
- * Contrôleur de graphQL permettant de répondre sur l'URL "/graphql" et d'exécuter les requêtes curl demandées.
+ * Contrôleur de graphql permettant de répondre sur l'URL "/graphql" et d'exécuter les requêtes curl demandées.
  */
 
 @RestController

@@ -1,7 +1,6 @@
-package com.projet.ecommerce.business.transformer;
+package com.projet.ecommerce.business.dto.transformer;
 
 import com.projet.ecommerce.business.dto.PhotoDTO;
-import com.projet.ecommerce.business.dto.transformer.PhotoTransformer;
 import com.projet.ecommerce.persistance.entity.Photo;
 import org.junit.Assert;
 import org.junit.Test;

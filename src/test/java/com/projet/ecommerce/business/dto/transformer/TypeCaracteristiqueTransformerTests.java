@@ -1,7 +1,6 @@
-package com.projet.ecommerce.business.transformer;
+package com.projet.ecommerce.business.dto.transformer;
 
 import com.projet.ecommerce.business.dto.TypeCaracteristiqueDTO;
-import com.projet.ecommerce.business.dto.transformer.TypeCaracteristiqueTransformer;
 import com.projet.ecommerce.persistance.entity.TypeCaracteristique;
 import org.junit.Assert;
 import org.junit.Test;

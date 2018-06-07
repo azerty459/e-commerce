@@ -8,9 +8,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 @Repository
 public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom {
@@ -44,16 +46,18 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
      * @return une collection des catégories parents de cette catégorie
      */
     @Override
-    public Collection<Categorie> findParents(HashMap<Integer,Categorie> cats) {
+    public Collection<Categorie> findParents(Map<Integer,Categorie> cats) {
 
-        Query query;
         if(!cats.isEmpty()){
             // Construire la requête
             String sql = "SELECT p FROM Categorie AS p WHERE ";
 
             // // Itérer sur le HashMap de catégories à rechercher
             int taille = cats.size();
+            // TODO StringBuilder
+            StringBuilder sb = new StringBuilder();
             for(int i = 1; i < taille; i++) {
+                sb.append("toto").append(cats);
                 sql += "(p.borneGauche >= ";
                 sql += cats.get(i).getBorneGauche();
                 sql += " AND p.borneDroit <= ";
@@ -65,9 +69,9 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
             sql += " AND p.borneDroit <= ";
             sql += cats.get(taille).getBorneDroit();
             sql += ")";
-
+            sb.toString();
             // Lancer la requête
-            query = entityManager.createQuery(sql, Categorie.class);
+            TypedQuery<Categorie> query = entityManager.createQuery(sql, Categorie.class);
 
             return query.getResultList();
         }else{
@@ -82,17 +86,16 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
      * @return La catégorie parent.
      */
     @Override
-    public Categorie findDirectParent(Categorie cat) {
+    public Categorie findDirectParent(final Categorie cat) {
 
         Categorie resultat;
 
         // Cas où la catégorie est de niveau au moins 2
         if(cat.getLevel() > 1) {
 
-            Query query;
 
             // On crée la requête pour aller chercher le parent direct de cat
-            query = entityManager.createQuery(SQL_PARENT_DIRECT, Categorie.class);
+            final TypedQuery<Categorie> query = entityManager.createQuery(SQL_PARENT_DIRECT, Categorie.class);
 
             query.setParameter("l", cat.getLevel() - 1);
             query.setParameter("bg", cat.getBorneGauche());
@@ -100,7 +103,7 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
 
             // On retourne la catégorie unique, parent de cat
 
-            resultat = (Categorie) query.getSingleResult();
+            resultat = query.getSingleResult();
 
         }
 

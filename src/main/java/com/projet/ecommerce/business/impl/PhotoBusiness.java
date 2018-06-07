@@ -3,7 +3,7 @@ package com.projet.ecommerce.business.impl;
 import com.projet.ecommerce.business.IPhotoBusiness;
 import com.projet.ecommerce.business.dto.PhotoDTO;
 import com.projet.ecommerce.business.dto.transformer.PhotoTransformer;
-import com.projet.ecommerce.entrypoint.graphQL.GraphQLCustomException;
+import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Photo;
 import com.projet.ecommerce.persistance.entity.Produit;
 import com.projet.ecommerce.persistance.repository.PhotoRepository;

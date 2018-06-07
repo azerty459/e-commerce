@@ -1,7 +1,6 @@
 package com.projet.ecommerce.entrypoint.graphql.categorie;
 
 import com.projet.ecommerce.business.impl.CategorieBusiness;
-import com.projet.ecommerce.entrypoint.graphQL.categorie.CategorieQuery;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.idl.TypeRuntimeWiring;

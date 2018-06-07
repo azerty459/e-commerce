@@ -1,11 +1,11 @@
-package com.projet.ecommerce.entrypoint.graphQL;
+package com.projet.ecommerce.entrypoint.graphql;
 
-import com.projet.ecommerce.entrypoint.graphQL.categorie.CategorieMutation;
-import com.projet.ecommerce.entrypoint.graphQL.categorie.CategorieQuery;
-import com.projet.ecommerce.entrypoint.graphQL.pagination.PaginationQuery;
-import com.projet.ecommerce.entrypoint.graphQL.photo.PhotoQuery;
-import com.projet.ecommerce.entrypoint.graphQL.produit.ProduitMutation;
-import com.projet.ecommerce.entrypoint.graphQL.produit.ProduitQuery;
+import com.projet.ecommerce.entrypoint.graphql.categorie.CategorieMutation;
+import com.projet.ecommerce.entrypoint.graphql.categorie.CategorieQuery;
+import com.projet.ecommerce.entrypoint.graphql.pagination.PaginationQuery;
+import com.projet.ecommerce.entrypoint.graphql.photo.PhotoQuery;
+import com.projet.ecommerce.entrypoint.graphql.produit.ProduitMutation;
+import com.projet.ecommerce.entrypoint.graphql.produit.ProduitQuery;
 import graphql.ExceptionWhileDataFetching;
 import graphql.GraphQL;
 import graphql.GraphQLError;
@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Configuration de graphQL.
+ * Configuration de graphql.
  */
 
 @Configuration

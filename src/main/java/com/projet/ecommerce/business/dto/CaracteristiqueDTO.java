@@ -14,6 +14,7 @@ public class CaracteristiqueDTO {
 
     /**
      * Retourne l'objet TypeCaracteristique contenu dans la caracteristique.
+     *
      * @return l'objet TypeCaracteristique
      */
     public TypeCaracteristique getTypeCaracteristique() {
@@ -22,6 +23,7 @@ public class CaracteristiqueDTO {
 
     /**
      * Remplace l'objet TypeCaracteristique contenu dans la caracteristique par celui-ci mit en paramètre.
+     *
      * @param typeCaracteristique Un objet TypeCaracteristique
      */
     public void setTypeCaracteristique(TypeCaracteristique typeCaracteristique) {
@@ -30,6 +32,7 @@ public class CaracteristiqueDTO {
 
     /**
      * Retourne la valeur contenu dans la caractéristique.
+     *
      * @return la valeur
      */
     public String getValeur() {
@@ -38,6 +41,7 @@ public class CaracteristiqueDTO {
 
     /**
      * Remplace la valeur contenu dans la caractéristique par celle-ci mit en paramètre.
+     *
      * @param valeur La nouvelle valeur
      */
     public void setValeur(String valeur) {

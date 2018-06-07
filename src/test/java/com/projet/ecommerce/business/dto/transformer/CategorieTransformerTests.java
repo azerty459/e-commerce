@@ -1,7 +1,6 @@
-package com.projet.ecommerce.business.transformer;
+package com.projet.ecommerce.business.dto.transformer;
 
 import com.projet.ecommerce.business.dto.CategorieDTO;
-import com.projet.ecommerce.business.dto.transformer.CategorieTransformer;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import org.junit.Test;
 import org.junit.Assert;

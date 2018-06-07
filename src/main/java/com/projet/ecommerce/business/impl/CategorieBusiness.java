@@ -3,7 +3,7 @@ package com.projet.ecommerce.business.impl;
 import com.projet.ecommerce.business.ICategorieBusiness;
 import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.business.dto.transformer.CategorieTransformer;
-import com.projet.ecommerce.entrypoint.graphQL.GraphQLCustomException;
+import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import com.projet.ecommerce.persistance.repository.impl.CategorieRepositoryCustomImpl;

@@ -12,6 +12,7 @@ public class TypeCaracteristiqueDTO {
 
     /**
      * Retourne l'id du type caractéristique.
+     *
      * @return l'id du type caractéristique
      */
     public int getIdTypeCaracteristique() {
@@ -20,7 +21,8 @@ public class TypeCaracteristiqueDTO {
 
     /**
      * Remplace l'id du type caractéristique par celui-ci mit en paramètre.
-     * @param idTypeCaracteristique
+     *
+     * @param idTypeCaracteristique Le nouveau ID
      */
     public void setIdTypeCaracteristique(int idTypeCaracteristique) {
         this.idTypeCaracteristique = idTypeCaracteristique;
@@ -28,6 +30,7 @@ public class TypeCaracteristiqueDTO {
 
     /**
      * Retourne le type lié à l'objet.
+     *
      * @return le type lié à l'objet.
      */
 
@@ -37,6 +40,7 @@ public class TypeCaracteristiqueDTO {
 
     /**
      * Remplace le type lié à l'objet par celui-ci mit en paramètre.
+     *
      * @param type Le nouveau type de caractéristique
      */
     public void setType(String type) {
