@@ -1,10 +1,10 @@
 package com.projet.ecommerce.business.impl;
 
 import com.projet.ecommerce.business.dto.CategorieDTO;
-import com.projet.ecommerce.business.impl.CategorieBusiness;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
+import com.projet.ecommerce.persistance.repository.CategorieRepositoryCustom;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -18,6 +18,8 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -93,6 +95,15 @@ public class CategorieBusinessTests {
     @Mock
     private CategorieRepository categorieRepository;
 
+    @Mock
+    private CategorieRepositoryCustom categorieRepositoryCustom;
+
+    @Mock
+    private EntityManager entityManager;
+
+    @Mock
+    private Query query;
+
     @InjectMocks
     private CategorieBusiness categorieBusiness;
 
@@ -135,7 +146,7 @@ public class CategorieBusinessTests {
 
         // Et le déplacer vers DRAME
         //TODO s'adapter à une seule catégorie
-      //  Mockito.when(categorieRepository.findById(7).get()).thenReturn(nouveauParent);
+        //  Mockito.when(categorieRepository.findById(7).get()).thenReturn(nouveauParent);
 
         // Mock de l'écartement des bornes // TODO: on fait rien?
         Mockito.doNothing().when(categorieRepository).ecarterBornes(Mockito.any(), Mockito.anyInt());
@@ -143,9 +154,7 @@ public class CategorieBusinessTests {
         // Simuler le réarrangement des bornes
         Mockito.when(categorieRepository.rearrangerBornes(Mockito.anyInt(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(3);
 
-        Assert.assertTrue(categorieBusiness.moveCategorie(2,7));
-
-
+        Assert.assertTrue(categorieBusiness.moveCategorie(2, 7));
 
 
     }
@@ -232,7 +241,10 @@ public class CategorieBusinessTests {
 
     @Test
     public void delete() {
-        Mockito.when(categorieRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(new Categorie()));
+        Mockito.when(categorieRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(ROMAN));
+        Mockito.when(categorieRepository.findByIdCategorieWithSousCat(Mockito.anyInt())).thenReturn(romanEtEnfants);
+
+        Mockito.when(categorieRepositoryCustom.rearrangerBornes(Mockito.anyInt(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(4);
         Assert.assertTrue(categorieBusiness.delete(1));
     }
 
@@ -241,14 +253,14 @@ public class CategorieBusinessTests {
         Assert.assertFalse(categorieBusiness.delete(1));
     }
 
-	@Test
-	public void getCategorie_getAll() {
-		List<Categorie> categories = new ArrayList<>();
-		Mockito.when(categorieRepository.findAll()).thenReturn(categories);
-		Assert.assertEquals(categorieBusiness.getCategorie(0, null, false, false).size(), 0);
+    @Test
+    public void getCategorie_getAll() {
+        List<Categorie> categories = new ArrayList<>();
+        Mockito.when(categorieRepository.findAll()).thenReturn(categories);
+        Assert.assertEquals(categorieBusiness.getCategorie(0, null, false, false).size(), 0);
 
-		// Création des catégories et ajout dans la liste.
-		Categorie categorie1 = new Categorie();
+        // Création des catégories et ajout dans la liste.
+        Categorie categorie1 = new Categorie();
         categorie1.setNomCategorie("Transport1");
         categorie1.setBorneGauche(1);
         categorie1.setBorneDroit(4);
@@ -266,15 +278,15 @@ public class CategorieBusinessTests {
         categories.add(categorie2);
 
         // Tests
-		Mockito.when(categorieRepository.findAll()).thenReturn(categories);
+        Mockito.when(categorieRepository.findAll()).thenReturn(categories);
         List<CategorieDTO> categorieDTOList = categorieBusiness.getCategorie(0, null, false, false);
 
         Assert.assertEquals(2, categories.size());
 
-		CategorieDTO retour = categorieDTOList.get(0);
-		Assert.assertEquals(categorie1.getNomCategorie(), retour.getNom());
+        CategorieDTO retour = categorieDTOList.get(0);
+        Assert.assertEquals(categorie1.getNomCategorie(), retour.getNom());
         Assert.assertEquals(categorie2.getNomCategorie(), retour.getSousCategories().get(0).getNom());
-	}
+    }
 
     @Test
     public void getCategorie_findByNomCategorie() {
@@ -305,8 +317,8 @@ public class CategorieBusinessTests {
         Assert.assertEquals(2, categorieDTOList.size());
     }
 
-	@Test
-	public void getCategorie_findByNomCategorieWithSousCat() {
+    @Test
+    public void getCategorie_findByNomCategorieWithSousCat() {
         List<Categorie> categories = new ArrayList<>();
 
         // Création des catégories et ajout dans la liste.
@@ -333,7 +345,7 @@ public class CategorieBusinessTests {
 
         Assert.assertEquals(1, categorieDTOList.size());
         Assert.assertEquals(1, categorieDTOList.get(0).getSousCategories().size());
-	}
+    }
 
     @Test
     public void getCategorie_getFindById() {
@@ -383,43 +395,43 @@ public class CategorieBusinessTests {
         Assert.assertEquals(1, categorieDTOList.get(0).getSousCategories().size());
     }
 
-	@Test
-	public void construireAssociationEnfantsChemins() {
+    @Test
+    public void construireAssociationEnfantsChemins() {
 
-		// Création des catégories
-		Collection<Categorie> categories = new ArrayList<>();
+        // Création des catégories
+        Collection<Categorie> categories = new ArrayList<>();
 
-		Categorie cat1 = new Categorie();
-		cat1.setLevel(1);
-		cat1.setBorneDroit(10);
-		cat1.setBorneGauche(1);
-		cat1.setNomCategorie("Transport");
+        Categorie cat1 = new Categorie();
+        cat1.setLevel(1);
+        cat1.setBorneDroit(10);
+        cat1.setBorneGauche(1);
+        cat1.setNomCategorie("Transport");
 
-		Categorie cat2 = new Categorie();
-		cat2.setLevel(2);
-		cat2.setBorneDroit(7);
-		cat2.setBorneGauche(2);
-		cat2.setNomCategorie("Aérien");
+        Categorie cat2 = new Categorie();
+        cat2.setLevel(2);
+        cat2.setBorneDroit(7);
+        cat2.setBorneGauche(2);
+        cat2.setNomCategorie("Aérien");
 
-		Categorie cat3 = new Categorie();
-		cat3.setLevel(3);
-		cat3.setBorneDroit(6);
-		cat3.setBorneGauche(3);
-		cat3.setNomCategorie("Avion");
+        Categorie cat3 = new Categorie();
+        cat3.setLevel(3);
+        cat3.setBorneDroit(6);
+        cat3.setBorneGauche(3);
+        cat3.setNomCategorie("Avion");
 
-		categories.add(cat1);
-		categories.add(cat2);
-		categories.add(cat3);
+        categories.add(cat1);
+        categories.add(cat2);
+        categories.add(cat3);
 
-		Mockito.when(this.categorieRepository.findParents(Mockito.any())).thenReturn(categories);
+        Mockito.when(categorieRepository.findParents(Mockito.any())).thenReturn(categories);
 
-		Map<Categorie,String> resultat;
-		resultat = this.categorieBusiness.construireAssociationEnfantsChemins(categories);
+        Map<Categorie, String> resultat;
+        resultat = categorieBusiness.construireAssociationEnfantsChemins(categories);
 
-		// Tests
-		Assert.assertEquals(resultat.get(cat1), "");
-		Assert.assertEquals(resultat.get(cat2), "Transport");
-		Assert.assertEquals(resultat.get(cat3), "Transport > Aérien");
+        // Tests
+        Assert.assertEquals(resultat.get(cat1), "");
+        Assert.assertEquals(resultat.get(cat2), "Transport");
+        Assert.assertEquals(resultat.get(cat3), "Transport > Aérien");
 
-	}
+    }
 }

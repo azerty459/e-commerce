@@ -4,14 +4,12 @@ import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.repository.CategorieRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 
 @Repository
@@ -29,7 +27,7 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
             "SET c.borneDroit = c.borneDroit + :i WHERE c.borneDroit > :limite";
 
     // Réarranger les bornes suite à la suppression d'une catégorie
-    private static final String  SQL_DECALER_BORNES_GAUCHES = "UPDATE Categorie AS c " +
+    private static final String SQL_DECALER_BORNES_GAUCHES = "UPDATE Categorie AS c " +
             "SET c.borneGauche = c.borneGauche - :i WHERE c.borneGauche > :bg";
     private static final String SQL_DECALER_BORNES_DROITES = "UPDATE Categorie AS c " +
             "SET c.borneDroit = c.borneDroit - :i WHERE c.borneDroit > :bg";
@@ -42,13 +40,14 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
 
     /**
      * Récupérer les catégories parents de la catégorie de nom donné en paramètre
+     *
      * @param cats les catégories dont on doit rechercher les parents
      * @return une collection des catégories parents de cette catégorie
      */
     @Override
-    public Collection<Categorie> findParents(Map<Integer,Categorie> cats) {
+    public Collection<Categorie> findParents(Map<Integer, Categorie> cats) {
 
-        if(!cats.isEmpty()){
+        if (!cats.isEmpty()) {
             // Construire la requête
             String sql = "SELECT p FROM Categorie AS p WHERE ";
 
@@ -56,7 +55,7 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
             int taille = cats.size();
             // TODO StringBuilder
             StringBuilder sb = new StringBuilder();
-            for(int i = 1; i < taille; i++) {
+            for (int i = 1; i < taille; i++) {
                 sb.append("toto").append(cats);
                 sql += "(p.borneGauche >= ";
                 sql += cats.get(i).getBorneGauche();
@@ -74,7 +73,7 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
             TypedQuery<Categorie> query = entityManager.createQuery(sql, Categorie.class);
 
             return query.getResultList();
-        }else{
+        } else {
             return new ArrayList<>();
         }
     }
@@ -82,20 +81,21 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
 
     /**
      * Renvoie la catégorie directement parent d'une catégorie donnée en paramètre.
+     *
      * @param cat la catégorie dont on doit chercher le parent.
      * @return La catégorie parent.
      */
     @Override
-    public Categorie findDirectParent(final Categorie cat) {
+    public Categorie findDirectParent(Categorie cat) {
 
         Categorie resultat;
 
         // Cas où la catégorie est de niveau au moins 2
-        if(cat.getLevel() > 1) {
+        if (cat.getLevel() > 1) {
 
 
             // On crée la requête pour aller chercher le parent direct de cat
-            final TypedQuery<Categorie> query = entityManager.createQuery(SQL_PARENT_DIRECT, Categorie.class);
+            TypedQuery<Categorie> query = entityManager.createQuery(SQL_PARENT_DIRECT, Categorie.class);
 
             query.setParameter("l", cat.getLevel() - 1);
             query.setParameter("bg", cat.getBorneGauche());
@@ -119,7 +119,6 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
     }
 
     @Override
-    @Transactional
     public void ecarterBornes(Categorie cat, int decalage) {
 
         Query query1;
@@ -139,7 +138,6 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
 
 
     @Override
-    @Transactional
     public int rearrangerBornes(int bg, int bd, int intervalle) {
 
         Query query1;
@@ -161,7 +159,6 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
     }
 
     @Override
-    @Transactional
     public int findBorneMax() {
 
         Query query;

@@ -32,6 +32,7 @@ public interface ICategorieBusiness {
     HashMap<Categorie, String> construireAssociationEnfantsChemins(Collection<Categorie> categories);
 
     /**
+     * rearrangerBornes
      * Méthode définissant l'ajout d'une catégorie parent.
      *
      * @param nomCategorie Le nom de la catégorie
@@ -59,7 +60,8 @@ public interface ICategorieBusiness {
 
     /**
      * Déplace une catégorie (et ses enfants) d'un parent à un autre
-     * @param idADeplacer id de la catégorie à déplacer
+     *
+     * @param idADeplacer  id de la catégorie à déplacer
      * @param idReceptrice id du nouveau parent
      * @return false si le client tente d'effectuer un déplacement null, true sinon
      */
@@ -67,7 +69,8 @@ public interface ICategorieBusiness {
 
     /**
      * Méthode permettant de modifier le nom d'une catégorie.
-     * @param id l'id de la catégorie à modifier.
+     *
+     * @param id  l'id de la catégorie à modifier.
      * @param nom le nouveau nom de la catégorie
      * @return la catégorie modifiée ou une exception GraphQL si elle n'a pas été trouvée.
      */
