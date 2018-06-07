@@ -254,6 +254,5 @@ public class ProduitBusiness implements IProduitBusiness {
             // On recherche un produit selon son nom
             return produitRepository.findByNomContainingIgnoreCase(page, nom);
         }
-
     }
 }

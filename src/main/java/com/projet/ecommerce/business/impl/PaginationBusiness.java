@@ -39,7 +39,6 @@ public class PaginationBusiness implements IPaginationBusiness {
         if (pageActuelle <= 0) {
             pageActuelle = 1;
         }
-
         PaginationDTO paginationDTO = null;
 
         switch (type) {
