@@ -1,7 +1,6 @@
 package com.projet.ecommerce.entrypoint.graphql.pagination;
 
 import com.projet.ecommerce.business.impl.PaginationBusiness;
-import com.projet.ecommerce.entrypoint.graphQL.pagination.PaginationQuery;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.idl.TypeRuntimeWiring;
@@ -11,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -37,6 +37,7 @@ public class PaginationQueryTest {
     @Test
     public void produitWiring(){
         TypeRuntimeWiring typeRuntimeWiring = paginationQuery.produitWiring();
+        Assert.assertEquals(1, typeRuntimeWiring.getFieldDataFetchers().size());
         Assert.assertEquals(typeRuntimeWiring.getTypeName(), "Query");
         Assert.assertEquals(typeRuntimeWiring.getTypeResolver(), null);
         Assert.assertNotNull(typeRuntimeWiring);
@@ -49,20 +50,20 @@ public class PaginationQueryTest {
         Assert.assertEquals(1,retourMap.size());
     }
 
-//    @Test
-//    public void categories(){
-//        Map<String, DataFetcher> retourMap = paginationQuery.produitWiring().getFieldDataFetchers();
-//
-//        // On imite le comportement des getArgument
-//        Mockito.when(dataFetchingEnvironment.getArgument("type")).thenReturn("produit");
-//        Mockito.when(dataFetchingEnvironment.getArgument("page")).thenReturn(1);
-//        Mockito.when(dataFetchingEnvironment.getArgument("npp")).thenReturn(5);
-//
-//        Assert.assertNotNull(retourMap.get("pagination"));
-//        retourMap.get("pagination").get(dataFetchingEnvironment);
-//        // Test avec nb appel add avec bon param
-//        Mockito.verify(paginationBusiness, Mockito.times(1)).getPagination("produit",1,5);
-//        // Test avec nb appel add avec mauvais param
-//        Mockito.verify(paginationBusiness, Mockito.times(0)).getPagination(null,0,0);
-//    }
+    @Test
+    public void pagination(){
+        Map<String, DataFetcher> retourMap = paginationQuery.produitWiring().getFieldDataFetchers();
+
+        // On imite le comportement des getArgument
+        Mockito.when(dataFetchingEnvironment.getArgument("type")).thenReturn("produit");
+        Mockito.when(dataFetchingEnvironment.getArgument("page")).thenReturn(1);
+        Mockito.when(dataFetchingEnvironment.getArgument("npp")).thenReturn(5);
+
+        Assert.assertNotNull(retourMap.get("pagination"));
+        retourMap.get("pagination").get(dataFetchingEnvironment);
+        // Test avec nb appel add avec bon param
+        Mockito.verify(paginationBusiness, Mockito.times(1)).getPagination("produit",1,5);
+        // Test avec nb appel add avec mauvais param
+        Mockito.verify(paginationBusiness, Mockito.times(0)).getPagination(null,0,0);
+    }
 }

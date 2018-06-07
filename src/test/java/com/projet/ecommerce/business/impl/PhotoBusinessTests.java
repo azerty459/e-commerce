@@ -1,17 +1,13 @@
-package com.projet.ecommerce.business;
+package com.projet.ecommerce.business.impl;
 
-import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.business.impl.PhotoBusiness;
-import com.projet.ecommerce.business.impl.ProduitBusiness;
-import com.projet.ecommerce.entrypoint.graphQL.GraphQLCustomException;
+import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Caracteristique;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Photo;
 import com.projet.ecommerce.persistance.entity.Produit;
-import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import com.projet.ecommerce.persistance.repository.PhotoRepository;
 import com.projet.ecommerce.persistance.repository.ProduitRepository;
-import com.projet.ecommerce.persistance.repository.ProduitRepositoryCustom;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -26,12 +22,10 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @RunWith(MockitoJUnitRunner.class)

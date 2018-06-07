@@ -1,4 +1,4 @@
-package com.projet.ecommerce.entrypoint.graphQL.produit;
+package com.projet.ecommerce.entrypoint.graphql.produit;
 
 import com.projet.ecommerce.business.IProduitBusiness;
 import graphql.schema.DataFetchingEnvironment;

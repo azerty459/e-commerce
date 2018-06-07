@@ -1,4 +1,4 @@
-package com.projet.ecommerce.entrypoint.graphQL.categorie;
+package com.projet.ecommerce.entrypoint.graphql.categorie;
 
 import com.projet.ecommerce.business.ICategorieBusiness;
 import graphql.schema.DataFetchingEnvironment;

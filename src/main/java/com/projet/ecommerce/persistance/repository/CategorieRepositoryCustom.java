@@ -4,10 +4,11 @@ import com.projet.ecommerce.persistance.entity.Categorie;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 public interface CategorieRepositoryCustom {
 
-    Collection<Categorie> findParents(HashMap<Integer,Categorie> cats);
+    Collection<Categorie> findParents(Map<Integer,Categorie> cats);
 
     Categorie findDirectParent(Categorie cat);
 

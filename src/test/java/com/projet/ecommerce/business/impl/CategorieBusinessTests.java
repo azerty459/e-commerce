@@ -1,8 +1,8 @@
-package com.projet.ecommerce.business;
+package com.projet.ecommerce.business.impl;
 
 import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.business.impl.CategorieBusiness;
-import com.projet.ecommerce.entrypoint.graphQL.GraphQLCustomException;
+import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import org.junit.Assert;

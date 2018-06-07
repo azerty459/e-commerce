@@ -1,7 +1,6 @@
-package com.projet.ecommerce.entrypoint.graphQL.photo;
+package com.projet.ecommerce.entrypoint.graphql.photo;
 
 import com.projet.ecommerce.business.IPhotoBusiness;
-import com.projet.ecommerce.business.IProduitBusiness;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.idl.TypeRuntimeWiring;
 import org.springframework.beans.factory.annotation.Autowired;

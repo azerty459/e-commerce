@@ -3,7 +3,7 @@ package com.projet.ecommerce.business.impl;
 import com.projet.ecommerce.business.IProduitBusiness;
 import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.business.dto.transformer.ProduitTransformer;
-import com.projet.ecommerce.entrypoint.graphQL.GraphQLCustomException;
+import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Photo;
 import com.projet.ecommerce.persistance.entity.Produit;
@@ -11,15 +11,12 @@ import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import com.projet.ecommerce.persistance.repository.PhotoRepository;
 import com.projet.ecommerce.persistance.repository.ProduitRepository;
 import com.projet.ecommerce.persistance.repository.ProduitRepositoryCustom;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -50,14 +47,15 @@ public class ProduitBusiness implements IProduitBusiness {
     /**
      * Ajoute un produit dans la base de données.
      *
-     * @param referenceProduit La référence du produit
-     * @param nom              Le nom du produit
-     * @param description      Sa description
-     * @param prixHT           Son prix hors taxe
+     * @param referenceProduit  La référence du produit
+     * @param nom               Le nom du produit
+     * @param description       Sa description
+     * @param prixHT            Son prix hors taxe
+     * @param categoriesProduit Liste d'id de catégorie à associer au produit
      * @return l'objet produit crée ou null, s'il il manque une referenceProduit, un nom et un prixHT.
      */
     @Override
-    public ProduitDTO add(String referenceProduit, String nom, String description, float prixHT, List<Integer> nouvelleCatList) {
+    public ProduitDTO add(String referenceProduit, String nom, String description, float prixHT, List<Integer> categoriesProduit) {
         if (!referenceProduit.isEmpty() && !nom.isEmpty()) {
             if (produitRepository.findById(referenceProduit).isPresent()) {
                 throw new GraphQLCustomException("Le produit à ajouter existe déjà.");
@@ -70,13 +68,12 @@ public class ProduitBusiness implements IProduitBusiness {
             produit.setCaracteristiques(new ArrayList<>());
             produit.setPhotos(new ArrayList<>());
 
-
             List<Categorie> categorieList = new ArrayList<>();
-            if (nouvelleCatList != null) {
-                for (int idCategorie : nouvelleCatList) {
-                    Optional<Categorie> categorie = categorieRepository.findById(idCategorie);
-                    if (categorie.isPresent()) {
-                        categorieList.add(categorie.get());
+            if (categoriesProduit != null) {
+                for (int idCategorie : categoriesProduit) {
+                    Optional<Categorie> categorieOptional = categorieRepository.findById(idCategorie);
+                    if (categorieOptional.isPresent()) {
+                        categorieList.add(categorieOptional.get());
                     }
                     //TODO else faire une erreur qui dit que la categorie n'existe pas mais n'arrete pas l'algorithme.
                 }
@@ -112,9 +109,9 @@ public class ProduitBusiness implements IProduitBusiness {
         List<Categorie> categorieList = new ArrayList<>();
         for (Categorie categorie : produit.getCategories()) {
             Optional<Categorie> categorieOptional = categorieRepository.findById(categorie.getIdCategorie());
-            if(categorieOptional.isPresent()){
+            if (categorieOptional.isPresent()) {
                 categorieList.add(categorieOptional.get());
-            }else{
+            } else {
                 throw new GraphQLCustomException("La catégorie n'existe pas.");
             }
         }
@@ -124,9 +121,9 @@ public class ProduitBusiness implements IProduitBusiness {
         List<Photo> photoList = new ArrayList<>();
         for (Photo photo : produit.getPhotos()) {
             Optional<Photo> photoOptional = photoRepository.findById(photo.getIdPhoto());
-            if(photoOptional.isPresent()){
+            if (photoOptional.isPresent()) {
                 photoList.add(photoOptional.get());
-            }else{
+            } else {
                 throw new GraphQLCustomException("La catégorie n'existe pas.");
             }
         }
@@ -204,6 +201,7 @@ public class ProduitBusiness implements IProduitBusiness {
      * @return l'objet produit recherché sinon une exception, s'il n'est pas trouvé
      */
     @Override
+    @Deprecated
     public ProduitDTO getByRef(String referenceProduit) {
         Optional<Produit> produit = produitRepository.findById(referenceProduit);
         if (produit.isPresent()) {
@@ -216,14 +214,14 @@ public class ProduitBusiness implements IProduitBusiness {
     /**
      * Retourne un objet page de produit
      *
-     * @param pageNumber la page souhaitée
-     * @param nb         le nombre de produit à afficher dans la page
+     * @param numeroPage    la page souhaitée
+     * @param nombreProduit le nombre de produit à afficher dans la page
      * @return un objet page de produit
      */
     @Override
-    public Page<Produit> getPage(int pageNumber, int nb, String nom) {
+    public Page<Produit> getPage(int numeroPage, int nombreProduit, String nom) {
 
-        PageRequest page = (pageNumber == 0)? PageRequest.of(pageNumber, nb): PageRequest.of(pageNumber-1, nb);
+        PageRequest page = (numeroPage == 0)? PageRequest.of(numeroPage, nombreProduit): PageRequest.of(numeroPage-1, nombreProduit);
 
         if(nom == null) {
             return produitRepository.findAll(page);

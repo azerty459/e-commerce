@@ -1,4 +1,4 @@
-package com.projet.ecommerce.entrypoint.graphQL.pagination;
+package com.projet.ecommerce.entrypoint.graphql.pagination;
 
 import com.projet.ecommerce.business.IPaginationBusiness;
 import graphql.schema.DataFetchingEnvironment;

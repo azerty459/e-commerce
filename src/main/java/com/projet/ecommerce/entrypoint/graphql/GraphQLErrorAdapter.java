@@ -1,4 +1,4 @@
-package com.projet.ecommerce.entrypoint.graphQL;
+package com.projet.ecommerce.entrypoint.graphql;
 
 import graphql.ErrorType;
 import graphql.ExceptionWhileDataFetching;

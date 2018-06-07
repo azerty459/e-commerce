@@ -1,7 +1,6 @@
 package com.projet.ecommerce.entrypoint.graphql.produit;
 
 import com.projet.ecommerce.business.impl.ProduitBusiness;
-import com.projet.ecommerce.entrypoint.graphQL.produit.ProduitMutation;
 import com.projet.ecommerce.persistance.entity.Produit;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;

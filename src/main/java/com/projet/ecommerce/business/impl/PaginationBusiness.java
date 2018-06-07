@@ -28,9 +28,9 @@ public class PaginationBusiness implements IPaginationBusiness {
     /**
      * Retourne une liste paginée selon le type voulu, la page voulu et le nombre de produits à afficher.
      *
-     * @param type le type de la liste voulu
+     * @param type         le type de la liste voulu
      * @param pageActuelle la page souhaité
-     * @param npp  le nombre de produits à afficher dans la page paginée
+     * @param npp          le nombre de produits à afficher dans la page paginée
      * @return une objet PaginationDTO
      */
     @Override
@@ -58,7 +58,7 @@ public class PaginationBusiness implements IPaginationBusiness {
                     pageCategorie = categorieBusiness.getPage(pageCategorie.getTotalPages(), npp);
                 }
                 paginationDTO = getPaginationDTO(pageCategorie, pageActuelle);
-                paginationDTO.setCategories(new ArrayList<>(CategorieTransformer.entityToDto(pageCategorie.getContent(), this.categorieBusiness.construireAssociationEnfantsChemins(pageCategorie.getContent()), false, false, null)));
+                paginationDTO.setCategories(new ArrayList<>(CategorieTransformer.entityToDto(pageCategorie.getContent(), categorieBusiness.construireAssociationEnfantsChemins(pageCategorie.getContent()), false, false, null)));
                 paginationDTO.setProduits(new ArrayList<>());
                 break;
             default:
@@ -70,16 +70,17 @@ public class PaginationBusiness implements IPaginationBusiness {
 
     /**
      * Méthode permettante de créer un objet PaginationDTO.
-     * @param page Un objet de type page
+     *
+     * @param page         Un objet de type page
      * @param pageActuelle la page souhaité
      * @returnun objet PaginationDTO
      */
     private PaginationDTO getPaginationDTO(Page page, int pageActuelle) {
         PaginationDTO paginationDTO = new PaginationDTO();
         paginationDTO.setPageMin(1);
-        if(pageActuelle > page.getTotalPages()){
+        if (pageActuelle > page.getTotalPages()) {
             paginationDTO.setPageActuelle(page.getTotalPages());
-        }else{
+        } else {
             paginationDTO.setPageActuelle(pageActuelle);
         }
         paginationDTO.setPageMax(page.getTotalPages());

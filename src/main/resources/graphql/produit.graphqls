@@ -2,7 +2,7 @@ input ProduitInput {
     referenceProduit: String!
     nom: String!
     description: String
-    prixHT: Float
+    prixHT: Float!
     categories: [CategorieInput]
     photos: [PhotoInput]
 }

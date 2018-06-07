@@ -27,7 +27,7 @@ public class CategorieDTO {
      */
     private String chemin;
 
-     /**
+    /**
      * Niveau de la catégorie dans l'arborescence des catégories (Niveau 1 = niveau le plus élevé).
      */
     private int level;
@@ -44,6 +44,7 @@ public class CategorieDTO {
 
     /**
      * Retourne le nom de la categorieDTO.
+     *
      * @return le nom de la categorie.
      */
     public String getNom() {
@@ -52,6 +53,7 @@ public class CategorieDTO {
 
     /**
      * Remplace le nom de la CategorieDTO par celui-ci mit en paramètre.
+     *
      * @param nom Le nouveau nom
      */
     public void setNom(String nom) {
@@ -60,6 +62,7 @@ public class CategorieDTO {
 
     /**
      * Retourne une liste de CategorieDTO.
+     *
      * @return une liste de CategorieDTO.
      */
     public List<CategorieDTO> getSousCategories() {
@@ -68,6 +71,7 @@ public class CategorieDTO {
 
     /**
      * Remplace la liste de CategorieDTO par celle-ci mit en paramètre.
+     *
      * @param sousCategories Une liste de CategorieDTO
      */
     public void setSousCategories(List<CategorieDTO> sousCategories) {
@@ -76,6 +80,7 @@ public class CategorieDTO {
 
     /**
      * Retourne l'id de la catégorie.
+     *
      * @return l'id de la catégorie
      */
     public int getId() {
@@ -84,6 +89,7 @@ public class CategorieDTO {
 
     /**
      * Remplace l'id par celle-ci mit en paramètre.
+     *
      * @param id La nouvelle id
      */
     public void setId(int id) {
@@ -92,50 +98,61 @@ public class CategorieDTO {
 
     /**
      * Retourne le chemin pour arriver à la catégorie depuis la catégorie parente de niveau 1
+     *
      * @return une chaîne de caractères représentant ce chemin.
      */
     public String getChemin() {
-        return this.chemin;
+        return chemin;
     }
 
     /**
      * Fixe le chemin de la catégorie.
+     *
      * @param c la chaîne de caractères représentant le chemin.
      */
     public void setChemin(String c) {
-        this.chemin = c;
+        chemin = c;
     }
 
     /**
      * Retourne le niveau de la catégorie dans l'arborescence des catégories.
+     *
      * @return le niveau (1 = catégorie de niveau 1, tout en haut de l'arborescence).
      */
-    public int getLevel() { return this.level; }
+    public int getLevel() {
+        return level;
+    }
 
     /**
      * Fixe le niveau de la catégorie.
+     *
      * @param l le niveau de la catégorie.
      */
-    public void setLevel(int l) { this.level = l; }
+    public void setLevel(int l) {
+        level = l;
+    }
 
     /**
      * Retourne le parent direct de la catégorie
+     *
      * @return le CategorieDTO représentant le parent
      */
     public CategorieDTO getParent() {
-        return this.parent;
+        return parent;
     }
 
     /**
      * Fixe le parent de la catégorie
+     *
      * @param p le parent
      */
     public void setParent(CategorieDTO p) {
-        this.parent = p;
+        parent = p;
     }
 
     /**
      * Retourne la profondeur formé par ses sous-catégories
+     *
      * @return la profondeur formé par ses sous-catégories
      */
     public int getProfondeur() {
@@ -144,6 +161,7 @@ public class CategorieDTO {
 
     /**
      * Remplace la profondeur par celui mis en paramètre.
+     *
      * @param profondeur la nouvelle profondeur
      */
     public void setProfondeur(int profondeur) {

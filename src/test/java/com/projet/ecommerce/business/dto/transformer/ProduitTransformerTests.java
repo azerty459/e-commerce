@@ -1,11 +1,10 @@
-package com.projet.ecommerce.business.transformer;
+package com.projet.ecommerce.business.dto.transformer;
 
 import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
 import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.business.dto.PhotoDTO;
 import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.persistance.entity.*;
-import com.projet.ecommerce.business.dto.transformer.ProduitTransformer;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -139,10 +138,10 @@ public class ProduitTransformerTests {
     }
 
     @Test
-    public void singleDtoToEntity(){
+    public void singleDtoToEntity() {
         Produit prod = ProduitTransformer.dtoToEntity(PRODUIT_DTO1);
         Assert.assertNotNull(prod);
-        Assert.assertEquals(PRODUIT_DTO1.getCaracteristiques().get(0).getValeur(), prod.getCaracteristiques().get(0).getValeur());
+        Assert.assertEquals((PRODUIT_DTO1.getCaracteristiques()).get(0).getValeur(), prod.getCaracteristiques().get(0).getValeur());
         Assert.assertEquals(PRODUIT_DTO1.getCaracteristiques().get(0).getTypeCaracteristique(), prod.getCaracteristiques().get(0).getTypeCaracteristique());
         Assert.assertEquals(PRODUIT_DTO1.getCategories().get(0).getNom(), prod.getCategories().get(0).getNomCategorie());
         Assert.assertEquals(PRODUIT_DTO1.getDescription(), prod.getDescription());
@@ -154,12 +153,12 @@ public class ProduitTransformerTests {
     }
 
     @Test
-    public void singleEntityToDto(){
+    public void singleEntityToDto() {
         ProduitDTO prodDto = ProduitTransformer.entityToDto(PRODUIT1);
         Assert.assertNotNull(prodDto);
         Assert.assertEquals(PRODUIT1.getCaracteristiques().get(0).getValeur(), prodDto.getCaracteristiques().get(0).getValeur());
         Assert.assertEquals(PRODUIT1.getCaracteristiques().get(0).getTypeCaracteristique(), prodDto.getCaracteristiques().get(0).getTypeCaracteristique());
-        Assert.assertEquals(PRODUIT1.getCategories(), prodDto.getCategories());
+        Assert.assertTrue(PRODUIT1.getCategories().containsAll(prodDto.getCategories()));
         Assert.assertEquals(PRODUIT1.getDescription(), prodDto.getDescription());
         Assert.assertEquals(PRODUIT1.getNom(), prodDto.getNom());
         Assert.assertEquals(PRODUIT1.getPhotos().get(0).getIdPhoto(), prodDto.getPhotos().get(0).getIdPhoto());
@@ -169,7 +168,7 @@ public class ProduitTransformerTests {
     }
 
     @Test
-    public void severalDtoToEntity(){
+    public void severalDtoToEntity() {
         List<Produit> listProd = new ArrayList<>(ProduitTransformer.dtoToEntity(LIST_PRODUIT_DTO));
 
         Assert.assertNotNull(listProd);
@@ -185,7 +184,7 @@ public class ProduitTransformerTests {
     }
 
     @Test
-    public void severalEntityToDto(){
+    public void severalEntityToDto() {
         List<ProduitDTO> listDTO = new ArrayList<>(ProduitTransformer.entityToDto(LIST_PRODUIT));
 
         Assert.assertNotNull(listDTO);

@@ -1,11 +1,9 @@
-package com.projet.ecommerce.entrypoint.graphQL;
+package com.projet.ecommerce.entrypoint.graphql;
 
 import graphql.ErrorType;
 import graphql.GraphQLError;
 import graphql.language.SourceLocation;
 
-import java.io.Serializable;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

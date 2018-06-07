@@ -1,4 +1,4 @@
-package com.projet.ecommerce.persistance.repository.custom;
+package com.projet.ecommerce.persistance.repository;
 
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
