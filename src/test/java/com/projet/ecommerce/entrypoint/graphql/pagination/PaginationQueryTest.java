@@ -35,7 +35,7 @@ public class PaginationQueryTest {
     }
 
     @Test
-    public void produitWiring(){
+    public void produitWiring() {
         TypeRuntimeWiring typeRuntimeWiring = paginationQuery.produitWiring();
         Assert.assertEquals(1, typeRuntimeWiring.getFieldDataFetchers().size());
         Assert.assertEquals(typeRuntimeWiring.getTypeName(), "Query");
@@ -47,11 +47,11 @@ public class PaginationQueryTest {
     public void testNbDataFetcher() {
         Map<String, DataFetcher> retourMap = paginationQuery.produitWiring().getFieldDataFetchers();
         Assert.assertNotNull(retourMap);
-        Assert.assertEquals(1,retourMap.size());
+        Assert.assertEquals(1, retourMap.size());
     }
 
     @Test
-    public void pagination(){
+    public void pagination() {
         Map<String, DataFetcher> retourMap = paginationQuery.produitWiring().getFieldDataFetchers();
 
         // On imite le comportement des getArgument
@@ -62,8 +62,8 @@ public class PaginationQueryTest {
         Assert.assertNotNull(retourMap.get("pagination"));
         retourMap.get("pagination").get(dataFetchingEnvironment);
         // Test avec nb appel add avec bon param
-        Mockito.verify(paginationBusiness, Mockito.times(1)).getPagination("produit",1,5);
+        Mockito.verify(paginationBusiness, Mockito.times(1)).getPagination("produit", 1, 5, null);
         // Test avec nb appel add avec mauvais param
-        Mockito.verify(paginationBusiness, Mockito.times(0)).getPagination(null,0,0);
+        Mockito.verify(paginationBusiness, Mockito.times(0)).getPagination(null, 0, 0, null);
     }
 }

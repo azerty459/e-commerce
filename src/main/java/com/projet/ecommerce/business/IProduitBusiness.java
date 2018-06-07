@@ -26,13 +26,8 @@ public interface IProduitBusiness {
     /**
      * Méthode définissant la modification d'un produit.
      *
-     * @param referenceProduit La référence du produit à modifier
-     * @param nom              Le nouveau nom
-     * @param description      La nouvelle description
-     * @param prixHT           Le nouveau prix hors taxe
-     * @param idCatAssocier    ID de la catégorie à associer au produit
-     * @param supprimerCatAssocier ID de la catégorie à supprimer de l'association au produit
-     * @return l'objet produit modifié, null si le produit à modifier n'est pas trouvée
+     * @param produit L'objet produit modifié à sauvegarder
+     * @return l'objet produit modifié
      */
     ProduitDTO update(Produit produit);
 
@@ -53,6 +48,7 @@ public interface IProduitBusiness {
 
     /**
      * Méthode définissant la recherche des produits selon les paramètres ci-dessous
+     *
      * @param ref la référence du produit recherché
      * @param nom le nom du produit recherché
      * @param cat la catégorie du /des produit(s) recherché(s)
@@ -61,18 +57,11 @@ public interface IProduitBusiness {
     List<ProduitDTO> getAll(String ref, String nom, String cat);
 
     /**
-     * Méthode définissant la recherche d'un produit selon la référence du produit recherché.
-     *
-     * @param referenceProduit Référence du produit à rechercher
-     * @return le produit rechercher
-     */
-    ProduitDTO getByRef(String referenceProduit);
-
-    /**
      * Méthode définissant la pagination
+     *
      * @param pageNumber la page souhaitée
-     * @param nb le nombre de produit à afficher dans la page
-     * @param nom le nom du produit recherché
+     * @param nb         le nombre de produit à afficher dans la page
+     * @param nom        le nom du produit recherché
      * @return une page de produit
      */
     Page<Produit> getPage(int pageNumber, int nb, String nom);

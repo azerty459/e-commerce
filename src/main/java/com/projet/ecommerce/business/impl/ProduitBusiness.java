@@ -4,13 +4,11 @@ import com.projet.ecommerce.business.IProduitBusiness;
 import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.business.dto.transformer.ProduitTransformer;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
+import com.projet.ecommerce.persistance.entity.Caracteristique;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Photo;
 import com.projet.ecommerce.persistance.entity.Produit;
-import com.projet.ecommerce.persistance.repository.CategorieRepository;
-import com.projet.ecommerce.persistance.repository.PhotoRepository;
-import com.projet.ecommerce.persistance.repository.ProduitRepository;
-import com.projet.ecommerce.persistance.repository.ProduitRepositoryCustom;
+import com.projet.ecommerce.persistance.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -43,6 +41,9 @@ public class ProduitBusiness implements IProduitBusiness {
 
     @Autowired
     private PhotoRepository photoRepository;
+
+    @Autowired
+    private CaracteristiqueRepository caracteristiqueRepository;
 
     /**
      * Ajoute un produit dans la base de données.
@@ -92,42 +93,24 @@ public class ProduitBusiness implements IProduitBusiness {
     /**
      * Modifie le produit dans la base de données.
      *
-     * @param produit L'objet produit à sauvegarder
-     * @return l'objet produit modifié, une erreur si le produit n'a pas été trouvé
+     * @param produit L'objet produit modifié à sauvegarder
+     * @return l'objet produit modifié
      */
     @Override
     public ProduitDTO update(Produit produit) {
-        Optional<Produit> produitOptional = produitRepository.findById(produit.getReferenceProduit());
-        if (produit.getNom().isEmpty()) {
-            throw new GraphQLCustomException("Le nom du produit ne peut être vide.");
+        if (produit == null) {
+            return null;
         }
+        Optional<Produit> produitOptional = produitRepository.findById(produit.getReferenceProduit());
         if (!produitOptional.isPresent()) {
             throw new GraphQLCustomException("Le produit recherché n'existe pas.");
         }
 
-        // On remplace la liste de catégories par une liste contenant les vraies valeurs des catégories pour éviter la perte d'informations
-        List<Categorie> categorieList = new ArrayList<>();
-        for (Categorie categorie : produit.getCategories()) {
-            Optional<Categorie> categorieOptional = categorieRepository.findById(categorie.getIdCategorie());
-            if (categorieOptional.isPresent()) {
-                categorieList.add(categorieOptional.get());
-            } else {
-                throw new GraphQLCustomException("La catégorie n'existe pas.");
-            }
-        }
-        produit.setCategories(categorieList);
+        produit.setPhotos(new ArrayList<>(completePhotosData(produit.getPhotos())));
 
-        // On remplace la liste de photos par une liste contenant les vraies valeurs des photos pour éviter la perte d'informations
-        List<Photo> photoList = new ArrayList<>();
-        for (Photo photo : produit.getPhotos()) {
-            Optional<Photo> photoOptional = photoRepository.findById(photo.getIdPhoto());
-            if (photoOptional.isPresent()) {
-                photoList.add(photoOptional.get());
-            } else {
-                throw new GraphQLCustomException("La catégorie n'existe pas.");
-            }
-        }
-        produit.setPhotos(photoList);
+        produit.setCategories(new ArrayList<>(completeCategoriesData(produit.getCategories())));
+
+        produit.setCaracteristiques(new ArrayList<>(completeCharacteristicData(produit.getCaracteristiques())));
 
         // On fusionne les deux produits en un
         Produit retourProduit = produitOptional.get();
@@ -143,6 +126,63 @@ public class ProduitBusiness implements IProduitBusiness {
 
         // On retourne le produit final et on le transforme en DTO
         return ProduitTransformer.entityToDto(produitRepository.save(produitFinal));
+    }
+
+    /**
+     * Remplace la liste de photo par une nouvelle liste contenant l'ensemble des données des photos.
+     *
+     * @param photoList Une array list contenant des id de photo
+     * @return une collection de Photo
+     */
+    private Collection<Photo> completePhotosData(List<Photo> photoList) {
+        List<Photo> retourList = new ArrayList<>();
+        for (Photo photo : photoList) {
+            Optional<Photo> photoOptional = photoRepository.findById(photo.getIdPhoto());
+            if (photoOptional.isPresent()) {
+                retourList.add(photoOptional.get());
+            } else {
+                throw new GraphQLCustomException("La photo n'existe pas.");
+            }
+        }
+        return retourList;
+    }
+
+    /**
+     * Remplace la liste de catégorie par une nouvelle liste contenant l'ensemble des données des photos.
+     *
+     * @param categorieList Une array list contenant des id de catégorie
+     * @return une collection de catégorie
+     */
+    private Collection<Categorie> completeCategoriesData(List<Categorie> categorieList) {
+        List<Categorie> retourList = new ArrayList<>();
+        for (Categorie categorie : categorieList) {
+            Optional<Categorie> categorieOptional = categorieRepository.findById(categorie.getIdCategorie());
+            if (categorieOptional.isPresent()) {
+                retourList.add(categorieOptional.get());
+            } else {
+                throw new GraphQLCustomException("La catégorie n'existe pas.");
+            }
+        }
+        return retourList;
+    }
+
+    /**
+     * Remplace la liste de catégorie par une nouvelle liste contenant l'ensemble des données des photos.
+     *
+     * @param caracteristiqueList Une list contenant des id de caracteristique
+     * @return une collection de catégorie
+     */
+    private Collection<Caracteristique> completeCharacteristicData(List<Caracteristique> caracteristiqueList) {
+        List<Caracteristique> retourList = new ArrayList<>();
+        for (Caracteristique caracteristique : caracteristiqueList) {
+            Optional<Caracteristique> caracteristiqueOptional = caracteristiqueRepository.findById(caracteristique.getIdCaracteristique());
+            if (caracteristiqueOptional.isPresent()) {
+                retourList.add(caracteristiqueOptional.get());
+            } else {
+                throw new GraphQLCustomException("La caractéristique n'existe pas.");
+            }
+        }
+        return retourList;
     }
 
     /**
@@ -172,21 +212,22 @@ public class ProduitBusiness implements IProduitBusiness {
      *
      * @param ref la référence du produit recherché
      * @param cat la catégorie du /des produit(s) recherché(s)
+     * @param nom le nom du produit à rechercher
      * @return une liste de produits selon les paramètres ci-dessous
      */
     @Override
-    public List<ProduitDTO> getAll(String ref, String nom, String cat) {
+    public List<ProduitDTO> getAll(String ref, String cat, String nom) {
 
         Collection<Produit> produitCollection;
 
-        if(nom == null) {
+        if (nom == null) {
             produitCollection = produitRepositoryCustom.findAllWithCriteria(ref, cat);
 
         } else {
             produitCollection = produitRepository.findByNomContainingIgnoreCase(nom);
         }
 
-        if(produitCollection.size() == 0){
+        if (produitCollection.size() == 0) {
             throw new GraphQLCustomException("Aucun produit(s) trouvé(s).");
         }
 
@@ -195,35 +236,19 @@ public class ProduitBusiness implements IProduitBusiness {
 
 
     /**
-     * Retourne le produit recherché.
-     *
-     * @param referenceProduit Référence du produit à rechercher
-     * @return l'objet produit recherché sinon une exception, s'il n'est pas trouvé
-     */
-    @Override
-    @Deprecated
-    public ProduitDTO getByRef(String referenceProduit) {
-        Optional<Produit> produit = produitRepository.findById(referenceProduit);
-        if (produit.isPresent()) {
-            return ProduitTransformer.entityToDto(produit.get());
-        } else {
-            throw new GraphQLCustomException("Le produit recherche n'existe pas.");
-        }
-    }
-
-    /**
      * Retourne un objet page de produit
      *
      * @param numeroPage    la page souhaitée
-     * @param nombreProduit le nombre de produit à afficher dans la page
+     * @param nombreProduit le nombre de produit à afficher dans la
+     * @param nom           le nom du produit à rechercher
      * @return un objet page de produit
      */
     @Override
     public Page<Produit> getPage(int numeroPage, int nombreProduit, String nom) {
 
-        PageRequest page = (numeroPage == 0)? PageRequest.of(numeroPage, nombreProduit): PageRequest.of(numeroPage-1, nombreProduit);
+        PageRequest page = (numeroPage == 0) ? PageRequest.of(numeroPage, nombreProduit) : PageRequest.of(numeroPage - 1, nombreProduit);
 
-        if(nom == null) {
+        if (nom == null) {
             return produitRepository.findAll(page);
         } else {
             // On recherche un produit selon son nom
