@@ -110,8 +110,6 @@ public class ProduitBusiness implements IProduitBusiness {
 
         produit.setCategories(new ArrayList<>(completeCategoriesData(produit.getCategories())));
 
-        produit.setCaracteristiques(new ArrayList<>(completeCharacteristicData(produit.getCaracteristiques())));
-
         // On fusionne les deux produits en un
         Produit retourProduit = produitOptional.get();
         Produit produitFinal = null;
