@@ -2,8 +2,8 @@ package com.projet.ecommerce.business.dto.transformer;
 
 import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.persistance.entity.Categorie;
-import org.junit.Test;
 import org.junit.Assert;
+import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ public class CategorieTransformerTests {
 
     private static final List<Categorie> CATEGORIE_LIST;
 
-    private static final HashMap<Categorie,String> CHEMINS;
+    private static final HashMap<Categorie, String> CHEMINS;
 
     static {
         CATEGORIE_1 = new Categorie();
@@ -67,7 +67,7 @@ public class CategorieTransformerTests {
         CATEGORIE_LIST.add(CATEGORIE_4);
         CATEGORIE_LIST.add(CATEGORIE_5);
 
-        CHEMINS = new HashMap<Categorie,String>();
+        CHEMINS = new HashMap<Categorie, String>();
 
         PARENT = new Categorie();
         PARENT.setNomCategorie("Parent");
@@ -76,7 +76,7 @@ public class CategorieTransformerTests {
     }
 
     @Test
-    public void entityToDto(){
+    public void entityToDto() {
 
         // Test sans parent
         CategorieDTO categorieDTO = CategorieTransformer.entityToDto(CATEGORIE_1, CATEGORIE_LIST, CHEMINS, false, null);
@@ -94,7 +94,7 @@ public class CategorieTransformerTests {
     }
 
     @Test
-    public void listEntityToDto(){
+    public void listEntityToDto() {
         List<CategorieDTO> categorieDTOList = new ArrayList<>(CategorieTransformer.entityToDto(CATEGORIE_LIST, CHEMINS, true, false, null));
         Assert.assertEquals(1, categorieDTOList.size());
         Assert.assertEquals(categorieDTOList.get(0).getNom(), CATEGORIE_1.getNomCategorie());

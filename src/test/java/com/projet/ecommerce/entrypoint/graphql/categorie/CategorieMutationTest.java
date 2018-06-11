@@ -35,7 +35,7 @@ public class CategorieMutationTest {
     }
 
     @Test
-    public void produitWiring(){
+    public void produitWiring() {
         TypeRuntimeWiring typeRuntimeWiring = categorieMutation.produitWiring();
         Assert.assertEquals(typeRuntimeWiring.getTypeName(), "Mutation");
         Assert.assertEquals(typeRuntimeWiring.getTypeResolver(), null);
@@ -46,11 +46,11 @@ public class CategorieMutationTest {
     public void testNbDataFetcher() {
         Map<String, DataFetcher> retourMap = categorieMutation.produitWiring().getFieldDataFetchers();
         Assert.assertNotNull(retourMap);
-        Assert.assertEquals(5,retourMap.size());
+        Assert.assertEquals(5, retourMap.size());
     }
 
     @Test
-    public void addCategorieParent(){
+    public void addCategorieParent() {
         Map<String, DataFetcher> retourMap = categorieMutation.produitWiring().getFieldDataFetchers();
 
         // On imite le comportement des getArgument
@@ -65,7 +65,7 @@ public class CategorieMutationTest {
     }
 
     @Test
-    public void addCategorieEnfant(){
+    public void addCategorieEnfant() {
         Map<String, DataFetcher> retourMap = categorieMutation.produitWiring().getFieldDataFetchers();
 
         // On imite le comportement des getArgument
@@ -81,7 +81,7 @@ public class CategorieMutationTest {
     }
 
     @Test
-    public void deleteCategorie(){
+    public void deleteCategorie() {
         Map<String, DataFetcher> retourMap = categorieMutation.produitWiring().getFieldDataFetchers();
 
         // On imite le comportement des getArgument
@@ -96,7 +96,7 @@ public class CategorieMutationTest {
     }
 
     @Test
-    public void moveCategorie(){
+    public void moveCategorie() {
         Map<String, DataFetcher> retourMap = categorieMutation.produitWiring().getFieldDataFetchers();
 
         // On imite le comportement des getArgument
@@ -112,7 +112,7 @@ public class CategorieMutationTest {
     }
 
     @Test
-    public void updateCategorie(){
+    public void updateCategorie() {
         Map<String, DataFetcher> retourMap = categorieMutation.produitWiring().getFieldDataFetchers();
 
         // On imite le comportement des getArgument

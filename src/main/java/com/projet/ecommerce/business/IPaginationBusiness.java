@@ -10,10 +10,11 @@ public interface IPaginationBusiness {
 
     /**
      * Méthode définissant la pagination d'une liste.
+     *
      * @param type le type de la liste voulu
      * @param page la page souhaitée
-     * @param npp le nombre de produits à afficher dans la page paginée
-     * @param nom le nom du produit recherché (ou de la catégorie)
+     * @param npp  le nombre de produits à afficher dans la page paginée
+     * @param nom  le nom du produit recherché (ou de la catégorie)
      * @return une objet PaginationDTO
      */
     PaginationDTO getPagination(String type, int page, int npp, String nom);

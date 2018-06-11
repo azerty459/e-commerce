@@ -15,11 +15,11 @@ public class CaracteristiqueTransformerTests {
 
     private static final TypeCaracteristique TYPE_CARACTERISTIQUE;
     private static final CaracteristiqueDTO CARACTERISTIQUE_DTO1;
-    private static final CaracteristiqueDTO  CARACTERISTIQUE_DTO2;
+    private static final CaracteristiqueDTO CARACTERISTIQUE_DTO2;
     private static final Caracteristique CARACTERISTIQUE1;
     private static final Caracteristique CARACTERISTIQUE2;
 
-	static {
+    static {
         TYPE_CARACTERISTIQUE = new TypeCaracteristique();
         TYPE_CARACTERISTIQUE.setIdTypeCaracteristique(0);
         TYPE_CARACTERISTIQUE.setType("testType");
@@ -39,10 +39,10 @@ public class CaracteristiqueTransformerTests {
         CARACTERISTIQUE2 = new Caracteristique();
         CARACTERISTIQUE2.setTypeCaracteristique(TYPE_CARACTERISTIQUE);
         CARACTERISTIQUE2.setValeur("test2");
-	}
+    }
 
-	@Test
-    public void singleDtoToEntity(){
+    @Test
+    public void singleDtoToEntity() {
         Caracteristique car = CaracteristiqueTransformer.dtoToEntity(CARACTERISTIQUE_DTO1);
 
         Assert.assertNotNull(car);
@@ -51,16 +51,16 @@ public class CaracteristiqueTransformerTests {
     }
 
     @Test
-    public void singleEntityToDto(){
-	    CaracteristiqueDTO carDTO = CaracteristiqueTransformer.entityToDto(CARACTERISTIQUE1);
+    public void singleEntityToDto() {
+        CaracteristiqueDTO carDTO = CaracteristiqueTransformer.entityToDto(CARACTERISTIQUE1);
 
-	    Assert.assertNotNull(carDTO);
+        Assert.assertNotNull(carDTO);
         Assert.assertEquals(carDTO.getTypeCaracteristique(), CARACTERISTIQUE1.getTypeCaracteristique());
         Assert.assertEquals(carDTO.getValeur(), CARACTERISTIQUE1.getValeur());
     }
 
     @Test
-    public void severalDtoToEntity(){
+    public void severalDtoToEntity() {
         List<CaracteristiqueDTO> listeDTO;
         listeDTO = new ArrayList<>();
         listeDTO.add(CARACTERISTIQUE_DTO1);
@@ -76,7 +76,7 @@ public class CaracteristiqueTransformerTests {
     }
 
     @Test
-    public void severalEntityToDto(){
+    public void severalEntityToDto() {
         List<Caracteristique> listeCaracteristiques;
         listeCaracteristiques = new ArrayList<>();
         listeCaracteristiques.add(CARACTERISTIQUE1);

@@ -8,7 +8,7 @@ import java.util.List;
  */
 
 @Entity
-@Table(name="categorie")
+@Table(name = "categorie")
 public class Categorie {
 
     @Id
@@ -39,6 +39,7 @@ public class Categorie {
 
     /**
      * Retourne le nom de la catégorie.
+     *
      * @return le nom de la catégorie
      */
     public String getNomCategorie() {
@@ -47,6 +48,7 @@ public class Categorie {
 
     /**
      * Remplace le nom de la catégorie par celui-ci mit en paramètre.
+     *
      * @param nomCategorie Le nouveau nom de la catégorie
      */
     public void setNomCategorie(String nomCategorie) {
@@ -55,6 +57,7 @@ public class Categorie {
 
     /**
      * Retourne l'indice de la borne gauche de la catégorie.
+     *
      * @return l'indice de la borne gauche
      */
     public int getBorneGauche() {
@@ -63,6 +66,7 @@ public class Categorie {
 
     /**
      * Remplace l'indice de la borne gauche par celui-ci mit en paramètre.
+     *
      * @param borneGauche Le nouvel indice de la borne gauche
      */
     public void setBorneGauche(int borneGauche) {
@@ -71,6 +75,7 @@ public class Categorie {
 
     /**
      * Retourne l'indice de la borne droit de la catégorie.
+     *
      * @return l'indice de la borne droit
      */
     public int getBorneDroit() {
@@ -79,6 +84,7 @@ public class Categorie {
 
     /**
      * Remplace l'indice de la borne droit par celui-ci mit en paramètre.
+     *
      * @param borneDroit Le nouvel indice de la borne droit
      */
     public void setBorneDroit(int borneDroit) {
@@ -87,6 +93,7 @@ public class Categorie {
 
     /**
      * Retourne une liste de produits liés à la catégorie.
+     *
      * @return
      */
     public List<Produit> getProduits() {
@@ -95,6 +102,7 @@ public class Categorie {
 
     /**
      * Retourne le level de la catégorie.
+     *
      * @return le level de la catégorie.
      */
     public int getLevel() {
@@ -103,6 +111,7 @@ public class Categorie {
 
     /**
      * Remplace le level par celui-ci mit en paramètre.
+     *
      * @param level Level de la catégorie.
      */
     public void setLevel(int level) {
@@ -111,6 +120,7 @@ public class Categorie {
 
     /**
      * Remplace la liste produit par celle-ci mit en paramètre.
+     *
      * @param produits Une liste de produit
      */
     public void setProduits(List<Produit> produits) {
@@ -119,6 +129,7 @@ public class Categorie {
 
     /**
      * Retourne l'id de la catégorie.
+     *
      * @return l'id de la catégorie
      */
     public int getIdCategorie() {
@@ -127,6 +138,7 @@ public class Categorie {
 
     /**
      * Remplace l'id de la catégorie par celui-ci mit en paramètre.
+     *
      * @param idCategorie La nouvelle ID de la catégorie
      */
     public void setIdCategorie(int idCategorie) {
