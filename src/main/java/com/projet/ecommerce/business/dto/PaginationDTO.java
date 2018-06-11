@@ -1,9 +1,6 @@
 package com.projet.ecommerce.business.dto;
 
 
-import com.projet.ecommerce.persistance.entity.Categorie;
-import com.projet.ecommerce.persistance.entity.Produit;
-
 import java.util.List;
 
 /**
@@ -20,9 +17,9 @@ public class PaginationDTO {
 
     private long total;
 
-    private List<Produit> produits;
+    private List<ProduitDTO> produits;
 
-    private List<Categorie> categories;
+    private List<CategorieDTO> categories;
 
     /**
      * Retourne la page où on est actuellement.
@@ -101,7 +98,7 @@ public class PaginationDTO {
      *
      * @return une collection d'objet produit
      */
-    public List<Produit> getProduits() {
+    public List<ProduitDTO> getProduits() {
         return produits;
     }
 
@@ -110,7 +107,7 @@ public class PaginationDTO {
      *
      * @param produits La nouvelle collection
      */
-    public void setProduits(List<Produit> produits) {
+    public void setProduits(List<ProduitDTO> produits) {
         this.produits = produits;
     }
 
@@ -119,7 +116,7 @@ public class PaginationDTO {
      *
      * @return une collection d'objet catégorie.
      */
-    public List<Categorie> getCategories() {
+    public List<CategorieDTO> getCategories() {
         return categories;
     }
 
@@ -128,7 +125,7 @@ public class PaginationDTO {
      *
      * @param categories La nouvelle collection
      */
-    public void setCategories(List<Categorie> categories) {
+    public void setCategories(List<CategorieDTO> categories) {
         this.categories = categories;
     }
 }

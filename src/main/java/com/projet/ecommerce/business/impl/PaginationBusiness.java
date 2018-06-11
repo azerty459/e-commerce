@@ -3,7 +3,9 @@ package com.projet.ecommerce.business.impl;
 import com.projet.ecommerce.business.ICategorieBusiness;
 import com.projet.ecommerce.business.IPaginationBusiness;
 import com.projet.ecommerce.business.IProduitBusiness;
+import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.business.dto.PaginationDTO;
+import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.business.dto.transformer.CategorieTransformer;
 import com.projet.ecommerce.business.dto.transformer.ProduitTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +41,7 @@ public class PaginationBusiness implements IPaginationBusiness {
         if (pageActuelle <= 0) {
             pageActuelle = 1;
         }
-        PaginationDTO paginationDTO = null;
+        PaginationDTO paginationDTO;
 
         switch (type) {
             case "produit":
@@ -49,7 +51,7 @@ public class PaginationBusiness implements IPaginationBusiness {
                 }
                 paginationDTO = getPaginationDTO(pageProduit, pageActuelle);
                 paginationDTO.setCategories(new ArrayList<>());
-                paginationDTO.setProduits(new ArrayList<>(ProduitTransformer.entityToDto(pageProduit.getContent())));
+                paginationDTO.setProduits(new ArrayList<ProduitDTO>(ProduitTransformer.entityToDto(pageProduit.getContent())));
                 break;
             case "categorie":
                 Page pageCategorie = categorieBusiness.getPage(pageActuelle, npp);
@@ -57,11 +59,11 @@ public class PaginationBusiness implements IPaginationBusiness {
                     pageCategorie = categorieBusiness.getPage(pageCategorie.getTotalPages(), npp);
                 }
                 paginationDTO = getPaginationDTO(pageCategorie, pageActuelle);
-                paginationDTO.setCategories(new ArrayList<>(CategorieTransformer.entityToDto(pageCategorie.getContent(), categorieBusiness.construireAssociationEnfantsChemins(pageCategorie.getContent()), false, false, null)));
+                paginationDTO.setCategories(new ArrayList<CategorieDTO>(CategorieTransformer.entityToDto(pageCategorie.getContent(), categorieBusiness.construireAssociationEnfantsChemins(pageCategorie.getContent()), false, false, null)));
                 paginationDTO.setProduits(new ArrayList<>());
                 break;
             default:
-                return paginationDTO;
+                return null;
 
         }
         return paginationDTO;
@@ -72,7 +74,7 @@ public class PaginationBusiness implements IPaginationBusiness {
      *
      * @param page         Un objet de type page
      * @param pageActuelle la page souhaité
-     * @returnun objet PaginationDTO
+     * @return un objet PaginationDTO
      */
     private PaginationDTO getPaginationDTO(Page page, int pageActuelle) {
         PaginationDTO paginationDTO = new PaginationDTO();

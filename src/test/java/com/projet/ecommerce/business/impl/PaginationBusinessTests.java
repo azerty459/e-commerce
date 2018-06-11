@@ -64,21 +64,21 @@ public class PaginationBusinessTests {
         Mockito.when(page.getTotalPages()).thenReturn(5);
         Mockito.when(page.getTotalElements()).thenReturn(Long.valueOf(25));
         Mockito.when(page.getContent()).thenReturn(produitArrayList);
-        Mockito.when(produitBusiness.getPage(Mockito.anyInt(), Mockito.anyInt(), Mockito.anyString())).thenReturn(page);
+        Mockito.when(produitBusiness.getPage(Mockito.anyInt(), Mockito.anyInt(), Mockito.any())).thenReturn(page);
 
-        PaginationDTO paginationDTO = paginationBusiness.getPagination("produit", 2, 5, null);
-        Mockito.verify(produitBusiness, Mockito.times(1)).getPage(Mockito.anyInt(), Mockito.anyInt(), null);
+        PaginationDTO paginationDTO = paginationBusiness.getPagination("produit", -1, 5, "");
+        Mockito.verify(produitBusiness, Mockito.times(1)).getPage(Mockito.anyInt(), Mockito.anyInt(), Mockito.anyString());
         Assert.assertNotNull(paginationDTO);
 
         Assert.assertEquals(25, paginationDTO.getTotal());
-        Assert.assertEquals(2, paginationDTO.getPageActuelle());
+        Assert.assertEquals(1, paginationDTO.getPageActuelle());
         Assert.assertEquals(1, paginationDTO.getPageMin());
         Assert.assertEquals(5, paginationDTO.getPageMax());
         Assert.assertEquals(1, paginationDTO.getProduits().size());
         Assert.assertEquals(new ArrayList<Categorie>(), paginationDTO.getCategories());
 
         // Permets de tester "if (pageActuelle > pageProduit.getTotalPages()) pour la pagination de produit"
-        paginationDTO = paginationBusiness.getPagination("produit", Integer.MAX_VALUE, 5, null);
+        paginationDTO = paginationBusiness.getPagination("produit", Integer.MAX_VALUE, 5, "");
         Mockito.verify(produitBusiness, Mockito.times(3)).getPage(Mockito.anyInt(), Mockito.anyInt(), Mockito.anyString());
         Assert.assertNotNull(paginationDTO);
         Assert.assertEquals(page.getTotalPages(), paginationDTO.getPageActuelle());

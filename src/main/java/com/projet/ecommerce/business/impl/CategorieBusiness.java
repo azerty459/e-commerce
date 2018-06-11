@@ -44,7 +44,7 @@ public class CategorieBusiness implements ICategorieBusiness {
 
         // Initialisation
         Categorie parentDirect = null;
-        Collection<Categorie> categorieCollection = null;
+        Collection<Categorie> categorieCollection;
 
         // On va chercher les catégories
         if (nom != null) {
@@ -76,7 +76,7 @@ public class CategorieBusiness implements ICategorieBusiness {
     @Override
     public HashMap<Categorie, String> construireAssociationEnfantsChemins(Collection<Categorie> categories) {
         // Construire un tableau des catégories retournées par findAllWithCriteria
-        HashMap<Integer, Categorie> categoriesPourParents = new HashMap<Integer, Categorie>();
+        HashMap<Integer, Categorie> categoriesPourParents = new HashMap<>();
         Iterator<Categorie> it = categories.iterator();
         int i = 1;
         while (it.hasNext()) {
@@ -104,7 +104,7 @@ public class CategorieBusiness implements ICategorieBusiness {
     private static HashMap<Categorie, String> associer(Collection<Categorie> enfants, Collection<Categorie> parents) {
 
         // Le Hashmap à retourner
-        HashMap<Categorie, String> resultat = new HashMap<Categorie, String>();
+        HashMap<Categorie, String> resultat = new HashMap<>();
 
         // Pour chaque enfant, aller chercher les parents
         Iterator<Categorie> it = enfants.iterator();
@@ -265,7 +265,7 @@ public class CategorieBusiness implements ICategorieBusiness {
         }
 
         // Récupération des enfants éventuels de la catégorie
-        ArrayList<Categorie> cats = new ArrayList<Categorie>(categorieRepository.findByIdCategorieWithSousCat(idCategorie));
+        ArrayList<Categorie> cats = new ArrayList<>(categorieRepository.findByIdCategorieWithSousCat(idCategorie));
 
         // On cherche la borne gauche minimale et la borne droite maximale et suppression de la BDD
         int bgMin = cats.get(0).getBorneGauche();
@@ -301,7 +301,7 @@ public class CategorieBusiness implements ICategorieBusiness {
      */
     private static Collection<Categorie> sortAccordingToLevelDesc(Collection<Categorie> cats) {
 
-        Collection<Categorie> result = new ArrayList<Categorie>();
+        Collection<Categorie> result = new ArrayList<>();
 
         while (!cats.isEmpty()) {
 
@@ -335,7 +335,7 @@ public class CategorieBusiness implements ICategorieBusiness {
         }
 
         // Aller chercher la catégorie à déplacer et ses enfants
-        ArrayList<Categorie> categoriesADeplacer = new ArrayList<Categorie>(findById(idADeplacer, true));
+        ArrayList<Categorie> categoriesADeplacer = new ArrayList<>(findById(idADeplacer, true));
 
         // Trouver les bornes min et max de toutes les catégories à déplacer + leur level le plus haut (le plus petit donc)
         int borneMin = categoriesADeplacer.get(0).getBorneGauche();
@@ -361,8 +361,7 @@ public class CategorieBusiness implements ICategorieBusiness {
 
         // Dans le cas où on affecte à un nouveau parent
         // Aller chercher la catégorie parent
-        Categorie nouveauParent = null;
-        nouveauParent = (Categorie) findById(idNouveauParent, false).toArray()[0];
+        Categorie nouveauParent = (Categorie) findById(idNouveauParent, false).toArray()[0];
 
         // Sauvegarder le level du nouveau parent
         int levelNouveauParent = nouveauParent.getLevel();
@@ -445,22 +444,17 @@ public class CategorieBusiness implements ICategorieBusiness {
     @Override
     public CategorieDTO updateCategorie(int id, String newName) {
 
-        Categorie cat = null;
-        CategorieDTO catDto = null;
-
         Optional<Categorie> optionalCategorie = categorieRepository.findById(id);
 
         // Trouver la catégorie à modifier et la transformer en DTO
-        if (optionalCategorie.isPresent()) {
-            cat = optionalCategorie.get();
-            cat.setNomCategorie(newName);
-            catDto = CategorieTransformer.entityToDto(categorieRepository.save(cat));
-        } else {
-            throw new GraphQLCustomException("La catégorie n'a pas été trouvée");
-        }
 
-        return catDto;
-
+        return optionalCategorie
+                .map((categorie) -> {
+                    Categorie cat = optionalCategorie.get();
+                    cat.setNomCategorie(newName);
+                    return CategorieTransformer.entityToDto(categorieRepository.save(cat));
+                })
+                .orElseThrow(() -> new GraphQLCustomException("La catégorie n'a pas été trouvée"));
     }
 
     /**

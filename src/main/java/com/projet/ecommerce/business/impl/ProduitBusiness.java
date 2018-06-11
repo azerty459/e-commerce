@@ -57,37 +57,34 @@ public class ProduitBusiness implements IProduitBusiness {
      */
     @Override
     public ProduitDTO add(String referenceProduit, String nom, String description, float prixHT, List<Integer> categoriesProduit) {
-        if (!referenceProduit.isEmpty() && !nom.isEmpty()) {
-            if (produitRepository.findById(referenceProduit).isPresent()) {
-                throw new GraphQLCustomException("Le produit à ajouter existe déjà.");
-            }
-            Produit produit = new Produit();
-            produit.setReferenceProduit(referenceProduit);
-            produit.setNom(nom);
-            produit.setDescription(description);
-            produit.setPrixHT(prixHT);
-            produit.setCaracteristiques(new ArrayList<>());
-            produit.setPhotos(new ArrayList<>());
-
-            List<Categorie> categorieList = new ArrayList<>();
-            if (categoriesProduit != null) {
-                for (int idCategorie : categoriesProduit) {
-                    Optional<Categorie> categorieOptional = categorieRepository.findById(idCategorie);
-                    if (categorieOptional.isPresent()) {
-                        categorieList.add(categorieOptional.get());
-                    }
-                    //TODO else faire une erreur qui dit que la categorie n'existe pas mais n'arrete pas l'algorithme.
-                }
-            }
-            produit.setCategories(categorieList);
-            return ProduitTransformer.entityToDto(produitRepository.save(produit));
-        } else {
+        if (referenceProduit.isEmpty() && nom.isEmpty()) {
             GraphQLCustomException graphQLCustomException = new GraphQLCustomException("Erreur dans l'ajout du produit (la référence, le nom et le prixHT ne peut être null)");
             graphQLCustomException.ajouterExtension("Référence", referenceProduit);
             graphQLCustomException.ajouterExtension("Nom", nom);
             graphQLCustomException.ajouterExtension("PrixHT", prixHT + "");
             throw graphQLCustomException;
         }
+        if (produitRepository.findById(referenceProduit).isPresent()) {
+            throw new GraphQLCustomException("Le produit à ajouter existe déjà.");
+        }
+        Produit produit = new Produit();
+        produit.setReferenceProduit(referenceProduit);
+        produit.setNom(nom);
+        produit.setDescription(description);
+        produit.setPrixHT(prixHT);
+        produit.setCaracteristiques(new ArrayList<>());
+        produit.setPhotos(new ArrayList<>());
+
+        List<Categorie> categorieList = new ArrayList<>();
+        if (categoriesProduit != null) {
+            for (int idCategorie : categoriesProduit) {
+                Optional<Categorie> categorieOptional = categorieRepository.findById(idCategorie);
+                categorieOptional
+                        .map(categorieList::add);
+            }
+        }
+        produit.setCategories(categorieList);
+        return ProduitTransformer.entityToDto(produitRepository.save(produit));
     }
 
     /**
@@ -118,6 +115,7 @@ public class ProduitBusiness implements IProduitBusiness {
         } catch (IllegalAccessException | InstantiationException e) {
             e.printStackTrace();
         }
+
         if (produitFinal == null) {
             throw new GraphQLCustomException("Le produit ne peux pas être sauvegardé");
         }
@@ -146,7 +144,7 @@ public class ProduitBusiness implements IProduitBusiness {
     }
 
     /**
-     * Remplace la liste de catégorie par une nouvelle liste contenant l'ensemble des données des photos.
+     * Remplace la liste de caractéristique par une nouvelle liste contenant l'ensemble des données des caractéristiques.
      *
      * @param categorieList Une array list contenant des id de catégorie
      * @return une collection de catégorie
@@ -165,7 +163,7 @@ public class ProduitBusiness implements IProduitBusiness {
     }
 
     /**
-     * Remplace la liste de catégorie par une nouvelle liste contenant l'ensemble des données des photos.
+     * Remplace la liste de catégorie par une nouvelle liste contenant l'ensemble des données des catégories.
      *
      * @param caracteristiqueList Une list contenant des id de caracteristique
      * @return une collection de catégorie
@@ -248,9 +246,7 @@ public class ProduitBusiness implements IProduitBusiness {
 
         if (nom == null) {
             return produitRepository.findAll(page);
-        } else {
-            // On recherche un produit selon son nom
-            return produitRepository.findByNomContainingIgnoreCase(page, nom);
         }
+        return produitRepository.findByNomContainingIgnoreCase(page, nom);
     }
 }

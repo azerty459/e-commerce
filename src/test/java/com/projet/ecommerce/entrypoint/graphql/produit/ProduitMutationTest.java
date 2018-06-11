@@ -36,7 +36,7 @@ public class ProduitMutationTest {
     }
 
     @Test
-    public void produitWiring(){
+    public void produitWiring() {
         TypeRuntimeWiring typeRuntimeWiring = produitMutation.produitWiring();
         Assert.assertEquals(typeRuntimeWiring.getTypeName(), "Mutation");
         Assert.assertEquals(typeRuntimeWiring.getTypeResolver(), null);
@@ -47,18 +47,18 @@ public class ProduitMutationTest {
     public void testNbDataFetcher() {
         Map<String, DataFetcher> retourMap = produitMutation.produitWiring().getFieldDataFetchers();
         Assert.assertNotNull(retourMap);
-        Assert.assertEquals(3,retourMap.size());
+        Assert.assertEquals(3, retourMap.size());
     }
 
     @Test
-    public void addProduit(){
+    public void addProduit() {
         Map<String, DataFetcher> retourMap = produitMutation.produitWiring().getFieldDataFetchers();
 
         // On imite le comportement des getArgument
         Mockito.when(dataFetchingEnvironment.getArgument("ref")).thenReturn("A09A87");
         Mockito.when(dataFetchingEnvironment.getArgument("nom")).thenReturn("test");
         Mockito.when(dataFetchingEnvironment.getArgument("description")).thenReturn("test");
-        Mockito.when(dataFetchingEnvironment.getArgument("prixHT")).thenReturn(4.7f);
+        Mockito.when(dataFetchingEnvironment.getArgument("prixHT")).thenReturn(4.7);
 
         Assert.assertNotNull(retourMap.get("addProduit"));
         retourMap.get("addProduit").get(dataFetchingEnvironment);
@@ -70,7 +70,7 @@ public class ProduitMutationTest {
 
     @Test
     //TODO Revoir le test
-    public void updateProduit(){
+    public void updateProduit() {
         Map<String, DataFetcher> retourMap = produitMutation.produitWiring().getFieldDataFetchers();
 
         // On imite le comportement des getArgument
@@ -86,7 +86,7 @@ public class ProduitMutationTest {
     }
 
     @Test
-    public void deleteProduit(){
+    public void deleteProduit() {
         Map<String, DataFetcher> retourMap = produitMutation.produitWiring().getFieldDataFetchers();
 
         // On imite le comportement des getArgument

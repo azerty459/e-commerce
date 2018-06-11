@@ -44,9 +44,9 @@ public class CaracteristiqueTypeBusiness implements ICaracteristiqueTypeBusiness
      */
     @Override
     public TypeCaracteristiqueDTO updateTypeCaracteristique(int idTypeCaracteristique, String type) {
-        Optional<TypeCaracteristique> tempCaracteristiqueTypeRepository = TypecaracteristiqueRepository.findById(idTypeCaracteristique);
-        if (tempCaracteristiqueTypeRepository.isPresent() == true) {
-            TypeCaracteristique caracteristiqueType = tempCaracteristiqueTypeRepository.get();
+        Optional<TypeCaracteristique> typeCaracteristiqueOptional = TypecaracteristiqueRepository.findById(idTypeCaracteristique);
+        if (typeCaracteristiqueOptional.isPresent()) {
+            TypeCaracteristique caracteristiqueType = typeCaracteristiqueOptional.get();
             caracteristiqueType.setType(type);
             return TypeCaracteristiqueTransformer.entityToDto(TypecaracteristiqueRepository.save(caracteristiqueType));
         }
@@ -84,6 +84,8 @@ public class CaracteristiqueTypeBusiness implements ICaracteristiqueTypeBusiness
     @Override
     public TypeCaracteristiqueDTO getTypeCaracteristiqueByID(int idTypeCaracteristique) {
         Optional<TypeCaracteristique> caracteristiqueOptional = TypecaracteristiqueRepository.findById(idTypeCaracteristique);
-        return TypeCaracteristiqueTransformer.entityToDto(caracteristiqueOptional.orElse(null));
+        return caracteristiqueOptional
+                .map(TypeCaracteristiqueTransformer::entityToDto)
+                .orElse(null);
     }
 }

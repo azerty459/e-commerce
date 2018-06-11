@@ -11,7 +11,10 @@ import java.util.Collection;
  */
 
 @Repository
-public interface PhotoRepository extends CrudRepository<Photo, Integer>, PhotoRepositoryCustom {
+public interface PhotoRepository extends CrudRepository<Photo, Integer> {
 
+    @Override
     Collection<Photo> findAll();
+
+    Collection<Photo> findByProduit_ReferenceProduit(String ref);
 }

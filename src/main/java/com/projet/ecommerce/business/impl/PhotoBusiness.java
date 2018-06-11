@@ -20,10 +20,7 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class PhotoBusiness implements IPhotoBusiness {
@@ -44,49 +41,49 @@ public class PhotoBusiness implements IPhotoBusiness {
     @Override
     public Boolean upload(MultipartFile fichier, String refProduit) {
         String repertoireImg = "src/main/resources/img/"; //TODO aller chercher la variable dans le fichier properties
-        if (!fichier.isEmpty()) {
-            try {
-                Optional<Produit> produitOptional = produitRepository.findById(refProduit);
-                if (produitOptional.isPresent()) {
-                    File repertoire = new File(repertoireImg + refProduit); // Le repertoire image spécifique au produit
-                    //On vérifie que le repertoire correspondant au produit existe sinon on le créé
-                    if (!repertoire.exists() || !repertoire.isDirectory()) {
-                        if (!repertoire.mkdirs()) {
-                            throw new GraphQLCustomException("Le dossier image pour le produit n'a pas pu être créé");
-                        } else {
-                            System.out.println("Le dossier " + refProduit + " a bien été créé dans le repertoire image");
-                        }
-                    }
-                    // Chemin de l'image a écrire , on ajoute le nombre de fichier au début du nom du fichier pour éviter les doublons
-
-                    Integer nombreDeFichier = Objects.requireNonNull(repertoire.listFiles()).length;
-                    Path pathFichier = Paths.get(repertoireImg + refProduit + '/' + Integer.toString(nombreDeFichier) + '-' + fichier.getOriginalFilename());
-                    byte[] bytes = fichier.getBytes(); // on va cherche les bits du fichier
-
-                    if (bytes == null) {
-                        throw new GraphQLCustomException("le fichier est vide");
-                    } else {
-                        Files.write(pathFichier, bytes); // On les écrits à l'endroit voulu
-                    }
-                    //On lie la photo et son produit dans la base de donnée
-                    Produit produit = produitOptional.get();
-                    Photo photo = new Photo();
-                    photo.setProduit(produit);
-                    photo.setUrl(refProduit + '/' + Integer.toString(nombreDeFichier) + '-' + fichier.getOriginalFilename());
-                    List<Photo> photoList = produit.getPhotos();
-                    photoList.add(photo);
-                    produit.setPhotos(photoList);
-                    produitRepository.save(produit);
-                    return true;
-                } else {
-                    throw new GraphQLCustomException("Le produit recherche n'existe pas.");
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        if (fichier.isEmpty()) {
             return false;
         }
-        return false;
+
+        Optional<Produit> produitOptional = produitRepository.findById(refProduit);
+        if (!produitOptional.isPresent()) {
+            throw new GraphQLCustomException("Le produit recherche n'existe pas.");
+        }
+        File repertoire = new File(repertoireImg + refProduit); // Le repertoire image spécifique au produit
+        //On vérifie que le repertoire correspondant au produit existe sinon on le créé
+        if (!repertoire.exists() || !repertoire.isDirectory()) {
+            if (!repertoire.mkdirs()) {
+                throw new GraphQLCustomException("Le dossier image pour le produit n'a pas pu être créé");
+            } else {
+                System.out.println("Le dossier " + refProduit + " a bien été créé dans le repertoire image");
+            }
+        }
+        // Chemin de l'image a écrire , on ajoute le nombre de fichier au début du nom du fichier pour éviter les doublons
+
+        Integer nombreDeFichier = Objects.requireNonNull(repertoire.listFiles()).length;
+        Path pathFichier = Paths.get(repertoireImg + refProduit + '/' + Integer.toString(nombreDeFichier) + '-' + fichier.getOriginalFilename());
+        byte[] bytes = new byte[0]; // on va cherche les bits du fichier
+        try {
+            bytes = fichier.getBytes();
+            if (bytes.length == 0) {
+                throw new GraphQLCustomException("le fichier est vide");
+            } else {
+                Files.write(pathFichier, bytes); // On les écrits à l'endroit voulu
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //On lie la photo et son produit dans la base de donnée
+        Produit produit = produitOptional.get();
+        Photo photo = new Photo();
+        photo.setProduit(produit);
+        photo.setUrl(refProduit + '/' + Integer.toString(nombreDeFichier) + '-' + fichier.getOriginalFilename());
+        List<Photo> photoList = produit.getPhotos();
+        photoList.add(photo);
+        produit.setPhotos(photoList);
+        produitRepository.save(produit);
+        return true;
     }
 
     /**
@@ -121,6 +118,12 @@ public class PhotoBusiness implements IPhotoBusiness {
      */
     @Override
     public List<PhotoDTO> getAll(String ref) {
-        return new ArrayList<>(PhotoTransformer.entityToDto(photoRepository.findAllWithCriteria(ref)));
+        Collection<Photo> photoCollection = new ArrayList<>();
+        if (ref == null) {
+            photoCollection.addAll(photoRepository.findAll());
+        } else {
+            photoCollection.addAll(photoRepository.findByProduit_ReferenceProduit(ref));
+        }
+        return new ArrayList<>(PhotoTransformer.entityToDto(photoCollection));
     }
 }

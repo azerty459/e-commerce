@@ -1,6 +1,5 @@
 package com.projet.ecommerce.business.impl;
 
-import com.projet.ecommerce.business.impl.PhotoBusiness;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Caracteristique;
 import com.projet.ecommerce.persistance.entity.Categorie;
@@ -56,7 +55,7 @@ public class PhotoBusinessTests {
     public void uploadFile() {
         Produit produit = new Produit();
         ArrayList<Photo> photos = new ArrayList<>();
-        ArrayList<Caracteristique> caracteristiques= new ArrayList<>();
+        ArrayList<Caracteristique> caracteristiques = new ArrayList<>();
         ArrayList<Categorie> categories = new ArrayList<>();
         produit.setPhotos(photos);
         produit.setDescription("description");
@@ -72,7 +71,7 @@ public class PhotoBusinessTests {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Assert.assertTrue(photoBusiness.upload(multipartFile,"test"));
+        Assert.assertTrue(photoBusiness.upload(multipartFile, "test"));
         try {
             Files.delete(Paths.get("src/main/resources/img/test/0-null"));
         } catch (IOException e) {
@@ -88,7 +87,7 @@ public class PhotoBusinessTests {
     @Test
     public void uploadFileEmptyTest() {
         Mockito.when(multipartFile.isEmpty()).thenReturn(true);
-        Assert.assertFalse(photoBusiness.upload(multipartFile,null));
+        Assert.assertFalse(photoBusiness.upload(multipartFile, null));
     }
 
 
@@ -96,15 +95,16 @@ public class PhotoBusinessTests {
     public void uploadProduitVide() {
         Mockito.when(produitRepository.findById(Mockito.any())).thenReturn(Optional.empty());
         thrown.expect(GraphQLCustomException.class);
-        photoBusiness.upload(multipartFile,null);
+        photoBusiness.upload(multipartFile, null);
     }
 
 
     @Test
     public void uploadFichierVide() {
+        // Initialisation
         Produit produit = new Produit();
         ArrayList<Photo> photos = new ArrayList<>();
-        ArrayList<Caracteristique> caracteristiques= new ArrayList<>();
+        ArrayList<Caracteristique> caracteristiques = new ArrayList<>();
         ArrayList<Categorie> categories = new ArrayList<>();
         produit.setPhotos(photos);
         produit.setDescription("description");
@@ -113,21 +113,36 @@ public class PhotoBusinessTests {
         produit.setCategories(categories);
         produit.setCaracteristiques(caracteristiques);
         produit.setNom("test");
+
+        // Test
         Mockito.when(produitRepository.findById(Mockito.any())).thenReturn(Optional.of(produit));
+        try {
+            Mockito.when(multipartFile.getBytes()).thenReturn(new byte[0]);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         thrown.expect(GraphQLCustomException.class);
-        photoBusiness.upload(multipartFile,produit.getReferenceProduit());
+        photoBusiness.upload(multipartFile, produit.getReferenceProduit());
+
+    }
+
+    @Test
+    //TODO faire le test de loadPhoto
+    public void loadPhotoFichier() {
 
     }
 
     @Test
     public void loadPhotoFichierInexistant() {
         thrown.expect(RuntimeException.class);
-        photoBusiness.loadPhotos("eaz","A05A02");
+        photoBusiness.loadPhotos("eaz", "A05A02");
     }
 
-    @Test
-    public void loadPhotoRefInexistante() {
-        thrown.expect(RuntimeException.class);
-        photoBusiness.loadPhotos("","aze");
-    }
+    //TODO Refaire le test getAll
+//    @Test
+//    public void getAll() {
+//        Mockito.when(photoRepository.findAllWithCriteria(Mockito.anyString())).thenReturn(new ArrayList<>());
+//        List<PhotoDTO> photoDTOList = photoBusiness.getAll("Test");
+//        Assert.assertNotNull(photoDTOList);
+//    }
 }

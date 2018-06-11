@@ -260,23 +260,24 @@ public class ProduitBusinessTests {
         Assert.assertEquals(1, retour.getPhotos().size());
     }
 
-    @Test
-    public void updateCharacteristicNotFound() {
-        Produit produit = new Produit();
-        produit.setReferenceProduit("A05A01");
-
-        produit.setCategories(new ArrayList<>());
-        produit.setPhotos(new ArrayList<>());
-
-        List<Caracteristique> caracteristiqueList = new ArrayList<>();
-        caracteristiqueList.add(new Caracteristique());
-        produit.setCaracteristiques(caracteristiqueList);
-
-        Mockito.when(produitRepository.findById(Mockito.anyString())).thenReturn(Optional.of(produit));
-
-        thrown.expect(GraphQLCustomException.class);
-        produitBusiness.update(produit);
-    }
+    //TODO A décommenter quand les produits auront des caractéristiques
+//    @Test
+//    public void updateCharacteristicNotFound() {
+//        Produit produit = new Produit();
+//        produit.setReferenceProduit("A05A01");
+//
+//        produit.setCategories(new ArrayList<>());
+//        produit.setPhotos(new ArrayList<>());
+//
+//        List<Caracteristique> caracteristiqueList = new ArrayList<>();
+//        caracteristiqueList.add(new Caracteristique());
+//        produit.setCaracteristiques(caracteristiqueList);
+//
+//        Mockito.when(produitRepository.findById(Mockito.anyString())).thenReturn(Optional.of(produit));
+//
+//        thrown.expect(GraphQLCustomException.class);
+//        produitBusiness.update(produit);
+//    }
 
     @Test
     public void updateCharacteristicFound() {
@@ -293,7 +294,8 @@ public class ProduitBusinessTests {
         produit.setCaracteristiques(caracteristiqueList);
 
         Mockito.when(produitRepository.findById(Mockito.anyString())).thenReturn(Optional.of(produit));
-        Mockito.when(caracteristiqueRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(caracteristique));
+        //TODO A décommenter quand les produits auront des caractéristiques
+        // Mockito.when(caracteristiqueRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(caracteristique));
         Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
 
         ProduitDTO retour = produitBusiness.update(produit);
