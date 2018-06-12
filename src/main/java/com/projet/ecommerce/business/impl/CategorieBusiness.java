@@ -39,7 +39,6 @@ public class CategorieBusiness implements ICategorieBusiness {
      * @return Une liste de CategorieDTO
      */
     @Override
-
     public List<CategorieDTO> getCategorie(int id, String nom, boolean sousCategorie, boolean parent) {
 
         // Initialisation
@@ -69,18 +68,21 @@ public class CategorieBusiness implements ICategorieBusiness {
         }
         // Mise en forme des objets CategorieDTO
         HashMap<Categorie, String> chemins = construireAssociationEnfantsChemins(categorieCollection);
+
         return new ArrayList<>(CategorieTransformer.entityToDto(new ArrayList<>(categorieCollection), chemins, sousCategorie, parent, parentDirect));
 
     }
 
     @Override
     public HashMap<Categorie, String> construireAssociationEnfantsChemins(Collection<Categorie> categories) {
+
         // Construire un tableau des catégories retournées par findAllWithCriteria
         HashMap<Integer, Categorie> categoriesPourParents = new HashMap<>();
         Iterator<Categorie> it = categories.iterator();
         int i = 1;
         while (it.hasNext()) {
-            categoriesPourParents.put(i, it.next());
+            Categorie cat = it.next();
+            categoriesPourParents.put(i, cat);
             i++;
         }
 

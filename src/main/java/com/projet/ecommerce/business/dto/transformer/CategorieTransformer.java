@@ -93,6 +93,8 @@ public class CategorieTransformer {
         return categorieDTO;
     }
 
+    // TODO: seule fonction entityToDto qui rajoute les chemins. Faire en sorte que les autres entityToDto le fasse aussi.
+
     /**
      * Transforme une liste d'objets Categorie en une collection d'objets CategorieDTO.
      *
