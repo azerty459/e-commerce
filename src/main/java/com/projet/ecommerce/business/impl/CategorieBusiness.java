@@ -176,6 +176,9 @@ public class CategorieBusiness implements ICategorieBusiness {
      */
     @Override
     public CategorieDTO addParent(String nomCategorie) {
+        if (nomCategorie.isEmpty()) {
+            throw new GraphQLCustomException("Le nom de categorie est vide");
+        }
         //On récupère toute la liste des catégories
         List<Categorie> categorieList = new ArrayList<>(categorieRepository.findAll());
         int borndeDroit = 0;
@@ -212,40 +215,42 @@ public class CategorieBusiness implements ICategorieBusiness {
      */
     @Override
     public CategorieDTO addEnfant(String nomCategorie, int idParent) {
+        if (nomCategorie.isEmpty()) {
+            throw new GraphQLCustomException("Le nom de categorie est vide");
+        }
         // On recherche si le père existe
         Optional<Categorie> categorieParentOptional = categorieRepository.findById(idParent);
-        if (categorieParentOptional.isPresent()) {
-            Categorie categorieParent = categorieParentOptional.get();
-            //Permet de décaler les catégorie de + 2 par rapport à la borne droite du père
-            List<Categorie> categorieList = new ArrayList<>(categorieRepository.findAll());
-            // On par cours tout le tableau de catégorie
-            for (Categorie retour : categorieList) {
-                if (retour.getBorneDroit() > categorieParent.getBorneDroit()) {
-                    // Si la catégorie est compris dans le parrent, on ajoute que +2 à la borne droite
-                    if (retour.getBorneGauche() < categorieParent.getBorneGauche()) {
-                        retour.setBorneDroit(retour.getBorneDroit() + 2);
-                        categorieRepository.save(retour);
-                    } else { // Sinon on ajoute + 2 à la borne gauche et droite
-                        retour.setBorneDroit(retour.getBorneDroit() + 2);
-                        retour.setBorneGauche(retour.getBorneGauche() + 2);
-                        categorieRepository.save(retour);
-                    }
-                }
-            }
-            // On créer la catégorie à insérer
-            Categorie categorieInserer = new Categorie();
-            categorieInserer.setNomCategorie(nomCategorie);
-            categorieInserer.setBorneGauche(categorieParent.getBorneDroit());
-            categorieInserer.setBorneDroit(categorieParent.getBorneDroit() + 1);
-            categorieInserer.setLevel(categorieParent.getLevel() + 1);
-            categorieInserer.setProduits(new ArrayList<>());
-            // On ajoute + 2 au père sur sa borne droite puis au sauvegarde
-            categorieParent.setBorneDroit(categorieParent.getBorneDroit() + 2);
-            categorieRepository.save(categorieParent);
-            return CategorieTransformer.entityToDto(categorieRepository.save(categorieInserer));
-        } else {
+        if (!categorieParentOptional.isPresent()) {
             throw new GraphQLCustomException("Aucune catégorie parent trouvé: " + idParent);
         }
+        Categorie categorieParent = categorieParentOptional.get();
+        //Permet de décaler les catégorie de + 2 par rapport à la borne droite du père
+        List<Categorie> categorieList = new ArrayList<>(categorieRepository.findAll());
+        // On par cours tout le tableau de catégorie
+        for (Categorie retour : categorieList) {
+            if (retour.getBorneDroit() > categorieParent.getBorneDroit()) {
+                // Si la catégorie est compris dans le parrent, on ajoute que +2 à la borne droite
+                if (retour.getBorneGauche() < categorieParent.getBorneGauche()) {
+                    retour.setBorneDroit(retour.getBorneDroit() + 2);
+                    categorieRepository.save(retour);
+                } else { // Sinon on ajoute + 2 à la borne gauche et droite
+                    retour.setBorneDroit(retour.getBorneDroit() + 2);
+                    retour.setBorneGauche(retour.getBorneGauche() + 2);
+                    categorieRepository.save(retour);
+                }
+            }
+        }
+        // On créer la catégorie à insérer
+        Categorie categorieInserer = new Categorie();
+        categorieInserer.setNomCategorie(nomCategorie);
+        categorieInserer.setBorneGauche(categorieParent.getBorneDroit());
+        categorieInserer.setBorneDroit(categorieParent.getBorneDroit() + 1);
+        categorieInserer.setLevel(categorieParent.getLevel() + 1);
+        categorieInserer.setProduits(new ArrayList<>());
+        // On ajoute + 2 au père sur sa borne droite puis au sauvegarde
+        categorieParent.setBorneDroit(categorieParent.getBorneDroit() + 2);
+        categorieRepository.save(categorieParent);
+        return CategorieTransformer.entityToDto(categorieRepository.save(categorieInserer));
     }
 
     /**
@@ -442,7 +447,10 @@ public class CategorieBusiness implements ICategorieBusiness {
     }
 
     @Override
-    public CategorieDTO updateCategorie(int id, String newName) {
+    public CategorieDTO updateCategorie(int id, String nomCategorie) {
+        if (nomCategorie.isEmpty()) {
+            throw new GraphQLCustomException("Le nom de categorie est vide");
+        }
 
         Optional<Categorie> optionalCategorie = categorieRepository.findById(id);
 
@@ -451,7 +459,7 @@ public class CategorieBusiness implements ICategorieBusiness {
         return optionalCategorie
                 .map((categorie) -> {
                     Categorie cat = optionalCategorie.get();
-                    cat.setNomCategorie(newName);
+                    cat.setNomCategorie(nomCategorie);
                     return CategorieTransformer.entityToDto(categorieRepository.save(cat));
                 })
                 .orElseThrow(() -> new GraphQLCustomException("La catégorie n'a pas été trouvée"));
