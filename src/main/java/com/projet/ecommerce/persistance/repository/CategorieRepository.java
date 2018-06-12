@@ -21,7 +21,7 @@ public interface CategorieRepository extends PagingAndSortingRepository<Categori
             "(SELECT maincat.borneGauche FROM Categorie AS maincat WHERE maincat.idCategorie =:id) " +
             "AND souscat.borneDroit <= " +
             "(SELECT maincat2.borneDroit FROM Categorie AS maincat2 WHERE maincat2.idCategorie =:id)")
-    Collection<Categorie> findByIdCategorieWithSousCat(@Param("id")  int id);
+    Collection<Categorie> findByIdCategorieWithSousCat(@Param("id") int id);
 
     Collection<Categorie> findByNomCategorie(String nom);
 

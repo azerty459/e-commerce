@@ -7,7 +7,7 @@ import javax.persistence.*;
  */
 
 @Entity
-@Table(name="type_caracteristique")
+@Table(name = "type_caracteristique")
 public class TypeCaracteristique {
     @Id
     @Column(name = "id_type_caracteristique")
@@ -19,6 +19,7 @@ public class TypeCaracteristique {
 
     /**
      * Retourne l'id de TypeCaracteristique.
+     *
      * @return l'id de type caractéristique
      */
     public int getIdTypeCaracteristique() {
@@ -28,6 +29,7 @@ public class TypeCaracteristique {
 
     /**
      * Retourne le type de la caractéristique.
+     *
      * @return le type de la caractéristique
      */
     public String getType() {
@@ -36,6 +38,7 @@ public class TypeCaracteristique {
 
     /**
      * Modifie le type de la caractéristique.
+     *
      * @param type Le nouveau type de caractéristique.
      */
     public void setType(String type) {
@@ -44,6 +47,7 @@ public class TypeCaracteristique {
 
     /**
      * Modifie l'id de TypeCaracteristique par celui-ci mit en paramètre.
+     *
      * @param idTypeCaracteristique La nouvelle id du TypeCaracteristique.
      */
     public void setIdTypeCaracteristique(int idTypeCaracteristique) {

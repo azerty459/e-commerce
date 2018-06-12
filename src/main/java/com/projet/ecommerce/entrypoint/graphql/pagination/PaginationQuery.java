@@ -20,7 +20,7 @@ public class PaginationQuery {
         builder.dataFetcher("pagination", (DataFetchingEnvironment env) ->
                 paginationBusiness.getPagination(env.getArgument("type"), env.getArgument("page"), env.getArgument("npp"),
                         env.getArgument("nom"))
-                );
+        );
         return builder.build();
     }
 }

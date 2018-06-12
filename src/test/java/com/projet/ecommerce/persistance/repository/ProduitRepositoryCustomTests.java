@@ -2,8 +2,6 @@ package com.projet.ecommerce.persistance.repository;
 
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Produit;
-import com.projet.ecommerce.persistance.repository.CategorieRepository;
-import com.projet.ecommerce.persistance.repository.ProduitRepository;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

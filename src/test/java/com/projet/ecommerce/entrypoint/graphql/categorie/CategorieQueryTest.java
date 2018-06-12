@@ -35,7 +35,7 @@ public class CategorieQueryTest {
     }
 
     @Test
-    public void produitWiring(){
+    public void produitWiring() {
         TypeRuntimeWiring typeRuntimeWiring = categorieQuery.produitWiring();
         Assert.assertEquals(typeRuntimeWiring.getTypeName(), "Query");
         Assert.assertEquals(typeRuntimeWiring.getTypeResolver(), null);
@@ -46,11 +46,11 @@ public class CategorieQueryTest {
     public void testNbDataFetcher() {
         Map<String, DataFetcher> retourMap = categorieQuery.produitWiring().getFieldDataFetchers();
         Assert.assertNotNull(retourMap);
-        Assert.assertEquals(1,retourMap.size());
+        Assert.assertEquals(1, retourMap.size());
     }
 
     @Test
-    public void categories(){
+    public void categories() {
         Map<String, DataFetcher> retourMap = categorieQuery.produitWiring().getFieldDataFetchers();
 
         Assert.assertNotNull(retourMap.get("categories"));

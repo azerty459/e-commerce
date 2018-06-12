@@ -18,7 +18,7 @@ public class ProduitQuery {
         builder.typeName("Query");
         builder.dataFetcher("produits", (DataFetchingEnvironment env) ->
                 produitBusiness.getAll(env.getArgument("ref"), env.getArgument("nom"), env.getArgument("cat")
-            ));
+                ));
         return builder.build();
     }
 }

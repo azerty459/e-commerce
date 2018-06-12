@@ -13,11 +13,11 @@ import java.util.List;
 public class PhotoTransformerTests {
 
     private static final PhotoDTO PHOTO_DTO1;
-    private static final PhotoDTO  PHOTO_DTO2;
+    private static final PhotoDTO PHOTO_DTO2;
     private static final Photo PHOTO1;
     private static final Photo PHOTO2;
 
-	static {
+    static {
         PHOTO_DTO1 = new PhotoDTO();
         PHOTO_DTO1.setUrl("test/test1.jpg");
         PHOTO_DTO1.setIdPhoto(1);
@@ -33,10 +33,10 @@ public class PhotoTransformerTests {
         PHOTO2 = new Photo();
         PHOTO2.setUrl("test/test2.jpg");
         PHOTO2.setIdPhoto(2);
-	}
+    }
 
-	@Test
-    public void singleDtoToEntity(){
+    @Test
+    public void singleDtoToEntity() {
         Photo photo = PhotoTransformer.dtoToEntity(PHOTO_DTO1);
 
         Assert.assertNotNull(photo);
@@ -45,16 +45,16 @@ public class PhotoTransformerTests {
     }
 
     @Test
-    public void singleEntityToDto(){
-	    PhotoDTO photoDTO = PhotoTransformer.entityToDto(PHOTO1);
+    public void singleEntityToDto() {
+        PhotoDTO photoDTO = PhotoTransformer.entityToDto(PHOTO1);
 
-	    Assert.assertNotNull(photoDTO);
+        Assert.assertNotNull(photoDTO);
         Assert.assertEquals(photoDTO.getUrl(), PHOTO1.getUrl());
         Assert.assertEquals(photoDTO.getIdPhoto(), PHOTO1.getIdPhoto());
     }
 
     @Test
-    public void severalDtoToEntity(){
+    public void severalDtoToEntity() {
         List<PhotoDTO> photoDTOList = new ArrayList<>();
         photoDTOList.add(PHOTO_DTO1);
         photoDTOList.add(PHOTO_DTO2);
@@ -69,7 +69,7 @@ public class PhotoTransformerTests {
     }
 
     @Test
-    public void severalEntityToDto(){
+    public void severalEntityToDto() {
         List<Photo> photoList = new ArrayList<>();
         photoList.add(PHOTO1);
         photoList.add(PHOTO2);

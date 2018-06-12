@@ -7,7 +7,7 @@ import javax.persistence.*;
  */
 
 @Entity
-@Table(name="photo")
+@Table(name = "photo")
 public class Photo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +23,7 @@ public class Photo {
 
     /**
      * Retourne l'id de la photo.
+     *
      * @return l'id de la photo.
      */
     public int getIdPhoto() {
@@ -31,6 +32,7 @@ public class Photo {
 
     /**
      * Retourne l'url liée à la photo.
+     *
      * @return l'url liée à la photo.
      */
     public String getUrl() {
@@ -39,6 +41,7 @@ public class Photo {
 
     /**
      * Remplace l'url de la photo par celle-ci mit en paramètre.
+     *
      * @param url La nouvelle URL qui pointe vers la photo
      */
     public void setUrl(String url) {
@@ -48,6 +51,7 @@ public class Photo {
 
     /**
      * Remplace l'id de la photo par celui-ci mit en paramètre.
+     *
      * @param idPhoto Le nouveau id de la photo
      */
     public void setIdPhoto(int idPhoto) {

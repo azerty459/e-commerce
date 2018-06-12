@@ -54,7 +54,7 @@ public class GraphQlUtility {
                 .build();
     }
 
-    public List<GraphQLError> graphQLErrorHandler(List<GraphQLError> graphQLErrors){
+    public List<GraphQLError> graphQLErrorHandler(List<GraphQLError> graphQLErrors) {
         List<GraphQLError> clientErrors = graphQLErrors.stream()
                 .filter(this::isClientError)
                 .collect(Collectors.toList());
@@ -74,8 +74,8 @@ public class GraphQlUtility {
         return !(error instanceof ExceptionWhileDataFetching || error instanceof Throwable);
     }
 
-    public RuntimeWiring buildRuntimeWiring(){
-        return  RuntimeWiring.newRuntimeWiring()
+    public RuntimeWiring buildRuntimeWiring() {
+        return RuntimeWiring.newRuntimeWiring()
                 .type(produitQuery.produitWiring())
                 .type(produitMutation.produitWiring())
                 .type(photoQuery.produitWiring())

@@ -81,7 +81,7 @@ public class CategorieRepositoryTests {
     }
 
     @Test
-    public void findByIdCategorieWithSousCat(){
+    public void findByIdCategorieWithSousCat() {
         // On sauvegarde tout pour avoir des données dans la BDD
         categorieRepository.save(TEMP_GET);
         categorieRepository.save(TEMP_DELETE);
@@ -93,14 +93,14 @@ public class CategorieRepositoryTests {
     }
 
     @Test
-    public void findByNomCategorie(){
+    public void findByNomCategorie() {
         categorieRepository.save(TEMP_GET);
         Collection<Categorie> categorieCollection = categorieRepository.findByNomCategorie(TEMP_GET.getNomCategorie());
         Assert.assertEquals(1, categorieCollection.size());
     }
 
     @Test
-    public void findByNomCategorieWithSousCat(){
+    public void findByNomCategorieWithSousCat() {
         categorieRepository.save(TEMP_GET);
         categorieRepository.save(TEMP_DELETE);
         categorieRepository.save(TEMP_INSERT);
