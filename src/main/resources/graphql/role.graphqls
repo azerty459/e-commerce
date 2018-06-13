@@ -1,0 +1,24 @@
+input RoleAddInput {
+    nom: String!
+}
+
+input RoleUpdateInput {
+    id: Int!
+    nom: String!
+}
+
+type Role {
+    id: Int!
+    nom: String!
+}
+
+
+extend type Query {
+    roles(id: Int, nom: String): [Role]!
+}
+
+extend type Mutation {
+    addRole(role: RoleAddInput!): Role!
+    updateRole(role: RoleUpdateInput!): Role!
+    deleteRole(id: Int!): Boolean!
+}

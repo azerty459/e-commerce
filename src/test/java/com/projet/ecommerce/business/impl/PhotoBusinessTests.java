@@ -21,6 +21,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -67,9 +68,10 @@ public class PhotoBusinessTests {
         byte[] b = new byte[4];
         Mockito.when(produitRepository.findById(Mockito.any())).thenReturn(Optional.of(produit));
         try {
-            Mockito.when(multipartFile.getBytes()).thenReturn(b);
+            Mockito.when(multipartFile.getBytes()).thenThrow(new FileNotFoundException());
         } catch (IOException e) {
             e.printStackTrace();
+            Assert.fail();
         }
         Assert.assertTrue(photoBusiness.upload(multipartFile, "test"));
         try {

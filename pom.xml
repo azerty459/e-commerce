@@ -30,6 +30,7 @@
         <sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
         <sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
+        <spring-security-crypto.version>5.0.5.RELEASE</spring-security-crypto.version>
     </properties>
 
     <dependencyManagement>
@@ -51,6 +52,12 @@
                 <artifactId>mockito-all</artifactId>
                 <version>${mockito-all.version}</version>
                 <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-crypto</artifactId>
+                <version>${spring-security-crypto.version}</version>
             </dependency>
 
         </dependencies>
@@ -93,6 +100,13 @@
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
         </dependency>
+
+        <!-- Librairie pour la sécurité -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-crypto</artifactId>
+        </dependency>
+
 
         <!-- Librairie pour les tests -->
 

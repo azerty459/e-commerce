@@ -221,22 +221,25 @@ public class CategorieBusinessTests {
 
     @Test
     public void insertEnfant() {
-        Categorie categorie1 = new Categorie();
-        categorie1.setNomCategorie("Transport");
-        categorie1.setBorneGauche(1);
-        categorie1.setBorneDroit(4);
-        categorie1.setLevel(1);
+        Categorie parent = new Categorie();
+        parent.setNomCategorie("Transport");
+        parent.setBorneGauche(1);
+        parent.setBorneDroit(4);
+        parent.setLevel(1);
+
+        Categorie enfant = new Categorie();
 
         Collection<Categorie> categorieCollection = new ArrayList<>();
-        categorieCollection.add(categorie1);
+        categorieCollection.add(parent);
 
-        Mockito.when(categorieRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(categorie1));
+        Mockito.when(categorieRepository.findById(parent.getIdCategorie())).thenReturn(Optional.of(parent));
+
         Mockito.when(categorieRepository.findAll()).thenReturn(categorieCollection);
-        Mockito.when(categorieRepository.save(Mockito.any())).thenReturn(categorie1);
-        CategorieDTO retour1 = categorieBusiness.addEnfant("Test", categorie1.getIdCategorie());
+        Mockito.when(categorieRepository.save(Mockito.any())).thenReturn(parent);
+        CategorieDTO retour1 = categorieBusiness.addEnfant("Test", parent.getIdCategorie());
 
         Assert.assertNotNull(retour1);
-        Assert.assertEquals(categorie1.getNomCategorie(), retour1.getNom());
+        Assert.assertEquals(parent.getNomCategorie(), retour1.getNom());
     }
 
 

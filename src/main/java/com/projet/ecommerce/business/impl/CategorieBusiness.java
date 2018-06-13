@@ -52,7 +52,7 @@ public class CategorieBusiness implements ICategorieBusiness {
         } else if (id != 0) {
             categorieCollection = findById(id, sousCategorie);
         } else {
-            categorieCollection = categorieRepository.findAll();
+            categorieCollection = categorieRepository.findAllByOrderByNomCategorie();
         }
 
         // On va aussi chercher son parent direct si demandé
