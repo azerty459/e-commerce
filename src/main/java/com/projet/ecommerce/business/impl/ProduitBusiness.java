@@ -209,7 +209,7 @@ public class ProduitBusiness implements IProduitBusiness {
      * @param ref la référence du produit recherché
      * @param cat la catégorie du /des produit(s) recherché(s)
      * @param nom le nom du produit à rechercher
-     * @return une liste de produits selon les paramètres ci-dessous
+     * @return une liste de produits selon les paramètres
      */
     @Override
     public List<ProduitDTO> getAll(String ref, String cat, String nom) {
@@ -232,12 +232,12 @@ public class ProduitBusiness implements IProduitBusiness {
 
 
     /**
-     * Retourne un objet page de produit
+     * Retourne une page de produit
      *
      * @param numeroPage    la page souhaitée
      * @param nombreProduit le nombre de produit à afficher dans la
      * @param nom           le nom du produit à rechercher
-     * @return un objet page de produit
+     * @return une page paginée
      */
     @Override
     public Page<Produit> getPage(int numeroPage, int nombreProduit, String nom) {

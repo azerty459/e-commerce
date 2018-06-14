@@ -19,6 +19,7 @@ import java.util.List;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("test")
+@Transactional
 public class ProduitRepositoryCustomTests {
 
     private static final Produit TEMP_INSERT;

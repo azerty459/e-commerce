@@ -16,11 +16,12 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
-public class ProduitMutationTest {
+public class ProduitMutationTests {
     @Mock
     private ProduitBusiness produitBusiness;
 
@@ -69,20 +70,23 @@ public class ProduitMutationTest {
     }
 
     @Test
-    //TODO Revoir le test
     public void updateProduit() {
         Map<String, DataFetcher> retourMap = produitMutation.produitWiring().getFieldDataFetchers();
 
         // On imite le comportement des getArgument
-        Produit produit = new Produit();
-        Mockito.when(dataFetchingEnvironment.getArgument("produit")).thenReturn(produit);
+        Map<String, String> linkedHashMap = new LinkedHashMap<String, String>();
+        linkedHashMap.put("referenceProduit", "A05A01");
+        linkedHashMap.put("nom", "Paw Patrolf");
+        linkedHashMap.put("description", "");
+        linkedHashMap.put("prixHT", "24.0");
+
+        // On imite le comportement des getArgument
+        Mockito.when(dataFetchingEnvironment.getArgument("produit")).thenReturn(linkedHashMap);
 
         Assert.assertNotNull(retourMap.get("updateProduit"));
         retourMap.get("updateProduit").get(dataFetchingEnvironment);
-        // Test avec nb appel add avec bon param
-        Mockito.verify(produitBusiness, Mockito.times(1)).update(produit);
-        // Test avec nb appel add avec mauvais param
-        Mockito.verify(produitBusiness, Mockito.times(0)).update(new Produit());
+        // Test avec nb appel
+        Mockito.verify(produitBusiness, Mockito.times(1)).update(Mockito.any(Produit.class));
     }
 
     @Test

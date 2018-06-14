@@ -5,6 +5,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
+import java.util.Optional;
 
 /**
  * Interface permettante de communiquer avec la base de données pour la table Catégorie.
@@ -13,12 +14,9 @@ import java.util.Collection;
 @Repository
 public interface UtilisateurRepository extends PagingAndSortingRepository<Utilisateur, Integer> {
 
-    @Override
-    Collection<Utilisateur> findAll();
+    Collection<Utilisateur> findAllByOrderByEmail();
 
-    Utilisateur findById(int id);
-
-    Utilisateur findByEmail(String email);
+    Optional<Utilisateur> findByEmail(String email);
 
     void deleteByEmail(String email);
 

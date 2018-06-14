@@ -10,6 +10,7 @@ import com.projet.ecommerce.persistance.repository.RoleRepository;
 import com.projet.ecommerce.persistance.repository.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Service permettant de gérer les actions effectuées pour les produits.
+ * Service permettant de gérer les actions effectuées pour les utilisateurs.
  */
 
 @Service
@@ -36,6 +37,12 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    /**
+     * Permets d'ajouter un utilisateur dans la base de données
+     *
+     * @param utilisateurDTO L'objet utilisateur à sauvegarder
+     * @return l'utilisateur créé sous forme d'objet : UtilisateurDTO
+     */
     @Override
     public UtilisateurDTO add(UtilisateurDTO utilisateurDTO) {
         if (utilisateurDTO == null) {
@@ -77,6 +84,12 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
         return retourList;
     }
 
+    /**
+     * Modifie l'utilisateur dans la base de données selon l'id de l'utilisateur
+     *
+     * @param utilisateurDTO L'objet utilisateur modifié à sauvegarder
+     * @return l'utilisateur modifié sous forme d'objet : UtilisateurDTO
+     */
     @Override
     public UtilisateurDTO update(UtilisateurDTO utilisateurDTO) {
         return null;
@@ -92,6 +105,16 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
         return true;
     }
 
+    /**
+     * Retoune une liste d'utilisateur selon les pramètres ci-dessous.
+     *
+     * @param id     l'id de l'utilisateur à rechercher
+     * @param email  l'mail de/des utilisateur(s) recherché(s)
+     * @param nom    le nom de/des utilisateur(s) recherché(s)
+     * @param prenom le prénom de/des utilisateur(s) recherché(s)
+     * @param role   le role de/des utilisateur(s) recherché(s)
+     * @return une liste d'utilisateur
+     */
     @Override
     public List<UtilisateurDTO> getUtilisateur(int id, String email, String nom, String prenom, String role) {
 
@@ -107,33 +130,47 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
         } else if (role != null) {
             utilisateurCollection = utilisateurRepository.findByRoles_NomContainingIgnoreCase(role);
         } else if (id != 0) {
-            utilisateurCollection.add(utilisateurRepository.findById(id));
+            Optional<Utilisateur> utilisateurOptional = utilisateurRepository.findById(id);
+            if (utilisateurOptional.isPresent()) {
+                utilisateurCollection.add(utilisateurOptional.get());
+            }
         } else {
-            utilisateurCollection = utilisateurRepository.findAll();
+            utilisateurCollection = utilisateurRepository.findAllByOrderByEmail();
         }
         return new ArrayList<>(UtilisateurTransformer.entityToDto(utilisateurCollection));
     }
 
+    /**
+     * Retourne l'utilisateur connecté où des erreurs graphql selon les erreurs qu'il y a commise, s'il n'y arrive pas
+     *
+     * @param email L'email de l'utilisateur
+     * @param mdp   Mot de passe de l'utilisateur
+     * @return l'utilisateur connecté
+     */
     @Override
     public UtilisateurDTO login(String email, String mdp) {
-        Utilisateur utilisateur = utilisateurRepository.findByEmail(email);
+        Optional<Utilisateur> utilisateurOptional = utilisateurRepository.findByEmail(email);
         if (email.isEmpty() || mdp.isEmpty()) {
             throw new GraphQLCustomException("Veuillez écrire votre mot de passe ou votre adresse e-mail.");
         }
-        if (utilisateur == null) {
-            throw new GraphQLCustomException("Impossible de trouver un compte correspondant à cette adresse e-mail.");
-        }
+        Utilisateur utilisateur = utilisateurOptional.orElseThrow(() -> new GraphQLCustomException("Impossible de trouver un compte correspondant à cette adresse e-mail."));
         String mdpHashe = passwordEncoder.encode(mdp);
-        System.out.println("Mdp hashé : " + mdpHashe + "Mdp utilisateur :" + utilisateur.getMdp());
-        System.out.println(passwordEncoder.matches(mdp, utilisateur.getMdp()));
         if (!passwordEncoder.matches(mdp, utilisateur.getMdp())) {
             throw new GraphQLCustomException("Votre mot de passe est incorrect.");
         }
         return UtilisateurTransformer.entityToDto(utilisateur);
     }
 
+    /**
+     * Retourne une page d'utilisateur.
+     *
+     * @param pageNumber le page souhaitée
+     * @param nb         le nombre d'utilisateur à afficher dans la page
+     * @return une page paginée
+     */
     @Override
     public Page<Utilisateur> getPage(int pageNumber, int nb) {
-        return null;
+        PageRequest page = (pageNumber == 0) ? PageRequest.of(pageNumber, nb) : PageRequest.of(pageNumber - 1, nb);
+        return utilisateurRepository.findAll(page);
     }
 }

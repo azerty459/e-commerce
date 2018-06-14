@@ -19,6 +19,7 @@ public class UtilisateurQuery {
         builder.dataFetcher("utilisateurs", (DataFetchingEnvironment env) ->
                 utilisateurBusiness.getUtilisateur((env.getArgument("id") != null) ? env.getArgument("id") : 0, env.getArgument("email"), env.getArgument("nom"), env.getArgument("prenom"), env.getArgument("role"))
         );
+
         builder.dataFetcher("login", (DataFetchingEnvironment env) ->
                 utilisateurBusiness.login(env.getArgument("email"), env.getArgument("mdp"))
         );

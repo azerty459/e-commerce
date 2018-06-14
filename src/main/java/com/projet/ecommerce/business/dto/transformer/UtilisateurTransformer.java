@@ -41,7 +41,7 @@ public class UtilisateurTransformer {
         utilisateurDTO.setId(utilisateur.getId());
         utilisateurDTO.setMdp(utilisateur.getMdp());
         utilisateurDTO.setNom(utilisateur.getNom());
-        utilisateurDTO.setPrenom(utilisateur.getNom());
+        utilisateurDTO.setPrenom(utilisateur.getPrenom());
         utilisateurDTO.setRoles(new ArrayList<>(RoleTransformer.entityToDto(utilisateur.getRoles())));
         return utilisateurDTO;
     }

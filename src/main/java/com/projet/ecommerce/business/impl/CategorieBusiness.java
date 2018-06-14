@@ -501,11 +501,11 @@ public class CategorieBusiness implements ICategorieBusiness {
     }
 
     /**
-     * Retourne un objet page de catégorie.
+     * Retourne une page de catégorie.
      *
      * @param pageNumber le page souhaitée
-     * @param nb         le nombre de produit à afficher dans la page
-     * @return un objet page de produit
+     * @param nb         le nombre de catégorie à afficher dans la page
+     * @return une page paginée
      */
     @Override
     public Page<Categorie> getPage(int pageNumber, int nb) {

@@ -19,7 +19,7 @@ import java.util.Map;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
-public class PaginationQueryTest {
+public class PaginationQueryTests {
     @Mock
     private PaginationBusiness paginationBusiness;
 

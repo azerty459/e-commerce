@@ -17,9 +17,5 @@ public interface RoleRepository extends PagingAndSortingRepository<Role, Integer
     @Override
     Collection<Role> findAll();
 
-    Collection<Role> findById(int id);
-
     Optional<Role> findByNom(String nom);
-
-    Collection<Role> findByNomContainingIgnoreCaseOrderByNom(String nom);
 }
