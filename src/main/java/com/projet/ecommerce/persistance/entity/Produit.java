@@ -1,6 +1,7 @@
 package com.projet.ecommerce.persistance.entity;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -13,6 +14,12 @@ public class Produit {
     @Id
     @Column(name = "reference_produit")
     private String referenceProduit;
+
+    /**
+     * La date et l'heure d'ajout du produit dans la base de données (auto-généré par PostgreSQL)
+     */
+    @Column(name = "date_ajout", updatable = false, insertable = false)
+    private LocalDateTime dateAjout;
 
     @Column
     private String nom;
@@ -163,5 +170,21 @@ public class Produit {
         this.nom = nom;
     }
 
+    /**
+     * Donne la date et l'heure d'ajout d'un produit
+     *
+     * @return la date / heure d'ajout
+     */
+    public LocalDateTime getDateAjout() {
+        return dateAjout;
+    }
 
+    /**
+     * Fixe la date et l'heure d'ajout d'un produit.
+     *
+     * @param dateAjout la date / heure d'ajout d'un produit
+     */
+    public void setDateAjout(LocalDateTime dateAjout) {
+        this.dateAjout = dateAjout;
+    }
 }

@@ -11,6 +11,8 @@ public class PhotoDTO {
 
     private String url;
 
+    private String nom;
+
     /**
      * Retourne l'id de l'objet Produit.
      *
@@ -45,5 +47,13 @@ public class PhotoDTO {
      */
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String n) {
+        nom = n;
     }
 }

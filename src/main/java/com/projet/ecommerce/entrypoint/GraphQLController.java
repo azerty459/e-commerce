@@ -1,6 +1,7 @@
 package com.projet.ecommerce.entrypoint;
 
 import com.projet.ecommerce.business.IPhotoBusiness;
+import com.projet.ecommerce.business.impl.PhotoException;
 import com.projet.ecommerce.entrypoint.graphql.GraphQlUtility;
 import graphql.ExecutionResult;
 import graphql.GraphQL;
@@ -52,7 +53,13 @@ public class GraphQLController {
             @RequestParam("fichier") MultipartFile file,
             @RequestParam("ref") String refProduit
     ) {
-        return photoBusiness.upload(file, refProduit);
+        try {
+            photoBusiness.upload(file, refProduit);
+        } catch (PhotoException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     @GetMapping("/fichier/{refProduit}/{nomFichier:.+}")
