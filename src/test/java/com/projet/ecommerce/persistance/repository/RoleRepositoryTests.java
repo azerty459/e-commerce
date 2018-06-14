@@ -53,13 +53,13 @@ public class RoleRepositoryTests {
     }
 
     @Test
-    public void findByAll() {
+    public void findAllByOrderByNom() {
         roleRepository.deleteAll();
-        Collection<Role> roleCollection = roleRepository.findAll();
+        Collection<Role> roleCollection = roleRepository.findAllByOrderByNom();
         Assert.assertEquals(0, roleCollection.size());
 
         roleRepository.save(TEMP_INSERT);
-        roleCollection = roleRepository.findAll();
+        roleCollection = roleRepository.findAllByOrderByNom();
         Assert.assertEquals(1, roleCollection.size());
     }
 

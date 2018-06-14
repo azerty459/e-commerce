@@ -283,7 +283,7 @@ public class CategorieBusinessTests {
         categories.add(categorie2);
 
         // Tests
-        Mockito.when(categorieRepository.findAll()).thenReturn(categories);
+        Mockito.when(categorieRepository.findAllByOrderByNomCategorie()).thenReturn(categories);
         List<CategorieDTO> categorieDTOList = categorieBusiness.getCategorie(0, null, false, false);
 
         Assert.assertEquals(2, categories.size());

@@ -36,10 +36,17 @@ public class RoleBusiness implements IRoleBusiness {
             if (roleOptional.isPresent()) {
                 roleCollection.add(roleOptional.get());
             } else {
-                throw new GraphQLCustomException("Le rôle n'a pas été trouvé");
+                throw new GraphQLCustomException("Le rôle avec le nom recherché, n'a pas été trouvé");
+            }
+        } else if (id != 0) {
+            Optional<Role> roleOptional = roleRepository.findById(id);
+            if (roleOptional.isPresent()) {
+                roleCollection.add(roleOptional.get());
+            } else {
+                throw new GraphQLCustomException("Le rôle avec l'id recherché, n'a pas été trouvé");
             }
         } else {
-            roleCollection = roleRepository.findAll();
+            roleCollection = roleRepository.findAllByOrderByNom();
         }
         return new ArrayList<>(RoleTransformer.entityToDto(roleCollection));
     }

@@ -14,8 +14,7 @@ import java.util.Optional;
 @Repository
 public interface RoleRepository extends PagingAndSortingRepository<Role, Integer> {
 
-    @Override
-    Collection<Role> findAll();
+    Collection<Role> findAllByOrderByNom();
 
     Optional<Role> findByNom(String nom);
 }
