@@ -9,6 +9,9 @@ import java.util.List;
 
 public class UtilisateurTransformer {
 
+    private UtilisateurTransformer() {
+    }
+
     /**
      * Transforme une collection d'objets Utilisateur en une collection d'objets UtilisateurDTO.
      *

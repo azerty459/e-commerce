@@ -9,6 +9,9 @@ import java.util.List;
 
 public class PhotoTransformer {
 
+    private PhotoTransformer() {
+    }
+
     /**
      * Transforme une collection d'objets PhotoDTO en une collection d'objets Photo.
      *

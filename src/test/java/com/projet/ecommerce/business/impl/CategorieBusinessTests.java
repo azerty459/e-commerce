@@ -172,9 +172,6 @@ public class CategorieBusinessTests {
 
         // TODO
 
-        // La borne maximale de la base de données doit être 14
-        Mockito.when(categorieRepository.findBorneMax()).thenReturn(14);
-
     }
 
 
@@ -192,11 +189,7 @@ public class CategorieBusinessTests {
 
     @Test(expected = GraphQLCustomException.class)
     public void updateCategorieIdKO() {
-
-        Mockito.when(categorieRepository.findById(1)).thenReturn(Optional.empty());
-
         categorieBusiness.updateCategorie(1000, "Truc");
-
     }
 
     @Test
@@ -261,7 +254,6 @@ public class CategorieBusinessTests {
     @Test
     public void getCategorie_getAll() {
         List<Categorie> categories = new ArrayList<>();
-        Mockito.when(categorieRepository.findAll()).thenReturn(categories);
         Assert.assertEquals(categorieBusiness.getCategorie(0, null, false, false).size(), 0);
 
         // Création des catégories et ajout dans la liste.

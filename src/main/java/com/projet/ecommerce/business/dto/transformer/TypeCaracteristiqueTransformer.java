@@ -8,6 +8,9 @@ import java.util.Collection;
 
 public class TypeCaracteristiqueTransformer {
 
+    private TypeCaracteristiqueTransformer() {
+    }
+
     /**
      * Transforme une collection d'objets TypeCaracteristiqueDTO en une collection d'objets TypeCaracteristique.
      *

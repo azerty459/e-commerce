@@ -9,6 +9,9 @@ import java.util.List;
 
 public class RoleTransformer {
 
+    private RoleTransformer() {
+    }
+
     /**
      * Transforme une collection d'objets RoleDTO en une collection d'objets Role.
      *

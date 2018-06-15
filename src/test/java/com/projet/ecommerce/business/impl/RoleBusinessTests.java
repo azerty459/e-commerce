@@ -85,7 +85,7 @@ public class RoleBusinessTests {
         role.setNom("Utilisateur");
         role.setUtilisateurs(new ArrayList<>());
 
-        Mockito.when(roleRepository.findByNom(Mockito.anyString())).thenReturn(Optional.empty());
+        Mockito.when(roleRepository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
 
         thrown.expect(GraphQLCustomException.class);
         Collection<RoleDTO> roleCollection = roleBusiness.getRole(5, null);

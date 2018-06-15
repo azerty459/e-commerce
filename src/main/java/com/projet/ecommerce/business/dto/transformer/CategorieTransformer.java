@@ -10,6 +10,9 @@ import java.util.List;
 
 public class CategorieTransformer {
 
+    private CategorieTransformer() {
+    }
+
     /**
      * Transforme une collection d'objets CategorieDTO en une collection d'objets Categorie.
      *

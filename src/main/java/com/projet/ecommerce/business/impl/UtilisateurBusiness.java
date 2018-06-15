@@ -49,18 +49,18 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
             return null;
         }
         Utilisateur utilisateur = UtilisateurTransformer.dtoToEntity(utilisateurDTO);
-        if (utilisateur.getEmail().isEmpty() && utilisateur.getMdp().isEmpty()) {
+        if (utilisateur.getEmail().isEmpty() || utilisateur.getMdp().isEmpty()) {
             GraphQLCustomException graphQLCustomException = new GraphQLCustomException("Erreur dans l'ajout de l'utilisateur (l'adresse email ou le mot de passe est vide)");
             graphQLCustomException.ajouterExtension("Email", utilisateur.getEmail());
             graphQLCustomException.ajouterExtension("Mdp", utilisateur.getMdp());
             throw graphQLCustomException;
         }
-        if (utilisateurRepository.findByEmail(utilisateur.getEmail()) != null) {
+        if (!utilisateurRepository.findByEmail(utilisateur.getEmail()).isPresent()) {
             throw new GraphQLCustomException("L'adresse email déjà utilisée");
         }
 
-        utilisateur.setMdp(passwordEncoder.encode(utilisateurDTO.getMdp()));
         utilisateur.setRoles(completeRoleData(utilisateur.getRoles()));
+        utilisateur.setMdp(passwordEncoder.encode(utilisateurDTO.getMdp()));
 
         return UtilisateurTransformer.entityToDto(utilisateurRepository.save(utilisateur));
     }
@@ -73,6 +73,7 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
      */
     private Collection<Role> completeRoleData(Collection<Role> roleList) {
         List<Role> retourList = new ArrayList<>();
+        System.out.println("ok");
         for (Role role : roleList) {
             Optional<Role> roleOptional = roleRepository.findByNom(role.getNom());
             if (roleOptional.isPresent()) {
@@ -133,6 +134,8 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
             Optional<Utilisateur> utilisateurOptional = utilisateurRepository.findById(id);
             if (utilisateurOptional.isPresent()) {
                 utilisateurCollection.add(utilisateurOptional.get());
+            } else {
+                throw new GraphQLCustomException("L'utilisateur avec l'id recherché, n'a pas été trouvé");
             }
         } else {
             utilisateurCollection = utilisateurRepository.findAllByOrderByEmail();
@@ -149,12 +152,11 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
      */
     @Override
     public UtilisateurDTO login(String email, String mdp) {
-        Optional<Utilisateur> utilisateurOptional = utilisateurRepository.findByEmail(email);
         if (email.isEmpty() || mdp.isEmpty()) {
             throw new GraphQLCustomException("Veuillez écrire votre mot de passe ou votre adresse e-mail.");
         }
+        Optional<Utilisateur> utilisateurOptional = utilisateurRepository.findByEmail(email);
         Utilisateur utilisateur = utilisateurOptional.orElseThrow(() -> new GraphQLCustomException("Impossible de trouver un compte correspondant à cette adresse e-mail."));
-        String mdpHashe = passwordEncoder.encode(mdp);
         if (!passwordEncoder.matches(mdp, utilisateur.getMdp())) {
             throw new GraphQLCustomException("Votre mot de passe est incorrect.");
         }
