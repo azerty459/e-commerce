@@ -15,7 +15,10 @@ import java.util.Collection;
 @Repository
 public interface CategorieRepository extends PagingAndSortingRepository<Categorie, Integer>, CategorieRepositoryCustom {
 
+    @Override
     Collection<Categorie> findAll();
+
+    Collection<Categorie> findAllByOrderByNomCategorie();
 
     @Query("SELECT souscat FROM Categorie AS souscat WHERE souscat.borneGauche >= " +
             "(SELECT maincat.borneGauche FROM Categorie AS maincat WHERE maincat.idCategorie =:id) " +

@@ -11,6 +11,9 @@ import java.util.List;
 
 public class ProduitTransformer {
 
+    private ProduitTransformer() {
+    }
+
     /**
      * Transforme une collection d'objets ProduitDTO en une collection d'objets Produit.
      *

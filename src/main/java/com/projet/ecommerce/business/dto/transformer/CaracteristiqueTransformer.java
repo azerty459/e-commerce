@@ -9,6 +9,9 @@ import java.util.List;
 
 public class CaracteristiqueTransformer {
 
+    private CaracteristiqueTransformer() {
+    }
+
     /**
      * Transforme une collection d'objets CaracteristiqueDTO en une collection d'objets Caracteristique.
      *
@@ -16,7 +19,9 @@ public class CaracteristiqueTransformer {
      * @return une collection d'objet Caracteristique
      */
     public static Collection<Caracteristique> dtoToEntity(Collection<CaracteristiqueDTO> caracteristiqueDTOCollection) {
-        if (caracteristiqueDTOCollection == null) return null;
+        if (caracteristiqueDTOCollection == null) {
+            return null;
+        }
         List<Caracteristique> caracteristiques = new ArrayList<>();
         for (CaracteristiqueDTO caracteristiqueDTO : caracteristiqueDTOCollection) {
             caracteristiques.add(dtoToEntity(caracteristiqueDTO));
@@ -31,7 +36,9 @@ public class CaracteristiqueTransformer {
      * @return un objet Caracteristique
      */
     public static Caracteristique dtoToEntity(CaracteristiqueDTO caracteristiqueDTO) {
-        if (caracteristiqueDTO == null) return null;
+        if (caracteristiqueDTO == null) {
+            return null;
+        }
         Caracteristique caracteristique = new Caracteristique();
         caracteristique.setTypeCaracteristique(caracteristiqueDTO.getTypeCaracteristique());
         caracteristique.setValeur(caracteristiqueDTO.getValeur());
@@ -46,7 +53,9 @@ public class CaracteristiqueTransformer {
      * @return une collection d'objet CaracteristiqueDTO
      */
     public static Collection<CaracteristiqueDTO> entityToDto(Collection<Caracteristique> caracteristiques) {
-        if (caracteristiques == null) return null;
+        if (caracteristiques == null) {
+            return null;
+        }
         List<CaracteristiqueDTO> caracteristiqueDTOCollection = new ArrayList<>();
         for (Caracteristique caracteristique : caracteristiques) {
             caracteristiqueDTOCollection.add(entityToDto(caracteristique));
@@ -61,7 +70,9 @@ public class CaracteristiqueTransformer {
      * @return un objet CaracteristiqueDTO
      */
     public static CaracteristiqueDTO entityToDto(Caracteristique caracteristique) {
-        if (caracteristique == null) return null;
+        if (caracteristique == null) {
+            return null;
+        }
         CaracteristiqueDTO caracteristiqueDTO = new CaracteristiqueDTO();
         caracteristiqueDTO.setTypeCaracteristique(caracteristique.getTypeCaracteristique());
         caracteristiqueDTO.setValeur(caracteristique.getValeur());

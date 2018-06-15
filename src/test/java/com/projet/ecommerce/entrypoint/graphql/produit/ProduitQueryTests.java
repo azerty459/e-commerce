@@ -18,7 +18,7 @@ import java.util.Map;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
-public class ProduitQueryTest {
+public class ProduitQueryTests {
     @Mock
     private ProduitBusiness produitBusiness;
 
