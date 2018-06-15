@@ -7,10 +7,19 @@ package com.projet.ecommerce.business.dto;
 
 public class PhotoDTO {
 
+    /**
+     * L'id de la photo dans la base de données/
+     */
     private int idPhoto;
 
+    /**
+     * L'URL de la photo pour l'affichage
+     */
     private String url;
 
+    /**
+     * Le nom du fichier téléchargé par le client.
+     */
     private String nom;
 
     /**
@@ -49,10 +58,20 @@ public class PhotoDTO {
         this.url = url;
     }
 
+    /**
+     * Récupère le nom originel de la photo (le nom du fichier téléchargé)
+     *
+     * @return le nom du fichier originel
+     */
     public String getNom() {
         return nom;
     }
 
+    /**
+     * Fixe le nom originel du fichier
+     *
+     * @param n le nom du fichier
+     */
     public void setNom(String n) {
         nom = n;
     }

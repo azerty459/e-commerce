@@ -36,10 +36,11 @@ public class PhotoBusiness implements IPhotoBusiness {
     @Autowired
     private ProduitRepository produitRepository;
 
+    //TODO aller chercher la variable dans le fichier properties
     /**
      * Le répertoire de base pour les images.
      */
-    private static final String repertoireImg = "src/main/resources/img/"; //TODO aller chercher la variable dans le fichier properties
+    private static final String repertoireImg = "src/main/resources/img/";
 
     /**
      * Methode permettant l'upload d'un fichier
@@ -63,6 +64,9 @@ public class PhotoBusiness implements IPhotoBusiness {
 
         // Extension du fichier originel
         String[] decoupageNom = nomFichierAffiche.split("\\.");
+        if (decoupageNom.length < 2) {
+            throw new PhotoException("Le fichier n'est pas conforme.");
+        }
         String extensionFichier = "." + decoupageNom[decoupageNom.length - 1];
 
 
@@ -93,7 +97,7 @@ public class PhotoBusiness implements IPhotoBusiness {
         try {
             bytes = fichier.getBytes();
             if (bytes.length == 0) {
-                throw new GraphQLCustomException("le fichier est vide");
+                throw new PhotoException("le fichier est vide");
             } else {
 
                 // Construction du nom du fichier
