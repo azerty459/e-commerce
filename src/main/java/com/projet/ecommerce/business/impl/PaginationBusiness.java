@@ -3,11 +3,14 @@ package com.projet.ecommerce.business.impl;
 import com.projet.ecommerce.business.ICategorieBusiness;
 import com.projet.ecommerce.business.IPaginationBusiness;
 import com.projet.ecommerce.business.IProduitBusiness;
+import com.projet.ecommerce.business.IUtilisateurBusiness;
 import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.business.dto.PaginationDTO;
 import com.projet.ecommerce.business.dto.ProduitDTO;
+import com.projet.ecommerce.business.dto.UtilisateurDTO;
 import com.projet.ecommerce.business.dto.transformer.CategorieTransformer;
 import com.projet.ecommerce.business.dto.transformer.ProduitTransformer;
+import com.projet.ecommerce.business.dto.transformer.UtilisateurTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -26,6 +29,9 @@ public class PaginationBusiness implements IPaginationBusiness {
 
     @Autowired
     private ICategorieBusiness categorieBusiness;
+
+    @Autowired
+    private IUtilisateurBusiness utilisateurBusiness;
 
     /**
      * Retourne une liste paginée selon le type voulu, la page voulu et le nombre de produits à afficher.
@@ -61,6 +67,17 @@ public class PaginationBusiness implements IPaginationBusiness {
                 paginationDTO = getPaginationDTO(pageCategorie, pageActuelle);
                 paginationDTO.setCategories(new ArrayList<CategorieDTO>(CategorieTransformer.entityToDto(pageCategorie.getContent(), categorieBusiness.construireAssociationEnfantsChemins(pageCategorie.getContent()), false, false, null)));
                 paginationDTO.setProduits(new ArrayList<>());
+                break;
+            case "utilisateur":
+                System.out.println("test");
+                Page utilisateurPage = utilisateurBusiness.getPage(pageActuelle, npp);
+                if (pageActuelle > utilisateurPage.getTotalPages()) {
+                    pageCategorie = utilisateurBusiness.getPage(utilisateurPage.getTotalPages(), npp);
+                }
+                paginationDTO = getPaginationDTO(utilisateurPage, pageActuelle);
+                paginationDTO.setProduits(new ArrayList<>());
+                paginationDTO.setCategories(new ArrayList<>());
+                paginationDTO.setUtilisateurs(new ArrayList<UtilisateurDTO>(UtilisateurTransformer.entityToDto(utilisateurPage.getContent())));
                 break;
             default:
                 return null;

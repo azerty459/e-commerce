@@ -1,6 +1,8 @@
 package com.projet.ecommerce.persistance.repository;
 
 import com.projet.ecommerce.persistance.entity.Utilisateur;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
@@ -27,4 +29,6 @@ public interface UtilisateurRepository extends PagingAndSortingRepository<Utilis
     Collection<Utilisateur> findByPrenomContainingIgnoreCaseOrderByPrenom(String prenom);
 
     Collection<Utilisateur> findByRoles_NomContainingIgnoreCase(String nom);
+
+    Page<Utilisateur> findAllByOrderByEmail(Pageable pageable);
 }

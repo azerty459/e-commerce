@@ -55,7 +55,7 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
             graphQLCustomException.ajouterExtension("Mdp", utilisateur.getMdp());
             throw graphQLCustomException;
         }
-        if (!utilisateurRepository.findByEmail(utilisateur.getEmail()).isPresent()) {
+        if (utilisateurRepository.findByEmail(utilisateur.getEmail()).isPresent()) {
             throw new GraphQLCustomException("L'adresse email déjà utilisée");
         }
 
@@ -173,6 +173,6 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
     @Override
     public Page<Utilisateur> getPage(int pageNumber, int nb) {
         PageRequest page = (pageNumber == 0) ? PageRequest.of(pageNumber, nb) : PageRequest.of(pageNumber - 1, nb);
-        return utilisateurRepository.findAll(page);
+        return utilisateurRepository.findAllByOrderByEmail(page);
     }
 }

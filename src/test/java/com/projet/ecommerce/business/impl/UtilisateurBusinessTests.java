@@ -363,7 +363,7 @@ public class UtilisateurBusinessTests {
 
     @Test
     public void getPage() {
-        Mockito.when(utilisateurRepository.findAll(Mockito.any(Pageable.class))).thenReturn(page);
+        Mockito.when(utilisateurRepository.findAllByOrderByEmail(Mockito.any(Pageable.class))).thenReturn(page);
         Assert.assertNotNull(utilisateurBusiness.getPage(1, 5));
     }
 }

@@ -5,6 +5,7 @@ type Pagination {
     total: Long
     produits: [Produit]!
     categories: [Categorie]!
+    utilisateurs: [Utilisateur]!
 }
 
 extend type Query {

@@ -21,6 +21,8 @@ public class PaginationDTO {
 
     private List<CategorieDTO> categories;
 
+    private List<UtilisateurDTO> utilisateurs;
+
     /**
      * Retourne la page où on est actuellement.
      *
@@ -127,5 +129,23 @@ public class PaginationDTO {
      */
     public void setCategories(List<CategorieDTO> categories) {
         this.categories = categories;
+    }
+
+    /**
+     * Retourne une collection d'objet utilisateur.
+     *
+     * @return une collection d'objet utilisateur.
+     */
+    public List<UtilisateurDTO> getUtilisateurs() {
+        return utilisateurs;
+    }
+
+    /**
+     * Modifie la collection d'utilisateur par celle-ci mis en paramètres
+     *
+     * @param utilisateurs La nouvelle collection
+     */
+    public void setUtilisateurs(List<UtilisateurDTO> utilisateurs) {
+        this.utilisateurs = utilisateurs;
     }
 }
