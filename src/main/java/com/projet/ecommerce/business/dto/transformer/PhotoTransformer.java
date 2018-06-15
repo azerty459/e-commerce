@@ -36,6 +36,7 @@ public class PhotoTransformer {
         Photo photo = new Photo();
         photo.setUrl(photoDTO.getUrl());
         photo.setIdPhoto(photoDTO.getIdPhoto());
+        photo.setNom(photoDTO.getNom());
         return photo;
     }
 
@@ -63,6 +64,7 @@ public class PhotoTransformer {
         PhotoDTO photoDTO = new PhotoDTO();
         photoDTO.setIdPhoto(photo.getIdPhoto());
         photoDTO.setUrl(photo.getUrl());
+        photoDTO.setNom(photo.getNom());
         return photoDTO;
     }
 }

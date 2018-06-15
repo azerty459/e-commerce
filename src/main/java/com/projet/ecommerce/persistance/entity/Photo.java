@@ -14,8 +14,17 @@ public class Photo {
     @Column(name = "id_photo")
     private int idPhoto;
 
+    /**
+     * L'URL de la photo, incluant en nom de photo le MD5 du fichier.
+     */
     @Column
     private String url;
+
+    /**
+     * Nom du fichier téléchargé par l'utilisateur (nom originel, qui sera affiché sur le front-end)
+     */
+    @Column(name = "nom")
+    private String nom;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reference_produit")
@@ -65,5 +74,23 @@ public class Photo {
 
     public void setProduit(Produit produit) {
         this.produit = produit;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    /**
+     * Méthode vérifiant que 2 photos ont la même URL
+     *
+     * @param p la photo avec laquelle on compare
+     * @return true si les 2 photos ont la même URL, false sinon
+     */
+    public boolean aMemeUrl(Photo p) {
+        return p.getUrl().equals(getUrl());
     }
 }

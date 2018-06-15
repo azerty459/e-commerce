@@ -6,6 +6,7 @@ CREATE TABLE produit
   nom VARCHAR(255) NOT NULL,
   description TEXT DEFAULT '',
   prix_ht FLOAT NOT NULL,
+  date_ajout TIMESTAMP DEFAULT current_timestamp,
   PRIMARY KEY (reference_produit)
 );
 
@@ -34,7 +35,8 @@ CREATE TABLE produit_categorie
 CREATE TABLE photo
 (
   id_photo SERIAL,
-  url VARCHAR(255) NOT NULL,
+  url VARCHAR(255) NOT NULL UNIQUE,
+  nom VARCHAR(255) NOT NULL,
   reference_produit VARCHAR(255) NOT NULL,
   PRIMARY KEY (id_photo),
   CONSTRAINT FK_idProduit FOREIGN KEY (reference_produit)

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -20,7 +21,11 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PhotoBusiness implements IPhotoBusiness {
@@ -31,63 +36,123 @@ public class PhotoBusiness implements IPhotoBusiness {
     @Autowired
     private ProduitRepository produitRepository;
 
+    //TODO aller chercher la variable dans le fichier properties
+    /**
+     * Le répertoire de base pour les images.
+     */
+    private static final String repertoireImg = "src/main/resources/img/";
+
     /**
      * Methode permettant l'upload d'un fichier
      *
      * @param fichier    le fichier a upload
      * @param refProduit ref du produit
-     * @return true si réussite, false si echec
+     * @return true si réussite, false si echec: fichier vide ou photo déjà présente
      */
     @Override
-    public Boolean upload(MultipartFile fichier, String refProduit) {
-        String repertoireImg = "src/main/resources/img/"; //TODO aller chercher la variable dans le fichier properties
+    public Boolean upload(MultipartFile fichier, String refProduit) throws PhotoException {
+
         if (fichier.isEmpty()) {
             return false;
         }
 
-        Optional<Produit> produitOptional = produitRepository.findById(refProduit);
-        if (!produitOptional.isPresent()) {
-            throw new GraphQLCustomException("Le produit recherche n'existe pas.");
+        // Nom unique du fichier (MD5)
+        String nouveauNomFichier = null;
+
+        // Nom du fichier uploadé (nom originel)
+        String nomFichierAffiche = fichier.getOriginalFilename();
+
+        // Extension du fichier originel
+        String[] decoupageNom = nomFichierAffiche.split("\\.");
+        if (decoupageNom.length < 2) {
+            throw new PhotoException("Le fichier n'est pas conforme.");
         }
-        File repertoire = new File(repertoireImg + refProduit); // Le repertoire image spécifique au produit
-        //On vérifie que le repertoire correspondant au produit existe sinon on le créé
+        String extensionFichier = "." + decoupageNom[decoupageNom.length - 1];
+
+
+        /*   Construction du répertoire dans lequel le fichier image va être stocké   */
+
+        // Récupérer la date d'insertion du produit.
+        Produit produit = recupereProduit(refProduit);
+        LocalDateTime dt = produit.getDateAjout();
+        int annee = dt.getYear();
+        int mois = dt.getMonthValue();
+        int jour = dt.getDayOfMonth();
+
+        // Construire le dossier de sauvegarde du fichier, pour toutes les images associées au produit
+        String repertoireImgAvecDate = repertoireImg + annee + "/" + mois + "/" + jour + "/";
+        File repertoire = new File(repertoireImgAvecDate + refProduit);
+
+        //On vérifie que le repertoire correspondant au produit existe, sinon on le créé
         if (!repertoire.exists() || !repertoire.isDirectory()) {
             if (!repertoire.mkdirs()) {
                 throw new GraphQLCustomException("Le dossier image pour le produit n'a pas pu être créé");
             } else {
-                System.out.println("Le dossier " + refProduit + " a bien été créé dans le repertoire image");
+                System.out.println("Le dossier " + repertoire.getPath().split("resources/img/")[1] + " a bien été créé.");
             }
         }
-        // Chemin de l'image a écrire , on ajoute le nombre de fichier au début du nom du fichier pour éviter les doublons
 
-        Integer nombreDeFichier = Objects.requireNonNull(repertoire.listFiles()).length;
-        Path pathFichier = Paths.get(repertoireImg + refProduit + '/' + Integer.toString(nombreDeFichier) + '-' + fichier.getOriginalFilename());
-        byte[] bytes = new byte[0]; // on va cherche les bits du fichier
+        // Lecture et sauvegarde de la photo pour le produit
+        byte[] bytes = null;
         try {
             bytes = fichier.getBytes();
             if (bytes.length == 0) {
-                throw new GraphQLCustomException("le fichier est vide");
+                throw new PhotoException("le fichier est vide");
             } else {
-                Files.write(pathFichier, bytes); // On les écrits à l'endroit voulu
+
+                // Construction du nom du fichier
+                StringBuilder sb = new StringBuilder();
+                DigestUtils.appendMd5DigestAsHex(bytes, sb);
+                nouveauNomFichier = sb.toString() + extensionFichier;
+
+                Path pathFichier = Paths.get(repertoireImgAvecDate + refProduit + '/' + nouveauNomFichier);
+
+                // Sauvegarde du fichier
+                Files.write(pathFichier, bytes);
+
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         //On lie la photo et son produit dans la base de donnée
-        Produit produit = produitOptional.get();
         Photo photo = new Photo();
         photo.setProduit(produit);
-        photo.setUrl(refProduit + '/' + Integer.toString(nombreDeFichier) + '-' + fichier.getOriginalFilename());
+        photo.setUrl(refProduit + "/" + nouveauNomFichier);
+        photo.setNom(nomFichierAffiche);
+
+
+        // Vérifier que la photo n'est as déjà présente (URL identique)
         List<Photo> photoList = produit.getPhotos();
+        for (Photo p : photoList) {
+            if (p.aMemeUrl(photo)) {
+                throw new PhotoException("Cette photo a déjà été uploadée.");
+            }
+        }
+
+        // Sauvegarder les photosq
         photoList.add(photo);
         produit.setPhotos(photoList);
         produitRepository.save(produit);
         return true;
     }
 
+    private Produit recupereProduit(String refProduit) {
+
+        // Récupération du produit
+        Optional<Produit> produitOptional = produitRepository.findById(refProduit);
+        if (!produitOptional.isPresent()) {
+            throw new GraphQLCustomException("Le produit recherche n'existe pas.");
+        }
+
+        // Récupérer la date d'insertion du produit.
+        return produitOptional.get();
+
+    }
+
+
     /**
-     * Permet de charger un photo d'un produit
+     * Permet de charger une photo d'un produit
      *
      * @param nomFichier Le nom de la photo a aller chercher
      * @param refProduit La reference du produit
@@ -95,8 +160,17 @@ public class PhotoBusiness implements IPhotoBusiness {
      */
     @Override
     public Resource loadPhotos(String nomFichier, String refProduit) {
-        String repertoireImg = "src/main/resources/img/" + refProduit; //TODO aller chercher la variable dans le fichier properties
-        Path rootLocation = Paths.get(repertoireImg);
+
+        // Récupérer le produit
+        Produit p = recupereProduit(refProduit);
+
+        // Construire le nom du dossier dans lequel le fichier est
+        String dossierImage = repertoireImg + p.getDateAjout().getYear() + "/" + p.getDateAjout().getMonthValue() +
+                "/" + p.getDateAjout().getDayOfMonth() + "/" + p.getReferenceProduit() + "/";
+
+        Path rootLocation = Paths.get(dossierImage);
+
+
         try {
             Path file = rootLocation.resolve(nomFichier);
             Resource resource = new UrlResource(file.toUri());
@@ -118,6 +192,8 @@ public class PhotoBusiness implements IPhotoBusiness {
      */
     @Override
     public List<PhotoDTO> getAll(String ref) {
+
+        System.out.println("getAll pour les photos");
         Collection<Photo> photoCollection = new ArrayList<>();
         if (ref == null) {
             photoCollection.addAll(photoRepository.findAll());

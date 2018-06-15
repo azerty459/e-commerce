@@ -1,12 +1,10 @@
 package com.projet.ecommerce.business.impl;
 
-import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
-import com.projet.ecommerce.persistance.entity.Caracteristique;
-import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Photo;
 import com.projet.ecommerce.persistance.entity.Produit;
 import com.projet.ecommerce.persistance.repository.PhotoRepository;
 import com.projet.ecommerce.persistance.repository.ProduitRepository;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -19,13 +17,19 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -52,87 +56,193 @@ public class PhotoBusinessTests {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
+
+    /**
+     * cas où le fichier uploadé est vide.
+     */
     @Test
-    public void uploadFile() {
-        Produit produit = new Produit();
-        ArrayList<Photo> photos = new ArrayList<>();
-        ArrayList<Caracteristique> caracteristiques = new ArrayList<>();
-        ArrayList<Categorie> categories = new ArrayList<>();
-        produit.setPhotos(photos);
-        produit.setDescription("description");
-        produit.setPrixHT(5.2f);
-        produit.setReferenceProduit("test");
-        produit.setCategories(categories);
-        produit.setCaracteristiques(caracteristiques);
-        produit.setNom("test");
-        byte[] b = new byte[4];
-        Mockito.when(produitRepository.findById(Mockito.any())).thenReturn(Optional.of(produit));
+    public void testUploadFichierVide() {
+
+        // Construction du fichier (test du premier if)
+        Path path = Paths.get("path/qui/nexiste/pas");
+        String name = "file.jpeg";
+        String originalFileName = "file.jpeg";
+        byte[] content = null;
         try {
-            Mockito.when(multipartFile.getBytes()).thenThrow(new FileNotFoundException());
+            content = Files.readAllBytes(path);
         } catch (IOException e) {
-            e.printStackTrace();
-            Assert.fail();
+
         }
-        Assert.assertTrue(photoBusiness.upload(multipartFile, "test"));
+        String contentType = "image/jpeg";
+        MultipartFile mpf = new MockMultipartFile(name, originalFileName, contentType, content);
+
         try {
-            Files.delete(Paths.get("src/main/resources/img/test/0-null"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            Files.delete(Paths.get("src/main/resources/img/test"));
-        } catch (IOException e) {
-            e.printStackTrace();
+            Assert.assertFalse(photoBusiness.upload(mpf, "hhh"));
+        } catch (Exception e) {
+
         }
     }
 
+    /**
+     * Cas normal.
+     */
     @Test
-    public void uploadFileEmptyTest() {
-        Mockito.when(multipartFile.isEmpty()).thenReturn(true);
-        Assert.assertFalse(photoBusiness.upload(multipartFile, null));
-    }
+    public void testUploadNormal() {
 
+        // Construction du fichier
+        String name = "file.jpeg";
+        String originalFileName = "file.jpeg";
+        byte[] content = "Juste des données au pif".getBytes();
+        String contentType = "image/jpeg";
+        MultipartFile mpf = new MockMultipartFile(name, originalFileName, contentType, content);
 
-    @Test
-    public void uploadProduitVide() {
-        Mockito.when(produitRepository.findById(Mockito.any())).thenReturn(Optional.empty());
-        thrown.expect(GraphQLCustomException.class);
-        photoBusiness.upload(multipartFile, null);
-    }
-
-
-    @Test
-    public void uploadFichierVide() {
-        // Initialisation
-        Produit produit = new Produit();
-        ArrayList<Photo> photos = new ArrayList<>();
-        ArrayList<Caracteristique> caracteristiques = new ArrayList<>();
-        ArrayList<Categorie> categories = new ArrayList<>();
-        produit.setPhotos(photos);
-        produit.setDescription("description");
-        produit.setPrixHT(5.2f);
-        produit.setReferenceProduit("A06A02");
-        produit.setCategories(categories);
-        produit.setCaracteristiques(caracteristiques);
-        produit.setNom("test");
-
-        // Test
-        Mockito.when(produitRepository.findById(Mockito.any())).thenReturn(Optional.of(produit));
+        // Test du 1ier if
         try {
-            Mockito.when(multipartFile.getBytes()).thenReturn(new byte[0]);
-        } catch (IOException e) {
-            e.printStackTrace();
+            Assert.assertTrue(photoBusiness.upload(mpf, "hello"));
+        } catch (Exception e) {
+
         }
-        thrown.expect(GraphQLCustomException.class);
-        photoBusiness.upload(multipartFile, produit.getReferenceProduit());
+    }
+
+
+    /**
+     * Cas où le fichier n'a pas d'extension
+     *
+     * @throws PhotoException si le fichier n'a pas d'extension
+     */
+    @Test(expected = PhotoException.class)
+    public void verificationFichierNomVideSansExtension() throws PhotoException {
+
+        // Création du produit auquel on veut ajouter une image
+        Produit p = new Produit();
+        p.setReferenceProduit("REF");
+        LocalDateTime date = LocalDateTime.now();
+        p.setDateAjout(date);
+        p.setPrixHT(44);
+        p.setNom("NOM PRODUIT");
+        List<Photo> arrayPhotos = new ArrayList<Photo>();
+        p.setPhotos(arrayPhotos);
+
+
+        // Construction du fichier
+        String name = "a";
+        String originalFileName = "a";
+        byte[] content = "Juste des données au pif".getBytes();
+        String contentType = "image/jpeg";
+        MultipartFile mpf = new MockMultipartFile(name, originalFileName, contentType, content);
+
+        // Test: doit retourner une exception car le nom du fichier n'a pas d'extension
+        Mockito.when(produitRepository.findById(Mockito.any())).thenReturn(Optional.of(p));
+        photoBusiness.upload(mpf, "hello");
 
     }
 
+    /**
+     * Test de la construction d'un nouveau répertoire de stockage du fichier.
+     */
     @Test
-    //TODO faire le test de loadPhoto
-    public void loadPhotoFichier() {
+    public void constructionNouveauRepertoireDeStockage() {
 
+        // Création du produit auquel on veut ajouter une image
+        Produit p = new Produit();
+        p.setReferenceProduit("REF");
+        LocalDateTime date = LocalDateTime.of(1900, Month.JANUARY, 1, 1, 1);
+        p.setDateAjout(date);
+        p.setPrixHT(44);
+        p.setNom("NOM PRODUIT");
+        List<Photo> arrayPhotos = new ArrayList<Photo>();
+        p.setPhotos(arrayPhotos);
+
+        // Construction du fichier
+        String name = "file.jpg";
+        String originalFileName = "file.jpg";
+        byte[] content = "Juste des données au pif".getBytes();
+        String contentType = "image/jpeg";
+        MultipartFile mpf = new MockMultipartFile(name, originalFileName, contentType, content);
+
+        Mockito.when(produitRepository.findById(Mockito.any())).thenReturn(Optional.of(p));
+
+        try {
+            photoBusiness.upload(mpf, p.getReferenceProduit());
+        } catch (PhotoException e) {
+
+        }
+
+        try {
+            // vérifier que le dossier a bien été créé
+            Assert.assertTrue(Files.isDirectory(Paths.get("src/main/resources/img/1900/1/1/REF")));
+
+            // Vérifier que le fichier a bien été ajouté et qu'il a le mD5 du fichier comme nom
+            StringBuilder sb = new StringBuilder();
+            DigestUtils.appendMd5DigestAsHex(content, sb);
+            Assert.assertTrue(Files.isRegularFile(Paths.get("src/main/resources/img/1900/1/1/REF/" + sb.toString() + ".jpg")));
+        } catch (Exception e) {
+
+        } finally {
+            // Suppression du fichier et dossier créé
+            try {
+
+                FileUtils.deleteDirectory(new File("src/main/resources/img/1900/"));
+                System.out.println("Le dossier créé durant le test a été supprimé.");
+            } catch (IOException e) {
+                System.out.println("Le dossier créé durant le test  n'a pas été supprimé.");
+            }
+        }
     }
+
+
+    /**
+     * Tester l'upload d'une photo en double
+     *
+     * @throws PhotoException si le fichier a été ajouté en double
+     */
+    @Test(expected = PhotoException.class)
+    public void uploadPhotoEnDouble() throws PhotoException {
+
+        // Création du produit auquel on veut ajouter une image
+        Produit p = new Produit();
+        p.setReferenceProduit("REF");
+        LocalDateTime date = LocalDateTime.of(1900, Month.JANUARY, 1, 1, 1);
+        p.setDateAjout(date);
+        p.setPrixHT(44);
+        p.setNom("NOM PRODUIT");
+        List<Photo> arrayPhotos = new ArrayList<Photo>();
+        p.setPhotos(arrayPhotos);
+
+        // Construction du fichier
+        String name = "file.jpg";
+        String originalFileName = "file.jpg";
+        byte[] content = "Juste des données au pif".getBytes();
+        String contentType = "image/jpeg";
+        MultipartFile mpf = new MockMultipartFile(name, originalFileName, contentType, content);
+
+        Mockito.when(produitRepository.findById(Mockito.any())).thenReturn(Optional.of(p));
+
+        // 1ier ajout
+        try {
+            System.out.println("1ier ajout");
+            photoBusiness.upload(mpf, p.getReferenceProduit());
+        } catch (PhotoException e) {
+
+        }
+
+        // 2eme ajout
+        try {
+            System.out.println("2e ajout");
+            photoBusiness.upload(mpf, p.getReferenceProduit());
+        } catch (PhotoException e) {
+            throw new PhotoException("Test OK");
+        } finally {
+            // Suppression du fichier et dossier créé
+            try {
+                FileUtils.deleteDirectory(new File("src/main/resources/img/1900/"));
+                System.out.println("Le dossier créé durant le test a été supprimé.");
+            } catch (IOException e) {
+                System.out.println("Le dossier créé durant le test  n'a pas été supprimé.");
+            }
+        }
+    }
+
 
     @Test
     public void loadPhotoFichierInexistant() {

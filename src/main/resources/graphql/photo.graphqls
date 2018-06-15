@@ -4,6 +4,7 @@ input PhotoInput {
 
 type Photo {
     url: String!
+    nom: String!
 }
 
 extend type Query {
