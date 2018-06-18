@@ -15,9 +15,14 @@ import java.util.Collection;
 @Repository
 public interface ProduitRepository extends PagingAndSortingRepository<Produit, String>, ProduitRepositoryCustom {
 
+    @Override
     Collection<Produit> findAll();
+
+    Collection<Produit> findByNomContainingIgnoreCase(String nom);
 
     Page<Produit> findByNomContainingIgnoreCase(Pageable pageable, String nom);
 
-    Collection<Produit> findByNomContainingIgnoreCase(String nom);
+    Page<Produit> findByNomContainingIgnoreCaseAndCategories_idCategorie(Pageable pageable, String nom, int idCategorie);
+
+    Page<Produit> findByCategories_IdCategorie(Pageable pageable, int idCategorie);
 }

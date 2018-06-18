@@ -42,7 +42,7 @@ public class PaginationBusiness implements IPaginationBusiness {
      * @return une objet PaginationDTO
      */
     @Override
-    public PaginationDTO getPagination(String type, int pageActuelle, int npp, String nom) {
+    public PaginationDTO getPagination(String type, int pageActuelle, int npp, String nom, int categorie) {
 
         if (pageActuelle <= 0) {
             pageActuelle = 1;
@@ -51,13 +51,7 @@ public class PaginationBusiness implements IPaginationBusiness {
 
         switch (type) {
             case "produit":
-                Page pageProduit = produitBusiness.getPage(pageActuelle, npp, nom);
-                if (pageActuelle > pageProduit.getTotalPages()) {
-                    pageProduit = produitBusiness.getPage(pageProduit.getTotalPages(), npp, nom);
-                }
-                paginationDTO = getPaginationDTO(pageProduit, pageActuelle);
-                paginationDTO.setCategories(new ArrayList<>());
-                paginationDTO.setProduits(new ArrayList<ProduitDTO>(ProduitTransformer.entityToDto(pageProduit.getContent())));
+                paginationDTO = produit(pageActuelle, npp, nom, categorie);
                 break;
             case "categorie":
                 Page pageCategorie = categorieBusiness.getPage(pageActuelle, npp);
@@ -72,7 +66,7 @@ public class PaginationBusiness implements IPaginationBusiness {
                 System.out.println("test");
                 Page utilisateurPage = utilisateurBusiness.getPage(pageActuelle, npp);
                 if (pageActuelle > utilisateurPage.getTotalPages()) {
-                    pageCategorie = utilisateurBusiness.getPage(utilisateurPage.getTotalPages(), npp);
+                    utilisateurPage = utilisateurBusiness.getPage(utilisateurPage.getTotalPages(), npp);
                 }
                 paginationDTO = getPaginationDTO(utilisateurPage, pageActuelle);
                 paginationDTO.setProduits(new ArrayList<>());
@@ -83,6 +77,18 @@ public class PaginationBusiness implements IPaginationBusiness {
                 return null;
 
         }
+        return paginationDTO;
+    }
+
+    private PaginationDTO produit(int pageActuelle, int npp, String nom, int categorie) {
+        PaginationDTO paginationDTO;
+        Page pageProduit = produitBusiness.getPage(pageActuelle, npp, nom, categorie);
+        if (pageActuelle > pageProduit.getTotalPages()) {
+            pageProduit = produitBusiness.getPage(pageProduit.getTotalPages(), npp, nom, categorie);
+        }
+        paginationDTO = getPaginationDTO(pageProduit, pageActuelle);
+        paginationDTO.setCategories(new ArrayList<>());
+        paginationDTO.setProduits(new ArrayList<ProduitDTO>(ProduitTransformer.entityToDto(pageProduit.getContent())));
         return paginationDTO;
     }
 

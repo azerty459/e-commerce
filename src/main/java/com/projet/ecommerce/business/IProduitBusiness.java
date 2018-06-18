@@ -59,12 +59,13 @@ public interface IProduitBusiness {
     /**
      * Méthode définissant la pagination
      *
-     * @param pageNumber la page souhaitée
-     * @param nb         le nombre de produit à afficher dans la page
-     * @param nom        le nom du produit recherché
+     * @param pageNumber  la page souhaitée
+     * @param nb          le nombre de produit à afficher dans la page
+     * @param nom         le nom du produit recherché
+     * @param IDcategorie l'id catégorie recherchée
      * @return une page de produit
      */
-    Page<Produit> getPage(int pageNumber, int nb, String nom);
+    Page<Produit> getPage(int pageNumber, int nb, String nom, int IDcategorie);
 
 
 }

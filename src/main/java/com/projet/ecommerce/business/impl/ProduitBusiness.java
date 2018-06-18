@@ -230,23 +230,27 @@ public class ProduitBusiness implements IProduitBusiness {
         return new ArrayList<>(ProduitTransformer.entityToDto(new ArrayList<>(produitCollection)));
     }
 
-
     /**
      * Retourne une page de produit
      *
      * @param numeroPage    la page souhaitée
      * @param nombreProduit le nombre de produit à afficher dans la
      * @param nom           le nom du produit à rechercher
+     * @param IDcategorie   l'id de la catégorie recherchée
      * @return une page paginée
      */
     @Override
-    public Page<Produit> getPage(int numeroPage, int nombreProduit, String nom) {
+    public Page<Produit> getPage(int numeroPage, int nombreProduit, String nom, int IDcategorie) {
 
         PageRequest page = (numeroPage == 0) ? PageRequest.of(numeroPage, nombreProduit) : PageRequest.of(numeroPage - 1, nombreProduit);
 
-        if (nom == null) {
-            return produitRepository.findAll(page);
+        if (nom != null && IDcategorie != 0) {
+            return produitRepository.findByNomContainingIgnoreCaseAndCategories_idCategorie(page, nom, IDcategorie);
+        } else if (nom != null) {
+            return produitRepository.findByNomContainingIgnoreCase(page, nom);
+        } else if (IDcategorie != 0) {
+            return produitRepository.findByCategories_IdCategorie(page, IDcategorie);
         }
-        return produitRepository.findByNomContainingIgnoreCase(page, nom);
+        return produitRepository.findAll(page);
     }
 }
