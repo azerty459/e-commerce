@@ -10,7 +10,7 @@ public class PhotoDTO {
     /**
      * L'id de la photo dans la base de données/
      */
-    private int idPhoto;
+    private int id;
 
     /**
      * L'URL de la photo pour l'affichage
@@ -27,17 +27,17 @@ public class PhotoDTO {
      *
      * @return l'id de l'objet Produit
      */
-    public int getIdPhoto() {
-        return idPhoto;
+    public int getId() {
+        return id;
     }
 
     /**
      * Remplace l'id de l'objet Produit par celui-ci mit en paramètre.
      *
-     * @param idPhoto Le nouveau ID de la photo
+     * @param id Le nouveau ID de la photo
      */
-    public void setIdPhoto(int idPhoto) {
-        this.idPhoto = idPhoto;
+    public void setIdPhoto(int id) {
+        this.id = id;
     }
 
     /**

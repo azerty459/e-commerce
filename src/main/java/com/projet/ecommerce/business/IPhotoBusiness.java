@@ -31,4 +31,6 @@ public interface IPhotoBusiness {
      * @return la liste des photos trouvés
      */
     List<PhotoDTO> getAll(String ref);
+
+    Boolean remove(int idPhoto);
 }
