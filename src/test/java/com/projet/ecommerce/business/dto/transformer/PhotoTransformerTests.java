@@ -41,7 +41,7 @@ public class PhotoTransformerTests {
 
         Assert.assertNotNull(photo);
         Assert.assertEquals(PHOTO_DTO1.getUrl(), photo.getUrl());
-        Assert.assertEquals(PHOTO_DTO1.getIdPhoto(), photo.getIdPhoto());
+        Assert.assertEquals(PHOTO_DTO1.getId(), photo.getIdPhoto());
     }
 
     @Test
@@ -50,7 +50,7 @@ public class PhotoTransformerTests {
 
         Assert.assertNotNull(photoDTO);
         Assert.assertEquals(photoDTO.getUrl(), PHOTO1.getUrl());
-        Assert.assertEquals(photoDTO.getIdPhoto(), PHOTO1.getIdPhoto());
+        Assert.assertEquals(photoDTO.getId(), PHOTO1.getIdPhoto());
     }
 
     @Test
@@ -63,9 +63,9 @@ public class PhotoTransformerTests {
 
         Assert.assertNotNull(photoList);
         Assert.assertEquals(photoList.get(0).getUrl(), photoDTOList.get(0).getUrl());
-        Assert.assertEquals(photoList.get(0).getIdPhoto(), photoDTOList.get(0).getIdPhoto());
+        Assert.assertEquals(photoList.get(0).getIdPhoto(), photoDTOList.get(0).getId());
         Assert.assertEquals(photoList.get(1).getUrl(), photoDTOList.get(1).getUrl());
-        Assert.assertEquals(photoList.get(1).getIdPhoto(), photoDTOList.get(1).getIdPhoto());
+        Assert.assertEquals(photoList.get(1).getIdPhoto(), photoDTOList.get(1).getId());
     }
 
     @Test
@@ -78,8 +78,8 @@ public class PhotoTransformerTests {
 
         Assert.assertNotNull(photoDTOList);
         Assert.assertEquals(photoDTOList.get(0).getUrl(), photoList.get(0).getUrl());
-        Assert.assertEquals(photoDTOList.get(0).getIdPhoto(), photoList.get(0).getIdPhoto());
+        Assert.assertEquals(photoDTOList.get(0).getId(), photoList.get(0).getIdPhoto());
         Assert.assertEquals(photoDTOList.get(1).getUrl(), photoList.get(1).getUrl());
-        Assert.assertEquals(photoDTOList.get(1).getIdPhoto(), photoList.get(1).getIdPhoto());
+        Assert.assertEquals(photoDTOList.get(1).getId(), photoList.get(1).getIdPhoto());
     }
 }

@@ -202,4 +202,32 @@ public class PhotoBusiness implements IPhotoBusiness {
         }
         return new ArrayList<>(PhotoTransformer.entityToDto(photoCollection));
     }
+
+    @Override
+    public Boolean remove(int idPhoto) {
+        if (idPhoto == 0) {
+            return false;
+        }
+        Optional<Photo> photoOptional = photoRepository.findById(idPhoto);
+        if (!photoOptional.isPresent()) {
+            throw new GraphQLCustomException("Photo introuvable");
+        }
+        Photo photo = photoOptional.get();
+        boolean supressionReussite = deleteFilePhoto(photo);
+        System.out.println(supressionReussite);
+        if (supressionReussite) {
+            photoRepository.deleteById(idPhoto);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean deleteFilePhoto(Photo photo) {
+        Produit produit = photo.getProduit();
+        String dossierImage = repertoireImg + produit.getDateAjout().getYear() + "/" + produit.getDateAjout().getMonthValue() +
+                "/" + produit.getDateAjout().getDayOfMonth() + "/";
+        File file = new File(dossierImage + photo.getUrl());
+        return file.delete();
+    }
 }

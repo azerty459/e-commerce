@@ -1,4 +1,5 @@
 input CategorieInput {
+    idCategorie: Int!
     nomCategorie: String!
 }
 
