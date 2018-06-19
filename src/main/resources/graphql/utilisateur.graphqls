@@ -21,7 +21,7 @@ type Utilisateur {
 }
 
 extend type Query {
-    utilisateurs(email: String, nom: String, prenom: String, role: String): [Utilisateur]!
+    utilisateurs(id: Int, email: String, nom: String, prenom: String, role: String): [Utilisateur]!
     login(email: String, mdp: String): Utilisateur!
 }
 
