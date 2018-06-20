@@ -384,25 +384,7 @@ public class CategorieBusiness implements ICategorieBusiness {
         categorieRepository.ecarterBornes(nouveauParent, interBornes);
 
         // Déplacer les catégories de intervalleDeDeplacement et réarranger leur levels
-        for (Categorie cat : categoriesADeplacer) {
-            int bg = cat.getBorneGauche();
-            int bd = cat.getBorneDroit();
-            int level = cat.getLevel();
-            cat.setBorneDroit(bd + intervalleDeDeplacement);
-            cat.setBorneGauche(bg + intervalleDeDeplacement);
-            System.out.println("Level du nouveau parent:");
-            System.out.println(levelNouveauParent);
-            System.out.println("Level de la catégorie examinée:");
-            System.out.println(level);
-            System.out.println("Level de la catégorie la plus élevée des catégories à déplacer");
-            System.out.println(levelCatADeplacer);
-            System.out.println("set Level à: ");
-            System.out.println(levelNouveauParent + 1 + level - levelCatADeplacer);
-            System.out.println();
-            cat.setLevel(levelNouveauParent + 1 + level - levelCatADeplacer);
-
-            // categorieRepository.save(cat);
-        }
+        deplacer(categoriesADeplacer, intervalleDeDeplacement, levelCatADeplacer, levelNouveauParent);
 
         // Les catégories déplacées ont laissé un vide dans les bornes à leur emplacement d'origine: combler le vide
         if (intervalleDeDeplacement >= 0) {
@@ -412,6 +394,28 @@ public class CategorieBusiness implements ICategorieBusiness {
         }
 
         return true;
+
+    }
+
+    /**
+     * Déplace les bornes des catégories à déplacer et réarrange leurs levels
+     *
+     * @param categoriesADeplacer     liste des catégories à déplacer
+     * @param intervalleDeDeplacement intervalle de déplacement
+     * @param levelCatADeplacer       niveau de la catégorie la plus haute à déplacer
+     * @param levelNouveauParent      niveau de son nouveau parent
+     */
+    private void deplacer(List<Categorie> categoriesADeplacer, int intervalleDeDeplacement, int levelCatADeplacer, int levelNouveauParent) {
+
+        for (Categorie cat : categoriesADeplacer) {
+            int bg = cat.getBorneGauche();
+            int bd = cat.getBorneDroit();
+            int level = cat.getLevel();
+            cat.setBorneDroit(bd + intervalleDeDeplacement);
+            cat.setBorneGauche(bg + intervalleDeDeplacement);
+            cat.setLevel(levelNouveauParent + 1 + level - levelCatADeplacer);
+
+        }
 
     }
 
@@ -433,14 +437,7 @@ public class CategorieBusiness implements ICategorieBusiness {
         int intervalleDeDeplacement = borneMaxDeBddEntiere - borneMin + 1;
 
         // Déplacer toutes les bornes des catégories à déplacer de cet intervalle + Ajuster le level
-        for (Categorie cat : categoriesADeplacer) {
-            int bg = cat.getBorneGauche();
-            int bd = cat.getBorneDroit();
-            int level = cat.getLevel();
-            cat.setBorneDroit(bd + intervalleDeDeplacement);
-            cat.setBorneGauche(bg + intervalleDeDeplacement);
-            cat.setLevel(1 - levelCatADeplacer + level);
-        }
+        deplacer(categoriesADeplacer, intervalleDeDeplacement, levelCatADeplacer, 0);
 
         // Les catégories déplacées ont laissé un vide dans les bornes à leur emplacement d'origine: les combler
         categorieRepositoryCustom.rearrangerBornes(borneMin, borneMax, borneMax - borneMin + 1);
