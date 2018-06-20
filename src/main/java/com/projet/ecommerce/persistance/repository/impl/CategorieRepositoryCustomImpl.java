@@ -121,6 +121,12 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
     @Override
     public void ecarterBornes(Categorie cat, int decalage) {
 
+        System.out.println("ECARTER BORNES");
+        System.out.println("Id catégorie:");
+        System.out.println(cat.getIdCategorie());
+        System.out.println("Décalage:");
+        System.out.println(decalage);
+
         Query query1;
         Query query2;
 
@@ -139,6 +145,14 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
 
     @Override
     public int rearrangerBornes(int bg, int bd, int intervalle) {
+
+        System.out.println("REARRANGER BORNES");
+        System.out.println("bg: ");
+        System.out.println(bg);
+        System.out.println("bd: ");
+        System.out.println(bd);
+        System.out.println("Intervalle: ");
+        System.out.println(intervalle);
 
         Query query1;
         Query query2;
@@ -170,4 +184,53 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
         return a;
 
     }
+
+    // NOUVELLE METHODES
+
+    private static final String SQL_DEPLACE_BORNE_GAUCHE = "UPDATE Categorie AS c " +
+            "SET c.borneGauche = c.borneGauche + :depl WHERE c.idCategorie = :id";
+
+    private static final String SQL_DEPLACE_BORNE_DROITE = "UPDATE Categorie AS c " +
+            "SET c.borneDroit = c.borneDroit + :depl WHERE c.idCategorie = :id";
+
+    @Override
+    public void changerBornes(int idCategorie, int deplacement) {
+
+        System.out.println("CHANGER BORNES");
+        System.out.println("id: ");
+        System.out.println(idCategorie);
+        System.out.println("Déplacement: ");
+        System.out.println(deplacement);
+
+        Query query1 = entityManager.createQuery(SQL_DEPLACE_BORNE_GAUCHE);
+        query1.setParameter("depl", deplacement);
+        query1.setParameter("id", idCategorie);
+        query1.executeUpdate();
+
+        Query query2 = entityManager.createQuery(SQL_DEPLACE_BORNE_DROITE);
+        query2.setParameter("depl", deplacement);
+        query2.setParameter("id", idCategorie);
+        query2.executeUpdate();
+
+    }
+
+    private static final String SQL_CHANGE_LEVEL = "UPDATE Categorie AS c" +
+            " SET c.level = :lev WHERE c.idCategorie = :id";
+
+    @Override
+    public void changerLevel(int idCategorie, int nouveauLevel) {
+
+        System.out.println("CHANGER LEVEL");
+        System.out.println("id: ");
+        System.out.println(idCategorie);
+        System.out.println("Nouveau Level: ");
+        System.out.println(nouveauLevel);
+
+        Query query = entityManager.createQuery(SQL_CHANGE_LEVEL);
+        query.setParameter("lev", nouveauLevel);
+        query.setParameter("id", idCategorie);
+
+    }
+
+
 }

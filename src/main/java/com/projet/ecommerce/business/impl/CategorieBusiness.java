@@ -366,6 +366,23 @@ public class CategorieBusiness implements ICategorieBusiness {
             return deplacerSansParent(categoriesADeplacer, borneMin, borneMax, levelCatADeplacer);
         }
 
+        // Sinon, on déplace sous la catégorie parente
+        return deplacerSurParent(categoriesADeplacer, borneMin, borneMax, levelCatADeplacer, idNouveauParent);
+
+    }
+
+    /**
+     * Déplace une catégorie et ses enfants vers une nouvelle catégorie parente
+     *
+     * @param categoriesADeplacer Liste des catégories à déplacer
+     * @param borneMin            Borne la plus petite de ces catégories à déplacer
+     * @param borneMax            Borne la plus grande de ces catégories à déplacer
+     * @param levelCatADeplacer   Level de la catégorie la plus haute des catégories à déplacer
+     * @param idNouveauParent     id du nouveau parent
+     * @return true si le déplacement réussit.
+     */
+    private boolean deplacerSurParent(List<Categorie> categoriesADeplacer, int borneMin, int borneMax, int levelCatADeplacer, int idNouveauParent) {
+
         // Dans le cas où on affecte à un nouveau parent
         // Aller chercher la catégorie parent
         Categorie nouveauParent = (Categorie) findById(idNouveauParent, false).toArray()[0];
@@ -392,32 +409,9 @@ public class CategorieBusiness implements ICategorieBusiness {
         } else {
             categorieRepositoryCustom.rearrangerBornes(borneMax, borneMax + interBornes, interBornes);
         }
-
         return true;
-
     }
 
-    /**
-     * Déplace les bornes des catégories à déplacer et réarrange leurs levels
-     *
-     * @param categoriesADeplacer     liste des catégories à déplacer
-     * @param intervalleDeDeplacement intervalle de déplacement
-     * @param levelCatADeplacer       niveau de la catégorie la plus haute à déplacer
-     * @param levelNouveauParent      niveau de son nouveau parent
-     */
-    private void deplacer(List<Categorie> categoriesADeplacer, int intervalleDeDeplacement, int levelCatADeplacer, int levelNouveauParent) {
-
-        for (Categorie cat : categoriesADeplacer) {
-            int bg = cat.getBorneGauche();
-            int bd = cat.getBorneDroit();
-            int level = cat.getLevel();
-            cat.setBorneDroit(bd + intervalleDeDeplacement);
-            cat.setBorneGauche(bg + intervalleDeDeplacement);
-            cat.setLevel(levelNouveauParent + 1 + level - levelCatADeplacer);
-
-        }
-
-    }
 
     /**
      * Déplace une catégorie (et ses enfants) vers le level 1 (c'est à dire sans parent)
@@ -442,6 +436,43 @@ public class CategorieBusiness implements ICategorieBusiness {
         // Les catégories déplacées ont laissé un vide dans les bornes à leur emplacement d'origine: les combler
         categorieRepositoryCustom.rearrangerBornes(borneMin, borneMax, borneMax - borneMin + 1);
 
+        return true;
+    }
+
+
+    /**
+     * Déplace les bornes des catégories à déplacer et réarrange leurs levels
+     *
+     * @param categoriesADeplacer     liste des catégories à déplacer
+     * @param intervalleDeDeplacement intervalle de déplacement
+     * @param levelCatADeplacer       niveau de la catégorie la plus haute à déplacer
+     * @param levelNouveauParent      niveau de son nouveau parent
+     */
+    private boolean deplacer(List<Categorie> categoriesADeplacer, int intervalleDeDeplacement, int levelCatADeplacer, int levelNouveauParent) {
+
+        for (Categorie cat : categoriesADeplacer) {
+//            int bg = cat.getBorneGauche();
+//            int bd = cat.getBorneDroit();
+//            int level = cat.getLevel();
+//            cat.setBorneDroit(bd + intervalleDeDeplacement);
+//            cat.setBorneGauche(bg + intervalleDeDeplacement);
+//            cat.setLevel(levelNouveauParent + 1 + level - levelCatADeplacer);
+
+            // NOUVEAU CODE
+            int idCategorie = cat.getIdCategorie();
+
+            // Calcul du nouveau level
+            int levelCatActuelle = cat.getLevel();
+            int nouveauLevel = levelNouveauParent + 1 + levelCatActuelle - levelCatADeplacer;
+
+            // Changer les bornes pour la catégorie d'id idCategorie
+            categorieRepository.changerBornes(idCategorie, intervalleDeDeplacement);
+
+            // Changer le level de chaque catégorie
+            categorieRepository.changerLevel(idCategorie, nouveauLevel);
+
+
+        }
         return true;
     }
 

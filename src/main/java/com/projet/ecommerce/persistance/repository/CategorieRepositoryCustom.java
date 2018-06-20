@@ -38,4 +38,20 @@ public interface CategorieRepositoryCustom {
      */
     int findBorneMax();
 
+    /**
+     * Change les bornes gauches et droites de la catégorie d'id idCategorie et les déplace de deplacement
+     *
+     * @param idCategorie id de la catégorie dont on change les bornes
+     * @param deplacement intervalle de déplacement de ces bornes
+     */
+    void changerBornes(int idCategorie, int deplacement);
+
+    /**
+     * Change le level d'une catégorie dont l'id est donnée en paramètre
+     *
+     * @param idCategorie  id de la catégorie dont on modifie le level
+     * @param nouveauLevel nouvelle valeur du level
+     */
+    void changerLevel(int idCategorie, int nouveauLevel);
+
 }
