@@ -103,12 +103,11 @@ public class ProduitBusiness implements IProduitBusiness {
             throw new GraphQLCustomException("Le produit recherché n'existe pas.");
         }
 
-        produit.setPhotos(new ArrayList<>(completePhotosData(produit.getPhotos())));
-
-        produit.setCategories(new ArrayList<>(completeCategoriesData(produit.getCategories())));
-
         // On fusionne les deux produits en un
         Produit retourProduit = produitOptional.get();
+        
+        produit.setCategories(new ArrayList<>(completeCategoriesData(produit.getCategories())));
+
         Produit produitFinal = null;
         try {
             produitFinal = mergeObjects(produit, retourProduit);
@@ -226,7 +225,6 @@ public class ProduitBusiness implements IProduitBusiness {
         if (produitCollection.size() == 0) {
             throw new GraphQLCustomException("Aucun produit(s) trouvé(s).");
         }
-
         return new ArrayList<>(ProduitTransformer.entityToDto(new ArrayList<>(produitCollection)));
     }
 

@@ -17,7 +17,11 @@ public class UtilisateurQuery {
         TypeRuntimeWiring.Builder builder = new TypeRuntimeWiring.Builder();
         builder.typeName("Query");
         builder.dataFetcher("utilisateurs", (DataFetchingEnvironment env) ->
-                utilisateurBusiness.getUtilisateur((env.getArgument("id") != null) ? env.getArgument("id") : 0, env.getArgument("email"), env.getArgument("nom"), env.getArgument("prenom"), env.getArgument("role"))
+                utilisateurBusiness.getUtilisateur((env.getArgument("id") != null) ? env.getArgument("id") : 0,
+                        env.getArgument("email"),
+                        env.getArgument("nom"),
+                        env.getArgument("prenom"),
+                        env.getArgument("role"))
         );
 
         builder.dataFetcher("login", (DataFetchingEnvironment env) ->
