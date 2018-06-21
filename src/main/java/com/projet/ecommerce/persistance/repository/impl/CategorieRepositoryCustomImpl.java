@@ -215,7 +215,7 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
     }
 
     private static final String SQL_CHANGE_LEVEL = "UPDATE Categorie AS c" +
-            " SET c.level = :lev WHERE c.idCategorie = :id";
+            " SET c.level = :nl WHERE c.idCategorie = :id";
 
     @Override
     public void changerLevel(int idCategorie, int nouveauLevel) {
@@ -227,8 +227,9 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
         System.out.println(nouveauLevel);
 
         Query query = entityManager.createQuery(SQL_CHANGE_LEVEL);
-        query.setParameter("lev", nouveauLevel);
+        query.setParameter("nl", nouveauLevel);
         query.setParameter("id", idCategorie);
+        query.executeUpdate();
 
     }
 

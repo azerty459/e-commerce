@@ -400,6 +400,11 @@ public class CategorieBusiness implements ICategorieBusiness {
         // catégories à déplacer
         categorieRepository.ecarterBornes(nouveauParent, interBornes);
 
+        // Mettre à jour l'intervalle de déplacement si on déplace de droite à gauche
+        if (intervalleDeDeplacement < 0) {
+            intervalleDeDeplacement -= interBornes;
+        }
+
         // Déplacer les catégories de intervalleDeDeplacement et réarranger leur levels
         deplacer(categoriesADeplacer, intervalleDeDeplacement, levelCatADeplacer, levelNouveauParent);
 
@@ -451,14 +456,7 @@ public class CategorieBusiness implements ICategorieBusiness {
     private boolean deplacer(List<Categorie> categoriesADeplacer, int intervalleDeDeplacement, int levelCatADeplacer, int levelNouveauParent) {
 
         for (Categorie cat : categoriesADeplacer) {
-//            int bg = cat.getBorneGauche();
-//            int bd = cat.getBorneDroit();
-//            int level = cat.getLevel();
-//            cat.setBorneDroit(bd + intervalleDeDeplacement);
-//            cat.setBorneGauche(bg + intervalleDeDeplacement);
-//            cat.setLevel(levelNouveauParent + 1 + level - levelCatADeplacer);
 
-            // NOUVEAU CODE
             int idCategorie = cat.getIdCategorie();
 
             // Calcul du nouveau level
@@ -470,7 +468,6 @@ public class CategorieBusiness implements ICategorieBusiness {
 
             // Changer le level de chaque catégorie
             categorieRepository.changerLevel(idCategorie, nouveauLevel);
-
 
         }
         return true;
