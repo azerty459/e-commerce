@@ -36,6 +36,10 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
     // Chercher la borne maximale dans toute la base de données
     private static final String SQL_BORNE_MAX = "SELECT MAX(borneDroit) FROM Categorie";
 
+    private static final String SQL_CHANGER_BORNES_ET_LEVEL = "UPDATE Categorie AS c " +
+            "SET c.borneGauche = c.borneGauche + :depl, c.borneDroit = c.borneDroit + :depl, c.level = c.level + :nl " +
+            "WHERE c.idCategorie IN :ids";
+
     @Autowired
     private EntityManager entityManager;
 
@@ -186,9 +190,6 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
 
     }
 
-    private static final String SQL_CHANGER_BORNES_ET_LEVEL = "UPDATE Categorie AS c " +
-            "SET c.borneGauche = c.borneGauche + :depl, c.borneDroit = c.borneDroit + :depl, c.level = c.level + :nl " +
-            "WHERE c.idCategorie IN :ids";
 
     @Override
     public void changerBornesEtLevel(List<Integer> ids, int intervalleDeDeplacement, int intervalLevel) {

@@ -301,7 +301,7 @@ public class CategorieBusiness implements ICategorieBusiness {
     }
 
     /**
-     * Classe les catégories eb fonction de leur level, les plus petits en premier.
+     * Classe les catégories en fonction de leur level, les plus petits en premier.
      *
      * @param cats les catégories à classer
      * @return une collection de catégories classées
@@ -459,8 +459,7 @@ public class CategorieBusiness implements ICategorieBusiness {
         List<Integer> ids = new ArrayList<Integer>();
 
         for (Categorie cat : categoriesADeplacer) {
-            int idCategorie = cat.getIdCategorie();
-            ids.add(idCategorie);
+            ids.add(cat.getIdCategorie());
         }
 
         // Calcul de l'intervalle de déplacement du level
