@@ -105,7 +105,7 @@ public class ProduitBusiness implements IProduitBusiness {
 
         // On fusionne les deux produits en un
         Produit retourProduit = produitOptional.get();
-        
+
         produit.setCategories(new ArrayList<>(completeCategoriesData(produit.getCategories())));
 
         Produit produitFinal = null;
@@ -240,14 +240,17 @@ public class ProduitBusiness implements IProduitBusiness {
     @Override
     public Page<Produit> getPage(int numeroPage, int nombreProduit, String nom, int IDcategorie) {
 
-        PageRequest page = (numeroPage == 0) ? PageRequest.of(numeroPage, nombreProduit) : PageRequest.of(numeroPage - 1, nombreProduit);
 
-        if (nom != null && IDcategorie != 0) {
-            return produitRepository.findByNomContainingIgnoreCaseAndCategories_idCategorie(page, nom, IDcategorie);
-        } else if (nom != null) {
+        PageRequest page = (numeroPage == 0) ? PageRequest.of(numeroPage, nombreProduit) : PageRequest.of(numeroPage - 1, nombreProduit);
+        if (nom != null && !nom.isEmpty() && IDcategorie != 0 || IDcategorie != 0) {
+            Optional<Categorie> categorieOptional = categorieRepository.findById(IDcategorie);
+            if (!categorieOptional.isPresent()) {
+                throw new GraphQLCustomException("La c");
+            }
+            Categorie categorie = categorieOptional.get();
+            return produitRepository.findByNomContainingIgnoreCaseAndCategories_borneGaucheGreaterThanEqualAndCategories_borneDroitLessThanEqual(page, nom, categorie.getBorneGauche(), categorie.getBorneDroit());
+        } else if (nom != null && !nom.isEmpty()) {
             return produitRepository.findByNomContainingIgnoreCase(page, nom);
-        } else if (IDcategorie != 0) {
-            return produitRepository.findByCategories_IdCategorie(page, IDcategorie);
         }
         return produitRepository.findAll(page);
     }
