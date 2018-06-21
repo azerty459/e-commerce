@@ -455,21 +455,20 @@ public class CategorieBusiness implements ICategorieBusiness {
      */
     private boolean deplacer(List<Categorie> categoriesADeplacer, int intervalleDeDeplacement, int levelCatADeplacer, int levelNouveauParent) {
 
+        // Liste des ids des catégories à déplacer
+        List<Integer> ids = new ArrayList<Integer>();
+
         for (Categorie cat : categoriesADeplacer) {
-
             int idCategorie = cat.getIdCategorie();
-
-            // Calcul du nouveau level
-            int levelCatActuelle = cat.getLevel();
-            int nouveauLevel = levelNouveauParent + 1 + levelCatActuelle - levelCatADeplacer;
-
-            // Changer les bornes pour la catégorie d'id idCategorie
-            categorieRepository.changerBornes(idCategorie, intervalleDeDeplacement);
-
-            // Changer le level de chaque catégorie
-            categorieRepository.changerLevel(idCategorie, nouveauLevel);
-
+            ids.add(idCategorie);
         }
+
+        // Calcul de l'intervalle de déplacement du level
+        int intervalLevel = levelNouveauParent + 1 - levelCatADeplacer;
+
+        // Changer le level de chaque catégorie et leurs bornes
+        categorieRepository.changerBornesEtLevel(ids, intervalleDeDeplacement, intervalLevel);
+
         return true;
     }
 

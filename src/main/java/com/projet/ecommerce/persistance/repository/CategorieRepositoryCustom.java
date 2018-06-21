@@ -3,6 +3,7 @@ package com.projet.ecommerce.persistance.repository;
 import com.projet.ecommerce.persistance.entity.Categorie;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 public interface CategorieRepositoryCustom {
@@ -39,19 +40,13 @@ public interface CategorieRepositoryCustom {
     int findBorneMax();
 
     /**
-     * Change les bornes gauches et droites de la catégorie d'id idCategorie et les déplace de deplacement
+     * Change les bornes des catégories à déplacer ainsi que leurs levels.
+     * Effectue réellement le déplacement.
      *
-     * @param idCategorie id de la catégorie dont on change les bornes
-     * @param deplacement intervalle de déplacement de ces bornes
+     * @param ids                     ids des catégories à déplacer.
+     * @param intervalleDeDeplacement Distance de déplacement pour les bornes.
+     * @param intervalLevel           Intervalle de déplacement du level.
      */
-    void changerBornes(int idCategorie, int deplacement);
-
-    /**
-     * Change le level d'une catégorie dont l'id est donnée en paramètre
-     *
-     * @param idCategorie  id de la catégorie dont on modifie le level
-     * @param nouveauLevel nouvelle valeur du level
-     */
-    void changerLevel(int idCategorie, int nouveauLevel);
+    void changerBornesEtLevel(List<Integer> ids, int intervalleDeDeplacement, int intervalLevel);
 
 }

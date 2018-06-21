@@ -10,6 +10,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -185,52 +186,18 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
 
     }
 
-    // NOUVELLE METHODES
-
-    private static final String SQL_DEPLACE_BORNE_GAUCHE = "UPDATE Categorie AS c " +
-            "SET c.borneGauche = c.borneGauche + :depl WHERE c.idCategorie = :id";
-
-    private static final String SQL_DEPLACE_BORNE_DROITE = "UPDATE Categorie AS c " +
-            "SET c.borneDroit = c.borneDroit + :depl WHERE c.idCategorie = :id";
+    private static final String SQL_CHANGER_BORNES_ET_LEVEL = "UPDATE Categorie AS c " +
+            "SET c.borneGauche = c.borneGauche + :depl, c.borneDroit = c.borneDroit + :depl, c.level = c.level + :nl " +
+            "WHERE c.idCategorie IN :ids";
 
     @Override
-    public void changerBornes(int idCategorie, int deplacement) {
+    public void changerBornesEtLevel(List<Integer> ids, int intervalleDeDeplacement, int intervalLevel) {
 
-        System.out.println("CHANGER BORNES");
-        System.out.println("id: ");
-        System.out.println(idCategorie);
-        System.out.println("Déplacement: ");
-        System.out.println(deplacement);
-
-        Query query1 = entityManager.createQuery(SQL_DEPLACE_BORNE_GAUCHE);
-        query1.setParameter("depl", deplacement);
-        query1.setParameter("id", idCategorie);
-        query1.executeUpdate();
-
-        Query query2 = entityManager.createQuery(SQL_DEPLACE_BORNE_DROITE);
-        query2.setParameter("depl", deplacement);
-        query2.setParameter("id", idCategorie);
-        query2.executeUpdate();
-
-    }
-
-    private static final String SQL_CHANGE_LEVEL = "UPDATE Categorie AS c" +
-            " SET c.level = :nl WHERE c.idCategorie = :id";
-
-    @Override
-    public void changerLevel(int idCategorie, int nouveauLevel) {
-
-        System.out.println("CHANGER LEVEL");
-        System.out.println("id: ");
-        System.out.println(idCategorie);
-        System.out.println("Nouveau Level: ");
-        System.out.println(nouveauLevel);
-
-        Query query = entityManager.createQuery(SQL_CHANGE_LEVEL);
-        query.setParameter("nl", nouveauLevel);
-        query.setParameter("id", idCategorie);
+        Query query = entityManager.createQuery(SQL_CHANGER_BORNES_ET_LEVEL);
+        query.setParameter("nl", intervalLevel);
+        query.setParameter("ids", ids);
+        query.setParameter("depl", intervalleDeDeplacement);
         query.executeUpdate();
-
     }
 
 
