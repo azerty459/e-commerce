@@ -126,12 +126,6 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
     @Override
     public void ecarterBornes(Categorie cat, int decalage) {
 
-        System.out.println("ECARTER BORNES");
-        System.out.println("Id catégorie:");
-        System.out.println(cat.getIdCategorie());
-        System.out.println("Décalage:");
-        System.out.println(decalage);
-
         Query query1;
         Query query2;
 
@@ -147,17 +141,8 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
 
     }
 
-
     @Override
-    public int rearrangerBornes(int bg, int bd, int intervalle) {
-
-        System.out.println("REARRANGER BORNES");
-        System.out.println("bg: ");
-        System.out.println(bg);
-        System.out.println("bd: ");
-        System.out.println(bd);
-        System.out.println("Intervalle: ");
-        System.out.println(intervalle);
+    public int rearrangerBornes(int bg, int intervalle) {
 
         Query query1;
         Query query2;

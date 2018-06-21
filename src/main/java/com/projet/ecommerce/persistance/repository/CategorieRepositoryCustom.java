@@ -26,11 +26,10 @@ public interface CategorieRepositoryCustom {
      * Réarranger les bornes pour éviter qu'il y ait des trous après suppression ou déplacement d'une catégorie
      *
      * @param bg         borne gauche de la catégorie supprimée
-     * @param bd         borne droite de la catégorie supprimée
      * @param intervalle intervalle entre les 2
      * @return ne nombre de catégories réorganisées
      */
-    int rearrangerBornes(int bg, int bd, int intervalle);
+    int rearrangerBornes(int bg, int intervalle);
 
     /**
      * Trouve la borne max de toute la base de données
