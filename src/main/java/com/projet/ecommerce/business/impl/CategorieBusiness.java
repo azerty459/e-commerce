@@ -295,7 +295,7 @@ public class CategorieBusiness implements ICategorieBusiness {
 
         // Réarrangement des index bornes gauches et droites: on décale toutes les bornes à droite
         // de la catégorie supprimée (> à bd) de l'intervalle supprimé.
-        categorieRepositoryCustom.rearrangerBornes(bgMin, bdMax, intervalleSupprime);
+        categorieRepositoryCustom.rearrangerBornes(bgMin, intervalleSupprime);
 
         return true;
     }
@@ -366,7 +366,7 @@ public class CategorieBusiness implements ICategorieBusiness {
             return deplacerSansParent(categoriesADeplacer, borneMin, borneMax, levelCatADeplacer);
         }
 
-        // Sinon, on déplace sous la catégorie parente
+        // Sinon, on déplace vers la catégorie parente
         return deplacerSurParent(categoriesADeplacer, borneMin, borneMax, levelCatADeplacer, idNouveauParent);
 
     }
@@ -398,7 +398,7 @@ public class CategorieBusiness implements ICategorieBusiness {
 
         // Décaler toutes les bornes supérieures à la borne gauche du nouveau parent de l'intervalle que prennent les
         // catégories à déplacer
-        categorieRepository.ecarterBornes(nouveauParent, interBornes);
+        categorieRepository.ecarterBornes(nouveauParent.getBorneGauche(), interBornes);
 
         // Mettre à jour l'intervalle de déplacement si on déplace de droite à gauche
         if (intervalleDeDeplacement < 0) {
@@ -410,9 +410,9 @@ public class CategorieBusiness implements ICategorieBusiness {
 
         // Les catégories déplacées ont laissé un vide dans les bornes à leur emplacement d'origine: combler le vide
         if (intervalleDeDeplacement >= 0) {
-            categorieRepositoryCustom.rearrangerBornes(borneMin, borneMax, interBornes);
+            categorieRepositoryCustom.rearrangerBornes(borneMin, interBornes);
         } else {
-            categorieRepositoryCustom.rearrangerBornes(borneMax, borneMax + interBornes, interBornes);
+            categorieRepositoryCustom.rearrangerBornes(borneMax, interBornes);
         }
         return true;
     }
@@ -439,7 +439,7 @@ public class CategorieBusiness implements ICategorieBusiness {
         deplacer(categoriesADeplacer, intervalleDeDeplacement, levelCatADeplacer, 0);
 
         // Les catégories déplacées ont laissé un vide dans les bornes à leur emplacement d'origine: les combler
-        categorieRepositoryCustom.rearrangerBornes(borneMin, borneMax, borneMax - borneMin + 1);
+        categorieRepositoryCustom.rearrangerBornes(borneMin, borneMax - borneMin + 1);
 
         return true;
     }

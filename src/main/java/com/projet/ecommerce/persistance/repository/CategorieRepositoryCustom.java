@@ -16,10 +16,10 @@ public interface CategorieRepositoryCustom {
      * Décale toutes les bornes supérieures à la borne gauche de cat vers la droite
      * Le but est d'inser une ou plusieurs catégories.
      *
-     * @param cat      la catégorie de référence pour la borne gauche
+     * @param bg       la catégorie de référence pour la borne gauche
      * @param decalage le nombre d'indices à décaler
      */
-    void ecarterBornes(Categorie cat, int decalage);
+    void ecarterBornes(int bg, int decalage);
 
 
     /**

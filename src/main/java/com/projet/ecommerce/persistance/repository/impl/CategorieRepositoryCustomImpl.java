@@ -36,6 +36,7 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
     // Chercher la borne maximale dans toute la base de données
     private static final String SQL_BORNE_MAX = "SELECT MAX(borneDroit) FROM Categorie";
 
+    // Déplacer les catégories (changer leurs bornes et leur level)
     private static final String SQL_CHANGER_BORNES_ET_LEVEL = "UPDATE Categorie AS c " +
             "SET c.borneGauche = c.borneGauche + :depl, c.borneDroit = c.borneDroit + :depl, c.level = c.level + :nl " +
             "WHERE c.idCategorie IN :ids";
@@ -107,14 +108,10 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
             query.setParameter("bd", cat.getBorneDroit());
 
             // On retourne la catégorie unique, parent de cat
-
             resultat = query.getSingleResult();
-
         }
-
         // Pas de parent pour une catégorie de niveau 1
         else {
-
             resultat = new Categorie();
             resultat.setNomCategorie("Aucune catégorie parente");
         }
@@ -124,19 +121,19 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
     }
 
     @Override
-    public void ecarterBornes(Categorie cat, int decalage) {
+    public void ecarterBornes(int bg, int decalage) {
 
         Query query1;
         Query query2;
 
         query1 = entityManager.createQuery(SQL_CATEGORIES_ECARTER_BORNES_GAUCHES);
         query1.setParameter("i", decalage);
-        query1.setParameter("limite", cat.getBorneGauche());
+        query1.setParameter("limite", bg);
         query1.executeUpdate();
 
         query2 = entityManager.createQuery(SQL_CATEGORIES_ECARTER_BORNES_DROITES);
         query2.setParameter("i", decalage);
-        query2.setParameter("limite", cat.getBorneGauche());
+        query2.setParameter("limite", bg);
         query2.executeUpdate();
 
     }
@@ -172,13 +169,11 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
         System.out.println(a);
 
         return a;
-
     }
 
 
     @Override
     public void changerBornesEtLevel(List<Integer> ids, int intervalleDeDeplacement, int intervalLevel) {
-
         Query query = entityManager.createQuery(SQL_CHANGER_BORNES_ET_LEVEL);
         query.setParameter("nl", intervalLevel);
         query.setParameter("ids", ids);

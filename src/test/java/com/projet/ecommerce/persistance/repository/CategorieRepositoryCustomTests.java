@@ -140,7 +140,7 @@ public class CategorieRepositoryCustomTests {
     public void ecarterBornes() {
 
         // Ecartement de bones de 2
-        categorieRepository.ecarterBornes(DRAME, 2);
+        categorieRepository.ecarterBornes(DRAME.getBorneGauche(), 2);
 
         Categorie newDrame = findACat("Drame");
 
