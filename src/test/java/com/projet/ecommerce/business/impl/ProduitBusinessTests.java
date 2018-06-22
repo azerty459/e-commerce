@@ -388,12 +388,14 @@ public class ProduitBusinessTests {
     @Test
     public void getPageWithoutName() {
         Mockito.when(produitRepository.findAll(Mockito.any(Pageable.class))).thenReturn(page);
-        Assert.assertNotNull(produitBusiness.getPage(1, 5, null));
+        Assert.assertNotNull(produitBusiness.getPage(1, 5, null, 0));
     }
 
     @Test
     public void getPageWithName() {
         Mockito.when(produitRepository.findByNomContainingIgnoreCase(Mockito.any(Pageable.class), Mockito.anyString())).thenReturn(page);
-        Assert.assertNotNull(produitBusiness.getPage(1, 5, "Toto"));
+        Assert.assertNotNull(produitBusiness.getPage(1, 5, "Toto", 0));
     }
+
+    //TODO Faire le teste avec id catégorie
 }
