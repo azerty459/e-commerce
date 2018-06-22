@@ -34,6 +34,9 @@ public class CategorieMutation {
         builder.dataFetcher("updateCategorie", (DataFetchingEnvironment env) ->
                 categorieBusiness.updateCategorie(env.getArgument("id"), env.getArgument("nom"))
         );
+        builder.dataFetcher("restoreCategorie", (DataFetchingEnvironment env) ->
+                categorieBusiness.restoreLastDeletedCategorie(env.getArgument("idNouveauParent"))
+        );
 
 
         return builder.build();

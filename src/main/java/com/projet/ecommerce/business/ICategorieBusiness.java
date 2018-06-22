@@ -84,4 +84,16 @@ public interface ICategorieBusiness {
      * @return une page de categorie
      */
     Page<Categorie> getPage(int pageNumber, int nb);
+
+    /**
+     * Methode permettant de transfert une catégorie dans la table catégorie supprimé.
+     *
+     * @param categorieToSave la catégorie a supprimé
+     * @return vrai si le transfert est un succès, faux sinon.
+     */
+    boolean saveInCategorieSupprime(Categorie categorieToSave);
+
+    boolean restoreLastDeletedCategorie(int nouveauParent);
+
+    int moveCategorieSupprime();
 }

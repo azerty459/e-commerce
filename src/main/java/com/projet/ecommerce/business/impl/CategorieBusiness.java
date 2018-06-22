@@ -5,7 +5,9 @@ import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.business.dto.transformer.CategorieTransformer;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Categorie;
+import com.projet.ecommerce.persistance.entity.CategorieSupprime;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
+import com.projet.ecommerce.persistance.repository.CategorieSupprimeRepository;
 import com.projet.ecommerce.persistance.repository.impl.CategorieRepositoryCustomImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,7 +29,12 @@ public class CategorieBusiness implements ICategorieBusiness {
     private CategorieRepository categorieRepository;
 
     @Autowired
+    private CategorieSupprimeRepository categorieSupprimeRepository;
+
+    @Autowired
     private CategorieRepositoryCustomImpl categorieRepositoryCustom;
+    @Autowired
+    private CategorieRepositoryCustomImpl categorieSupprimeRepositoryCustom;
 
     /**
      * Va chercher toutes les catégories, ou la catégorie donnée en nom. Récupère aussi les sous-catégories si demandées.
@@ -271,6 +278,9 @@ public class CategorieBusiness implements ICategorieBusiness {
             return false;
         }
 
+        // on supprime les categorie supprimé déja présente, en effet actuellement une seule catégorie et ses sous catégories peuvent être stocké
+        categorieSupprimeRepository.deleteAll();
+
         // Récupération des enfants éventuels de la catégorie
         ArrayList<Categorie> cats = new ArrayList<>(categorieRepository.findByIdCategorieWithSousCat(idCategorie));
 
@@ -287,6 +297,7 @@ public class CategorieBusiness implements ICategorieBusiness {
             }
 
             // Suppression de la catégorie
+            saveInCategorieSupprime(c);
             categorieRepository.delete(c);
         }
 
@@ -406,7 +417,7 @@ public class CategorieBusiness implements ICategorieBusiness {
         }
 
         // Déplacer les catégories de intervalleDeDeplacement et réarranger leur levels
-        deplacer(categoriesADeplacer, intervalleDeDeplacement, levelCatADeplacer, levelNouveauParent);
+        deplacer(categoriesADeplacer, intervalleDeDeplacement, levelCatADeplacer, levelNouveauParent, false);
 
         // Les catégories déplacées ont laissé un vide dans les bornes à leur emplacement d'origine: combler le vide
         if (intervalleDeDeplacement >= 0) {
@@ -436,7 +447,7 @@ public class CategorieBusiness implements ICategorieBusiness {
         int intervalleDeDeplacement = borneMaxDeBddEntiere - borneMin + 1;
 
         // Déplacer toutes les bornes des catégories à déplacer de cet intervalle + Ajuster le level
-        deplacer(categoriesADeplacer, intervalleDeDeplacement, levelCatADeplacer, 0);
+        deplacer(categoriesADeplacer, intervalleDeDeplacement, levelCatADeplacer, 0, false);
 
         // Les catégories déplacées ont laissé un vide dans les bornes à leur emplacement d'origine: les combler
         categorieRepositoryCustom.rearrangerBornes(borneMin, borneMax - borneMin + 1);
@@ -452,9 +463,9 @@ public class CategorieBusiness implements ICategorieBusiness {
      * @param intervalleDeDeplacement intervalle de déplacement
      * @param levelCatADeplacer       niveau de la catégorie la plus haute à déplacer
      * @param levelNouveauParent      niveau de son nouveau parent
+     * @param isDeleted               vrai si la catégorie est une catégorie supprimé faux sinon
      */
-    private boolean deplacer(List<Categorie> categoriesADeplacer, int intervalleDeDeplacement, int levelCatADeplacer, int levelNouveauParent) {
-
+    private boolean deplacer(List<Categorie> categoriesADeplacer, int intervalleDeDeplacement, int levelCatADeplacer, int levelNouveauParent, boolean isDeleted) {
         // Liste des ids des catégories à déplacer
         List<Integer> ids = new ArrayList<Integer>();
 
@@ -466,7 +477,12 @@ public class CategorieBusiness implements ICategorieBusiness {
         int intervalLevel = levelNouveauParent + 1 - levelCatADeplacer;
 
         // Changer le level de chaque catégorie et leurs bornes
-        categorieRepository.changerBornesEtLevel(ids, intervalleDeDeplacement, intervalLevel);
+        if (isDeleted) {
+            categorieSupprimeRepository.changerBornesEtLevel(ids, intervalleDeDeplacement, intervalLevel);
+        } else {
+            categorieRepository.changerBornesEtLevel(ids, intervalleDeDeplacement, intervalLevel);
+        }
+
 
         return true;
     }
@@ -545,4 +561,78 @@ public class CategorieBusiness implements ICategorieBusiness {
         PageRequest page = (pageNumber == 0) ? PageRequest.of(pageNumber, nb) : PageRequest.of(pageNumber - 1, nb);
         return categorieRepository.findAll(page);
     }
+
+    @Override
+    public boolean saveInCategorieSupprime(Categorie categorieToSave) {
+        CategorieSupprime categorieSupprime = new CategorieSupprime();
+        categorieSupprime.setIdCategorie(categorieToSave.getIdCategorie());
+        categorieSupprime.setNomCategorie(categorieToSave.getNomCategorie());
+        categorieSupprime.setLevel(categorieToSave.getLevel());
+        categorieSupprime.setBorneDroit(categorieToSave.getBorneDroit());
+        categorieSupprime.setBorneGauche(categorieToSave.getBorneGauche());
+        categorieSupprime.setProduits(categorieToSave.getProduits());
+        // on vérifie que la catégorie a bien été ajouté
+        return categorieSupprimeRepository.save(categorieSupprime).getIdCategorie() == categorieToSave.getIdCategorie();
+    }
+
+    @Override
+    public boolean restoreLastDeletedCategorie(int newParent) {
+        int idParent = moveCategorieSupprime();
+        if (idParent == 0) {
+            return false;
+        } else {
+            return moveCategorie(idParent, newParent);
+        }
+
+    }
+
+    @Override
+    public int moveCategorieSupprime() {
+        // Aller chercher la catégorie à déplacer et ses enfants
+        ArrayList<CategorieSupprime> categoriesADeplacer = new ArrayList<>(categorieSupprimeRepository.findAll());
+        // Trouver les bornes min et max de toutes les catégories à déplacer + leur level le plus haut (le plus petit donc)
+        int borneMin = categoriesADeplacer.get(0).getBorneGauche();
+        int borneMax = categoriesADeplacer.get(0).getBorneDroit();
+        int levelCatADeplacer = categoriesADeplacer.get(0).getLevel();
+        for (CategorieSupprime c : categoriesADeplacer) {
+            if (c.getBorneGauche() < borneMin) {
+                borneMin = c.getBorneGauche();
+            }
+            if (c.getBorneDroit() > borneMax) {
+                borneMax = c.getBorneDroit();
+            }
+            if (c.getLevel() < levelCatADeplacer) {
+                levelCatADeplacer = c.getLevel();
+            }
+        }
+        // on converties les catégorieSupprime en Categorie
+        ArrayList<Categorie> categories = new ArrayList<>();
+
+        for (CategorieSupprime c : categoriesADeplacer) {
+            Categorie categorie = new Categorie();
+            categorie.setIdCategorie(c.getIdCategorie());
+            categorie.setNomCategorie(c.getNomCategorie());
+            categorie.setLevel(c.getLevel());
+            categorie.setBorneDroit(c.getBorneDroit());
+            categorie.setBorneGauche(c.getBorneGauche());
+            categorie.setProduits(c.getProduits());
+            categories.add(categorie);
+        }
+
+
+        // Déplacer toutes les bornes des catégories à déplacer de cet intervalle + Ajuster le level
+        deplacer(categories, -100000, levelCatADeplacer, 0, true);
+        int idOfCatWithLevelMin = 0;
+        int levelmin = -1;
+        for (Categorie c : categorieRepository.saveAll(categories)) {
+            if (c.getLevel() < levelmin || levelmin == -1) {
+                levelmin = c.getLevel();
+                idOfCatWithLevelMin = c.getIdCategorie();
+            }
+        }
+
+        return idOfCatWithLevelMin;
+    }
+
+
 }
