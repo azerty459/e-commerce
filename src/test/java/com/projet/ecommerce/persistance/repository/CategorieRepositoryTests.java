@@ -9,12 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("test")
+@Transactional
 public class CategorieRepositoryTests {
     private static final Categorie TEMP_INSERT = new Categorie();
     private static final Categorie TEMP_DELETE = new Categorie();
@@ -81,7 +83,7 @@ public class CategorieRepositoryTests {
     }
 
     @Test
-    public void findByIdCategorieWithSousCat(){
+    public void findByIdCategorieWithSousCat() {
         // On sauvegarde tout pour avoir des données dans la BDD
         categorieRepository.save(TEMP_GET);
         categorieRepository.save(TEMP_DELETE);
@@ -93,14 +95,14 @@ public class CategorieRepositoryTests {
     }
 
     @Test
-    public void findByNomCategorie(){
+    public void findByNomCategorie() {
         categorieRepository.save(TEMP_GET);
         Collection<Categorie> categorieCollection = categorieRepository.findByNomCategorie(TEMP_GET.getNomCategorie());
         Assert.assertEquals(1, categorieCollection.size());
     }
 
     @Test
-    public void findByNomCategorieWithSousCat(){
+    public void findByNomCategorieWithSousCat() {
         categorieRepository.save(TEMP_GET);
         categorieRepository.save(TEMP_DELETE);
         categorieRepository.save(TEMP_INSERT);

@@ -39,7 +39,6 @@ public class CategorieBusiness implements ICategorieBusiness {
      * @return Une liste de CategorieDTO
      */
     @Override
-
     public List<CategorieDTO> getCategorie(int id, String nom, boolean sousCategorie, boolean parent) {
 
         // Initialisation
@@ -52,7 +51,7 @@ public class CategorieBusiness implements ICategorieBusiness {
         } else if (id != 0) {
             categorieCollection = findById(id, sousCategorie);
         } else {
-            categorieCollection = categorieRepository.findAll();
+            categorieCollection = categorieRepository.findAllByOrderByNomCategorie();
         }
 
         // On va aussi chercher son parent direct si demandé
@@ -69,18 +68,21 @@ public class CategorieBusiness implements ICategorieBusiness {
         }
         // Mise en forme des objets CategorieDTO
         HashMap<Categorie, String> chemins = construireAssociationEnfantsChemins(categorieCollection);
+
         return new ArrayList<>(CategorieTransformer.entityToDto(new ArrayList<>(categorieCollection), chemins, sousCategorie, parent, parentDirect));
 
     }
 
     @Override
     public HashMap<Categorie, String> construireAssociationEnfantsChemins(Collection<Categorie> categories) {
+
         // Construire un tableau des catégories retournées par findAllWithCriteria
         HashMap<Integer, Categorie> categoriesPourParents = new HashMap<>();
         Iterator<Categorie> it = categories.iterator();
         int i = 1;
         while (it.hasNext()) {
-            categoriesPourParents.put(i, it.next());
+            Categorie cat = it.next();
+            categoriesPourParents.put(i, cat);
             i++;
         }
 
@@ -176,6 +178,9 @@ public class CategorieBusiness implements ICategorieBusiness {
      */
     @Override
     public CategorieDTO addParent(String nomCategorie) {
+        if (nomCategorie.isEmpty()) {
+            throw new GraphQLCustomException("Le nom de categorie est vide");
+        }
         //On récupère toute la liste des catégories
         List<Categorie> categorieList = new ArrayList<>(categorieRepository.findAll());
         int borndeDroit = 0;
@@ -212,40 +217,42 @@ public class CategorieBusiness implements ICategorieBusiness {
      */
     @Override
     public CategorieDTO addEnfant(String nomCategorie, int idParent) {
+        if (nomCategorie.isEmpty()) {
+            throw new GraphQLCustomException("Le nom de categorie est vide");
+        }
         // On recherche si le père existe
         Optional<Categorie> categorieParentOptional = categorieRepository.findById(idParent);
-        if (categorieParentOptional.isPresent()) {
-            Categorie categorieParent = categorieParentOptional.get();
-            //Permet de décaler les catégorie de + 2 par rapport à la borne droite du père
-            List<Categorie> categorieList = new ArrayList<>(categorieRepository.findAll());
-            // On par cours tout le tableau de catégorie
-            for (Categorie retour : categorieList) {
-                if (retour.getBorneDroit() > categorieParent.getBorneDroit()) {
-                    // Si la catégorie est compris dans le parrent, on ajoute que +2 à la borne droite
-                    if (retour.getBorneGauche() < categorieParent.getBorneGauche()) {
-                        retour.setBorneDroit(retour.getBorneDroit() + 2);
-                        categorieRepository.save(retour);
-                    } else { // Sinon on ajoute + 2 à la borne gauche et droite
-                        retour.setBorneDroit(retour.getBorneDroit() + 2);
-                        retour.setBorneGauche(retour.getBorneGauche() + 2);
-                        categorieRepository.save(retour);
-                    }
-                }
-            }
-            // On créer la catégorie à insérer
-            Categorie categorieInserer = new Categorie();
-            categorieInserer.setNomCategorie(nomCategorie);
-            categorieInserer.setBorneGauche(categorieParent.getBorneDroit());
-            categorieInserer.setBorneDroit(categorieParent.getBorneDroit() + 1);
-            categorieInserer.setLevel(categorieParent.getLevel() + 1);
-            categorieInserer.setProduits(new ArrayList<>());
-            // On ajoute + 2 au père sur sa borne droite puis au sauvegarde
-            categorieParent.setBorneDroit(categorieParent.getBorneDroit() + 2);
-            categorieRepository.save(categorieParent);
-            return CategorieTransformer.entityToDto(categorieRepository.save(categorieInserer));
-        } else {
+        if (!categorieParentOptional.isPresent()) {
             throw new GraphQLCustomException("Aucune catégorie parent trouvé: " + idParent);
         }
+        Categorie categorieParent = categorieParentOptional.get();
+        //Permet de décaler les catégorie de + 2 par rapport à la borne droite du père
+        List<Categorie> categorieList = new ArrayList<>(categorieRepository.findAll());
+        // On par cours tout le tableau de catégorie
+        for (Categorie retour : categorieList) {
+            if (retour.getBorneDroit() > categorieParent.getBorneDroit()) {
+                // Si la catégorie est compris dans le parrent, on ajoute que +2 à la borne droite
+                if (retour.getBorneGauche() < categorieParent.getBorneGauche()) {
+                    retour.setBorneDroit(retour.getBorneDroit() + 2);
+                    categorieRepository.save(retour);
+                } else { // Sinon on ajoute + 2 à la borne gauche et droite
+                    retour.setBorneDroit(retour.getBorneDroit() + 2);
+                    retour.setBorneGauche(retour.getBorneGauche() + 2);
+                    categorieRepository.save(retour);
+                }
+            }
+        }
+        // On créer la catégorie à insérer
+        Categorie categorieInserer = new Categorie();
+        categorieInserer.setNomCategorie(nomCategorie);
+        categorieInserer.setBorneGauche(categorieParent.getBorneDroit());
+        categorieInserer.setBorneDroit(categorieParent.getBorneDroit() + 1);
+        categorieInserer.setLevel(categorieParent.getLevel() + 1);
+        categorieInserer.setProduits(new ArrayList<>());
+        // On ajoute + 2 au père sur sa borne droite puis au sauvegarde
+        categorieParent.setBorneDroit(categorieParent.getBorneDroit() + 2);
+        categorieRepository.save(categorieParent);
+        return CategorieTransformer.entityToDto(categorieRepository.save(categorieInserer));
     }
 
     /**
@@ -288,13 +295,13 @@ public class CategorieBusiness implements ICategorieBusiness {
 
         // Réarrangement des index bornes gauches et droites: on décale toutes les bornes à droite
         // de la catégorie supprimée (> à bd) de l'intervalle supprimé.
-        categorieRepositoryCustom.rearrangerBornes(bgMin, bdMax, intervalleSupprime);
+        categorieRepositoryCustom.rearrangerBornes(bgMin, intervalleSupprime);
 
         return true;
     }
 
     /**
-     * Classe les catégories eb fonction de leur level, les plus petits en premier.
+     * Classe les catégories en fonction de leur level, les plus petits en premier.
      *
      * @param cats les catégories à classer
      * @return une collection de catégories classées
@@ -359,6 +366,23 @@ public class CategorieBusiness implements ICategorieBusiness {
             return deplacerSansParent(categoriesADeplacer, borneMin, borneMax, levelCatADeplacer);
         }
 
+        // Sinon, on déplace vers la catégorie parente
+        return deplacerSurParent(categoriesADeplacer, borneMin, borneMax, levelCatADeplacer, idNouveauParent);
+
+    }
+
+    /**
+     * Déplace une catégorie et ses enfants vers une nouvelle catégorie parente
+     *
+     * @param categoriesADeplacer Liste des catégories à déplacer
+     * @param borneMin            Borne la plus petite de ces catégories à déplacer
+     * @param borneMax            Borne la plus grande de ces catégories à déplacer
+     * @param levelCatADeplacer   Level de la catégorie la plus haute des catégories à déplacer
+     * @param idNouveauParent     id du nouveau parent
+     * @return true si le déplacement réussit.
+     */
+    private boolean deplacerSurParent(List<Categorie> categoriesADeplacer, int borneMin, int borneMax, int levelCatADeplacer, int idNouveauParent) {
+
         // Dans le cas où on affecte à un nouveau parent
         // Aller chercher la catégorie parent
         Categorie nouveauParent = (Categorie) findById(idNouveauParent, false).toArray()[0];
@@ -374,39 +398,25 @@ public class CategorieBusiness implements ICategorieBusiness {
 
         // Décaler toutes les bornes supérieures à la borne gauche du nouveau parent de l'intervalle que prennent les
         // catégories à déplacer
-        categorieRepository.ecarterBornes(nouveauParent, interBornes);
+        categorieRepository.ecarterBornes(nouveauParent.getBorneGauche(), interBornes);
+
+        // Mettre à jour l'intervalle de déplacement si on déplace de droite à gauche
+        if (intervalleDeDeplacement < 0) {
+            intervalleDeDeplacement -= interBornes;
+        }
 
         // Déplacer les catégories de intervalleDeDeplacement et réarranger leur levels
-        for (Categorie cat : categoriesADeplacer) {
-            int bg = cat.getBorneGauche();
-            int bd = cat.getBorneDroit();
-            int level = cat.getLevel();
-            cat.setBorneDroit(bd + intervalleDeDeplacement);
-            cat.setBorneGauche(bg + intervalleDeDeplacement);
-            System.out.println("Level du nouveau parent:");
-            System.out.println(levelNouveauParent);
-            System.out.println("Level de la catégorie examinée:");
-            System.out.println(level);
-            System.out.println("Level de la catégorie la plus élevée des catégories à déplacer");
-            System.out.println(levelCatADeplacer);
-            System.out.println("set Level à: ");
-            System.out.println(levelNouveauParent + 1 + level - levelCatADeplacer);
-            System.out.println();
-            cat.setLevel(levelNouveauParent + 1 + level - levelCatADeplacer);
-
-            // categorieRepository.save(cat);
-        }
+        deplacer(categoriesADeplacer, intervalleDeDeplacement, levelCatADeplacer, levelNouveauParent);
 
         // Les catégories déplacées ont laissé un vide dans les bornes à leur emplacement d'origine: combler le vide
         if (intervalleDeDeplacement >= 0) {
-            categorieRepositoryCustom.rearrangerBornes(borneMin, borneMax, interBornes);
+            categorieRepositoryCustom.rearrangerBornes(borneMin, interBornes);
         } else {
-            categorieRepositoryCustom.rearrangerBornes(borneMax, borneMax + interBornes, interBornes);
+            categorieRepositoryCustom.rearrangerBornes(borneMax, interBornes);
         }
-
         return true;
-
     }
+
 
     /**
      * Déplace une catégorie (et ses enfants) vers le level 1 (c'est à dire sans parent)
@@ -426,23 +436,46 @@ public class CategorieBusiness implements ICategorieBusiness {
         int intervalleDeDeplacement = borneMaxDeBddEntiere - borneMin + 1;
 
         // Déplacer toutes les bornes des catégories à déplacer de cet intervalle + Ajuster le level
-        for (Categorie cat : categoriesADeplacer) {
-            int bg = cat.getBorneGauche();
-            int bd = cat.getBorneDroit();
-            int level = cat.getLevel();
-            cat.setBorneDroit(bd + intervalleDeDeplacement);
-            cat.setBorneGauche(bg + intervalleDeDeplacement);
-            cat.setLevel(1 - levelCatADeplacer + level);
-        }
+        deplacer(categoriesADeplacer, intervalleDeDeplacement, levelCatADeplacer, 0);
 
         // Les catégories déplacées ont laissé un vide dans les bornes à leur emplacement d'origine: les combler
-        categorieRepositoryCustom.rearrangerBornes(borneMin, borneMax, borneMax - borneMin + 1);
+        categorieRepositoryCustom.rearrangerBornes(borneMin, borneMax - borneMin + 1);
+
+        return true;
+    }
+
+
+    /**
+     * Déplace les bornes des catégories à déplacer et réarrange leurs levels
+     *
+     * @param categoriesADeplacer     liste des catégories à déplacer
+     * @param intervalleDeDeplacement intervalle de déplacement
+     * @param levelCatADeplacer       niveau de la catégorie la plus haute à déplacer
+     * @param levelNouveauParent      niveau de son nouveau parent
+     */
+    private boolean deplacer(List<Categorie> categoriesADeplacer, int intervalleDeDeplacement, int levelCatADeplacer, int levelNouveauParent) {
+
+        // Liste des ids des catégories à déplacer
+        List<Integer> ids = new ArrayList<Integer>();
+
+        for (Categorie cat : categoriesADeplacer) {
+            ids.add(cat.getIdCategorie());
+        }
+
+        // Calcul de l'intervalle de déplacement du level
+        int intervalLevel = levelNouveauParent + 1 - levelCatADeplacer;
+
+        // Changer le level de chaque catégorie et leurs bornes
+        categorieRepository.changerBornesEtLevel(ids, intervalleDeDeplacement, intervalLevel);
 
         return true;
     }
 
     @Override
-    public CategorieDTO updateCategorie(int id, String newName) {
+    public CategorieDTO updateCategorie(int id, String nomCategorie) {
+        if (nomCategorie.isEmpty()) {
+            throw new GraphQLCustomException("Le nom de categorie est vide");
+        }
 
         Optional<Categorie> optionalCategorie = categorieRepository.findById(id);
 
@@ -451,7 +484,7 @@ public class CategorieBusiness implements ICategorieBusiness {
         return optionalCategorie
                 .map((categorie) -> {
                     Categorie cat = optionalCategorie.get();
-                    cat.setNomCategorie(newName);
+                    cat.setNomCategorie(nomCategorie);
                     return CategorieTransformer.entityToDto(categorieRepository.save(cat));
                 })
                 .orElseThrow(() -> new GraphQLCustomException("La catégorie n'a pas été trouvée"));
@@ -501,11 +534,11 @@ public class CategorieBusiness implements ICategorieBusiness {
     }
 
     /**
-     * Retourne un objet page de catégorie.
+     * Retourne une page de catégorie.
      *
      * @param pageNumber le page souhaitée
-     * @param nb         le nombre de produit à afficher dans la page
-     * @return un objet page de produit
+     * @param nb         le nombre de catégorie à afficher dans la page
+     * @return une page paginée
      */
     @Override
     public Page<Categorie> getPage(int pageNumber, int nb) {

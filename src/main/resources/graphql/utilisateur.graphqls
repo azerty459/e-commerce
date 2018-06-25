@@ -1,0 +1,32 @@
+input UtilisateurAddInput {
+    email: String!
+    mdp: String!
+    roles: [RoleAddInput]
+}
+
+input UtilisateurUpdateInput {
+    email: String!
+    mdp: String!
+    nom: String
+    prenom: String
+    roles: [RoleUpdateInput]
+}
+
+type Utilisateur {
+    id: Int!
+    email: String!
+    nom: String!
+    prenom: String!
+    roles: [Role]!
+}
+
+extend type Query {
+    utilisateurs(id: Int, email: String, nom: String, prenom: String, role: String): [Utilisateur]!
+    login(email: String, mdp: String): Utilisateur!
+}
+
+extend type Mutation {
+    addUtilisateur(utilisateur: UtilisateurAddInput!): Utilisateur!
+    updateUtilisateur(utilisateur: UtilisateurUpdateInput!): Utilisateur!
+    deleteUtilisateur(email: String, id: Int): Boolean!
+}

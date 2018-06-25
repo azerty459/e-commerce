@@ -36,21 +36,20 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
 
         Query query = null;
 
-        if(ref == null) {
-            if(cat == null) {
-                query =  entityManager.createQuery(SQL_ALL_PRODUCTS, Produit.class);
-            }
-            else {
-                query =  entityManager.createQuery(SQL_PRODUCTS_BY_CATEGORY, Collection.class);
+        if (ref == null) {
+            if (cat == null) {
+                query = entityManager.createQuery(SQL_ALL_PRODUCTS, Produit.class);
+            } else {
+                System.out.println("testsdfsdfsdfsdf");
+                query = entityManager.createQuery(SQL_PRODUCTS_BY_CATEGORY, Collection.class);
                 query.setParameter("cat", cat);
             }
-        }
-        else {
+        } else {
             // Dans tous les cas, on fait une recherche par référence
-            query =  entityManager.createQuery(SQL_PRODUCT_BY_REFERENCE, Produit.class);
+            query = entityManager.createQuery(SQL_PRODUCT_BY_REFERENCE, Produit.class);
             query.setParameter("ref", ref);
         }
-
+        System.out.println(query.getResultList().size());
         return query.getResultList();
     }
 }

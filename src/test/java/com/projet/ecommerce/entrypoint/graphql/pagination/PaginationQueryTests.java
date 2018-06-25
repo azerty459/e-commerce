@@ -19,7 +19,7 @@ import java.util.Map;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
-public class PaginationQueryTest {
+public class PaginationQueryTests {
     @Mock
     private PaginationBusiness paginationBusiness;
 
@@ -62,8 +62,8 @@ public class PaginationQueryTest {
         Assert.assertNotNull(retourMap.get("pagination"));
         retourMap.get("pagination").get(dataFetchingEnvironment);
         // Test avec nb appel add avec bon param
-        Mockito.verify(paginationBusiness, Mockito.times(1)).getPagination("produit", 1, 5, null);
+        Mockito.verify(paginationBusiness, Mockito.times(1)).getPagination("produit", 1, 5, null, 0);
         // Test avec nb appel add avec mauvais param
-        Mockito.verify(paginationBusiness, Mockito.times(0)).getPagination(null, 0, 0, null);
+        Mockito.verify(paginationBusiness, Mockito.times(0)).getPagination(null, 0, 0, null, 0);
     }
 }

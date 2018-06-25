@@ -3,9 +3,14 @@ package com.projet.ecommerce.entrypoint.graphql;
 import com.projet.ecommerce.entrypoint.graphql.categorie.CategorieMutation;
 import com.projet.ecommerce.entrypoint.graphql.categorie.CategorieQuery;
 import com.projet.ecommerce.entrypoint.graphql.pagination.PaginationQuery;
+import com.projet.ecommerce.entrypoint.graphql.photo.PhotoMutation;
 import com.projet.ecommerce.entrypoint.graphql.photo.PhotoQuery;
 import com.projet.ecommerce.entrypoint.graphql.produit.ProduitMutation;
 import com.projet.ecommerce.entrypoint.graphql.produit.ProduitQuery;
+import com.projet.ecommerce.entrypoint.graphql.role.RoleMutation;
+import com.projet.ecommerce.entrypoint.graphql.role.RoleQuery;
+import com.projet.ecommerce.entrypoint.graphql.utilisateur.UtilisateurMutation;
+import com.projet.ecommerce.entrypoint.graphql.utilisateur.UtilisateurQuery;
 import graphql.ExceptionWhileDataFetching;
 import graphql.GraphQL;
 import graphql.GraphQLError;
@@ -43,7 +48,22 @@ public class GraphQlUtility {
     private CategorieMutation categorieMutation;
 
     @Autowired
+    private RoleQuery roleQuery;
+
+    @Autowired
+    private RoleMutation roleMutation;
+
+    @Autowired
+    private UtilisateurQuery utilisateurQuery;
+
+    @Autowired
+    private UtilisateurMutation utilisateurMutation;
+
+    @Autowired
     private PhotoQuery photoQuery;
+
+    @Autowired
+    private PhotoMutation photoMutation;
 
     @Autowired
     private PaginationQuery paginationQuery;
@@ -54,7 +74,7 @@ public class GraphQlUtility {
                 .build();
     }
 
-    public List<GraphQLError> graphQLErrorHandler(List<GraphQLError> graphQLErrors){
+    public List<GraphQLError> graphQLErrorHandler(List<GraphQLError> graphQLErrors) {
         List<GraphQLError> clientErrors = graphQLErrors.stream()
                 .filter(this::isClientError)
                 .collect(Collectors.toList());
@@ -74,13 +94,18 @@ public class GraphQlUtility {
         return !(error instanceof ExceptionWhileDataFetching || error instanceof Throwable);
     }
 
-    public RuntimeWiring buildRuntimeWiring(){
-        return  RuntimeWiring.newRuntimeWiring()
+    private RuntimeWiring buildRuntimeWiring() {
+        return RuntimeWiring.newRuntimeWiring()
                 .type(produitQuery.produitWiring())
                 .type(produitMutation.produitWiring())
                 .type(photoQuery.produitWiring())
+                .type(photoMutation.produitWiring())
                 .type(categorieQuery.produitWiring())
                 .type(categorieMutation.produitWiring())
+                .type(roleQuery.produitWiring())
+                .type(roleMutation.produitWiring())
+                .type(utilisateurQuery.produitWiring())
+                .type(utilisateurMutation.produitWiring())
                 .type(paginationQuery.produitWiring())
                 .build();
     }
@@ -90,6 +115,8 @@ public class GraphQlUtility {
         File categorieSchemaFile = new File("src/main/resources/graphql/categorie.graphqls");
         File photoSchemaFile = new File("src/main/resources/graphql/photo.graphqls");
         File produitSchemaFile = new File("src/main/resources/graphql/produit.graphqls");
+        File utilisateurSchemaFile = new File("src/main/resources/graphql/utilisateur.graphqls");
+        File roleSchemaFile = new File("src/main/resources/graphql/role.graphqls");
         File paginationSchemaFile = new File("src/main/resources/graphql/pagination.graphqls");
 
         SchemaParser schemaParser = new SchemaParser();
@@ -98,6 +125,8 @@ public class GraphQlUtility {
         typeRegistry.merge(schemaParser.parse(categorieSchemaFile));
         typeRegistry.merge(schemaParser.parse(photoSchemaFile));
         typeRegistry.merge(schemaParser.parse(produitSchemaFile));
+        typeRegistry.merge(schemaParser.parse(roleSchemaFile));
+        typeRegistry.merge(schemaParser.parse(utilisateurSchemaFile));
         typeRegistry.merge(schemaParser.parse(paginationSchemaFile));
 
         RuntimeWiring wiring = buildRuntimeWiring();

@@ -1,6 +1,7 @@
 package com.projet.ecommerce.business;
 
 import com.projet.ecommerce.business.dto.PhotoDTO;
+import com.projet.ecommerce.business.impl.PhotoException;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,7 +20,7 @@ public interface IPhotoBusiness {
      * @param refProduit ref du produit
      * @return true si le fichier est upload , false sinon
      */
-    Boolean upload(MultipartFile fichier, String refProduit);
+    Boolean upload(MultipartFile fichier, String refProduit) throws PhotoException;
 
     Resource loadPhotos(String nomFichier, String refProduit);
 
@@ -30,4 +31,6 @@ public interface IPhotoBusiness {
      * @return la liste des photos trouvés
      */
     List<PhotoDTO> getAll(String ref);
+
+    Boolean remove(int idPhoto);
 }

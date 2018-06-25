@@ -18,7 +18,7 @@ public class PhotoQuery {
         builder.typeName("Query");
         builder.dataFetcher("photos", (DataFetchingEnvironment env) ->
                 photoBusiness.getAll(env.getArgument("ref"))
-            );
+        );
         return builder.build();
     }
 }

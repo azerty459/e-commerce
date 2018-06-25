@@ -103,12 +103,11 @@ public class ProduitBusiness implements IProduitBusiness {
             throw new GraphQLCustomException("Le produit recherché n'existe pas.");
         }
 
-        produit.setPhotos(new ArrayList<>(completePhotosData(produit.getPhotos())));
+        // On fusionne les deux produits en un
+        Produit retourProduit = produitOptional.get();
 
         produit.setCategories(new ArrayList<>(completeCategoriesData(produit.getCategories())));
 
-        // On fusionne les deux produits en un
-        Produit retourProduit = produitOptional.get();
         Produit produitFinal = null;
         try {
             produitFinal = mergeObjects(produit, retourProduit);
@@ -209,7 +208,7 @@ public class ProduitBusiness implements IProduitBusiness {
      * @param ref la référence du produit recherché
      * @param cat la catégorie du /des produit(s) recherché(s)
      * @param nom le nom du produit à rechercher
-     * @return une liste de produits selon les paramètres ci-dessous
+     * @return une liste de produits selon les paramètres
      */
     @Override
     public List<ProduitDTO> getAll(String ref, String cat, String nom) {
@@ -226,27 +225,33 @@ public class ProduitBusiness implements IProduitBusiness {
         if (produitCollection.size() == 0) {
             throw new GraphQLCustomException("Aucun produit(s) trouvé(s).");
         }
-
         return new ArrayList<>(ProduitTransformer.entityToDto(new ArrayList<>(produitCollection)));
     }
 
-
     /**
-     * Retourne un objet page de produit
+     * Retourne une page de produit
      *
      * @param numeroPage    la page souhaitée
      * @param nombreProduit le nombre de produit à afficher dans la
      * @param nom           le nom du produit à rechercher
-     * @return un objet page de produit
+     * @param IDcategorie   l'id de la catégorie recherchée
+     * @return une page paginée
      */
     @Override
-    public Page<Produit> getPage(int numeroPage, int nombreProduit, String nom) {
+    public Page<Produit> getPage(int numeroPage, int nombreProduit, String nom, int IDcategorie) {
+
 
         PageRequest page = (numeroPage == 0) ? PageRequest.of(numeroPage, nombreProduit) : PageRequest.of(numeroPage - 1, nombreProduit);
-
-        if (nom == null) {
-            return produitRepository.findAll(page);
+        if (nom != null && !nom.isEmpty() && IDcategorie != 0 || IDcategorie != 0) {
+            Optional<Categorie> categorieOptional = categorieRepository.findById(IDcategorie);
+            if (!categorieOptional.isPresent()) {
+                throw new GraphQLCustomException("La c");
+            }
+            Categorie categorie = categorieOptional.get();
+            return produitRepository.findByNomContainingIgnoreCaseAndCategories_borneGaucheGreaterThanEqualAndCategories_borneDroitLessThanEqual(page, nom, categorie.getBorneGauche(), categorie.getBorneDroit());
+        } else if (nom != null && !nom.isEmpty()) {
+            return produitRepository.findByNomContainingIgnoreCase(page, nom);
         }
-        return produitRepository.findByNomContainingIgnoreCase(page, nom);
+        return produitRepository.findAll(page);
     }
 }

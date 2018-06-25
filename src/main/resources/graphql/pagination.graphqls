@@ -5,10 +5,11 @@ type Pagination {
     total: Long
     produits: [Produit]!
     categories: [Categorie]!
+    utilisateurs: [Utilisateur]!
 }
 
 extend type Query {
-    pagination(type: String!, page: Int!, npp: Int!, nom: String): Pagination!
+    pagination(type: String!, page: Int!, npp: Int!, nom: String, categorie: Int): Pagination!
 }
 
 schema {

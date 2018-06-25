@@ -37,7 +37,7 @@ public class TypeCaracteristiqueTransformerTests {
     }
 
     @Test
-    public void singleDtoToEntity(){
+    public void singleDtoToEntity() {
         TypeCaracteristique retour = TypeCaracteristiqueTransformer.dtoToEntity(TYPE_CARACTERISTIQUE_DTO1);
 
         Assert.assertNotNull(retour);
@@ -46,7 +46,7 @@ public class TypeCaracteristiqueTransformerTests {
     }
 
     @Test
-    public void singleEntityToDto(){
+    public void singleEntityToDto() {
         TypeCaracteristiqueDTO retour = TypeCaracteristiqueTransformer.entityToDto(TYPE_CARACTERISTIQUE1);
 
         Assert.assertNotNull(retour);
@@ -55,7 +55,7 @@ public class TypeCaracteristiqueTransformerTests {
     }
 
     @Test
-    public void severalDtoToEntity(){
+    public void severalDtoToEntity() {
         List<TypeCaracteristiqueDTO> caracteristiqueDTOList = new ArrayList<>();
         caracteristiqueDTOList.add(TYPE_CARACTERISTIQUE_DTO1);
         caracteristiqueDTOList.add(TYPE_CARACTERISTIQUE_DTO2);
@@ -70,7 +70,7 @@ public class TypeCaracteristiqueTransformerTests {
     }
 
     @Test
-    public void severalEntityToDto(){
+    public void severalEntityToDto() {
         List<TypeCaracteristique> typeCaracteristiqueList;
         typeCaracteristiqueList = new ArrayList<>();
         typeCaracteristiqueList.add(TYPE_CARACTERISTIQUE1);

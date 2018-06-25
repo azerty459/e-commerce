@@ -17,8 +17,9 @@ public class ProduitQuery {
         TypeRuntimeWiring.Builder builder = new TypeRuntimeWiring.Builder();
         builder.typeName("Query");
         builder.dataFetcher("produits", (DataFetchingEnvironment env) ->
-                produitBusiness.getAll(env.getArgument("ref"), env.getArgument("nom"), env.getArgument("cat")
-            ));
+                produitBusiness.getAll(env.getArgument("ref"), env.getArgument("cat"), env.getArgument("nom")
+                ));
+
         return builder.build();
     }
 }

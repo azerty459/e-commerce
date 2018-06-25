@@ -7,7 +7,7 @@ import javax.persistence.*;
  */
 
 @Entity
-@Table(name="caracteristique")
+@Table(name = "caracteristique")
 public class Caracteristique {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,7 +15,7 @@ public class Caracteristique {
     private int idCaracteristique;
 
     @OneToOne
-    @JoinColumn(name="id_type_caracteristique")
+    @JoinColumn(name = "id_type_caracteristique")
     private TypeCaracteristique typeCaracteristique;
 
     @Column
@@ -27,6 +27,7 @@ public class Caracteristique {
 
     /**
      * Retourne id de la caractéristique.
+     *
      * @return l'id de la caracteristique
      */
     public int getIdCaracteristique() {
@@ -35,6 +36,7 @@ public class Caracteristique {
 
     /**
      * Retourne l'objet TypeCaracteristique lié à la caractéristique.
+     *
      * @return un objet de type TypeCaracteristique
      */
     public TypeCaracteristique getTypeCaracteristique() {
@@ -43,6 +45,7 @@ public class Caracteristique {
 
     /**
      * Remplace l'objet TypeCaracteristique  lié à la caractéristique par l'objet TypeCaracteristique mit en paramètre.
+     *
      * @param typeCaracteristique un objet TypeCaracteristique
      */
     public void setTypeCaracteristique(TypeCaracteristique typeCaracteristique) {
@@ -51,6 +54,7 @@ public class Caracteristique {
 
     /**
      * Retourne la valeur contenu dans la caractéristique.
+     *
      * @return la valeur de la caracteristique
      */
     public String getValeur() {
@@ -59,6 +63,7 @@ public class Caracteristique {
 
     /**
      * Remplace la valeur contenu dans la caractéristique par la valeur mit en paramètre.
+     *
      * @param valeur la nouvelle valeur de la caracteristique
      */
     public void setValeur(String valeur) {

@@ -146,7 +146,7 @@ public class ProduitTransformerTests {
         Assert.assertEquals(PRODUIT_DTO1.getCategories().get(0).getNom(), prod.getCategories().get(0).getNomCategorie());
         Assert.assertEquals(PRODUIT_DTO1.getDescription(), prod.getDescription());
         Assert.assertEquals(PRODUIT_DTO1.getNom(), prod.getNom());
-        Assert.assertEquals(PRODUIT_DTO1.getPhotos().get(0).getIdPhoto(), prod.getPhotos().get(0).getIdPhoto());
+        Assert.assertEquals(PRODUIT_DTO1.getPhotos().get(0).getId(), prod.getPhotos().get(0).getIdPhoto());
         Assert.assertEquals(PRODUIT_DTO1.getPhotos().get(0).getUrl(), prod.getPhotos().get(0).getUrl());
         Assert.assertEquals(PRODUIT_DTO1.getPrixHT(), prod.getPrixHT(), 0);
         Assert.assertEquals(PRODUIT_DTO1.getRef(), prod.getReferenceProduit());
@@ -161,7 +161,7 @@ public class ProduitTransformerTests {
         Assert.assertTrue(PRODUIT1.getCategories().containsAll(prodDto.getCategories()));
         Assert.assertEquals(PRODUIT1.getDescription(), prodDto.getDescription());
         Assert.assertEquals(PRODUIT1.getNom(), prodDto.getNom());
-        Assert.assertEquals(PRODUIT1.getPhotos().get(0).getIdPhoto(), prodDto.getPhotos().get(0).getIdPhoto());
+        Assert.assertEquals(PRODUIT1.getPhotos().get(0).getIdPhoto(), prodDto.getPhotos().get(0).getId());
         Assert.assertEquals(PRODUIT1.getPhotos().get(0).getUrl(), prodDto.getPhotos().get(0).getUrl());
         Assert.assertEquals(PRODUIT1.getPrixHT(), prodDto.getPrixHT(), 0);
         Assert.assertEquals(PRODUIT1.getReferenceProduit(), prodDto.getRef());
@@ -177,7 +177,7 @@ public class ProduitTransformerTests {
         Assert.assertEquals(listProd.get(0).getCategories().get(0).getNomCategorie(), LIST_PRODUIT_DTO.get(0).getCategories().get(0).getNom());
         Assert.assertEquals(listProd.get(0).getDescription(), LIST_PRODUIT_DTO.get(0).getDescription());
         Assert.assertEquals(listProd.get(0).getNom(), LIST_PRODUIT_DTO.get(0).getNom());
-        Assert.assertEquals(listProd.get(0).getPhotos().get(0).getIdPhoto(), LIST_PRODUIT_DTO.get(0).getPhotos().get(0).getIdPhoto());
+        Assert.assertEquals(listProd.get(0).getPhotos().get(0).getIdPhoto(), LIST_PRODUIT_DTO.get(0).getPhotos().get(0).getId());
         Assert.assertEquals(listProd.get(0).getPhotos().get(0).getUrl(), LIST_PRODUIT_DTO.get(0).getPhotos().get(0).getUrl());
         Assert.assertEquals(listProd.get(0).getPrixHT(), LIST_PRODUIT_DTO.get(0).getPrixHT(), 0);
         Assert.assertEquals(listProd.get(0).getReferenceProduit(), LIST_PRODUIT_DTO.get(0).getRef());
@@ -193,7 +193,7 @@ public class ProduitTransformerTests {
         Assert.assertEquals(listDTO.get(0).getCategories(), LIST_PRODUIT.get(0).getCategories());
         Assert.assertEquals(listDTO.get(0).getDescription(), LIST_PRODUIT.get(0).getDescription());
         Assert.assertEquals(listDTO.get(0).getNom(), LIST_PRODUIT.get(0).getNom());
-        Assert.assertEquals(listDTO.get(0).getPhotos().get(0).getIdPhoto(), LIST_PRODUIT.get(0).getPhotos().get(0).getIdPhoto());
+        Assert.assertEquals(listDTO.get(0).getPhotos().get(0).getId(), LIST_PRODUIT.get(0).getPhotos().get(0).getIdPhoto());
         Assert.assertEquals(listDTO.get(0).getPhotos().get(0).getUrl(), LIST_PRODUIT.get(0).getPhotos().get(0).getUrl());
         Assert.assertEquals(listDTO.get(0).getPrixHT(), LIST_PRODUIT.get(0).getPrixHT(), 0);
         Assert.assertEquals(listDTO.get(0).getRef(), LIST_PRODUIT.get(0).getReferenceProduit());

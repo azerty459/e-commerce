@@ -19,8 +19,8 @@ public class PaginationQuery {
 
         builder.dataFetcher("pagination", (DataFetchingEnvironment env) ->
                 paginationBusiness.getPagination(env.getArgument("type"), env.getArgument("page"), env.getArgument("npp"),
-                        env.getArgument("nom"))
-                );
+                        env.getArgument("nom"), (env.getArgument("categorie") != null) ? env.getArgument("categorie") : 0)
+        );
         return builder.build();
     }
 }

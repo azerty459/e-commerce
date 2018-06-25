@@ -1,12 +1,12 @@
 package com.projet.ecommerce.utilitaire;
 
 import java.lang.reflect.Field;
-import java.util.List;
 
 public class utilitaire {
     /**
      * Fusionne les deux objets en paramètre en un seul et mes les valeurs à jour s'il y a des différences.
-     * @param first Le premier objet à fusionner
+     *
+     * @param first  Le premier objet à fusionner
      * @param second Le deuxième à fusionner
      * @return l'objet fusionné
      * @throws IllegalAccessException

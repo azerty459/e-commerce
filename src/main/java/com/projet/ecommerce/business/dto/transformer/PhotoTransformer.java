@@ -9,6 +9,9 @@ import java.util.List;
 
 public class PhotoTransformer {
 
+    private PhotoTransformer() {
+    }
+
     /**
      * Transforme une collection d'objets PhotoDTO en une collection d'objets Photo.
      *
@@ -32,7 +35,8 @@ public class PhotoTransformer {
     public static Photo dtoToEntity(PhotoDTO photoDTO) {
         Photo photo = new Photo();
         photo.setUrl(photoDTO.getUrl());
-        photo.setIdPhoto(photoDTO.getIdPhoto());
+        photo.setIdPhoto(photoDTO.getId());
+        photo.setNom(photoDTO.getNom());
         return photo;
     }
 
@@ -60,6 +64,7 @@ public class PhotoTransformer {
         PhotoDTO photoDTO = new PhotoDTO();
         photoDTO.setIdPhoto(photo.getIdPhoto());
         photoDTO.setUrl(photo.getUrl());
+        photoDTO.setNom(photo.getNom());
         return photoDTO;
     }
 }

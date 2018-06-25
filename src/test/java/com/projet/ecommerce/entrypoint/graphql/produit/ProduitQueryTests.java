@@ -18,7 +18,7 @@ import java.util.Map;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
-public class ProduitQueryTest {
+public class ProduitQueryTests {
     @Mock
     private ProduitBusiness produitBusiness;
 
@@ -34,7 +34,7 @@ public class ProduitQueryTest {
     }
 
     @Test
-    public void produitWiring(){
+    public void produitWiring() {
         TypeRuntimeWiring typeRuntimeWiring = produitQuery.produitWiring();
         Assert.assertEquals(typeRuntimeWiring.getTypeName(), "Query");
         Assert.assertEquals(typeRuntimeWiring.getTypeResolver(), null);
@@ -45,7 +45,7 @@ public class ProduitQueryTest {
     public void testNbDataFetcher() {
         Map<String, DataFetcher> retourMap = produitQuery.produitWiring().getFieldDataFetchers();
         Assert.assertNotNull(retourMap);
-        Assert.assertEquals(1,retourMap.size());
+        Assert.assertEquals(1, retourMap.size());
     }
 
 //    @Test

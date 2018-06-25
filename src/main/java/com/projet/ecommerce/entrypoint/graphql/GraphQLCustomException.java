@@ -17,7 +17,8 @@ public class GraphQLCustomException extends RuntimeException implements GraphQLE
     private transient Map<String, Object> extensions = new HashMap<>();
 
     /**
-     *  Créer un objet GraphQLCustomException.
+     * Créer un objet GraphQLCustomException.
+     *
      * @param message Le message de l'exception
      */
     public GraphQLCustomException(String message) {
@@ -31,6 +32,7 @@ public class GraphQLCustomException extends RuntimeException implements GraphQLE
 
     /**
      * Retourne une map de String et Objet.
+     *
      * @return une map de String et Objet.
      */
     public Map<String, Object> getExtensions() {
@@ -39,6 +41,7 @@ public class GraphQLCustomException extends RuntimeException implements GraphQLE
 
     /**
      * Retourne l'erreur type.
+     *
      * @return l'erreur type.
      */
     @Override
@@ -48,10 +51,11 @@ public class GraphQLCustomException extends RuntimeException implements GraphQLE
 
     /**
      * Permet d'ajouter une valeur dans la Map extensions.
-     * @param clef Le nom de la clef à ajouter
+     *
+     * @param clef  Le nom de la clef à ajouter
      * @param value La valeur associé à la clef
      */
-    public void ajouterExtension(String clef, String value){
+    public void ajouterExtension(String clef, String value) {
         extensions.put(clef, value);
     }
 }
