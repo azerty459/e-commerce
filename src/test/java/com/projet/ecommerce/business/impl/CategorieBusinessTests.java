@@ -131,47 +131,24 @@ public class CategorieBusinessTests {
         nouveauParent = new ArrayList<>();
         nouveauParent.add(DRAME);
 
+
     }
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    //TODO Refaire le test correctement
-//    @Test
-//    public void moveCategorieVersAutreCategorieVersBornesPlusElevees() {
-//
-//        // TODO: finir
-//
-//        // Si on veut bouger ROMAN
-//        Mockito.when(categorieRepository.findByIdCategorieWithSousCat(2)).thenReturn(romanEtEnfants);
-//
-//        // Et le déplacer vers DRAME
-//        //TODO s'adapter à une seule catégorie
-//        //  Mockito.when(categorieRepository.findById(7).get()).thenReturn(nouveauParent);
-//
-//        // Mock de l'écartement des bornes // TODO: on fait rien?
-//        Mockito.doNothing().when(categorieRepository).ecarterBornes(Mockito.any(), Mockito.anyInt());
-//
-//        // Simuler le réarrangement des bornes
-//        Mockito.when(categorieRepository.rearrangerBornes(Mockito.anyInt(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(3);
-//
-//        Assert.assertTrue(categorieBusiness.moveCategorie(2, 7));
-//
-//
-//    }
-
     @Test
-    public void moveCategorieVersAutreCategorieVersBornesPlusPetites() {
+    public void testMoveCategorieSansMove() {
 
-        // TODO
+
+        Assert.assertFalse(categorieBusiness.moveCategorie(2, 2));
 
     }
 
     @Test
-    public void moveCategorieVersLevel1() {
+    public void testMoveCategorie() {
 
-        // TODO
-
+        Assert.assertTrue(categorieBusiness.moveCategorie(2, 3));
     }
 
 

@@ -141,6 +141,8 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
     @Override
     public int rearrangerBornes(int bg, int intervalle) {
 
+        System.out.println("Réarrangement des bornes");
+
         Query query1;
         Query query2;
 

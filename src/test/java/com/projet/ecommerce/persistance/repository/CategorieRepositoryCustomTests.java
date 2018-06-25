@@ -21,13 +21,13 @@ import java.util.HashMap;
 @Transactional
 public class CategorieRepositoryCustomTests {
 
-    private static final Categorie LIVRE = new Categorie();
-    private static final Categorie ROMAN = new Categorie();
-    private static final Categorie BIO = new Categorie();
-    private static final Categorie FRANCE = new Categorie();
-    private static final Categorie US = new Categorie();
-    private static final Categorie CINEMA = new Categorie();
-    private static final Categorie DRAME = new Categorie();
+    private static Categorie LIVRE = new Categorie();
+    private static Categorie ROMAN = new Categorie();
+    private static Categorie BIO = new Categorie();
+    private static Categorie FRANCE = new Categorie();
+    private static Categorie US = new Categorie();
+    private static Categorie CINEMA = new Categorie();
+    private static Categorie DRAME = new Categorie();
 
     static {
 
@@ -42,17 +42,21 @@ public class CategorieRepositoryCustomTests {
         LIVRE.setBorneGauche(1);
         LIVRE.setBorneDroit(10);
         LIVRE.setLevel(1);
+        LIVRE.setIdCategorie(1);
 
         ROMAN.setNomCategorie("Roman");
         ROMAN.setBorneGauche(2);
         ROMAN.setBorneDroit(7);
         ROMAN.setLevel(2);
+        ROMAN.setIdCategorie(2);
 
         BIO.setNomCategorie("Bio");
         BIO.setBorneGauche(8);
         BIO.setBorneDroit(9);
         BIO.setLevel(2);
+        BIO.setIdCategorie(3);
 
+        FRANCE.setIdCategorie(4);
         FRANCE.setNomCategorie("France");
         FRANCE.setBorneGauche(3);
         FRANCE.setBorneDroit(4);
@@ -62,16 +66,19 @@ public class CategorieRepositoryCustomTests {
         US.setBorneGauche(5);
         US.setBorneDroit(6);
         US.setLevel(3);
+        US.setIdCategorie(5);
 
         CINEMA.setNomCategorie("Ciné");
         CINEMA.setBorneGauche(11);
         CINEMA.setBorneDroit(14);
         CINEMA.setLevel(1);
+        CINEMA.setIdCategorie(6);
 
         DRAME.setNomCategorie("Drame");
         DRAME.setBorneGauche(12);
         DRAME.setBorneDroit(13);
         DRAME.setLevel(2);
+        DRAME.setIdCategorie(7);
     }
 
     @Before
@@ -135,51 +142,58 @@ public class CategorieRepositoryCustomTests {
 
     }
 
-    @Test
-    //TODO Refaire le test
-    public void ecarterBornes() {
-
-        // Ecartement de bones de 2
-        categorieRepository.ecarterBornes(DRAME.getBorneGauche(), 2);
-
-        Categorie newDrame = findACat("Drame");
-
-        Assert.assertEquals(newDrame.getNomCategorie(), "Drame");
-        Assert.assertEquals(newDrame.getLevel(), 2);
-        Assert.assertEquals(newDrame.getBorneGauche(), 12);
-        Assert.assertEquals(newDrame.getBorneDroit(), 13);
-
-        Categorie newCinema = findACat("Ciné");
-        Assert.assertEquals(newCinema.getBorneGauche(), 11);
-        Assert.assertEquals(newCinema.getBorneDroit(), 14);
-    }
-
-    //TODO Refaire le test
 //    @Test
-//    public void rearrangerBornes() {
+    //TODO Refaire le test
+//    public void ecarterBornes() {
 //
-//        // trouver un id
-//        int id = findACat("US").getIdCategorie();
+//        // Ecartement de bones de 2
+//        categorieRepository.ecarterBornes(DRAME.getBorneGauche(), 2);
 //
-//        // Supprimer une categorie (US)
-//        categorieRepository.deleteById(id);
+//        Categorie newDrame = findACat("Drame");
 //
-//        // La rechercher
-//        Assert.assertNull(findACat("US"));
+//        Assert.assertEquals(newDrame.getNomCategorie(), "Drame");
+//        Assert.assertEquals(newDrame.getLevel(), 2);
+//        Assert.assertEquals(newDrame.getBorneGauche(), 12);
+//        Assert.assertEquals(newDrame.getBorneDroit(), 13);
 //
-//        // Réorganiser les bornes
-//        categorieRepository.rearrangerBornes(5, 6, 2);
-//
-//        // Vérification des modifications
-//        Assert.assertTrue(checkBornes("Livre", 1, 8));
-//        Assert.assertTrue(checkBornes("Roman", 2, 5));
-//        Assert.assertTrue(checkBornes("Bio", 6, 7));
-//        Assert.assertTrue(checkBornes("France", 3, 4));
-//        Assert.assertTrue(checkBornes("Ciné", 9, 12));
-//        Assert.assertTrue(checkBornes("Drame", 10, 11));
-//
-//
+//        Categorie newCinema = findACat("Ciné");
+//        Assert.assertEquals(newCinema.getBorneGauche(), 11);
+//        Assert.assertEquals(newCinema.getBorneDroit(), 14);
 //    }
+
+    // TODO: à finir
+    @Test
+    public void testRearrangerBornes() {
+
+        // Supprimer la catégorie Roman et ses enfants (3 catégories supprimées donc intervalle de 6)
+        int bgRoman = categorieRepository.findByNomCategorie("Roman").iterator().next().getBorneGauche();
+        int intervalleSupprime = 6;
+
+        categorieRepository.delete(categorieRepository.findByNomCategorie("Roman").iterator().next());
+        categorieRepository.delete(categorieRepository.findByNomCategorie("France").iterator().next());
+        categorieRepository.delete(categorieRepository.findByNomCategorie("US").iterator().next());
+
+        // categorieRepository.deleteById(categorieRepository.findByNomCategorie("Roman").iterator().next().getIdCategorie());
+
+        // Vérifier la suppression
+        Assert.assertTrue(categorieRepository.findByNomCategorie("Roman").isEmpty());
+        Assert.assertTrue(categorieRepository.findByNomCategorie("France").isEmpty());
+        Assert.assertTrue(categorieRepository.findByNomCategorie("US").isEmpty());
+
+        categorieRepository.rearrangerBornes(bgRoman, intervalleSupprime);
+
+
+        // Vérifier que les bornes ont été réarrangées
+//        Categorie l = categorieRepository.findByNomCategorie("Livre").iterator().next();
+//        Assert.assertEquals(1, l.getBorneGauche());
+//        Assert.assertEquals(4, l.getBorneDroit());
+
+//        Categorie b = categorieRepository.findByNomCategorie("Bio").iterator().next();
+//        Assert.assertEquals(2, b.getBorneGauche());
+//        Assert.assertEquals(3, b.getBorneDroit());
+
+
+    }
 
     //TODO Refaire le test
     // CategorieRepositoryCustomTests.rearrangerBornesAvecSuppressionsMultiples:197 expected null, but was:<com.projet.ecommerce.persistance.entity.Categorie@3fc024c6>
@@ -231,7 +245,7 @@ public class CategorieRepositoryCustomTests {
     }
 
     /**
-     * Va chercher toutes les catégories et retourne celle dont le nom correspond au paramères.
+     * Helper method. Va chercher toutes les catégories et retourne celle dont le nom correspond au paramètre.
      *
      * @param name le nom de la catégorie qu'on cherche
      * @return la catégorie recherchée, ou null si elle n'a pas été trouvée
@@ -241,13 +255,14 @@ public class CategorieRepositoryCustomTests {
         Collection<Categorie> res = categorieRepository.findAll();
         ArrayList<Categorie> newcatList = new ArrayList<Categorie>(res);
 
+        Categorie result = null;
+
         for (Categorie cat : newcatList) {
             if (cat.getNomCategorie().equals(name)) {
-                return cat;
+                result = cat;
             }
         }
-
-        return null;
+        return result;
     }
 
     /**
