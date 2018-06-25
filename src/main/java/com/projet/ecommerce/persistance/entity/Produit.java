@@ -41,7 +41,7 @@ public class Produit {
     @OneToMany(mappedBy = "produit", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private List<Caracteristique> caracteristiques;
 
-    @OneToMany(mappedBy = "produit", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "produit", cascade = {CascadeType.REMOVE, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<Photo> photos;
 
     /**
