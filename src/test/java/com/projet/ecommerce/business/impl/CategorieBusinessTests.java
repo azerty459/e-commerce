@@ -5,6 +5,7 @@ import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import com.projet.ecommerce.persistance.repository.CategorieRepositoryCustom;
+import com.projet.ecommerce.persistance.repository.CategorieSupprimeRepository;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -96,6 +97,10 @@ public class CategorieBusinessTests {
     private CategorieRepository categorieRepository;
 
     @Mock
+    private CategorieSupprimeRepository categorieSupprimeRepository;
+
+
+    @Mock
     private CategorieRepositoryCustom categorieRepositoryCustom;
 
     @Mock
@@ -103,6 +108,9 @@ public class CategorieBusinessTests {
 
     @Mock
     private Query query;
+
+    @Mock
+    private CategorieBusiness categorieBusinessMock;
 
     @InjectMocks
     private CategorieBusiness categorieBusiness;
@@ -408,4 +416,5 @@ public class CategorieBusinessTests {
         Assert.assertEquals(resultat.get(cat3), "Transport > Aérien");
 
     }
+
 }
