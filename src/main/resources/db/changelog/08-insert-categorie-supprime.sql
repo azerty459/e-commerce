@@ -1,5 +1,5 @@
 --liquibase formatted sql
---changeset Rémy Halipré:07
+--changeset Antoine Ruffino:07
 
 CREATE TABLE categorie_supprime
 (
@@ -19,5 +19,5 @@ CREATE TABLE produit_categorie_supprime
   CONSTRAINT FK_produit_categorie_referenceProduit FOREIGN KEY (reference_produit)
   REFERENCES produit(reference_produit),
   CONSTRAINT FK_idCategorie FOREIGN KEY (id_categorie)
-  REFERENCES categorie(id_categorie)
+  REFERENCES categorie_supprime(id_categorie)
 );

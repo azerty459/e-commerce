@@ -1,6 +1,7 @@
 package com.projet.ecommerce.entrypoint.graphql.categorie;
 
 import com.projet.ecommerce.business.ICategorieBusiness;
+import com.projet.ecommerce.business.ICategorieSupprimeBusiness;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.idl.TypeRuntimeWiring;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ public class CategorieMutation {
 
     @Autowired
     private ICategorieBusiness categorieBusiness;
+    @Autowired
+    private ICategorieSupprimeBusiness categorieSupprimeBusiness;
 
     public TypeRuntimeWiring produitWiring() {
         TypeRuntimeWiring.Builder builder = new TypeRuntimeWiring.Builder();
@@ -35,7 +38,7 @@ public class CategorieMutation {
                 categorieBusiness.updateCategorie(env.getArgument("id"), env.getArgument("nom"))
         );
         builder.dataFetcher("restoreCategorie", (DataFetchingEnvironment env) ->
-                categorieBusiness.restoreLastDeletedCategorie(env.getArgument("idNouveauParent"))
+                categorieSupprimeBusiness.restoreLastDeletedCategorie(env.getArgument("idNouveauParent"))
         );
 
 

@@ -84,41 +84,6 @@ public class CategorieSupprimeRepositoryCustomImpl implements CategorieSupprimeR
     }
 
 
-    /**
-     * Renvoie la catégorie directement parent d'une catégorie donnée en paramètre.
-     *
-     * @param cat la catégorie dont on doit chercher le parent.
-     * @return La catégorie parent.
-     */
-    @Override
-    public CategorieSupprime findDirectParent(CategorieSupprime cat) {
-
-        CategorieSupprime resultat;
-
-        // Cas où la catégorie est de niveau au moins 2
-        if (cat.getLevel() > 1) {
-
-
-            // On crée la requête pour aller chercher le parent direct de cat
-            TypedQuery<CategorieSupprime> query = entityManager.createQuery(SQL_PARENT_DIRECT, CategorieSupprime.class);
-
-            query.setParameter("l", cat.getLevel() - 1);
-            query.setParameter("bg", cat.getBorneGauche());
-            query.setParameter("bd", cat.getBorneDroit());
-
-            // On retourne la catégorie unique, parent de cat
-            resultat = query.getSingleResult();
-        }
-        // Pas de parent pour une catégorie de niveau 1
-        else {
-            resultat = new CategorieSupprime();
-            resultat.setNomCategorie("Aucune catégorie parente");
-        }
-
-        return resultat;
-
-    }
-
     @Override
     public void ecarterBornes(int bg, int decalage) {
 
@@ -137,26 +102,6 @@ public class CategorieSupprimeRepositoryCustomImpl implements CategorieSupprimeR
 
     }
 
-    @Override
-    public int rearrangerBornes(int bg, int intervalle) {
-
-        Query query1;
-        Query query2;
-
-        query1 = entityManager.createQuery(SQL_DECALER_BORNES_GAUCHES);
-        query1.setParameter("i", intervalle);
-        query1.setParameter("bg", bg);
-
-        int nb1 = query1.executeUpdate();
-
-        query2 = entityManager.createQuery(SQL_DECALER_BORNES_DROITES);
-        query2.setParameter("i", intervalle);
-        query2.setParameter("bg", bg);
-
-        int nb2 = query2.executeUpdate();
-
-        return Math.max(nb1, nb2);
-    }
 
     @Override
     public int findBorneMax() {

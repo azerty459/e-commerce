@@ -23,5 +23,5 @@ type Mutation {
     deleteCategorie(id: Int!): Boolean!
     moveCategorie(idADeplacer: Int!, idNouveauParent: Int!): Boolean!
     updateCategorie(id: Int!, nom: String!): Categorie
-    restoreCategorie(idToRestore: Int!, idNouveauParent: Int!): Boolean!
+    restoreCategorie(idNouveauParent: Int!): Int!
 }
