@@ -67,7 +67,7 @@ public class CategorieSupprimeBusiness implements ICategorieSupprimeBusiness {
      * notament le deplacement de la categorie supprime une fois insérer dans la table categorie
      *
      * @param nouveauParent id de la categorie parent de la categorie a restaurer
-     * @return true si restauration réussite sinon false
+     * @return l'id de la categorie restauré ou 0 si la categorie n'a pas pu être restauré
      */
     @Override
     public int restoreLastDeletedCategorie(int nouveauParent) {
