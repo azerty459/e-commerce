@@ -6,7 +6,6 @@ import com.projet.ecommerce.business.dto.transformer.CategorieTransformer;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
-import com.projet.ecommerce.persistance.repository.impl.CategorieRepositoryCustomImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,9 +24,6 @@ public class CategorieBusiness implements ICategorieBusiness {
 
     @Autowired
     private CategorieRepository categorieRepository;
-
-    @Autowired
-    private CategorieRepositoryCustomImpl categorieRepositoryCustom;
 
     /**
      * Va chercher toutes les catégories, ou la catégorie donnée en nom. Récupère aussi les sous-catégories si demandées.
@@ -295,7 +291,7 @@ public class CategorieBusiness implements ICategorieBusiness {
 
         // Réarrangement des index bornes gauches et droites: on décale toutes les bornes à droite
         // de la catégorie supprimée (> à bd) de l'intervalle supprimé.
-        categorieRepositoryCustom.rearrangerBornes(bgMin, intervalleSupprime);
+        categorieRepository.rearrangerBornes(bgMin, intervalleSupprime);
 
         return true;
     }
@@ -410,9 +406,9 @@ public class CategorieBusiness implements ICategorieBusiness {
 
         // Les catégories déplacées ont laissé un vide dans les bornes à leur emplacement d'origine: combler le vide
         if (intervalleDeDeplacement >= 0) {
-            categorieRepositoryCustom.rearrangerBornes(borneMin, interBornes);
+            categorieRepository.rearrangerBornes(borneMin, interBornes);
         } else {
-            categorieRepositoryCustom.rearrangerBornes(borneMax, interBornes);
+            categorieRepository.rearrangerBornes(borneMax, interBornes);
         }
         return true;
     }
@@ -430,7 +426,7 @@ public class CategorieBusiness implements ICategorieBusiness {
     private boolean deplacerSansParent(List<Categorie> categoriesADeplacer, int borneMin, int borneMax, int levelCatADeplacer) {
 
         // Aller chercler la borne maximale de toutes les catégories de la base de donbées
-        int borneMaxDeBddEntiere = categorieRepositoryCustom.findBorneMax();
+        int borneMaxDeBddEntiere = categorieRepository.findBorneMax();
 
         // Calculer le déplacement
         int intervalleDeDeplacement = borneMaxDeBddEntiere - borneMin + 1;
@@ -439,7 +435,7 @@ public class CategorieBusiness implements ICategorieBusiness {
         deplacer(categoriesADeplacer, intervalleDeDeplacement, levelCatADeplacer, 0);
 
         // Les catégories déplacées ont laissé un vide dans les bornes à leur emplacement d'origine: les combler
-        categorieRepositoryCustom.rearrangerBornes(borneMin, borneMax - borneMin + 1);
+        categorieRepository.rearrangerBornes(borneMin, borneMax - borneMin + 1);
 
         return true;
     }
