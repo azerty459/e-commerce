@@ -1,12 +1,13 @@
 package com.projet.ecommerce.business.impl;
 
 import com.projet.ecommerce.business.ICategorieSupprimeBusiness;
+import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.CategorieSupprime;
 import com.projet.ecommerce.persistance.entity.Produit;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import com.projet.ecommerce.persistance.repository.CategorieSupprimeRepository;
-import com.projet.ecommerce.persistance.repository.impl.CategorieRepositoryCustomImpl;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +25,8 @@ public class CategorieSupprimeBusiness implements ICategorieSupprimeBusiness {
     /**
      * Constant permettant un décalage des bornes maximum
      */
-    private final int decalageBorne = -999999;
+    private static final int decalageBorne = -999999;
+
     @Autowired
     private CategorieRepository categorieRepository;
     @Autowired
@@ -33,33 +35,36 @@ public class CategorieSupprimeBusiness implements ICategorieSupprimeBusiness {
     @Autowired
     private CategorieSupprimeRepository categorieSupprimeRepository;
 
-    @Autowired
-    private CategorieRepositoryCustomImpl categorieRepositoryCustom;
-
     /**
      * @param categorieToSave la catégorie a supprimé
      * @return true si sauvegarde réussi sinon false.
      */
     @Override
     public boolean saveInCategorieSupprime(Categorie categorieToSave) {
-        if (categorieToSave.getNomCategorie() != null) {
-            CategorieSupprime categorieSupprime = new CategorieSupprime();
-            categorieSupprime.setIdCategorie(categorieToSave.getIdCategorie());
-            categorieSupprime.setNomCategorie(categorieToSave.getNomCategorie());
-            categorieSupprime.setLevel(categorieToSave.getLevel());
-            categorieSupprime.setBorneDroit(categorieToSave.getBorneDroit());
-            categorieSupprime.setBorneGauche(categorieToSave.getBorneGauche());
-            if (categorieToSave.getProduits() != null) {
-                // On realise une copie car categorie.setProduits(c.getProduits()) creer des conflits JPA (shared reference)
-                List<Produit> produits = new ArrayList<Produit>(categorieToSave.getProduits());
-                categorieSupprime.setProduits(produits);
-            }
-            // on vérifie que la catégorie a bien été ajouté
-            return categorieSupprimeRepository.save(categorieSupprime).getNomCategorie().equals(categorieToSave.getNomCategorie());
-        } else {
+        if (categorieToSave == null) {
             return false;
         }
+        CategorieSupprime categorieSupprime = categorieToCategorieSupprime(categorieToSave);
 
+        // on vérifie que la catégorie a bien été ajouté
+        categorieSupprimeRepository.save(categorieSupprime);
+        return true;
+    }
+
+    @NotNull
+    private CategorieSupprime categorieToCategorieSupprime(Categorie categorieToSave) {
+        CategorieSupprime categorieSupprime = new CategorieSupprime();
+        categorieSupprime.setIdCategorie(categorieToSave.getIdCategorie());
+        categorieSupprime.setNomCategorie(categorieToSave.getNomCategorie());
+        categorieSupprime.setLevel(categorieToSave.getLevel());
+        categorieSupprime.setBorneDroit(categorieToSave.getBorneDroit());
+        categorieSupprime.setBorneGauche(categorieToSave.getBorneGauche());
+        if (categorieToSave.getProduits() != null) {
+            // On realise une copie car categorie.setProduits(c.getProduits()) creer des conflits JPA (shared reference)
+            List<Produit> produits = new ArrayList<Produit>(categorieToSave.getProduits());
+            categorieSupprime.setProduits(produits);
+        }
+        return categorieSupprime;
     }
 
     /**
@@ -70,19 +75,19 @@ public class CategorieSupprimeBusiness implements ICategorieSupprimeBusiness {
      * @return l'id de la categorie restauré ou 0 si la categorie n'a pas pu être restauré
      */
     @Override
-    public int restoreLastDeletedCategorie(int nouveauParent) {
+    public List<CategorieDTO> restoreLastDeletedCategorie(int nouveauParent) {
         int idCatADeplacer = moveCategorieSupprime();
         if (categorieBusiness.moveCategorie(idCatADeplacer, nouveauParent)) {
             categorieSupprimeRepository.deleteAll();
-            return idCatADeplacer;
+            return categorieBusiness.getCategorie(idCatADeplacer, null, true, true);
         } else {
-            return 0;
+            return null;
         }
     }
 
 
     /**
-     * Methode permettant de deplacer les bornes des categories supprimés afin preparer l'insertion dans la table categorie
+     * Methode permettant de deplacer les bornes des categories supprimées afin de preparer l'insertion dans la table categorie
      * puis l'insére dans la table categorie
      *
      * @return l'id de la catégorie une fois insérer dans la table categorie
@@ -90,21 +95,21 @@ public class CategorieSupprimeBusiness implements ICategorieSupprimeBusiness {
     @Override
     public int moveCategorieSupprime() {
         // Aller chercher la catégorie à déplacer et ses enfants
-        List<CategorieSupprime> categoriesADeplacer = new ArrayList<>(categorieSupprimeRepository.findAll());
+        Iterable<CategorieSupprime> categoriesADeplacer = categorieSupprimeRepository.findAll();
         // On converties les catégorieSupprime en Categorie
         List<Categorie> categories = new ArrayList<>();
-        for (CategorieSupprime c : categoriesADeplacer) {
+        for (CategorieSupprime catSupp : categoriesADeplacer) {
             Categorie categorie = new Categorie();
-            categorie.setNomCategorie(c.getNomCategorie());
-            categorie.setLevel(c.getLevel());
+            categorie.setNomCategorie(catSupp.getNomCategorie());
+            categorie.setLevel(catSupp.getLevel());
             if (categorie.getProduits() != null) {
-                // On realise une copie car categorie.setProduits(c.getProduits()) creer des conflits JPA (shared reference)
-                List<Produit> produits = new ArrayList<Produit>(c.getProduits());
+                // On realise une copie car categorie.setProduits(catSupp.getProduits()) creer des conflits JPA (shared reference)
+                List<Produit> produits = new ArrayList<Produit>(catSupp.getProduits());
                 categorie.setProduits(produits);
             }
             // On décale les bornes pour éviter les conflits lors de l'insertion dans la table catégorie
-            categorie.setBorneDroit(c.getBorneDroit() + decalageBorne);
-            categorie.setBorneGauche(c.getBorneGauche() + decalageBorne);
+            categorie.setBorneDroit(catSupp.getBorneDroit() + decalageBorne);
+            categorie.setBorneGauche(catSupp.getBorneGauche() + decalageBorne);
             categories.add(categorie);
         }
         Iterable<Categorie> results = categorieRepository.saveAll(categories);

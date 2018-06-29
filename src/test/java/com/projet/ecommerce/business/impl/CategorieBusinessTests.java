@@ -267,7 +267,7 @@ public class CategorieBusinessTests {
 
         CategorieDTO retour = categorieDTOList.get(0);
         Assert.assertEquals(categorie1.getNomCategorie(), retour.getNom());
-        Assert.assertEquals(categorie2.getNomCategorie(), retour.getSousCategories().get(0).getNom());
+
     }
 
     @Test

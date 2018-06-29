@@ -1,5 +1,7 @@
 package com.projet.ecommerce.business.impl;
 
+import com.projet.ecommerce.business.dto.CategorieDTO;
+import com.projet.ecommerce.business.dto.transformer.CategorieTransformer;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.CategorieSupprime;
 import com.projet.ecommerce.persistance.entity.Produit;
@@ -197,7 +199,7 @@ public class CategorieSupprimeBusinessTests {
 
     @Test
     public void saveInCategorieSupprimeNull() {
-        Categorie categorie1 = new Categorie();
+        Categorie categorie1 = null;
         CategorieSupprime categorieSupprime1 = new CategorieSupprime();
         Mockito.when(categorieSupprimeRepository.save(Mockito.any())).thenReturn(categorieSupprime1);
         boolean retour1 = categorieSupprimeBusiness.saveInCategorieSupprime(categorie1);
@@ -239,12 +241,20 @@ public class CategorieSupprimeBusinessTests {
         List<Categorie> categories = new ArrayList<>();
         categories.add(categorie1);
         categories.add(categorie2);
+        List<CategorieDTO> categoriesDTO = new ArrayList<>();
+        categoriesDTO.add(CategorieTransformer.entityToDto(categorie1));
+        categoriesDTO.add(CategorieTransformer.entityToDto(categorie2));
 
         Mockito.when(categorieSupprimeRepository.findAll()).thenReturn(categoriesADeplacer);
         Mockito.when(categorieRepository.saveAll(Mockito.any())).thenReturn(categories);
         Mockito.when(categorieBusiness.moveCategorie(Mockito.anyInt(), Mockito.anyInt())).thenReturn(true);
-        int retour1 = categorieSupprimeBusiness.restoreLastDeletedCategorie(idNouveauParent);
-        Assert.assertEquals(retour1, idNouvelleCategorie);
+
+        Mockito.when(categorieBusiness.getCategorie(idNouvelleCategorie, null, true, true)).thenReturn(categoriesDTO);
+
+        List<CategorieDTO> retour1 = categorieSupprimeBusiness.restoreLastDeletedCategorie(idNouveauParent);
+
+        Assert.assertEquals(categoriesDTO, retour1);
+
     }
 
 }

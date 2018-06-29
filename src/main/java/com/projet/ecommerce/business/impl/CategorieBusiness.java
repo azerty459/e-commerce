@@ -293,10 +293,8 @@ public class CategorieBusiness implements ICategorieBusiness {
         int bdMax = cats.get(0).getBorneDroit();
 
         for (Categorie c : cats) {
-            if (c.getBorneGauche() < bgMin) {
+            if (c.getIdCategorie() == idCategorie) {
                 bgMin = c.getBorneGauche();
-            }
-            if (c.getBorneDroit() > bdMax) {
                 bdMax = c.getBorneDroit();
             }
 

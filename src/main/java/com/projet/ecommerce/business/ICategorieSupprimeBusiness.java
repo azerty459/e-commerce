@@ -1,6 +1,9 @@
 package com.projet.ecommerce.business;
 
+import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.persistance.entity.Categorie;
+
+import java.util.List;
 
 /**
  * Interface du service CategorieBusiness.
@@ -23,7 +26,7 @@ public interface ICategorieSupprimeBusiness {
      * @param nouveauParent id de la categorie parent de la categorie a restaurer
      * @return l'id de la categorie restauré ou 0 si la categorie n'a pas pu être restauré
      */
-    int restoreLastDeletedCategorie(int nouveauParent);
+    List<CategorieDTO> restoreLastDeletedCategorie(int nouveauParent);
 
     /**
      * Methode permettant de deplacer les bornes des categories supprimés afin preparer l'insertion dans la table categorie
