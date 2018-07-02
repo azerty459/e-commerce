@@ -241,7 +241,7 @@ public class ProduitBusiness implements IProduitBusiness {
         if (nom != null && !nom.isEmpty() && IDcategorie != 0 || IDcategorie != 0) {
             Optional<Categorie> categorieOptional = categorieRepository.findById(IDcategorie);
             if (!categorieOptional.isPresent()) {
-                throw new GraphQLCustomException("La c");
+                return Page.empty();
             }
             Categorie categorie = categorieOptional.get();
             return produitRepository.findByNomContainingIgnoreCaseAndCategories_borneGaucheGreaterThanEqualAndCategories_borneDroitLessThanEqual(page, nom, categorie.getBorneGauche(), categorie.getBorneDroit());
