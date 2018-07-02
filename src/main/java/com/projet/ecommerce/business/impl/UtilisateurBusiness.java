@@ -4,7 +4,9 @@ import com.projet.ecommerce.business.IUtilisateurBusiness;
 import com.projet.ecommerce.business.dto.UtilisateurDTO;
 import com.projet.ecommerce.business.dto.transformer.UtilisateurTransformer;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
+import com.projet.ecommerce.persistance.entity.AuthData;
 import com.projet.ecommerce.persistance.entity.Role;
+import com.projet.ecommerce.persistance.entity.SigninPayload;
 import com.projet.ecommerce.persistance.entity.Utilisateur;
 import com.projet.ecommerce.persistance.repository.RoleRepository;
 import com.projet.ecommerce.persistance.repository.UtilisateurRepository;
@@ -150,6 +152,7 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
      * @param mdp   Mot de passe de l'utilisateur
      * @return l'utilisateur connecté
      */
+
     @Override
     public UtilisateurDTO login(String email, String mdp) {
         if (email.isEmpty() || mdp.isEmpty()) {
@@ -162,6 +165,23 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
         }
         return UtilisateurTransformer.entityToDto(utilisateur);
     }
+
+    @Override
+    public SigninPayload signinUser(AuthData auth) throws IllegalAccessException {
+        String email = auth.getEmail();
+        String mdp = auth.getPassword();
+
+        if (email.isEmpty() || mdp.isEmpty()) {
+            throw new GraphQLCustomException("Veuillez écrire votre mot de passe ou votre adresse e-mail.");
+        }
+        Optional<Utilisateur> utilisateurOptional = utilisateurRepository.findByEmail(email);
+        Utilisateur utilisateur = utilisateurOptional.orElseThrow(() -> new GraphQLCustomException("Impossible de trouver un compte correspondant à cette adresse e-mail."));
+        if (!mdp.equals(utilisateur.getMdp())) {
+            throw new GraphQLCustomException("Votre mot de passe est incorrect.");
+        }
+        return new SigninPayload(Integer.toString(utilisateur.getId()), utilisateur);
+    }
+
 
     /**
      * Retourne une page d'utilisateur.

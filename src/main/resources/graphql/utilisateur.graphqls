@@ -11,6 +11,10 @@ input UtilisateurUpdateInput {
     prenom: String
     roles: [RoleUpdateInput]
 }
+input AuthData {
+      email: String!
+      password: String!
+}
 
 type Utilisateur {
     id: Int!
@@ -18,6 +22,11 @@ type Utilisateur {
     nom: String!
     prenom: String!
     roles: [Role]!
+}
+
+type SigninPayload{
+    token: String
+    user: Utilisateur
 }
 
 extend type Query {
@@ -29,4 +38,5 @@ extend type Mutation {
     addUtilisateur(utilisateur: UtilisateurAddInput!): Utilisateur!
     updateUtilisateur(utilisateur: UtilisateurUpdateInput!): Utilisateur!
     deleteUtilisateur(email: String, id: Int): Boolean!
+    signinUtilisateur(auth: AuthData): SigninPayload
 }
