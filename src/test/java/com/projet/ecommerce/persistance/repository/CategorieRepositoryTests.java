@@ -11,7 +11,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.util.Collection;
+import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -46,6 +48,31 @@ public class CategorieRepositoryTests {
 
     @Autowired
     private CategorieRepository categorieRepository;
+    @Autowired
+    private EntityManager entityManager;
+
+    @Test
+    public void testEcarterBornes() {
+
+        int idCategorie = 1;
+        Categorie test = new Categorie();
+        test.setIdCategorie(idCategorie);
+        test.setNomCategorie("Test");
+        test.setBorneDroit(2);
+        test.setBorneGauche(1);
+        test.setLevel(1);
+
+        categorieRepository.save(test);
+        categorieRepository.ecarterBornes(1, 4);
+
+        // FIXME: ce clear() n'est pas normal
+        entityManager.clear();
+        Optional<Categorie> res = categorieRepository.findById(idCategorie);
+
+        Assert.assertTrue(res.isPresent());
+        Assert.assertEquals(6, res.get().getBorneDroit());
+    }
+
 
     @Test
     public void insertCategorie() {

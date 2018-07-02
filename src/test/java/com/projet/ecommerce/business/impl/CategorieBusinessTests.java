@@ -19,8 +19,6 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import java.util.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -40,6 +38,12 @@ public class CategorieBusinessTests {
     private static Collection<Categorie> toutesLesCategories;
 
     private static Collection<Categorie> nouveauParent;
+
+    @Mock
+    private CategorieRepository categorieRepository;
+
+    @InjectMocks
+    private CategorieBusiness categorieBusiness;
 
 
     static {
@@ -147,16 +151,28 @@ public class CategorieBusinessTests {
 
     @Test
     public void testMoveCategorieSansMove() {
-
-
         Assert.assertFalse(categorieBusiness.moveCategorie(2, 2));
-
     }
 
     @Test
-    public void testMoveCategorie() {
+    public void testMoveCategorieVersParent() {
 
-        Assert.assertTrue(categorieBusiness.moveCategorie(2, 3));
+        List<Categorie> liste = new ArrayList<>();
+        liste.add(ROMAN);
+        liste.add(FRANCE);
+        liste.add(US);
+
+        Mockito.when(categorieRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(DRAME));
+        Mockito.when(categorieRepository.findByIdCategorieWithSousCat(Mockito.anyInt())).thenReturn(liste);
+        Mockito.when(categorieRepository.rearrangerBornes(Mockito.anyInt(), Mockito.anyInt())).thenReturn(4);
+
+        Assert.assertTrue(categorieBusiness.moveCategorie(2, 7));
+    }
+
+    // TODO: à faire
+    @Test
+    public void testMoveCategorieSansParent() {
+
     }
 
 
@@ -220,16 +236,6 @@ public class CategorieBusinessTests {
         Assert.assertEquals(parent.getNomCategorie(), retour1.getNom());
     }
 
-
-    // TODO Refaire le test correctement
-//    @Test
-//    public void delete() {
-//        Mockito.when(categorieRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(ROMAN));
-//        Mockito.when(categorieRepository.findByIdCategorieWithSousCat(Mockito.anyInt())).thenReturn(romanEtEnfants);
-//
-//        Mockito.when(categorieRepositoryCustom.rearrangerBornes(Mockito.anyInt(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(4);
-//        Assert.assertTrue(categorieBusiness.delete(1));
-//    }
 
     @Test
     public void deleteNull() {
