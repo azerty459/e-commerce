@@ -44,6 +44,14 @@ public class Produit {
     @OneToMany(mappedBy = "produit", cascade = {CascadeType.REMOVE, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<Photo> photos;
 
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "produit_categorie_supprime",
+            joinColumns = {@JoinColumn(name = "reference_produit")},
+            inverseJoinColumns = {@JoinColumn(name = "id_categorie")}
+    )
+    private List<Categorie> categoriesSupprime;
+
     /**
      * Retourne la référence du produit.
      *

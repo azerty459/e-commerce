@@ -4,6 +4,8 @@ import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
+import com.projet.ecommerce.persistance.repository.CategorieRepositoryCustom;
+import com.projet.ecommerce.persistance.repository.CategorieSupprimeRepository;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -94,6 +96,28 @@ public class CategorieBusinessTests {
         DRAME.setLevel(2);
     }
 
+
+    @Mock
+    private CategorieRepository categorieRepository;
+
+    @Mock
+    private CategorieSupprimeRepository categorieSupprimeRepository;
+
+
+    @Mock
+    private CategorieRepositoryCustom categorieRepositoryCustom;
+
+    @Mock
+    private EntityManager entityManager;
+
+    @Mock
+    private Query query;
+
+    @Mock
+    private CategorieBusiness categorieBusinessMock;
+
+    @InjectMocks
+    private CategorieBusiness categorieBusiness;
 
     @Before
     public void setUp() {
@@ -249,7 +273,7 @@ public class CategorieBusinessTests {
 
         CategorieDTO retour = categorieDTOList.get(0);
         Assert.assertEquals(categorie1.getNomCategorie(), retour.getNom());
-        Assert.assertEquals(categorie2.getNomCategorie(), retour.getSousCategories().get(0).getNom());
+
     }
 
     @Test
@@ -398,4 +422,5 @@ public class CategorieBusinessTests {
         Assert.assertEquals(resultat.get(cat3), "Transport > Aérien");
 
     }
+
 }
