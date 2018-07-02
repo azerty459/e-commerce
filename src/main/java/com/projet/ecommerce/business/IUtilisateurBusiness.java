@@ -1,6 +1,8 @@
 package com.projet.ecommerce.business;
 
 import com.projet.ecommerce.business.dto.UtilisateurDTO;
+import com.projet.ecommerce.persistance.entity.AuthData;
+import com.projet.ecommerce.persistance.entity.SigninPayload;
 import com.projet.ecommerce.persistance.entity.Utilisateur;
 import org.springframework.data.domain.Page;
 
@@ -66,4 +68,6 @@ public interface IUtilisateurBusiness {
      * @return une page d'utilisateur
      */
     Page<Utilisateur> getPage(int pageNumber, int nb);
+
+    SigninPayload signinUser(AuthData auth) throws IllegalAccessException;
 }

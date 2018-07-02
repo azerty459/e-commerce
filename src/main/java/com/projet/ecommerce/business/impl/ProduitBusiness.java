@@ -20,7 +20,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import static com.projet.ecommerce.utilitaire.utilitaire.mergeObjects;
+import static com.projet.ecommerce.utilitaire.Utilitaire.mergeObjects;
 
 /**
  * Service permettant de gérer les actions effectuées pour les produits.
