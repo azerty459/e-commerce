@@ -18,7 +18,9 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.jpa.repository.Query;
 
+import javax.persistence.EntityManager;
 import java.util.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -98,9 +100,6 @@ public class CategorieBusinessTests {
 
 
     @Mock
-    private CategorieRepository categorieRepository;
-
-    @Mock
     private CategorieSupprimeRepository categorieSupprimeRepository;
 
 
@@ -112,12 +111,6 @@ public class CategorieBusinessTests {
 
     @Mock
     private Query query;
-
-    @Mock
-    private CategorieBusiness categorieBusinessMock;
-
-    @InjectMocks
-    private CategorieBusiness categorieBusiness;
 
     @Before
     public void setUp() {
