@@ -1,4 +1,4 @@
-package com.projet.ecommerce.persistance.entity;
+package com.projet.ecommerce.persistance.authentification;
 
 public class AuthData {
 

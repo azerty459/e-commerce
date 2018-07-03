@@ -2,7 +2,9 @@ package com.projet.ecommerce.entrypoint;
 
 import com.projet.ecommerce.business.IPhotoBusiness;
 import com.projet.ecommerce.business.impl.PhotoException;
+import com.projet.ecommerce.business.impl.UtilisateurBusiness;
 import com.projet.ecommerce.entrypoint.graphql.GraphQlUtility;
+import com.projet.ecommerce.persistance.authentification.Token;
 import graphql.ExecutionResult;
 import graphql.GraphQL;
 import graphql.GraphQLError;
@@ -27,6 +29,8 @@ public class GraphQLController {
     private GraphQL graphQL;
 
     @Autowired
+    private UtilisateurBusiness utilisateurBusiness;
+    @Autowired
     private IPhotoBusiness photoBusiness;
 
     @Autowired
@@ -37,7 +41,26 @@ public class GraphQLController {
     }
 
     @RequestMapping(value = "/graphql", method = RequestMethod.POST)
+    public Object handle(@RequestHeader("Authorization") String authData,
+                         @RequestBody Map<String, String> query) {
+        Token supposedToken = new Token();
+        supposedToken.setToken(authData);
+        System.out.println(authData);
+        if (!utilisateurBusiness.isLogged(supposedToken)) {
+            return null;
+        }
+        ExecutionResult result = graphQL.execute(query.get("query"));
+        if (result.getErrors().isEmpty()) {
+            return result.getData();
+        } else {
+            List<GraphQLError> graphQLErrors = result.getErrors();
+            return graphQlUtility.graphQLErrorHandler(graphQLErrors);
+        }
+    }
+
+    @RequestMapping(value = "/graphql/login", method = RequestMethod.POST)
     public Object handle(@RequestBody Map<String, String> query) {
+        // TODO bloquer les requéte qui ne sont pas une mutation utilisateur "signinUtilisateur"
         ExecutionResult result = graphQL.execute(query.get("query"));
         if (result.getErrors().isEmpty()) {
             return result.getData();
