@@ -40,15 +40,26 @@ public class GraphQLController {
         graphQL = graphQlUtility.createGraphQlObject();
     }
 
-    @RequestMapping(value = "/graphql", method = RequestMethod.POST)
-    public Object handle(@RequestHeader("Authorization") String authData,
-                         @RequestBody Map<String, String> query) {
+    @RequestMapping(value = "/graphql/admin", method = RequestMethod.POST)
+    public Object handleAdmin(@RequestHeader("Authorization") String authData,
+                              @RequestBody Map<String, String> query) {
         Token supposedToken = new Token();
         supposedToken.setToken(authData);
         System.out.println(authData);
         if (!utilisateurBusiness.isLogged(supposedToken)) {
             return null;
         }
+        ExecutionResult result = graphQL.execute(query.get("query"));
+        if (result.getErrors().isEmpty()) {
+            return result.getData();
+        } else {
+            List<GraphQLError> graphQLErrors = result.getErrors();
+            return graphQlUtility.graphQLErrorHandler(graphQLErrors);
+        }
+    }
+
+    @RequestMapping(value = "/graphql", method = RequestMethod.POST)
+    public Object handleClient(@RequestBody Map<String, String> query) {
         ExecutionResult result = graphQL.execute(query.get("query"));
         if (result.getErrors().isEmpty()) {
             return result.getData();
