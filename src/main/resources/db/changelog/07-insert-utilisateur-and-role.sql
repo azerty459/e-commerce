@@ -29,6 +29,6 @@ CREATE TABLE utilisateur_role
   REFERENCES role(id_role)
 );
 
-INSERT INTO utilisateur (adresse_email, mot_de_passe, nom, prenom) VALUES ('rhalipre@nextoo.fr', 'rhalipre', '', ''),('utilisateur@gmail.com', 'utilisateur', '', ''),('visiteur@gmail.com', 'visiteur', '', '');
+INSERT INTO utilisateur (adresse_email, mot_de_passe, nom, prenom) VALUES ('a', '$2a$10$tKoa.0HtlizobJijofNHIeJkIXOBYFFJMelG075rNqupjJAtKcFSW', '', ''),('utilisateur@gmail.com', 'utilisateur', '', ''),('visiteur@gmail.com', 'visiteur', '', '');
 INSERT INTO role (nom) VALUES ('Administrateur'),('Utilisateur'),('Visiteur');
 INSERT INTO utilisateur_role (id_utilisateur, id_role) VALUES (1, 1),(2, 2),(3, 3);
