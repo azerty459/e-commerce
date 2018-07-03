@@ -1,0 +1,23 @@
+input AvisClientInput {
+    note: Int!
+    referenceProduit: String
+    description : String
+    idAvis: Int!
+}
+
+type AvisClient {
+    id: Int!
+    description: String!
+    note: Int!
+    date: String
+}
+
+extend type Query {
+    avisClient(ref: String): [AvisClient]!
+}
+
+extend type Mutation {
+    addAvisClient(description: String!, note: Int!, referenceProduit: String!): AvisClient!
+    updateAvisClient(avis: AvisClientInput!): AvisClient!
+    deleteAvisClient(idAvis: Int!): Boolean!
+}

@@ -96,10 +96,6 @@ public class CategorieBusinessTests {
         DRAME.setLevel(2);
     }
 
-
-    @Mock
-    private CategorieRepository categorieRepository;
-
     @Mock
     private CategorieSupprimeRepository categorieSupprimeRepository;
 
@@ -108,16 +104,7 @@ public class CategorieBusinessTests {
     private CategorieRepositoryCustom categorieRepositoryCustom;
 
     @Mock
-    private EntityManager entityManager;
-
-    @Mock
-    private Query query;
-
-    @Mock
     private CategorieBusiness categorieBusinessMock;
-
-    @InjectMocks
-    private CategorieBusiness categorieBusiness;
 
     @Before
     public void setUp() {

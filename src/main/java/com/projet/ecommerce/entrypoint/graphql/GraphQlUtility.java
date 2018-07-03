@@ -1,5 +1,7 @@
 package com.projet.ecommerce.entrypoint.graphql;
 
+import com.projet.ecommerce.entrypoint.graphql.avisclient.AvisClientMutation;
+import com.projet.ecommerce.entrypoint.graphql.avisclient.AvisClientQuery;
 import com.projet.ecommerce.entrypoint.graphql.categorie.CategorieMutation;
 import com.projet.ecommerce.entrypoint.graphql.categorie.CategorieQuery;
 import com.projet.ecommerce.entrypoint.graphql.pagination.PaginationQuery;
@@ -68,6 +70,12 @@ public class GraphQlUtility {
     @Autowired
     private PaginationQuery paginationQuery;
 
+    @Autowired
+    private AvisClientQuery avisClientQuery;
+
+    @Autowired
+    private AvisClientMutation avisClientMutation;
+
     @PostConstruct
     public GraphQL createGraphQlObject() {
         return GraphQL.newGraphQL(graphQLSchema())
@@ -107,6 +115,8 @@ public class GraphQlUtility {
                 .type(utilisateurQuery.produitWiring())
                 .type(utilisateurMutation.produitWiring())
                 .type(paginationQuery.produitWiring())
+                .type(avisClientQuery.produitWiring())
+                .type(avisClientMutation.produitWiring())
                 .build();
     }
 
@@ -118,6 +128,7 @@ public class GraphQlUtility {
         File utilisateurSchemaFile = new File("src/main/resources/graphql/utilisateur.graphqls");
         File roleSchemaFile = new File("src/main/resources/graphql/role.graphqls");
         File paginationSchemaFile = new File("src/main/resources/graphql/pagination.graphqls");
+        File avisClientSchemaFile = new File("src/main/resources/graphql/avisclient.graphqls");
 
         SchemaParser schemaParser = new SchemaParser();
         TypeDefinitionRegistry typeRegistry = new TypeDefinitionRegistry();
@@ -128,6 +139,7 @@ public class GraphQlUtility {
         typeRegistry.merge(schemaParser.parse(roleSchemaFile));
         typeRegistry.merge(schemaParser.parse(utilisateurSchemaFile));
         typeRegistry.merge(schemaParser.parse(paginationSchemaFile));
+        typeRegistry.merge(schemaParser.parse(avisClientSchemaFile));
 
         RuntimeWiring wiring = buildRuntimeWiring();
 
