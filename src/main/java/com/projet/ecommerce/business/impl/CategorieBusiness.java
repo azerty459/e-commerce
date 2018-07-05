@@ -98,6 +98,7 @@ public class CategorieBusiness implements ICategorieBusiness {
         }
 
         // Request all the parents for these categories
+        // FIXME changer le paramètre
         Collection<Categorie> parents = categorieRepository.findParents(categoriesPourParents);
 
         // Classer cette collection pour mettre chaque parents en face de chaque catégorie de départ
@@ -175,7 +176,7 @@ public class CategorieBusiness implements ICategorieBusiness {
 
         // On a trouvé le parent juste au-dessus dans la hiérarchie et on construit le chemin
         if (tempParent != null) {
-            chemin = tempParent.getNomCategorie() + " > " + chemin;
+            chemin = tempParent.getIdCategorie() + " > " + chemin;
         }
 
         return chercherChemin(tempParent, parents, chemin);

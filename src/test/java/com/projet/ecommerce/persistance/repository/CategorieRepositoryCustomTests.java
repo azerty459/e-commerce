@@ -112,21 +112,19 @@ public class CategorieRepositoryCustomTests {
 
         ArrayList<Categorie> liste = new ArrayList<Categorie>(resultat);
 
-        Assert.assertEquals(liste.get(0).getNomCategorie(), ROMAN.getNomCategorie());
-        Assert.assertEquals(liste.get(0).getBorneDroit(), ROMAN.getBorneDroit());
-        Assert.assertEquals(liste.get(0).getBorneGauche(), ROMAN.getBorneGauche());
-        Assert.assertEquals(liste.get(0).getLevel(), ROMAN.getLevel());
+        compareCategorie(ROMAN, liste.get(0));
+        compareCategorie(FRANCE, liste.get(1));
+        compareCategorie(US, liste.get(2));
 
-        Assert.assertEquals(liste.get(1).getNomCategorie(), FRANCE.getNomCategorie());
-        Assert.assertEquals(liste.get(1).getBorneDroit(), FRANCE.getBorneDroit());
-        Assert.assertEquals(liste.get(1).getBorneGauche(), FRANCE.getBorneGauche());
-        Assert.assertEquals(liste.get(1).getLevel(), FRANCE.getLevel());
+    }
 
-        Assert.assertEquals(liste.get(2).getNomCategorie(), US.getNomCategorie());
-        Assert.assertEquals(liste.get(2).getBorneDroit(), US.getBorneDroit());
-        Assert.assertEquals(liste.get(2).getBorneGauche(), US.getBorneGauche());
-        Assert.assertEquals(liste.get(2).getLevel(), US.getLevel());
+    private void compareCategorie(Categorie attendue, Categorie actuelle) {
+        Assert.assertEquals(actuelle.getNomCategorie(), attendue.getNomCategorie());
+        Assert.assertEquals(actuelle.getBorneDroit(), attendue.getBorneDroit());
+        Assert.assertEquals(actuelle.getBorneGauche(), attendue.getBorneGauche());
+        Assert.assertEquals(actuelle.getLevel(), attendue.getLevel());
 
+        // TODO a faire marcher Assert.assertEquals(attendue, actuelle);
     }
 
     @Test

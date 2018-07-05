@@ -1,4 +1,4 @@
-package com.projet.ecommerce.persistance.authentification;
+package com.projet.ecommerce.entrypoint.authentification;
 
 import com.projet.ecommerce.persistance.entity.Utilisateur;
 
@@ -8,11 +8,11 @@ import java.util.Date;
 public class Token {
 
     private String token;
-    private Utilisateur utilisateur;
+    private Utilisateur utilisateur; // FIXME dto
     private String id;
     private String subject;
     private String issuer;
-    private Date Expiration;
+    private Date expiration;
 
     public Utilisateur getUtilisateur() {
         return utilisateur;
@@ -51,11 +51,11 @@ public class Token {
     }
 
     public Date getExpiration() {
-        return Expiration;
+        return expiration;
     }
 
     public void setExpiration(Date expiration) {
-        Expiration = expiration;
+        this.expiration = expiration;
     }
 
     public void setToken(String token) {

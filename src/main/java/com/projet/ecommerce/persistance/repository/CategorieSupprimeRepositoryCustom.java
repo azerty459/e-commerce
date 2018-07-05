@@ -7,6 +7,13 @@ import java.util.List;
 import java.util.Map;
 
 public interface CategorieSupprimeRepositoryCustom {
+
+    /**
+     * Récupérer les catégories parents de la catégorie de nom donné en paramètre
+     *
+     * @param cats les catégories dont on doit rechercher les parents
+     * @return une collection des catégories parents de cette catégorie
+     */
     Collection<CategorieSupprime> findParents(Map<Integer, CategorieSupprime> cats);
 
     /**

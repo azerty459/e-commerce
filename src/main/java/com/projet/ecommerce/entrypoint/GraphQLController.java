@@ -3,8 +3,8 @@ package com.projet.ecommerce.entrypoint;
 import com.projet.ecommerce.business.IPhotoBusiness;
 import com.projet.ecommerce.business.impl.PhotoException;
 import com.projet.ecommerce.business.impl.UtilisateurBusiness;
+import com.projet.ecommerce.entrypoint.authentification.Token;
 import com.projet.ecommerce.entrypoint.graphql.GraphQlUtility;
-import com.projet.ecommerce.persistance.authentification.Token;
 import graphql.ExecutionResult;
 import graphql.GraphQL;
 import graphql.GraphQLError;
@@ -45,7 +45,6 @@ public class GraphQLController {
                               @RequestBody Map<String, String> query) {
         Token supposedToken = new Token();
         supposedToken.setToken(authData);
-        System.out.println(authData);
         if (!utilisateurBusiness.isLogged(supposedToken)) {
             return null;
         }
