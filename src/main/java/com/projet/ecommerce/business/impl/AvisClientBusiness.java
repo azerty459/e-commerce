@@ -42,26 +42,21 @@ public class AvisClientBusiness implements IAvisClientBusiness {
         }else{
             avisClients.addAll(avisClientRepository.findByProduit_ReferenceProduit(ref));
         }
-        return new ArrayList<>(AvisClientTransformer.entityToDto(avisClients));
+        return new ArrayList<>(AvisClientTransformer.listEntityToDto(avisClients));
     }
 
     @Override
-    public AvisClientDTO update(AvisClient avisClient) {
+    public AvisClientDTO update(AvisClientDTO avisClient) {
         if (avisClient == null) {
             return null;
         }
 
-        Optional<AvisClient> optionalAvisClient = avisClientRepository.findById(avisClient.getIdAvis());
-        if (!optionalAvisClient.isPresent()) {
-            throw new GraphQLCustomException("L'avis client recherché n'existe pas.");
-        }
-
+        AvisClient retourAvisClient = this.getAvisClientExistant(avisClient.getId());
+        AvisClient avis = AvisClientTransformer.dtoToEntity(avisClient);
         // On fusionne les deux produits en un
-        AvisClient retourAvisClient = optionalAvisClient.get();
-
         AvisClient avisClientFinal = null;
         try {
-            avisClientFinal = mergeObjects(avisClient, retourAvisClient);
+            avisClientFinal = mergeObjects(avis, retourAvisClient);
         } catch (IllegalAccessException | InstantiationException e) {
             e.printStackTrace();
         }
@@ -76,26 +71,28 @@ public class AvisClientBusiness implements IAvisClientBusiness {
 
     @Override
     public boolean delete(Integer idAvisClient) {
+        if(idAvisClient == null){
+            return false;
+        }
+        this.getAvisClientExistant(idAvisClient);
         avisClientRepository.deleteById(idAvisClient);
         return true;
     }
 
     @Override
-    public AvisClientDTO add(String description, Integer note, String referenceProduit) {
-        if (referenceProduit == null || description.isEmpty() || note == null) {
+    public AvisClientDTO add(AvisClientDTO avisClient) {
+        if (avisClient == null || avisClient.getRefProduit().isEmpty()
+                || avisClient.getDescription().isEmpty() || avisClient.getNote() <= 0) {
             GraphQLCustomException graphQLCustomException = new GraphQLCustomException("Erreur dans l'ajout du produit (la référence produit, la description et la note ne peut être null)");
-            graphQLCustomException.ajouterExtension("description", description);
-            graphQLCustomException.ajouterExtension("note", note +"");
-            graphQLCustomException.ajouterExtension("referenceProduit", referenceProduit +"");
+            graphQLCustomException.ajouterExtension("description", avisClient.getDescription());
+            graphQLCustomException.ajouterExtension("note", avisClient.getNote() +"");
+            graphQLCustomException.ajouterExtension("referenceProduit", avisClient.getRefProduit() +"");
             throw graphQLCustomException;
         }
 
-        AvisClient avisClient = new AvisClient();
-        avisClient.setDescription(description);
-        avisClient.setNote(note);
-        avisClient.setProduit(this.getProduit(referenceProduit));
-
-        return AvisClientTransformer.entityToDto(avisClientRepository.save(avisClient));
+        this.getProduit(avisClient.getRefProduit());
+        AvisClient avis = AvisClientTransformer.dtoToEntity(avisClient);
+        return AvisClientTransformer.entityToDto(avisClientRepository.save(avis));
     }
 
     /**
@@ -119,6 +116,15 @@ public class AvisClientBusiness implements IAvisClientBusiness {
         }
 
        return produitOptional.get();
+    }
+
+    private AvisClient getAvisClientExistant(Integer idAvisClient){
+        Optional<AvisClient> optionalAvisClient = avisClientRepository.findById(idAvisClient);
+        if (!optionalAvisClient.isPresent()) {
+            throw new GraphQLCustomException("L'avis client recherché n'existe pas.");
+        }
+
+        return optionalAvisClient.get();
     }
 
 }

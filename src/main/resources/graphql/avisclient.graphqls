@@ -1,8 +1,8 @@
 input AvisClientInput {
     note: Int!
-    referenceProduit: String
+    refProduit: String
     description : String
-    idAvis: Int!
+    id: Int
 }
 
 type AvisClient {
@@ -17,7 +17,7 @@ extend type Query {
 }
 
 extend type Mutation {
-    addAvisClient(description: String!, note: Int!, referenceProduit: String!): AvisClient!
+    addAvisClient(avis: AvisClientInput!): AvisClient!
     updateAvisClient(avis: AvisClientInput!): AvisClient!
-    deleteAvisClient(idAvis: Int!): Boolean!
+    deleteAvisClient(id: Int!): Boolean!
 }
