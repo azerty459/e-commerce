@@ -12,4 +12,5 @@
     <include file="changelog/06-insert-caracteristique.sql" relativeToChangelogFile="true"/>
     <include file="changelog/07-insert-utilisateur-and-role.sql" relativeToChangelogFile="true"/>
     <include file="changelog/08-insert-categorie-supprime.sql" relativeToChangelogFile="true"/>
+    <include file="changelog/09-insert-avis_client.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>

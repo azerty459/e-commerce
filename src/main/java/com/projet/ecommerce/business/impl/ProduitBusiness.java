@@ -33,10 +33,6 @@ public class ProduitBusiness implements IProduitBusiness {
     private ProduitRepository produitRepository;
 
     @Autowired
-    @Qualifier("produitRepositoryCustomImpl")
-    private ProduitRepositoryCustom produitRepositoryCustom;
-
-    @Autowired
     private CategorieRepository categorieRepository;
 
     @Autowired
@@ -216,7 +212,7 @@ public class ProduitBusiness implements IProduitBusiness {
         Collection<Produit> produitCollection;
 
         if (nom == null) {
-            produitCollection = produitRepositoryCustom.findAllWithCriteria(ref, cat);
+            produitCollection = produitRepository.findAllWithCriteria(ref, cat);
 
         } else {
             produitCollection = produitRepository.findByNomContainingIgnoreCase(nom);
