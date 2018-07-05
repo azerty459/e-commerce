@@ -106,7 +106,10 @@ public class CategorieBusinessTests {
     private CategorieRepositoryCustom categorieRepositoryCustom;
 
     @Mock
-    private CategorieBusiness categorieBusinessMock;
+    private EntityManager entityManager;
+
+    @Mock
+    private Query query;
 
     @Before
     public void setUp() {
