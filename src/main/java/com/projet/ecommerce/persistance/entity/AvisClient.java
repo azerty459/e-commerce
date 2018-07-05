@@ -1,5 +1,7 @@
 package com.projet.ecommerce.persistance.entity;
 
+import com.projet.ecommerce.business.dto.AvisClientDTO;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -13,7 +15,7 @@ public class AvisClient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_avis")
-    private int idAvis;
+    private int id;
 
     /**
      * Date de l'avis du client
@@ -38,12 +40,16 @@ public class AvisClient {
     private Produit produit;
 
 
-    public int getIdAvis() {
-        return idAvis;
+    public int getId() {
+        return id;
     }
 
-    public LocalDateTime getDateAvis() {
+    public LocalDateTime getDate() {
         return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
     }
 
     public String getDescription() {
@@ -54,12 +60,8 @@ public class AvisClient {
         return note;
     }
 
-    public void setIdAvis(int idAvis) {
-        this.idAvis = idAvis;
-    }
-
-    public void setDateAvis(LocalDateTime date) {
-        this.date = date;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setDescription(String description) {

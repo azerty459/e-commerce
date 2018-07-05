@@ -25,7 +25,7 @@ public interface IAvisClientBusiness {
      * @param avisClient L'objet avis client modifié à sauvegarder
      * @return l'objet avis client modifié
      */
-    AvisClientDTO update(AvisClient avisClient);
+    AvisClientDTO update(AvisClientDTO avisClient);
 
     /**
      * Méthode définissant la suppression d'un avis client.
@@ -37,11 +37,9 @@ public interface IAvisClientBusiness {
 
     /**
      * Méthode définissant l'ajout d'un avis client
-     * @param description description de l'avis
-     * @param note note de l'avis
-     * @param referenceProduit ref du produit pour cet avis
+     * @param avisClient
      * @return
      */
-    AvisClientDTO add(String description, Integer note, String referenceProduit);
+    AvisClientDTO add(AvisClientDTO avisClient);
 
 }
