@@ -55,6 +55,7 @@ public class CategorieSupprimeRepositoryTests {
 
         CategorieSupprime temp = categorieRepository.findById(save.getIdCategorie()).get();
         Assert.assertNotNull(temp);
+        // TODO tester les champs
     }
 
     @Test

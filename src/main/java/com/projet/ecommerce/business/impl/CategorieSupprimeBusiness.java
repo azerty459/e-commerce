@@ -102,7 +102,7 @@ public class CategorieSupprimeBusiness implements ICategorieSupprimeBusiness {
             Categorie categorie = new Categorie();
             categorie.setNomCategorie(catSupp.getNomCategorie());
             categorie.setLevel(catSupp.getLevel());
-            if (categorie.getProduits() != null) {
+            if (catSupp.getProduits() != null) {
                 // On realise une copie car categorie.setProduits(catSupp.getProduits()) creer des conflits JPA (shared reference)
                 List<Produit> produits = new ArrayList<Produit>(catSupp.getProduits());
                 categorie.setProduits(produits);

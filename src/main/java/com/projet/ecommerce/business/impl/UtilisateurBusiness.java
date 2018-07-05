@@ -3,10 +3,10 @@ package com.projet.ecommerce.business.impl;
 import com.projet.ecommerce.business.IUtilisateurBusiness;
 import com.projet.ecommerce.business.dto.UtilisateurDTO;
 import com.projet.ecommerce.business.dto.transformer.UtilisateurTransformer;
+import com.projet.ecommerce.entrypoint.authentification.AuthData;
+import com.projet.ecommerce.entrypoint.authentification.SigninPayload;
+import com.projet.ecommerce.entrypoint.authentification.Token;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
-import com.projet.ecommerce.persistance.authentification.AuthData;
-import com.projet.ecommerce.persistance.authentification.SigninPayload;
-import com.projet.ecommerce.persistance.authentification.Token;
 import com.projet.ecommerce.persistance.entity.Role;
 import com.projet.ecommerce.persistance.entity.Utilisateur;
 import com.projet.ecommerce.persistance.repository.RoleRepository;
@@ -32,6 +32,7 @@ import java.util.Optional;
 @Transactional
 public class UtilisateurBusiness implements IUtilisateurBusiness {
 
+    public static final String MESSAGE_ERREUR_SIGNIN = "Votre mot de passe  ou votre identifiant est incorrect.";
     @Autowired
     private UtilisateurRepository utilisateurRepository;
 
@@ -146,20 +147,7 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
         return new ArrayList<>(UtilisateurTransformer.entityToDto(utilisateurCollection));
     }
 
-    /**
-     * Retourne l'utilisateur connecté où des erreurs graphql selon les erreurs qu'il y a commise, s'il n'y arrive pas
-     *
-     * @param email L'email de l'utilisateur
-     * @param mdp   Mot de passe de l'utilisateur
-     * @return l'utilisateur connecté
-     */
 
-    /**
-     * Permet de connecter un utilisateur
-     *
-     * @param auth l'objet contenant les données de connection
-     * @return SigninPayload contenant les informations necessaire à l'authentification
-     */
     @Override
     public SigninPayload signinUser(AuthData auth) {
         String email = auth.getEmail();
@@ -169,11 +157,10 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
             throw new GraphQLCustomException("Veuillez écrire votre mot de passe ou votre adresse e-mail.");
         }
         Optional<Utilisateur> utilisateurOptional = utilisateurRepository.findByEmail(email);
-        Utilisateur utilisateur = utilisateurOptional.orElseThrow(() -> new GraphQLCustomException("Impossible de trouver un compte correspondant à cette adresse e-mail."));
+        Utilisateur utilisateur = utilisateurOptional.orElseThrow(() -> new GraphQLCustomException(MESSAGE_ERREUR_SIGNIN));
         if (!passwordEncoder.matches(mdp, utilisateur.getMdp())) {
-            throw new GraphQLCustomException("Votre mot de passe est incorrect.");
+            throw new GraphQLCustomException(MESSAGE_ERREUR_SIGNIN);
         }
-
         Token token = new Token();
         token.setUtilisateur(utilisateur);
         // 3 600 000 ms= 60 minutes

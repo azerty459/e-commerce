@@ -1,4 +1,4 @@
-package com.projet.ecommerce.persistance.authentification;
+package com.projet.ecommerce.entrypoint.authentification;
 
 public class SigninPayload {
     private final Token token;
