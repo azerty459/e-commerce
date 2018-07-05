@@ -98,7 +98,6 @@ public class CategorieBusinessTests {
         DRAME.setLevel(2);
     }
 
-
     @Mock
     private CategorieSupprimeRepository categorieSupprimeRepository;
 

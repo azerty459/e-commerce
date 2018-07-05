@@ -29,6 +29,15 @@ public class AvisClientDTO {
      */
     private Integer note;
 
+    private String refProduit;
+
+    public String getRefProduit() {
+        return refProduit;
+    }
+
+    public void setRefProduit(String refProduit) {
+        this.refProduit = refProduit;
+    }
 
     public int getId() {
         return id;

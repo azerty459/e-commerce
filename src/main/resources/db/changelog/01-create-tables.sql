@@ -62,15 +62,3 @@ CREATE TABLE caracteristique
   CONSTRAINT FK_caracteristique_referenceProduit FOREIGN KEY (reference_produit)
   REFERENCES produit(reference_produit)
 );
-
-CREATE TABLE avis_client
-(
-  id_avis SERIAL,
-  date_avis TIMESTAMP DEFAULT current_timestamp,
-  description VARCHAR(255) NOT NULL,
-  note int NOT NULL,
-  reference_produit VARCHAR(255) NOT NULL,
-  PRIMARY KEY (id_avis),
-  CONSTRAINT FK_idProduit FOREIGN KEY (reference_produit)
-  REFERENCES produit(reference_produit)
-);

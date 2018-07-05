@@ -2,6 +2,7 @@ package com.projet.ecommerce.business.dto.transformer;
 
 import com.projet.ecommerce.business.dto.AvisClientDTO;
 import com.projet.ecommerce.persistance.entity.AvisClient;
+import com.projet.ecommerce.persistance.entity.Produit;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,10 +19,12 @@ public class AvisClientTransformer {
      * @param avisClientDTO Une collection d'objets AvisClientDTO
      * @return une collection d'objets AvisClient
      */
-    public static Collection<AvisClient> dtoToEntity(Collection<AvisClientDTO> avisClientDTO) {
-        List<AvisClient> listeAvisClients = new ArrayList<>();
-        for (AvisClientDTO dtoAvisClient : avisClientDTO) {
-            listeAvisClients.add(dtoToEntity(dtoAvisClient));
+    public static Collection<AvisClient> listDtoToEntity(Collection<AvisClientDTO> avisClientDTO) {
+        Collection<AvisClient> listeAvisClients = new ArrayList<>();
+        if(avisClientDTO != null) {
+            for (AvisClientDTO dtoAvisClient : avisClientDTO) {
+                listeAvisClients.add(dtoToEntity(dtoAvisClient));
+            }
         }
         return listeAvisClients;
     }
@@ -34,10 +37,13 @@ public class AvisClientTransformer {
      */
     public static AvisClient dtoToEntity(AvisClientDTO dtoAvisClient) {
         AvisClient avisClient = new AvisClient();
-        avisClient.setIdAvis(dtoAvisClient.getId());
-        avisClient.setDateAvis(dtoAvisClient.getDate());
+        avisClient.setId(dtoAvisClient.getId());
+        avisClient.setDate(dtoAvisClient.getDate());
         avisClient.setDescription(dtoAvisClient.getDescription());
         avisClient.setNote(dtoAvisClient.getNote());
+        Produit p = new Produit();
+        p.setReferenceProduit(dtoAvisClient.getRefProduit());
+        avisClient.setProduit(p);
         return avisClient;
     }
 
@@ -47,10 +53,12 @@ public class AvisClientTransformer {
      * @param avisClients Une collection d'objets AvisClient
      * @return une collection d'objets AvisClientDTO
      */
-    public static Collection<AvisClientDTO> entityToDto(Collection<AvisClient> avisClients) {
-        List<AvisClientDTO> listeAvisClientsDTO = new ArrayList<>();
-        for (AvisClient unAvisClient : avisClients) {
-            listeAvisClientsDTO.add(entityToDto(unAvisClient));
+    public static Collection<AvisClientDTO> listEntityToDto(Collection<AvisClient> avisClients) {
+        Collection<AvisClientDTO> listeAvisClientsDTO = new ArrayList<>();
+        if(avisClients != null) {
+            for (AvisClient unAvisClient : avisClients) {
+                listeAvisClientsDTO.add(entityToDto(unAvisClient));
+            }
         }
         return listeAvisClientsDTO;
     }
@@ -63,10 +71,13 @@ public class AvisClientTransformer {
      */
     public static AvisClientDTO entityToDto(AvisClient avisClient) {
         AvisClientDTO avisClientDTO = new AvisClientDTO();
-        avisClientDTO.setId(avisClient.getIdAvis());
-        avisClientDTO.setDate(avisClient.getDateAvis());
+        avisClientDTO.setId(avisClient.getId());
+        avisClientDTO.setDate(avisClient.getDate());
         avisClientDTO.setDescription(avisClient.getDescription());
         avisClientDTO.setNote(avisClient.getNote());
+        if(avisClient.getProduit() != null){
+            avisClientDTO.setRefProduit(avisClient.getProduit().getReferenceProduit());
+        }
         return avisClientDTO;
     }
 }
