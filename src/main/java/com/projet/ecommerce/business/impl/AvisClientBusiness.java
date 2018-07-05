@@ -16,7 +16,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import static com.projet.ecommerce.utilitaire.utilitaire.mergeObjects;
+import static com.projet.ecommerce.utilitaire.Utilitaire.mergeObjects;
 
 @Service
 public class AvisClientBusiness implements IAvisClientBusiness {
@@ -37,9 +37,9 @@ public class AvisClientBusiness implements IAvisClientBusiness {
     public List<AvisClientDTO> getAll(String ref) {
 
         Collection<AvisClient> avisClients = new ArrayList<>();
-        if(ref == null){
+        if (ref == null) {
             avisClients.addAll(avisClientRepository.findAll());
-        }else{
+        } else {
             avisClients.addAll(avisClientRepository.findByProduit_ReferenceProduit(ref));
         }
         return new ArrayList<>(AvisClientTransformer.entityToDto(avisClients));
@@ -85,40 +85,42 @@ public class AvisClientBusiness implements IAvisClientBusiness {
         if (referenceProduit == null || description.isEmpty() || note == null) {
             GraphQLCustomException graphQLCustomException = new GraphQLCustomException("Erreur dans l'ajout du produit (la référence produit, la description et la note ne peut être null)");
             graphQLCustomException.ajouterExtension("description", description);
-            graphQLCustomException.ajouterExtension("note", note +"");
-            graphQLCustomException.ajouterExtension("referenceProduit", referenceProduit +"");
+            graphQLCustomException.ajouterExtension("note", note + "");
+            graphQLCustomException.ajouterExtension("referenceProduit", referenceProduit + "");
             throw graphQLCustomException;
         }
 
         AvisClient avisClient = new AvisClient();
         avisClient.setDescription(description);
         avisClient.setNote(note);
-        avisClient.setProduit(this.getProduit(referenceProduit));
+        avisClient.setProduit(getProduit(referenceProduit));
 
         return AvisClientTransformer.entityToDto(avisClientRepository.save(avisClient));
     }
 
     /**
      * Signature supplémentaire du getAll pour éviter de passer un null explicitement en paramètre lors de l'appel
+     *
      * @return la liste de tous les avis clients
      */
     public List<AvisClientDTO> getAll() {
-        return this.getAll(null);
+        return getAll(null);
     }
 
     /**
      * Récupère un produit à partir de sa référence
+     *
      * @param refProduit
      * @return
      */
-    private Produit getProduit(String refProduit){
+    private Produit getProduit(String refProduit) {
         // Récupération du produit
         Optional<Produit> produitOptional = produitRepository.findById(refProduit);
         if (!produitOptional.isPresent()) {
             throw new GraphQLCustomException("Le produit pour cet avis n'existe pas.");
         }
 
-       return produitOptional.get();
+        return produitOptional.get();
     }
 
 }
