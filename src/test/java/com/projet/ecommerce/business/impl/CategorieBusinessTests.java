@@ -18,7 +18,9 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.jpa.repository.Query;
 
+import javax.persistence.EntityManager;
 import java.util.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -96,6 +98,7 @@ public class CategorieBusinessTests {
         DRAME.setLevel(2);
     }
 
+
     @Mock
     private CategorieSupprimeRepository categorieSupprimeRepository;
 
@@ -104,7 +107,10 @@ public class CategorieBusinessTests {
     private CategorieRepositoryCustom categorieRepositoryCustom;
 
     @Mock
-    private CategorieBusiness categorieBusinessMock;
+    private EntityManager entityManager;
+
+    @Mock
+    private Query query;
 
     @Before
     public void setUp() {

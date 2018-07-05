@@ -2,7 +2,7 @@ package com.projet.ecommerce.utilitaire;
 
 import java.lang.reflect.Field;
 
-public class utilitaire {
+public class Utilitaire {
     /**
      * Fusionne les deux objets en paramètre en un seul et mes les valeurs à jour s'il y a des différences.
      *
@@ -12,7 +12,6 @@ public class utilitaire {
      * @throws IllegalAccessException
      * @throws InstantiationException
      */
-    @SuppressWarnings("unchecked")
     public static <T> T mergeObjects(T first, T second) throws IllegalAccessException, InstantiationException {
         Class<?> clazz = first.getClass();
         Field[] fields = clazz.getDeclaredFields();

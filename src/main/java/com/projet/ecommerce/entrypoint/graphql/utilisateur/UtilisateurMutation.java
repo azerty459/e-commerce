@@ -3,6 +3,8 @@ package com.projet.ecommerce.entrypoint.graphql.utilisateur;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.projet.ecommerce.business.IUtilisateurBusiness;
 import com.projet.ecommerce.business.dto.UtilisateurDTO;
+import com.projet.ecommerce.persistance.authentification.AuthData;
+import com.projet.ecommerce.persistance.authentification.Token;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.idl.TypeRuntimeWiring;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +36,28 @@ public class UtilisateurMutation {
                     return utilisateurBusiness.update(utilisateurDTO);
                 }
         );
+        builder.dataFetcher("isLogged", (DataFetchingEnvironment env) -> {
+            Token token = new Token();
+            token.setToken(env.getArgument("token"));
+            return utilisateurBusiness.isLogged(token);
+        });
+
 
         builder.dataFetcher("deleteUtilisateur", (DataFetchingEnvironment environment) ->
                 utilisateurBusiness.delete(environment.getArgument("email"), (environment.getArgument("id") != null) ? environment.getArgument("id") : 0)
+        );
+        builder.dataFetcher("signinUtilisateur", (DataFetchingEnvironment environment) -> {
+                    ObjectMapper mapper = new ObjectMapper();
+                    Object rawInput = environment.getArgument("auth");
+                    AuthData authData = mapper.convertValue(rawInput, AuthData.class);
+                    try {
+                        return utilisateurBusiness.signinUser(authData);
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
+
         );
         return builder.build();
 

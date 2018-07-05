@@ -143,7 +143,8 @@ public class GraphQlUtility {
 
         RuntimeWiring wiring = buildRuntimeWiring();
 
-
         return new SchemaGenerator().makeExecutableSchema(typeRegistry, wiring);
     }
+
+
 }
