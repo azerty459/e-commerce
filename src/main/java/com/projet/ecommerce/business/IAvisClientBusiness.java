@@ -3,6 +3,7 @@ package com.projet.ecommerce.business;
 import com.projet.ecommerce.business.dto.AvisClientDTO;
 import com.projet.ecommerce.persistance.entity.AvisClient;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -17,7 +18,7 @@ public interface IAvisClientBusiness {
      * @param ref la référence du produit recherché
      * @return la liste des avis clients trouvés
      */
-    List<AvisClientDTO> getAll(String ref);
+    Collection<AvisClientDTO> getAll(String ref);
 
     /**
      * Méthode définissant la modification d'un avis client.

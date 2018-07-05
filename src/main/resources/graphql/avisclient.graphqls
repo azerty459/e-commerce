@@ -1,6 +1,6 @@
 input AvisClientInput {
     note: Int!
-    refProduit: String
+    refProduit: String!
     description : String
     id: Int
 }
@@ -9,7 +9,7 @@ type AvisClient {
     id: Int!
     description: String!
     note: Int!
-    date: String
+    date: String!
 }
 
 extend type Query {

@@ -34,7 +34,7 @@ public class AvisClientBusiness implements IAvisClientBusiness {
      * @return la liste des avis clients du produit
      */
     @Override
-    public List<AvisClientDTO> getAll(String ref) {
+    public Collection<AvisClientDTO> getAll(String ref) {
 
         Collection<AvisClient> avisClients = new ArrayList<>();
         if (ref == null) {
@@ -42,7 +42,7 @@ public class AvisClientBusiness implements IAvisClientBusiness {
         } else {
             avisClients.addAll(avisClientRepository.findByProduit_ReferenceProduit(ref));
         }
-        return new ArrayList<>(AvisClientTransformer.listEntityToDto(avisClients));
+        return AvisClientTransformer.listEntityToDto(avisClients);
     }
 
     @Override
@@ -51,17 +51,19 @@ public class AvisClientBusiness implements IAvisClientBusiness {
             return null;
         }
 
-        AvisClient retourAvisClient = this.getAvisClientExistant(avisClient.getId());
+        Optional<AvisClient> optionalAvisClient = avisClientRepository
+                .findById(avisClient.getId());
+
+        optionalAvisClient.orElseThrow(() -> new GraphQLCustomException("L'avis client recherché n'existe pas."));
+
+        AvisClient retourAvisClient = optionalAvisClient.get();
+
         AvisClient avis = AvisClientTransformer.dtoToEntity(avisClient);
         // On fusionne les deux produits en un
         AvisClient avisClientFinal = null;
         try {
             avisClientFinal = mergeObjects(avis, retourAvisClient);
         } catch (IllegalAccessException | InstantiationException e) {
-            e.printStackTrace();
-        }
-
-        if (avisClientFinal == null) {
             throw new GraphQLCustomException("L'avis client ne peut pas être sauvegardé");
         }
 
@@ -74,7 +76,8 @@ public class AvisClientBusiness implements IAvisClientBusiness {
         if(idAvisClient == null){
             return false;
         }
-        this.getAvisClientExistant(idAvisClient);
+        Optional<AvisClient> optionalAvisClient = avisClientRepository.findById(idAvisClient);
+        optionalAvisClient.orElseThrow(() -> new GraphQLCustomException("L'avis client recherché n'existe pas."));
         avisClientRepository.deleteById(idAvisClient);
         return true;
     }
@@ -90,7 +93,8 @@ public class AvisClientBusiness implements IAvisClientBusiness {
             throw graphQLCustomException;
         }
 
-        this.getProduit(avisClient.getRefProduit());
+        Optional<Produit> produitOptional = produitRepository.findById(avisClient.getRefProduit());
+        produitOptional.orElseThrow(() -> new GraphQLCustomException("Le produit pour cet avis n'existe pas."));
         AvisClient avis = AvisClientTransformer.dtoToEntity(avisClient);
         return AvisClientTransformer.entityToDto(avisClientRepository.save(avis));
     }
@@ -100,33 +104,8 @@ public class AvisClientBusiness implements IAvisClientBusiness {
      *
      * @return la liste de tous les avis clients
      */
-    public List<AvisClientDTO> getAll() {
+    public Collection<AvisClientDTO> getAll() {
         return getAll(null);
-    }
-
-    /**
-     * Récupère un produit à partir de sa référence
-     *
-     * @param refProduit
-     * @return
-     */
-    private Produit getProduit(String refProduit) {
-        // Récupération du produit
-        Optional<Produit> produitOptional = produitRepository.findById(refProduit);
-        if (!produitOptional.isPresent()) {
-            throw new GraphQLCustomException("Le produit pour cet avis n'existe pas.");
-        }
-
-        return produitOptional.get();
-    }
-
-    private AvisClient getAvisClientExistant(Integer idAvisClient){
-        Optional<AvisClient> optionalAvisClient = avisClientRepository.findById(idAvisClient);
-        if (!optionalAvisClient.isPresent()) {
-            throw new GraphQLCustomException("L'avis client recherché n'existe pas.");
-        }
-
-        return optionalAvisClient.get();
     }
 
 }

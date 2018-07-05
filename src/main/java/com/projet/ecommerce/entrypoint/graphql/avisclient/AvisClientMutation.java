@@ -39,7 +39,7 @@ public class AvisClientMutation {
         );
 
         builder.dataFetcher("deleteAvisClient", (DataFetchingEnvironment environment) ->
-                avisClientBusiness.delete(environment.getArgument("idAvis"))
+                avisClientBusiness.delete(environment.getArgument("id"))
         );
 
         return builder.build();

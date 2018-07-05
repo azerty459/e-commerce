@@ -20,7 +20,7 @@ public class AvisClientTransformer {
      * @return une collection d'objets AvisClient
      */
     public static Collection<AvisClient> listDtoToEntity(Collection<AvisClientDTO> avisClientDTO) {
-        List<AvisClient> listeAvisClients = new ArrayList<>();
+        Collection<AvisClient> listeAvisClients = new ArrayList<>();
         if(avisClientDTO != null) {
             for (AvisClientDTO dtoAvisClient : avisClientDTO) {
                 listeAvisClients.add(dtoToEntity(dtoAvisClient));
@@ -54,7 +54,7 @@ public class AvisClientTransformer {
      * @return une collection d'objets AvisClientDTO
      */
     public static Collection<AvisClientDTO> listEntityToDto(Collection<AvisClient> avisClients) {
-        List<AvisClientDTO> listeAvisClientsDTO = new ArrayList<>();
+        Collection<AvisClientDTO> listeAvisClientsDTO = new ArrayList<>();
         if(avisClients != null) {
             for (AvisClient unAvisClient : avisClients) {
                 listeAvisClientsDTO.add(entityToDto(unAvisClient));

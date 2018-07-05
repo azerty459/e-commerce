@@ -19,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,12 +52,13 @@ public class AvisClientBusinessTests {
         Mockito.when(avisClientRepository.findByProduit_ReferenceProduit("A05A02"))
                 .thenReturn(listeAvisClients);
 
-        List<AvisClientDTO> avisClientsDTO = avisClientBusiness.getAll("A05A02");
+        Collection<AvisClientDTO> avisClientsDTO = avisClientBusiness.getAll("A05A02");
 
         Mockito.verify(avisClientRepository, Mockito.times(1))
                 .findByProduit_ReferenceProduit("A05A02");
 
-        this.assertData(listeAvisClients.get(0), avisClientsDTO.get(0));
+        List<AvisClientDTO> listeAvis = new ArrayList<>(avisClientsDTO);
+        this.assertData(listeAvisClients.get(0), listeAvis.get(0));
 
     }
 
@@ -83,17 +85,18 @@ public class AvisClientBusinessTests {
         List<AvisClient> listeAvisClients = this.getListAvisClientTest();
 
         Mockito.when(avisClientRepository.findAll()).thenReturn(listeAvisClients);
-        List<AvisClientDTO> avisClientsDTO = avisClientBusiness.getAll();
-        Assert.assertEquals(avisClientsDTO.size(), 1);
+        Collection<AvisClientDTO> avisClientsDTO = avisClientBusiness.getAll();
+        List<AvisClientDTO> listeAvis = new ArrayList<>(avisClientsDTO);
+        Assert.assertEquals(listeAvis.size(), 1);
 
-        this.assertData(listeAvisClients.get(0), avisClientsDTO.get(0));
+        this.assertData(listeAvisClients.get(0), listeAvis.get(0));
         Mockito.verify(avisClientRepository, Mockito.times(1)).findAll();
     }
 
     @Test
     public void can_getAll_no_data() {
         Mockito.when(avisClientRepository.findAll()).thenReturn(new ArrayList<>());
-        List<AvisClientDTO> avisClient = avisClientBusiness.getAll();
+        Collection<AvisClientDTO> avisClient = avisClientBusiness.getAll();
         Assert.assertNotNull(avisClient);
         Assert.assertEquals(avisClient.size(), 0);
         Mockito.verify(avisClientRepository, Mockito.times(1)).findAll();
