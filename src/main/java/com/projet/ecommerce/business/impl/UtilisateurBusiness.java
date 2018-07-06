@@ -3,11 +3,15 @@ package com.projet.ecommerce.business.impl;
 import com.projet.ecommerce.business.IUtilisateurBusiness;
 import com.projet.ecommerce.business.dto.UtilisateurDTO;
 import com.projet.ecommerce.business.dto.transformer.UtilisateurTransformer;
+import com.projet.ecommerce.entrypoint.authentification.AuthData;
+import com.projet.ecommerce.entrypoint.authentification.SigninPayload;
+import com.projet.ecommerce.entrypoint.authentification.Token;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Role;
 import com.projet.ecommerce.persistance.entity.Utilisateur;
 import com.projet.ecommerce.persistance.repository.RoleRepository;
 import com.projet.ecommerce.persistance.repository.UtilisateurRepository;
+import com.projet.ecommerce.utilitaire.AuthUtilitaire;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,12 +32,12 @@ import java.util.Optional;
 @Transactional
 public class UtilisateurBusiness implements IUtilisateurBusiness {
 
+    public static final String MESSAGE_ERREUR_SIGNIN = "Votre mot de passe  ou votre identifiant est incorrect.";
     @Autowired
     private UtilisateurRepository utilisateurRepository;
 
     @Autowired
     private RoleRepository roleRepository;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -143,25 +147,28 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
         return new ArrayList<>(UtilisateurTransformer.entityToDto(utilisateurCollection));
     }
 
-    /**
-     * Retourne l'utilisateur connecté où des erreurs graphql selon les erreurs qu'il y a commise, s'il n'y arrive pas
-     *
-     * @param email L'email de l'utilisateur
-     * @param mdp   Mot de passe de l'utilisateur
-     * @return l'utilisateur connecté
-     */
+
     @Override
-    public UtilisateurDTO login(String email, String mdp) {
+    public SigninPayload signinUser(AuthData auth) {
+        String email = auth.getEmail();
+        String mdp = auth.getPassword();
+
         if (email.isEmpty() || mdp.isEmpty()) {
             throw new GraphQLCustomException("Veuillez écrire votre mot de passe ou votre adresse e-mail.");
         }
         Optional<Utilisateur> utilisateurOptional = utilisateurRepository.findByEmail(email);
-        Utilisateur utilisateur = utilisateurOptional.orElseThrow(() -> new GraphQLCustomException("Impossible de trouver un compte correspondant à cette adresse e-mail."));
+        Utilisateur utilisateur = utilisateurOptional.orElseThrow(() -> new GraphQLCustomException(MESSAGE_ERREUR_SIGNIN));
         if (!passwordEncoder.matches(mdp, utilisateur.getMdp())) {
-            throw new GraphQLCustomException("Votre mot de passe est incorrect.");
+            throw new GraphQLCustomException(MESSAGE_ERREUR_SIGNIN);
         }
-        return UtilisateurTransformer.entityToDto(utilisateur);
+        Token token = new Token();
+        token.setUtilisateur(utilisateur);
+        // 3 600 000 ms= 60 minutes
+        // Le subject est mis par defaut ici
+        token.setToken(AuthUtilitaire.createJWT(Integer.toString(utilisateur.getId()), utilisateur.getEmail(), "simple auth", 3600000));
+        return new SigninPayload(token);
     }
+
 
     /**
      * Retourne une page d'utilisateur.
@@ -174,5 +181,22 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
     public Page<Utilisateur> getPage(int pageNumber, int nb) {
         PageRequest page = (pageNumber == 0) ? PageRequest.of(pageNumber, nb) : PageRequest.of(pageNumber - 1, nb);
         return utilisateurRepository.findAllByOrderByEmail(page);
+    }
+
+    /**
+     * Permet de vérifier si l'utilisateur est connecté
+     *
+     * @param supposedToken le token de connection
+     * @return true si connecté false sinon
+     */
+    @Override
+    public boolean isLogged(Token supposedToken) {
+        Token token = AuthUtilitaire.parseJWT(supposedToken.getToken());
+        Optional<Utilisateur> utilisateurOptional = utilisateurRepository.findByEmail(token.getIssuer());
+        Utilisateur utilisateur = utilisateurOptional.orElseThrow(() -> new GraphQLCustomException("Impossible de trouver un compte correspondant à cette adresse e-mail."));
+        token.setUtilisateur(utilisateur);
+        // TODO sécuriser en ajoutant une verification que le token n'est pas volé
+        return true;
+
     }
 }

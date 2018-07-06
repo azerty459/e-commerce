@@ -24,9 +24,7 @@ public class UtilisateurQuery {
                         env.getArgument("role"))
         );
 
-        builder.dataFetcher("login", (DataFetchingEnvironment env) ->
-                utilisateurBusiness.login(env.getArgument("email"), env.getArgument("mdp"))
-        );
+
         return builder.build();
     }
 }

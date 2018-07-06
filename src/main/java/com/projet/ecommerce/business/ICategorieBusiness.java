@@ -84,4 +84,5 @@ public interface ICategorieBusiness {
      * @return une page de categorie
      */
     Page<Categorie> getPage(int pageNumber, int nb);
+
 }

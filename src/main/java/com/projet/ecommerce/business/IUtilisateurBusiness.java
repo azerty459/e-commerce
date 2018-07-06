@@ -1,6 +1,9 @@
 package com.projet.ecommerce.business;
 
 import com.projet.ecommerce.business.dto.UtilisateurDTO;
+import com.projet.ecommerce.entrypoint.authentification.AuthData;
+import com.projet.ecommerce.entrypoint.authentification.SigninPayload;
+import com.projet.ecommerce.entrypoint.authentification.Token;
 import com.projet.ecommerce.persistance.entity.Utilisateur;
 import org.springframework.data.domain.Page;
 
@@ -49,14 +52,6 @@ public interface IUtilisateurBusiness {
      */
     List<UtilisateurDTO> getUtilisateur(int id, String email, String nom, String prenom, String role);
 
-    /**
-     * Méthode permettant la connexion d'un utilisateur
-     *
-     * @param email L'email de l'utilisateur
-     * @param mdp   Mot de passe de l'utilisateur
-     * @return l'utilisateur connecté
-     */
-    UtilisateurDTO login(String email, String mdp);
 
     /**
      * Méthode définissant la pagination
@@ -66,4 +61,14 @@ public interface IUtilisateurBusiness {
      * @return une page d'utilisateur
      */
     Page<Utilisateur> getPage(int pageNumber, int nb);
+
+    boolean isLogged(Token token);
+
+    /**
+     * Permet de connecter un utilisateur
+     *
+     * @param auth l'objet contenant les données de connection
+     * @return SigninPayload contenant les informations necessaire à l'authentification
+     */
+    SigninPayload signinUser(AuthData auth) throws IllegalAccessException;
 }

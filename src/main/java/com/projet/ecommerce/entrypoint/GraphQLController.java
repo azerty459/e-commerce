@@ -2,6 +2,8 @@ package com.projet.ecommerce.entrypoint;
 
 import com.projet.ecommerce.business.IPhotoBusiness;
 import com.projet.ecommerce.business.impl.PhotoException;
+import com.projet.ecommerce.business.impl.UtilisateurBusiness;
+import com.projet.ecommerce.entrypoint.authentification.Token;
 import com.projet.ecommerce.entrypoint.graphql.GraphQlUtility;
 import graphql.ExecutionResult;
 import graphql.GraphQL;
@@ -27,6 +29,8 @@ public class GraphQLController {
     private GraphQL graphQL;
 
     @Autowired
+    private UtilisateurBusiness utilisateurBusiness;
+    @Autowired
     private IPhotoBusiness photoBusiness;
 
     @Autowired
@@ -36,8 +40,37 @@ public class GraphQLController {
         graphQL = graphQlUtility.createGraphQlObject();
     }
 
+    @RequestMapping(value = "/graphql/admin", method = RequestMethod.POST)
+    public Object handleAdmin(@RequestHeader("Authorization") String authData,
+                              @RequestBody Map<String, String> query) {
+        Token supposedToken = new Token();
+        supposedToken.setToken(authData);
+        if (!utilisateurBusiness.isLogged(supposedToken)) {
+            return null;
+        }
+        ExecutionResult result = graphQL.execute(query.get("query"));
+        if (result.getErrors().isEmpty()) {
+            return result.getData();
+        } else {
+            List<GraphQLError> graphQLErrors = result.getErrors();
+            return graphQlUtility.graphQLErrorHandler(graphQLErrors);
+        }
+    }
+
     @RequestMapping(value = "/graphql", method = RequestMethod.POST)
+    public Object handleClient(@RequestBody Map<String, String> query) {
+        ExecutionResult result = graphQL.execute(query.get("query"));
+        if (result.getErrors().isEmpty()) {
+            return result.getData();
+        } else {
+            List<GraphQLError> graphQLErrors = result.getErrors();
+            return graphQlUtility.graphQLErrorHandler(graphQLErrors);
+        }
+    }
+
+    @RequestMapping(value = "/graphql/login", method = RequestMethod.POST)
     public Object handle(@RequestBody Map<String, String> query) {
+        // TODO bloquer les requéte qui ne sont pas une mutation utilisateur "signinUtilisateur"
         ExecutionResult result = graphQL.execute(query.get("query"));
         if (result.getErrors().isEmpty()) {
             return result.getData();

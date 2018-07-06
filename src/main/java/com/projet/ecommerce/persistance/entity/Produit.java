@@ -41,8 +41,19 @@ public class Produit {
     @OneToMany(mappedBy = "produit", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private List<Caracteristique> caracteristiques;
 
-    @OneToMany(mappedBy = "produit", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "produit", cascade = {CascadeType.REMOVE, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<Photo> photos;
+
+    @OneToMany(mappedBy = "produit", cascade = {CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private List<AvisClient> avisClients;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "produit_categorie_supprime",
+            joinColumns = {@JoinColumn(name = "reference_produit")},
+            inverseJoinColumns = {@JoinColumn(name = "id_categorie")}
+    )
+    private List<Categorie> categoriesSupprime;
 
     /**
      * Retourne la référence du produit.
@@ -124,6 +135,11 @@ public class Produit {
     public List<Photo> getPhotos() {
         return photos;
     }
+
+    public List<AvisClient> getAvisClients() { return avisClients;   }
+
+
+    public void setAvisClients(List<AvisClient> avisClients) { this.avisClients = avisClients;  }
 
     /**
      * Remplace la liste de catégorie par celui-ci mit en paramètre

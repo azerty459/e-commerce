@@ -52,7 +52,7 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
      */
     @Override
     public Collection<Categorie> findParents(Map<Integer, Categorie> cats) {
-
+// FIXME collection au lieu de map
         if (!cats.isEmpty()) {
             // Construire la requête
             String sql = "SELECT p FROM Categorie AS p WHERE ";
@@ -60,21 +60,18 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
             // // Itérer sur le HashMap de catégories à rechercher
             int taille = cats.size();
             // TODO StringBuilder
-            StringBuilder sb = new StringBuilder();
-            for (int i = 1; i < taille; i++) {
-                sb.append("toto").append(cats);
-                sql += "(p.borneGauche >= ";
-                sql += cats.get(i).getBorneGauche();
-                sql += " AND p.borneDroit <= ";
-                sql += cats.get(i).getBorneDroit();
-                sql += ") OR ";
-            }
             sql += "(p.borneGauche >= ";
             sql += cats.get(taille).getBorneGauche();
             sql += " AND p.borneDroit <= ";
             sql += cats.get(taille).getBorneDroit();
             sql += ")";
-            sb.toString();
+            for (int i = 1; i < taille; i++) {
+                sql += " OR (p.borneGauche >= ";
+                sql += cats.get(i).getBorneGauche();
+                sql += " AND p.borneDroit <= ";
+                sql += cats.get(i).getBorneDroit();
+                sql += ")";
+            }
             // Lancer la requête
             TypedQuery<Categorie> query = entityManager.createQuery(sql, Categorie.class);
 
@@ -140,8 +137,6 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
 
     @Override
     public int rearrangerBornes(int bg, int intervalle) {
-
-        System.out.println("Réarrangement des bornes");
 
         Query query1;
         Query query2;

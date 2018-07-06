@@ -320,46 +320,6 @@ public class UtilisateurBusinessTests {
         Assert.assertEquals(1, roleCollectionRetour.size());
     }
 
-    @Test
-    public void loginUserFound() {
-        Utilisateur utilisateur = new Utilisateur();
-        utilisateur.setPrenom("Titi");
-        utilisateur.setNom("Ruhade");
-        utilisateur.setEmail("titi.ruhade@gmail.com");
-        utilisateur.setMdp("azerty");
-        utilisateur.setRoles(new ArrayList<>());
-
-        Mockito.when(utilisateurRepository.findByEmail(Mockito.anyString())).thenReturn(Optional.of(utilisateur));
-        Mockito.when(passwordEncoder.matches(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
-        UtilisateurDTO utilisateurDTO = utilisateurBusiness.login("titi.ruhade@gmail.com", "azerty");
-    }
-
-    @Test
-    public void loginMdpDoNotMatch() {
-        Utilisateur utilisateur = new Utilisateur();
-        utilisateur.setPrenom("Titi");
-        utilisateur.setNom("Ruhade");
-        utilisateur.setEmail("titi.ruhade@gmail.com");
-        utilisateur.setMdp("azerty");
-        utilisateur.setRoles(new ArrayList<>());
-
-        Mockito.when(utilisateurRepository.findByEmail(Mockito.anyString())).thenReturn(Optional.of(utilisateur));
-        thrown.expect(GraphQLCustomException.class);
-        UtilisateurDTO utilisateurDTO = utilisateurBusiness.login("titi.ruhade@gmail.com", "test");
-    }
-
-    @Test
-    public void loginEmailNotFound() {
-        Mockito.when(utilisateurRepository.findByEmail(Mockito.anyString())).thenReturn(Optional.empty());
-        thrown.expect(GraphQLCustomException.class);
-        utilisateurBusiness.login("test@gmail.com", "test");
-    }
-
-    @Test
-    public void loginEmailAndMdpEmpty() {
-        thrown.expect(GraphQLCustomException.class);
-        utilisateurBusiness.login("", "");
-    }
 
     @Test
     public void getPage() {

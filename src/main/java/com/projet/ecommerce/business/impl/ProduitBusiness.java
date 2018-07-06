@@ -20,7 +20,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import static com.projet.ecommerce.utilitaire.utilitaire.mergeObjects;
+import static com.projet.ecommerce.utilitaire.Utilitaire.mergeObjects;
 
 /**
  * Service permettant de gérer les actions effectuées pour les produits.
@@ -31,10 +31,6 @@ public class ProduitBusiness implements IProduitBusiness {
 
     @Autowired
     private ProduitRepository produitRepository;
-
-    @Autowired
-    @Qualifier("produitRepositoryCustomImpl")
-    private ProduitRepositoryCustom produitRepositoryCustom;
 
     @Autowired
     private CategorieRepository categorieRepository;
@@ -93,6 +89,7 @@ public class ProduitBusiness implements IProduitBusiness {
      * @param produit L'objet produit modifié à sauvegarder
      * @return l'objet produit modifié
      */
+    //Todo changer parametre par ProduitDTO
     @Override
     public ProduitDTO update(Produit produit) {
         if (produit == null) {
@@ -216,7 +213,7 @@ public class ProduitBusiness implements IProduitBusiness {
         Collection<Produit> produitCollection;
 
         if (nom == null) {
-            produitCollection = produitRepositoryCustom.findAllWithCriteria(ref, cat);
+            produitCollection = produitRepository.findAllWithCriteria(ref, cat);
 
         } else {
             produitCollection = produitRepository.findByNomContainingIgnoreCase(nom);
@@ -245,7 +242,7 @@ public class ProduitBusiness implements IProduitBusiness {
         if (nom != null && !nom.isEmpty() && IDcategorie != 0 || IDcategorie != 0) {
             Optional<Categorie> categorieOptional = categorieRepository.findById(IDcategorie);
             if (!categorieOptional.isPresent()) {
-                throw new GraphQLCustomException("La c");
+                return Page.empty();
             }
             Categorie categorie = categorieOptional.get();
             return produitRepository.findByNomContainingIgnoreCaseAndCategories_borneGaucheGreaterThanEqualAndCategories_borneDroitLessThanEqual(page, nom, categorie.getBorneGauche(), categorie.getBorneDroit());

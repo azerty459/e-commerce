@@ -1,6 +1,6 @@
 package com.projet.ecommerce.persistance.repository;
 
-import com.projet.ecommerce.persistance.entity.Categorie;
+import com.projet.ecommerce.persistance.entity.CategorieSupprime;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
@@ -11,19 +11,17 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import java.util.Collection;
-import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("test")
 @Transactional
-public class CategorieRepositoryTests {
-    private static final Categorie TEMP_INSERT = new Categorie();
-    private static final Categorie TEMP_DELETE = new Categorie();
-    private static final Categorie TEMP_UPDATE = new Categorie();
-    private static final Categorie TEMP_GET = new Categorie();
+public class CategorieSupprimeRepositoryTests {
+    private static final CategorieSupprime TEMP_INSERT = new CategorieSupprime();
+    private static final CategorieSupprime TEMP_DELETE = new CategorieSupprime();
+    private static final CategorieSupprime TEMP_UPDATE = new CategorieSupprime();
+    private static final CategorieSupprime TEMP_GET = new CategorieSupprime();
 
     static {
         //Permet d'écraser la config application.properties par application-test.properties
@@ -47,48 +45,24 @@ public class CategorieRepositoryTests {
     }
 
     @Autowired
-    private CategorieRepository categorieRepository;
-    @Autowired
-    private EntityManager entityManager;
+    private CategorieSupprimeRepository categorieRepository;
 
     @Test
-    public void testEcarterBornes() {
-
-        int idCategorie = 1;
-        Categorie test = new Categorie();
-        test.setIdCategorie(idCategorie);
-        test.setNomCategorie("Test");
-        test.setBorneDroit(2);
-        test.setBorneGauche(1);
-        test.setLevel(1);
-
-        categorieRepository.save(test);
-        categorieRepository.ecarterBornes(1, 4);
-
-        // FIXME: ce clear() n'est pas normal
-        entityManager.clear();
-        Optional<Categorie> res = categorieRepository.findById(idCategorie);
-
-        Assert.assertTrue(res.isPresent());
-        Assert.assertEquals(6, res.get().getBorneDroit());
-    }
-
-
-    @Test
-    public void insertCategorie() {
+    public void insertCategorieSupprime() {
         // On stocke le retour du save pour avoir l'id de la catégorie qui a été sauvegardé
-        Categorie save = categorieRepository.save(TEMP_INSERT);
+        CategorieSupprime save = categorieRepository.save(TEMP_INSERT);
         Assert.assertNotNull(save);
 
-        Categorie temp = categorieRepository.findById(save.getIdCategorie()).get();
+        CategorieSupprime temp = categorieRepository.findById(save.getIdCategorie()).get();
         Assert.assertNotNull(temp);
+        // TODO tester les champs
     }
 
     @Test
-    public void getAllCategorie() {
+    public void getAllCategorieSupprime() {
         categorieRepository.deleteAll();
 
-        Collection<Categorie> categorieCollection = categorieRepository.findAll();
+        Collection<CategorieSupprime> categorieCollection = categorieRepository.findAll();
         Assert.assertEquals(0, categorieCollection.size());
 
         categorieRepository.save(TEMP_INSERT);
@@ -99,49 +73,21 @@ public class CategorieRepositoryTests {
     @Test
     public void findById() {
         // On stocke le retour du save pour avoir l'id de la catégorie qui a été sauvegardé
-        Categorie save = categorieRepository.save(TEMP_GET);
+        CategorieSupprime save = categorieRepository.save(TEMP_GET);
         Assert.assertNotNull(save);
 
-        Categorie temp = categorieRepository.findById(save.getIdCategorie()).orElse(null);
+        CategorieSupprime temp = categorieRepository.findById(save.getIdCategorie()).orElse(null);
         Assert.assertNotNull("Produit ne peut pas être null", temp);
         Assert.assertEquals(TEMP_GET.getBorneDroit(), temp.getBorneDroit());
         Assert.assertEquals(TEMP_GET.getBorneGauche(), temp.getBorneGauche());
         Assert.assertEquals(TEMP_GET.getNomCategorie(), temp.getNomCategorie());
     }
 
-    @Test
-    public void findByIdCategorieWithSousCat() {
-        // On sauvegarde tout pour avoir des données dans la BDD
-        categorieRepository.save(TEMP_GET);
-        categorieRepository.save(TEMP_DELETE);
-        categorieRepository.save(TEMP_UPDATE);
-        // On stocke le retour du save pour avoir l'id de la catégorie qui a été sauvegardé
-        Categorie save = categorieRepository.save(TEMP_INSERT);
-        Collection<Categorie> categorieCollection = categorieRepository.findByIdCategorieWithSousCat(save.getIdCategorie());
-        Assert.assertEquals(4, categorieCollection.size());
-    }
 
     @Test
-    public void findByNomCategorie() {
-        categorieRepository.save(TEMP_GET);
-        Collection<Categorie> categorieCollection = categorieRepository.findByNomCategorie(TEMP_GET.getNomCategorie());
-        Assert.assertEquals(1, categorieCollection.size());
-    }
-
-    @Test
-    public void findByNomCategorieWithSousCat() {
-        categorieRepository.save(TEMP_GET);
-        categorieRepository.save(TEMP_DELETE);
-        categorieRepository.save(TEMP_INSERT);
+    public void updateCategorieSupprime() {
         categorieRepository.save(TEMP_UPDATE);
-        Collection<Categorie> categorieCollection = categorieRepository.findByNomCategorieWithSousCat(TEMP_INSERT.getNomCategorie());
-        Assert.assertEquals(4, categorieCollection.size());
-    }
-
-    @Test
-    public void updateCategorie() {
-        categorieRepository.save(TEMP_UPDATE);
-        Categorie retour = categorieRepository.findById(TEMP_UPDATE.getIdCategorie()).orElse(null);
+        CategorieSupprime retour = categorieRepository.findById(TEMP_UPDATE.getIdCategorie()).orElse(null);
         Assert.assertNotNull(retour.getNomCategorie());
         Assert.assertEquals(TEMP_UPDATE.getNomCategorie(), retour.getNomCategorie());
         Assert.assertEquals(TEMP_UPDATE.getBorneGauche(), retour.getBorneGauche());
@@ -160,7 +106,7 @@ public class CategorieRepositoryTests {
     }
 
     @Test
-    public void deleteCategorie() {
+    public void deleteCategorieSupprime() {
         Assert.assertNotNull(categorieRepository.save(TEMP_DELETE));
         categorieRepository.delete(TEMP_DELETE);
         Assert.assertFalse(categorieRepository.findById(TEMP_DELETE.getIdCategorie()).isPresent());
