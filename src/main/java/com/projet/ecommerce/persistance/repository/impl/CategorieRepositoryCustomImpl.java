@@ -20,7 +20,7 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
 
     // Aller chercher une catégorie parente directe d'une catégorie
     private static final String SQL_PARENT_DIRECT = "SELECT c FROM Categorie AS c WHERE c.level =:l AND c.borneGauche < :bg AND c.borneDroit > :bd";
-
+    private static final int decalageBorne = +1000000;
     // Ecarter d'un intervalle i les bornes gauches ou droites supérieures à un nombre limite
     private static final String SQL_CATEGORIES_ECARTER_BORNES_GAUCHES = "UPDATE Categorie as c " +
             "SET c.borneGauche = c.borneGauche + :i WHERE c.borneGauche > :limite";
@@ -34,13 +34,16 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
             "SET c.borneDroit = c.borneDroit - :i WHERE c.borneDroit > :bg";
 
     // Chercher la borne maximale dans toute la base de données
-    private static final String SQL_BORNE_MAX = "SELECT MAX(borneDroit) FROM Categorie";
+    private static final String SQL_BORNE_MAX = "SELECT MAX(borneDroit) FROM Categorie AS c WHERE  c.borneDroit < 1000000 ";
 
     // Déplacer les catégories (changer leurs bornes et leur level)
     private static final String SQL_CHANGER_BORNES_ET_LEVEL = "UPDATE Categorie AS c " +
             "SET c.borneGauche = c.borneGauche + :depl, c.borneDroit = c.borneDroit + :depl, c.level = c.level + :nl " +
             "WHERE c.idCategorie IN :ids";
 
+    private static final String SQL_RECOLLE_CATEGORIE = "UPDATE Categorie AS c " +
+            "SET c.borneGauche = c.borneGauche - :depl, c.borneDroit = c.borneDroit - :depl " +
+            "WHERE c.borneGauche >= :depl";
     @Autowired
     private EntityManager entityManager;
 
@@ -164,7 +167,9 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
 
         Integer a = (Integer) query.getSingleResult();
         System.out.println(a);
-
+        if (a == null) {
+            return 0;
+        }
         return a;
     }
 
@@ -175,6 +180,13 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
         query.setParameter("nl", intervalLevel);
         query.setParameter("ids", ids);
         query.setParameter("depl", intervalleDeDeplacement);
+        query.executeUpdate();
+    }
+
+    @Override
+    public void recolleCategories() {
+        Query query = entityManager.createQuery(SQL_RECOLLE_CATEGORIE);
+        query.setParameter("depl", decalageBorne);
         query.executeUpdate();
     }
 

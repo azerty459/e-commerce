@@ -7,7 +7,7 @@ type Categorie {
     id: Int!
     nom: String!
     level: Int!
-    chemin: String!
+    chemin: [Categorie]
     parent: Categorie
     profondeur: Int!
     sousCategories: [Categorie]!

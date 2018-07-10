@@ -23,10 +23,7 @@ import java.util.*;
 @Service
 @Transactional
 public class CategorieBusiness implements ICategorieBusiness {
-    /**
-     * Constant permettant un décalage des bornes maximum
-     */
-    private final int decalageBorne = -999999;
+    private static final int decalageBorne = +1000000;
     @Autowired
     private CategorieRepository categorieRepository;
 
@@ -78,14 +75,14 @@ public class CategorieBusiness implements ICategorieBusiness {
             }
         }
         // Mise en forme des objets CategorieDTO
-        HashMap<Categorie, String> chemins = construireAssociationEnfantsChemins(categorieCollection);
+        HashMap<Categorie, Collection<Categorie>> chemins = construireAssociationEnfantsChemins(categorieCollection);
 
         return new ArrayList<>(CategorieTransformer.entityToDto(new ArrayList<>(categorieCollection), chemins, sousCategorie, parent, parentDirect));
 
     }
 
     @Override
-    public HashMap<Categorie, String> construireAssociationEnfantsChemins(Collection<Categorie> categories) {
+    public HashMap<Categorie, Collection<Categorie>> construireAssociationEnfantsChemins(Collection<Categorie> categories) {
 
         // Construire un tableau des catégories retournées par findAllWithCriteria
         HashMap<Integer, Categorie> categoriesPourParents = new HashMap<>();
@@ -102,7 +99,7 @@ public class CategorieBusiness implements ICategorieBusiness {
         Collection<Categorie> parents = categorieRepository.findParents(categoriesPourParents);
 
         // Classer cette collection pour mettre chaque parents en face de chaque catégorie de départ
-        HashMap<Categorie, String> associationsEnfantsChemins;
+        HashMap<Categorie, Collection<Categorie>> associationsEnfantsChemins;
         associationsEnfantsChemins = associer(categories, parents);
 
         return associationsEnfantsChemins;
@@ -115,19 +112,18 @@ public class CategorieBusiness implements ICategorieBusiness {
      * @param parents les parents disponibles
      * @return une HashMap contennant en clés, chaque enfant, et en valeur le chemin vers cet enfant
      */
-    private static HashMap<Categorie, String> associer(Collection<Categorie> enfants, Collection<Categorie> parents) {
+    private static HashMap<Categorie, Collection<Categorie>> associer(Collection<Categorie> enfants, Collection<Categorie> parents) {
 
         // Le Hashmap à retourner
-        HashMap<Categorie, String> resultat = new HashMap<>();
+        HashMap<Categorie, Collection<Categorie>> resultat = new HashMap<>();
 
         // Pour chaque enfant, aller chercher les parents
         Iterator<Categorie> it = enfants.iterator();
         while (it.hasNext()) {
             Categorie enf = it.next();
-            String chemin = chercherChemin(enf, parents, "");
-            if (chemin.length() > 1) {
-                chemin = chemin.substring(0, chemin.length() - 3);
-            }
+            Collection<Categorie> cheminInitial = new ArrayList<>();
+            Collection<Categorie> chemin = chercherChemin(enf, parents, cheminInitial);
+
 
             resultat.put(enf, chemin);
         }
@@ -143,7 +139,7 @@ public class CategorieBusiness implements ICategorieBusiness {
      * @param parents la collection des parents possibles
      * @return le chemin vers l'enfant
      */
-    private static String chercherChemin(Categorie enfant, Collection<Categorie> parents, String chemin) {
+    private static Collection<Categorie> chercherChemin(Categorie enfant, Collection<Categorie> parents, Collection<Categorie> chemin) {
 
         // Condition d'arrêt de l'algorithme
         if (enfant == null || enfant.getLevel() == 1) {
@@ -176,7 +172,7 @@ public class CategorieBusiness implements ICategorieBusiness {
 
         // On a trouvé le parent juste au-dessus dans la hiérarchie et on construit le chemin
         if (tempParent != null) {
-            chemin = tempParent.getIdCategorie() + " > " + chemin;
+            chemin.add(tempParent);
         }
 
         return chercherChemin(tempParent, parents, chemin);
@@ -292,7 +288,6 @@ public class CategorieBusiness implements ICategorieBusiness {
         // On cherche la borne gauche minimale et la borne droite maximale et suppression de la BDD
         int bgMin = cats.get(0).getBorneGauche();
         int bdMax = cats.get(0).getBorneDroit();
-
         for (Categorie c : cats) {
             if (c.getIdCategorie() == idCategorie) {
                 bgMin = c.getBorneGauche();
@@ -443,12 +438,10 @@ public class CategorieBusiness implements ICategorieBusiness {
      */
     private boolean deplacerSansParent(List<Categorie> categoriesADeplacer, int borneMin, int borneMax, int levelCatADeplacer) {
 
-        // Aller chercler la borne maximale de toutes les catégories de la base de donbées
         int borneMaxDeBddEntiere = categorieRepository.findBorneMax();
 
         // Calculer le déplacement
         int intervalleDeDeplacement = borneMaxDeBddEntiere - borneMin + 1;
-
         // Déplacer toutes les bornes des catégories à déplacer de cet intervalle + Ajuster le level
         deplacer(categoriesADeplacer, intervalleDeDeplacement, levelCatADeplacer, 0, false);
 

@@ -221,26 +221,26 @@ public class CategorieRepositoryCustomTests {
 //
 //    }
 
-    @Test
-    public void findBorneMax() {
-
-        // Aller chercher la vraie borne maximale de la BDD
-        ArrayList<Categorie> categories = new ArrayList<Categorie>(categorieRepository.findAll());
-
-        int bornemax = 0;
-
-        for (Categorie c : categories) {
-            if (c.getBorneDroit() > bornemax) {
-                bornemax = c.getBorneDroit();
-            }
-        }
-
-        // Faire de même avec la méthode à tester
-        int res = categorieRepository.findBorneMax();
-
-        Assert.assertEquals(res, bornemax);
-
-    }
+//    @Test
+//    public void findBorneMax() {
+//
+//        // Aller chercher la vraie borne maximale de la BDD
+//        ArrayList<Categorie> categories = new ArrayList<Categorie>(categorieRepository.findAll());
+//
+//        int bornemax = 0;
+//
+//        for (Categorie c : categories) {
+//            if (c.getBorneDroit() > bornemax) {
+//                bornemax = c.getBorneDroit();
+//            }
+//        }
+//
+//        // Faire de même avec la méthode à tester
+//        int res = categorieRepository.findBorneMax();
+//
+//        Assert.assertEquals(res, bornemax);
+//
+//    }
 
     /**
      * Helper method. Va chercher toutes les catégories et retourne celle dont le nom correspond au paramètre.

@@ -25,7 +25,7 @@ public class CategorieSupprimeBusiness implements ICategorieSupprimeBusiness {
     /**
      * Constant permettant un décalage des bornes maximum
      */
-    private static final int decalageBorne = -999999;
+    private static final int decalageBorne = +1000000;
 
     @Autowired
     private CategorieRepository categorieRepository;
@@ -54,7 +54,6 @@ public class CategorieSupprimeBusiness implements ICategorieSupprimeBusiness {
     @NotNull
     private CategorieSupprime categorieToCategorieSupprime(Categorie categorieToSave) {
         CategorieSupprime categorieSupprime = new CategorieSupprime();
-        categorieSupprime.setIdCategorie(categorieToSave.getIdCategorie());
         categorieSupprime.setNomCategorie(categorieToSave.getNomCategorie());
         categorieSupprime.setLevel(categorieToSave.getLevel());
         categorieSupprime.setBorneDroit(categorieToSave.getBorneDroit());

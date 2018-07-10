@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class CategorieTransformerTests {
 
     private static final List<Categorie> CATEGORIE_LIST;
 
-    private static final HashMap<Categorie, String> CHEMINS;
+    private static final HashMap<Categorie, Collection<Categorie>> CHEMINS;
 
     static {
         CATEGORIE_1 = new Categorie();
@@ -67,7 +68,7 @@ public class CategorieTransformerTests {
         CATEGORIE_LIST.add(CATEGORIE_4);
         CATEGORIE_LIST.add(CATEGORIE_5);
 
-        CHEMINS = new HashMap<Categorie, String>();
+        CHEMINS = new HashMap<Categorie, Collection<Categorie>>();
 
         PARENT = new Categorie();
         PARENT.setNomCategorie("Parent");

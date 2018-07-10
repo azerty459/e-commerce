@@ -1,5 +1,7 @@
 package com.projet.ecommerce.persistance.repository;
 
+import com.projet.ecommerce.business.impl.CategorieBusiness;
+import com.projet.ecommerce.business.impl.CategorieSupprimeBusiness;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import org.junit.After;
 import org.junit.Assert;
@@ -48,6 +50,12 @@ public class CategorieRepositoryTests {
 
     @Autowired
     private CategorieRepository categorieRepository;
+    @Autowired
+    private CategorieSupprimeRepository categorieSupprimeRepository;
+    @Autowired
+    private CategorieBusiness categorieBusiness;
+    @Autowired
+    private CategorieSupprimeBusiness categorieSupprimeBusiness;
     @Autowired
     private EntityManager entityManager;
 
@@ -165,6 +173,33 @@ public class CategorieRepositoryTests {
         categorieRepository.delete(TEMP_DELETE);
         Assert.assertFalse(categorieRepository.findById(TEMP_DELETE.getIdCategorie()).isPresent());
     }
+
+    @Test
+    public void categorieSupprimeInsertionWithCatSupIdEqualCatId() {
+        // Création des catégories
+        Categorie cat1 = new Categorie();
+        cat1.setLevel(2);
+        cat1.setBorneDroit(4);
+        cat1.setBorneGauche(1);
+        cat1.setNomCategorie("Video/3D");
+
+        Categorie cat2 = new Categorie();
+        cat2.setLevel(1);
+        cat2.setBorneDroit(3);
+        cat2.setBorneGauche(2);
+        cat2.setNomCategorie("graphisme");
+
+
+        categorieRepository.save(cat1);
+        categorieRepository.save(cat2);
+
+        categorieBusiness.moveCategorie(2, 0);
+        categorieBusiness.moveCategorie(1, 2);
+        categorieBusiness.delete(1); //Graphisme categorie parent
+        Assert.assertEquals(2, categorieSupprimeRepository.findAll().size());
+
+    }
+
 
     @After
     public void end() {
