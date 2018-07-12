@@ -213,9 +213,13 @@ public class PhotoBusiness implements IPhotoBusiness {
             throw new GraphQLCustomException("Photo introuvable");
         }
         Photo photo = photoOptional.get();
+        Produit produit = photo.getProduit();
         boolean supressionReussite = deleteFilePhoto(photo);
-        System.out.println(supressionReussite);
         if (supressionReussite) {
+            if (produit.getPhotoPrincipale() != null && produit.getPhotoPrincipale().getIdPhoto() == photo.getIdPhoto()) {
+                produit.setPhotoPrincipale(null);
+                produitRepository.save(produit);
+            }
             photoRepository.deleteById(idPhoto);
             return true;
         } else {

@@ -42,6 +42,12 @@ public class ProduitDTO {
      */
     private List<PhotoDTO> photos;
 
+
+    /**
+     * La photo pricnipale
+     */
+    private PhotoDTO photoPrincipale;
+
     /**
      * Obtenir la référence du produit
      *
@@ -166,5 +172,23 @@ public class ProduitDTO {
      */
     public void setPhotos(List<PhotoDTO> photos) {
         this.photos = photos;
+    }
+
+    /**
+     * Permet d'obtenir la photo principale DTO
+     *
+     * @return
+     */
+    public PhotoDTO getPhotoPrincipale() {
+        return photoPrincipale;
+    }
+
+    /**
+     * Permet de définir la photo principale DTO
+     *
+     * @param photoPrincipale
+     */
+    public void setPhotoPrincipale(PhotoDTO photoPrincipale) {
+        this.photoPrincipale = photoPrincipale;
     }
 }
