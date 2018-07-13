@@ -4,20 +4,20 @@ import com.projet.ecommerce.business.IPhotoBusiness;
 import com.projet.ecommerce.business.dto.PhotoDTO;
 import com.projet.ecommerce.business.dto.transformer.PhotoTransformer;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
+import com.projet.ecommerce.entrypoint.image.DimensionImage;
 import com.projet.ecommerce.persistance.entity.Photo;
 import com.projet.ecommerce.persistance.entity.Produit;
 import com.projet.ecommerce.persistance.repository.PhotoRepository;
 import com.projet.ecommerce.persistance.repository.ProduitRepository;
+import com.projet.ecommerce.utilitaire.ImageUtilitaire;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -30,6 +30,7 @@ import java.util.Optional;
 @Service
 public class PhotoBusiness implements IPhotoBusiness {
 
+    private ImageUtilitaire imageUtilitaire = new ImageUtilitaire();
     @Autowired
     private PhotoRepository photoRepository;
 
@@ -159,7 +160,7 @@ public class PhotoBusiness implements IPhotoBusiness {
      * @return La resource contenant la photo du produit voulu
      */
     @Override
-    public Resource loadPhotos(String nomFichier, String refProduit) {
+    public Resource loadPhotos(String nomFichier, String refProduit, DimensionImage dimension) {
 
         // Récupérer le produit
         Produit p = recupereProduit(refProduit);
@@ -168,20 +169,7 @@ public class PhotoBusiness implements IPhotoBusiness {
         String dossierImage = repertoireImg + p.getDateAjout().getYear() + "/" + p.getDateAjout().getMonthValue() +
                 "/" + p.getDateAjout().getDayOfMonth() + "/" + p.getReferenceProduit() + "/";
 
-        Path rootLocation = Paths.get(dossierImage);
-
-
-        try {
-            Path file = rootLocation.resolve(nomFichier);
-            Resource resource = new UrlResource(file.toUri());
-            if (resource.exists() || resource.isReadable()) {
-                return resource;
-            } else {
-                throw new RuntimeException("echec du chargement");
-            }
-        } catch (MalformedURLException e) {
-            throw new RuntimeException("echec du chargement");
-        }
+        return imageUtilitaire.getImage(dimension, dossierImage, nomFichier);
     }
 
     /**

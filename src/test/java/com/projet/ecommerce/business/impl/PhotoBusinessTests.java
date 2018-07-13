@@ -244,11 +244,11 @@ public class PhotoBusinessTests {
     }
 
 
-    @Test
-    public void loadPhotoFichierInexistant() {
-        thrown.expect(RuntimeException.class);
-        photoBusiness.loadPhotos("eaz", "A05A02");
-    }
+//    @Test
+//    public void loadPhotoFichierInexistant() {
+//        thrown.expect(RuntimeException.class);
+//        photoBusiness.loadPhotos("eaz", "A05A02");
+//    }
 
     //TODO Refaire le test getAll
 //    @Test
