@@ -32,6 +32,85 @@ public class ImageUtilitaire {
     private int SEUIL_HEIGHT_L = 768;
     private int SEUIL_WIDTH_L = 1024;
 
+    /**
+     * Methode permettant d'obtenir l'image redimensionné correctement
+     *
+     * @param dimension  les dimensions demandé
+     * @param chemin     le repertoire où est stocké l'image
+     * @param nomFichier le nom du fichier de l'image
+     * @return la ressource contenant l'image
+     */
+    public Resource getImage(DimensionImage dimension, String chemin, String nomFichier) {
+
+        Path rootLocation = Paths.get(chemin);
+        DimensionImage dimensionAdapte = findDimension(dimension);
+        if (dimensionAdapte == null) {
+            dimensionAdapte = new DimensionImage();
+            dimensionAdapte.setSize(Integer.MAX_VALUE, Integer.MAX_VALUE);
+        }
+        String nomFichierWithSize = Integer.toString(dimensionAdapte.width) + 'x' + Integer.toString(dimensionAdapte.height) + '_' + nomFichier;
+        Path fileResized = rootLocation.resolve(nomFichierWithSize);
+        Path pathFile = rootLocation.resolve(nomFichier);
+        InputStream in = null;
+        //TODO Voir comment gérer proprement plusieurs try / catch
+        try {
+            in = new ByteArrayInputStream(Files.readAllBytes(pathFile));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        BufferedImage originalImage = null;
+        try {
+            originalImage = ImageIO.read(in);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // On va chercher les dimensions réels
+        int height;
+        int width;
+        if (originalImage == null) {
+            height = 0;
+            width = 0;
+        } else {
+            height = originalImage.getHeight();
+            width = originalImage.getWidth();
+        }
+        if (height * width < dimensionAdapte.height * dimensionAdapte.width) {
+            try {
+                return new UrlResource(pathFile.toUri());
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+        }
+        // TODO else ???
+
+        Resource resource = null;
+        try {
+            resource = new UrlResource(fileResized.toUri());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        // On vérifie que le fichier redimensionné n'existe pas
+        if (resource != null && (resource.exists() || resource.isReadable())) {
+            return resource;
+        } else {
+            // On créer le fichier contenant la photo redi
+            resize(dimensionAdapte, chemin, nomFichier);
+            if (resource != null && (resource.exists() || resource.isReadable())) {
+                return resource;
+            } else {
+                throw new GraphQLCustomException("Image introuvable");
+            }
+        }
+    }
+
+    /**
+     * Permet de gérer le redimensionnement d'une image
+     *
+     * @param dimensionImage les dimensions de l'image
+     * @param chemin         le chemin du repertoire où est stocké l'image
+     * @param nomFichier     le nom du fichier original(non redimensionné) de l'image
+     */
     public void resize(DimensionImage dimensionImage, String chemin, String nomFichier) {
 
         try {
@@ -50,10 +129,12 @@ public class ImageUtilitaire {
         }
 
     }
+
     /**
      * Permet de redimensionner l'image sans hint
+     *
      * @param originalImage l'image a redimenssionné
-     * @param type le type de l'image
+     * @param type          le type de l'image
      * @return l'image
      */
     private BufferedImage resizeImage(BufferedImage originalImage, int type) {
@@ -67,16 +148,15 @@ public class ImageUtilitaire {
 
     /**
      * Permet de redimensionner l'image avec un hint
+     *
      * @param originalImage l'image a redimenssionné
-     * @param type le type de l'image
+     * @param type          le type de l'image
      * @return l'image
      */
     private BufferedImage resizeImageWithHint(BufferedImage originalImage, int type) {
-
+        System.out.println("resize");
         BufferedImage resizedImage = new BufferedImage(IMG_WIDTH, IMG_HEIGHT, type);
         Graphics2D g = resizedImage.createGraphics();
-        g.drawImage(originalImage, 0, 0, IMG_WIDTH, IMG_HEIGHT, null);
-        g.dispose();
         g.setComposite(AlphaComposite.Src);
 
         g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
@@ -85,68 +165,19 @@ public class ImageUtilitaire {
                 RenderingHints.VALUE_RENDER_QUALITY);
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
+        g.drawImage(originalImage, 0, 0, IMG_WIDTH, IMG_HEIGHT, null);
+        g.dispose();
+
 
         return resizedImage;
     }
 
-    /**
-     * Methode permettant d'obtenir l'image redimensionné correctement
-     * @param dimension les dimensions demandé
-     * @param chemin le repertoire où est stocké l'image
-     * @param nomFichier le nom du fichier de l'image
-     * @return la ressource contenant l'image
-     */
-    public Resource getImage(DimensionImage dimension, String chemin, String nomFichier) {
-        Path rootLocation = Paths.get(chemin);
-        DimensionImage dimensionAdapte = findDimension(dimension);
-        String nomFichierWithSize = Integer.toString(dimensionAdapte.width) + 'x' + Integer.toString(dimensionAdapte.height) + '_' + nomFichier;
-        Path fileResized = rootLocation.resolve(nomFichierWithSize);
-        Path pathFile = rootLocation.resolve(nomFichier);
-        InputStream in = null;
-        try {
-            in = new ByteArrayInputStream(Files.readAllBytes(pathFile));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        BufferedImage originalImage = null;
-        try {
-            originalImage = ImageIO.read(in);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // Get image dimensions
-        int height = originalImage.getHeight();
-        int width = originalImage.getWidth();
-        if (height * width < dimensionAdapte.height * dimensionAdapte.width) {
-            try {
-                return new UrlResource(pathFile.toUri());
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-        }
-        Resource resource = null;
-        try {
-            resource = new UrlResource(fileResized.toUri());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        if (resource.exists() || resource.isReadable()) {
-            return resource;
-        } else {
-            resize(dimensionAdapte, chemin, nomFichier);
-            if (resource.exists() || resource.isReadable()) {
-                return resource;
-            } else {
-                throw new GraphQLCustomException("Image introuvable");
-            }
-        }
-    }
 
     /**
-     * Methode permettant de trouver les dimensions adapté
-     * @param dimensionImage les dimensions demandé
-     * @return les dimensions adapté
+     * Methode permettant de trouver les dimensions adaptées
+     *
+     * @param dimensionImage les dimensions demandées
+     * @return les dimensions adaptées
      */
     private DimensionImage findDimension(DimensionImage dimensionImage) {
         double intervalleS = (Math.abs((dimensionImage.getHeight() - SEUIL_HEIGHT_S) * (dimensionImage.getWidth() - SEUIL_WIDTH_S)));
