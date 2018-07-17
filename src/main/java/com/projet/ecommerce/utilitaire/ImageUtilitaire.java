@@ -41,15 +41,7 @@ public class ImageUtilitaire {
      * @return la ressource contenant l'image
      */
     public Resource getImage(DimensionImage dimension, String chemin, String nomFichier) {
-
         Path rootLocation = Paths.get(chemin);
-        DimensionImage dimensionAdapte = findDimension(dimension);
-        if (dimensionAdapte == null) {
-            dimensionAdapte = new DimensionImage();
-            dimensionAdapte.setSize(Integer.MAX_VALUE, Integer.MAX_VALUE);
-        }
-        String nomFichierWithSize = Integer.toString(dimensionAdapte.width) + 'x' + Integer.toString(dimensionAdapte.height) + '_' + nomFichier;
-        Path fileResized = rootLocation.resolve(nomFichierWithSize);
         Path pathFile = rootLocation.resolve(nomFichier);
         InputStream in = null;
         //TODO Voir comment gérer proprement plusieurs try / catch
@@ -66,16 +58,23 @@ public class ImageUtilitaire {
         }
 
         // On va chercher les dimensions réels
-        int height;
-        int width;
+        DimensionImage dimensionImageReel = new DimensionImage();
         if (originalImage == null) {
-            height = 0;
-            width = 0;
+            dimensionImageReel.setSize(0, 0);
         } else {
-            height = originalImage.getHeight();
-            width = originalImage.getWidth();
+            dimensionImageReel.setSize(originalImage.getWidth(), originalImage.getHeight());
         }
-        if (height * width < dimensionAdapte.height * dimensionAdapte.width) {
+
+        DimensionImage dimensionAdapte = findDimension(dimension, dimensionImageReel);
+        if (dimensionAdapte == null) {
+            dimensionAdapte = new DimensionImage();
+            dimensionAdapte.setSize(Integer.MAX_VALUE, Integer.MAX_VALUE);
+        }
+        String nomFichierWithSize = Integer.toString(dimensionAdapte.width) + 'x' + Integer.toString(dimensionAdapte.height) + '_' + nomFichier;
+        Path fileResized = rootLocation.resolve(nomFichierWithSize);
+
+
+        if (dimensionImageReel.getHeight() * dimensionImageReel.getWidth() < dimensionAdapte.height * dimensionAdapte.width) {
             try {
                 return new UrlResource(pathFile.toUri());
             } catch (MalformedURLException e) {
@@ -94,7 +93,7 @@ public class ImageUtilitaire {
         if (resource != null && (resource.exists() || resource.isReadable())) {
             return resource;
         } else {
-            // On créer le fichier contenant la photo redi
+            // On créer le fichier contenant la photo redimensionné
             resize(dimensionAdapte, chemin, nomFichier);
             if (resource != null && (resource.exists() || resource.isReadable())) {
                 return resource;
@@ -118,11 +117,8 @@ public class ImageUtilitaire {
             IMG_WIDTH = dimensionImage.width;
             BufferedImage originalImage = ImageIO.read(new File(chemin + nomFichier));
             int type = originalImage.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
-
-
             BufferedImage resizeImagePng = resizeImageWithHint(originalImage, type);
             ImageIO.write(resizeImagePng, "png", new File(chemin + dimensionImage.width + 'x' + dimensionImage.height + '_' + nomFichier));
-
 
         } catch (IOException e) {
             System.out.println(e.getMessage());
@@ -154,7 +150,6 @@ public class ImageUtilitaire {
      * @return l'image
      */
     private BufferedImage resizeImageWithHint(BufferedImage originalImage, int type) {
-        System.out.println("resize");
         BufferedImage resizedImage = new BufferedImage(IMG_WIDTH, IMG_HEIGHT, type);
         Graphics2D g = resizedImage.createGraphics();
         g.setComposite(AlphaComposite.Src);
@@ -176,16 +171,17 @@ public class ImageUtilitaire {
     /**
      * Methode permettant de trouver les dimensions adaptées
      *
-     * @param dimensionImage les dimensions demandées
+     * @param dimensionImageDemande les dimensions demande
+     * @param dimensionImage        les dimensions de l'image
      * @return les dimensions adaptées
      */
-    private DimensionImage findDimension(DimensionImage dimensionImage) {
-        double intervalleS = (Math.abs((dimensionImage.getHeight() - SEUIL_HEIGHT_S) * (dimensionImage.getWidth() - SEUIL_WIDTH_S)));
-        double intervalleM = (Math.abs((dimensionImage.getHeight() - SEUIL_HEIGHT_M) * (dimensionImage.getWidth() - SEUIL_WIDTH_M)));
+    private DimensionImage findDimension(DimensionImage dimensionImageDemande, DimensionImage dimensionImage) {
+        double intervalleS = (Math.abs((dimensionImageDemande.getHeight() - SEUIL_HEIGHT_S) * (dimensionImageDemande.getWidth() - SEUIL_WIDTH_S)));
+        double intervalleM = (Math.abs((dimensionImageDemande.getHeight() - SEUIL_HEIGHT_M) * (dimensionImageDemande.getWidth() - SEUIL_WIDTH_M)));
         double intervalleL = (Math.abs((dimensionImage.getHeight() - SEUIL_HEIGHT_L) * (dimensionImage.getWidth() - SEUIL_WIDTH_L)));
         if (intervalleS < intervalleM && intervalleS < intervalleL) {
             DimensionImage dimensionS = new DimensionImage();
-            dimensionS.setSize(SEUIL_WIDTH_S, SEUIL_HEIGHT_S);
+            dimensionS.setSize(SEUIL_WIDTH_S, SEUIL_WIDTH_S * (dimensionImage.getHeight() / dimensionImage.getWidth()));
             return dimensionS;
         } else if (intervalleM < intervalleS && intervalleM < intervalleL) {
             DimensionImage dimensionM = new DimensionImage();

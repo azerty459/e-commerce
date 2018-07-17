@@ -96,7 +96,7 @@ public class GraphQLController {
         return true;
     }
 
-    @GetMapping("/fichier/{refProduit}/{nomFichier:.+}_{height}x{width}")
+    @GetMapping("/fichier/{refProduit}/{nomFichier:.+}_{width}x{height}")
     @ResponseBody
     public ResponseEntity<Resource> getFile(@PathVariable String nomFichier, @PathVariable String refProduit, @PathVariable int height, @PathVariable int width) {
         DimensionImage dimension = new DimensionImage();

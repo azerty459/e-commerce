@@ -7,7 +7,6 @@ import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import com.projet.ecommerce.persistance.repository.CategorieSupprimeRepository;
-import com.projet.ecommerce.persistance.repository.impl.CategorieRepositoryCustomImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,7 +22,6 @@ import java.util.*;
 @Service
 @Transactional
 public class CategorieBusiness implements ICategorieBusiness {
-    private static final int decalageBorne = +1000000;
     @Autowired
     private CategorieRepository categorieRepository;
 
@@ -32,10 +30,6 @@ public class CategorieBusiness implements ICategorieBusiness {
 
     @Autowired
     private CategorieSupprimeRepository categorieSupprimeRepository;
-
-
-    @Autowired
-    private CategorieRepositoryCustomImpl categorieRepositoryCustom;
 
     /**
      * Va chercher toutes les catégories, ou la catégorie donnée en nom. Récupère aussi les sous-catégories si demandées.
@@ -407,6 +401,7 @@ public class CategorieBusiness implements ICategorieBusiness {
 
         // Décaler toutes les bornes supérieures à la borne gauche du nouveau parent de l'intervalle que prennent les
         // catégories à déplacer
+
         categorieRepository.ecarterBornes(nouveauParent.getBorneGauche(), interBornes);
 
         // Mettre à jour l'intervalle de déplacement si on déplace de droite à gauche
