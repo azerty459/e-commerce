@@ -185,11 +185,11 @@ public class ImageUtilitaire {
             return dimensionS;
         } else if (intervalleM < intervalleS && intervalleM < intervalleL) {
             DimensionImage dimensionM = new DimensionImage();
-            dimensionM.setSize(SEUIL_WIDTH_M, SEUIL_HEIGHT_M);
+            dimensionM.setSize(SEUIL_WIDTH_M, SEUIL_WIDTH_M * (dimensionImage.getHeight() / dimensionImage.getWidth()));
             return dimensionM;
         } else if (intervalleL < intervalleS && intervalleL < intervalleM) {
             DimensionImage dimensionL = new DimensionImage();
-            dimensionL.setSize(SEUIL_WIDTH_L, SEUIL_HEIGHT_L);
+            dimensionL.setSize(SEUIL_WIDTH_L, SEUIL_WIDTH_L * (dimensionImage.getHeight() / dimensionImage.getWidth()));
             return dimensionL;
         }
         return null;
