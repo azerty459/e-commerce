@@ -99,6 +99,18 @@ public class CategorieSupprimeRepositoryCustomImpl implements CategorieSupprimeR
         query.setParameter("ids", ids);
         query.setParameter("depl", intervalleDeDeplacement);
         query.executeUpdate();
+        refreshEveryCategoriesSupprime();
+
+    }
+
+    private void refreshEveryCategoriesSupprime() {
+        int i = 1;
+        CategorieSupprime categorieSupprimer = entityManager.find(CategorieSupprime.class, i);
+        while (categorieSupprimer != null) {
+            entityManager.refresh(categorieSupprimer);
+            i = i + 1;
+            categorieSupprimer = entityManager.find(CategorieSupprime.class, i);
+        }
     }
 
 }

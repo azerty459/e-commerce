@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 @SpringBootTest
 public class PhotoBusinessTests {
 
@@ -134,7 +134,6 @@ public class PhotoBusinessTests {
         // Test: doit retourner une exception car le nom du fichier n'a pas d'extension
         Mockito.when(produitRepository.findById(Mockito.any())).thenReturn(Optional.of(p));
         photoBusiness.upload(mpf, "hello");
-
     }
 
     /**
@@ -242,19 +241,4 @@ public class PhotoBusinessTests {
             }
         }
     }
-
-
-//    @Test
-//    public void loadPhotoFichierInexistant() {
-//        thrown.expect(RuntimeException.class);
-//        photoBusiness.loadPhotos("eaz", "A05A02");
-//    }
-
-    //TODO Refaire le test getAll
-//    @Test
-//    public void getAll() {
-//        Mockito.when(photoRepository.findAllWithCriteria(Mockito.anyString())).thenReturn(new ArrayList<>());
-//        List<PhotoDTO> photoDTOList = photoBusiness.getAll("Test");
-//        Assert.assertNotNull(photoDTOList);
-//    }
 }

@@ -122,10 +122,8 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
 
     @Override
     public void ecarterBornes(int bg, int decalage) {
-
         Query query1;
         Query query2;
-
         query1 = entityManager.createQuery(SQL_CATEGORIES_ECARTER_BORNES_GAUCHES);
         query1.setParameter("i", decalage);
         query1.setParameter("limite", bg);
@@ -135,6 +133,8 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
         query2.setParameter("i", decalage);
         query2.setParameter("limite", bg);
         query2.executeUpdate();
+        refreshEveryCategories();
+
 
     }
 
@@ -155,7 +155,7 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
         query2.setParameter("bg", bg);
 
         int nb2 = query2.executeUpdate();
-
+        refreshEveryCategories();
         return Math.max(nb1, nb2);
     }
 
@@ -181,6 +181,8 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
         query.setParameter("ids", ids);
         query.setParameter("depl", intervalleDeDeplacement);
         query.executeUpdate();
+        refreshEveryCategories();
+
     }
 
     @Override
@@ -188,7 +190,17 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
         Query query = entityManager.createQuery(SQL_RECOLLE_CATEGORIE);
         query.setParameter("depl", decalageBorne);
         query.executeUpdate();
+        refreshEveryCategories();
+
     }
 
-
+    private void refreshEveryCategories() {
+        int i = 1;
+        Categorie categorie = entityManager.find(Categorie.class, i);
+        while (categorie != null) {
+            entityManager.refresh(categorie);
+            i = i + 1;
+            categorie = entityManager.find(Categorie.class, i);
+        }
+    }
 }

@@ -72,9 +72,6 @@ public class CategorieRepositoryTests {
 
         categorieRepository.save(test);
         categorieRepository.ecarterBornes(1, 4);
-
-        // FIXME: ce clear() n'est pas normal
-        entityManager.clear();
         Optional<Categorie> res = categorieRepository.findById(idCategorie);
 
         Assert.assertTrue(res.isPresent());
