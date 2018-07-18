@@ -180,18 +180,27 @@ public class ImageUtilitaire {
         double intervalleM = (Math.abs((dimensionImageDemande.getHeight() - SEUIL_HEIGHT_M) * (dimensionImageDemande.getWidth() - SEUIL_WIDTH_M)));
         double intervalleL = (Math.abs((dimensionImage.getHeight() - SEUIL_HEIGHT_L) * (dimensionImage.getWidth() - SEUIL_WIDTH_L)));
         if (intervalleS < intervalleM && intervalleS < intervalleL) {
-            DimensionImage dimensionS = new DimensionImage();
-            dimensionS.setSize(SEUIL_WIDTH_S, SEUIL_WIDTH_S * (dimensionImage.getHeight() / dimensionImage.getWidth()));
-            return dimensionS;
+            return getDimensionImage(dimensionImageDemande, dimensionImage, SEUIL_HEIGHT_S, SEUIL_WIDTH_S, SEUIL_WIDTH_M);
         } else if (intervalleM < intervalleS && intervalleM < intervalleL) {
-            DimensionImage dimensionM = new DimensionImage();
-            dimensionM.setSize(SEUIL_WIDTH_M, SEUIL_WIDTH_M * (dimensionImage.getHeight() / dimensionImage.getWidth()));
-            return dimensionM;
+            return getDimensionImage(dimensionImageDemande, dimensionImage, SEUIL_HEIGHT_M, SEUIL_WIDTH_M, SEUIL_WIDTH_L);
+
         } else if (intervalleL < intervalleS && intervalleL < intervalleM) {
             DimensionImage dimensionL = new DimensionImage();
             dimensionL.setSize(SEUIL_WIDTH_L, SEUIL_WIDTH_L * (dimensionImage.getHeight() / dimensionImage.getWidth()));
             return dimensionL;
         }
         return null;
+    }
+
+    private DimensionImage getDimensionImage(DimensionImage dimensionImageDemande, DimensionImage dimensionImage, int seuil_height, int seuil_width, int seuil_width_sup) {
+        if (dimensionImageDemande.getHeight() < seuil_height && dimensionImageDemande.getWidth() < seuil_width) {
+            DimensionImage dimensionS = new DimensionImage();
+            dimensionS.setSize(seuil_width, seuil_width * (dimensionImage.getHeight() / dimensionImage.getWidth()));
+            return dimensionS;
+        } else {
+            DimensionImage dimensionM = new DimensionImage();
+            dimensionM.setSize(seuil_width_sup, seuil_width_sup * (dimensionImage.getHeight() / dimensionImage.getWidth()));
+            return dimensionM;
+        }
     }
 }

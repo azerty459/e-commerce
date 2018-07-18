@@ -80,25 +80,6 @@ public class CategorieSupprimeRepositoryCustomImpl implements CategorieSupprimeR
 
 
     @Override
-    public void ecarterBornes(int bg, int decalage) {
-
-        Query query1;
-        Query query2;
-
-        query1 = entityManager.createQuery(SQL_CATEGORIES_ECARTER_BORNES_GAUCHES);
-        query1.setParameter("i", decalage);
-        query1.setParameter("limite", bg);
-        query1.executeUpdate();
-
-        query2 = entityManager.createQuery(SQL_CATEGORIES_ECARTER_BORNES_DROITES);
-        query2.setParameter("i", decalage);
-        query2.setParameter("limite", bg);
-        query2.executeUpdate();
-
-    }
-
-
-    @Override
     public int findBorneMax() {
 
         Query query;

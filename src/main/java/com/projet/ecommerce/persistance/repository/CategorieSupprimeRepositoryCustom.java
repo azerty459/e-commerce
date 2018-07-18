@@ -16,15 +16,6 @@ public interface CategorieSupprimeRepositoryCustom {
      */
     Collection<CategorieSupprime> findParents(Map<Integer, CategorieSupprime> cats);
 
-    /**
-     * Décale toutes les bornes supérieures à la borne gauche de cat vers la droite
-     * Le but est d'inser une ou plusieurs catégories.
-     *
-     * @param bg       la catégorie de référence pour la borne gauche
-     * @param decalage le nombre d'indices à décaler
-     */
-    void ecarterBornes(int bg, int decalage);
-
 
     /**
      * Trouve la borne max de toute la base de données
