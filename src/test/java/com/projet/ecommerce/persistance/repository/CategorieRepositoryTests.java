@@ -85,7 +85,7 @@ public class CategorieRepositoryTests {
         Categorie save = categorieRepository.save(TEMP_INSERT);
         Assert.assertNotNull(save);
 
-        Categorie temp = categorieRepository.findById(save.getIdCategorie()).get();
+        Categorie temp = categorieRepository.findById(save.getIdCategorie()).eget();
         Assert.assertNotNull(temp);
     }
 
