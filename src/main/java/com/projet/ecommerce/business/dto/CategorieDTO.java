@@ -1,5 +1,6 @@
 package com.projet.ecommerce.business.dto;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -25,7 +26,7 @@ public class CategorieDTO {
     /**
      * Liste des parents de la catégories.
      */
-    private String chemin;
+    private Collection<CategorieDTO> chemin;
 
     /**
      * Niveau de la catégorie dans l'arborescence des catégories (Niveau 1 = niveau le plus élevé).
@@ -101,7 +102,7 @@ public class CategorieDTO {
      *
      * @return une chaîne de caractères représentant ce chemin.
      */
-    public String getChemin() {
+    public Collection<CategorieDTO> getChemin() {
         return chemin;
     }
 
@@ -110,7 +111,7 @@ public class CategorieDTO {
      *
      * @param c la chaîne de caractères représentant le chemin.
      */
-    public void setChemin(String c) {
+    public void setChemin(Collection<CategorieDTO> c) {
         chemin = c;
     }
 

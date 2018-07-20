@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 
 import static com.projet.ecommerce.utilitaire.Utilitaire.mergeObjects;
@@ -73,7 +72,7 @@ public class AvisClientBusiness implements IAvisClientBusiness {
 
     @Override
     public boolean delete(Integer idAvisClient) {
-        if(idAvisClient == null){
+        if (idAvisClient == null) {
             return false;
         }
         Optional<AvisClient> optionalAvisClient = avisClientRepository.findById(idAvisClient);
@@ -85,11 +84,11 @@ public class AvisClientBusiness implements IAvisClientBusiness {
     @Override
     public AvisClientDTO add(AvisClientDTO avisClient) {
         if (avisClient == null || avisClient.getRefProduit().isEmpty()
-                || avisClient.getDescription().isEmpty() || avisClient.getNote() <= 0) {
+                || avisClient.getDescription().isEmpty() || avisClient.getNote() < 0) {
             GraphQLCustomException graphQLCustomException = new GraphQLCustomException("Erreur dans l'ajout du produit (la référence produit, la description et la note ne peut être null)");
             graphQLCustomException.ajouterExtension("description", avisClient.getDescription());
-            graphQLCustomException.ajouterExtension("note", avisClient.getNote() +"");
-            graphQLCustomException.ajouterExtension("referenceProduit", avisClient.getRefProduit() +"");
+            graphQLCustomException.ajouterExtension("note", avisClient.getNote() + "");
+            graphQLCustomException.ajouterExtension("referenceProduit", avisClient.getRefProduit() + "");
             throw graphQLCustomException;
         }
 

@@ -8,9 +8,11 @@ import com.projet.ecommerce.persistance.entity.Caracteristique;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Photo;
 import com.projet.ecommerce.persistance.entity.Produit;
-import com.projet.ecommerce.persistance.repository.*;
+import com.projet.ecommerce.persistance.repository.CaracteristiqueRepository;
+import com.projet.ecommerce.persistance.repository.CategorieRepository;
+import com.projet.ecommerce.persistance.repository.PhotoRepository;
+import com.projet.ecommerce.persistance.repository.ProduitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -104,7 +106,9 @@ public class ProduitBusiness implements IProduitBusiness {
         Produit retourProduit = produitOptional.get();
 
         produit.setCategories(new ArrayList<>(completeCategoriesData(produit.getCategories())));
-
+        if (produit.getPhotoPrincipale() != null && produit.getPhotoPrincipale().getIdPhoto() != 0) {
+            produit.setPhotoPrincipale(completePhotoPrincipaleData(produit.getPhotoPrincipale()));
+        }
         Produit produitFinal = null;
         try {
             produitFinal = mergeObjects(produit, retourProduit);
@@ -140,6 +144,22 @@ public class ProduitBusiness implements IProduitBusiness {
     }
 
     /**
+     * Remplace la liste de photo par une nouvelle liste contenant l'ensemble des données des photos.
+     *
+     * @param photoPrincipale La photo principale
+     * @return une collection de Photo
+     */
+    private Photo completePhotoPrincipaleData(Photo photoPrincipale) {
+        Optional<Photo> photoOptional = photoRepository.findById(photoPrincipale.getIdPhoto());
+        if (photoOptional.isPresent()) {
+            return photoOptional.get();
+        } else {
+            throw new GraphQLCustomException("La photo n'existe pas.");
+        }
+
+    }
+
+    /**
      * Remplace la liste de caractéristique par une nouvelle liste contenant l'ensemble des données des caractéristiques.
      *
      * @param categorieList Une array list contenant des id de catégorie
@@ -157,6 +177,7 @@ public class ProduitBusiness implements IProduitBusiness {
         }
         return retourList;
     }
+
 
     /**
      * Remplace la liste de catégorie par une nouvelle liste contenant l'ensemble des données des catégories.

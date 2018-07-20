@@ -48,4 +48,5 @@ public interface CategorieRepositoryCustom {
      */
     void changerBornesEtLevel(List<Integer> ids, int intervalleDeDeplacement, int intervalLevel);
 
+    void recolleCategories();
 }

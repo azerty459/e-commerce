@@ -1,5 +1,7 @@
 package com.projet.ecommerce.persistance.repository;
 
+import com.projet.ecommerce.business.impl.CategorieBusiness;
+import com.projet.ecommerce.business.impl.CategorieSupprimeBusiness;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import org.junit.After;
 import org.junit.Assert;
@@ -49,6 +51,12 @@ public class CategorieRepositoryTests {
     @Autowired
     private CategorieRepository categorieRepository;
     @Autowired
+    private CategorieSupprimeRepository categorieSupprimeRepository;
+    @Autowired
+    private CategorieBusiness categorieBusiness;
+    @Autowired
+    private CategorieSupprimeBusiness categorieSupprimeBusiness;
+    @Autowired
     private EntityManager entityManager;
 
     @Test
@@ -64,9 +72,6 @@ public class CategorieRepositoryTests {
 
         categorieRepository.save(test);
         categorieRepository.ecarterBornes(1, 4);
-
-        // FIXME: ce clear() n'est pas normal
-        entityManager.clear();
         Optional<Categorie> res = categorieRepository.findById(idCategorie);
 
         Assert.assertTrue(res.isPresent());
@@ -165,6 +170,7 @@ public class CategorieRepositoryTests {
         categorieRepository.delete(TEMP_DELETE);
         Assert.assertFalse(categorieRepository.findById(TEMP_DELETE.getIdCategorie()).isPresent());
     }
+
 
     @After
     public void end() {

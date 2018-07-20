@@ -124,27 +124,6 @@ public class CategorieSupprimeRepositoryCustomTests {
 
 
     @Test
-    //TODO Refaire le test
-    public void ecarterBornes() {
-
-        // Ecartement de bones de 2
-        categorieSupprimeRepository.ecarterBornes(DRAME.getBorneGauche(), 2);
-
-        CategorieSupprime newDrame = findACat("Drame");
-
-        assert newDrame != null;
-        Assert.assertEquals(newDrame.getNomCategorie(), "Drame");
-        Assert.assertEquals(newDrame.getLevel(), 2);
-        Assert.assertEquals(newDrame.getBorneGauche(), 12);
-        Assert.assertEquals(newDrame.getBorneDroit(), 13);
-
-        CategorieSupprime newCinema = findACat("Ciné");
-        assert newCinema != null;
-        Assert.assertEquals(newCinema.getBorneGauche(), 11);
-        Assert.assertEquals(newCinema.getBorneDroit(), 14);
-    }
-
-    @Test
     public void findBorneMax() {
 
         // Aller chercher la vraie borne maximale de la BDD

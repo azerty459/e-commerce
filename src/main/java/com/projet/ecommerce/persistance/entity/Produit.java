@@ -41,11 +41,17 @@ public class Produit {
     @OneToMany(mappedBy = "produit", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private List<Caracteristique> caracteristiques;
 
+
+    @OneToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @JoinColumn(name = "photo_principale")
+    private Photo photoPrincipale;
+
     @OneToMany(mappedBy = "produit", cascade = {CascadeType.REMOVE, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<Photo> photos;
 
     @OneToMany(mappedBy = "produit", cascade = {CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<AvisClient> avisClients;
+
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinTable(
@@ -136,10 +142,14 @@ public class Produit {
         return photos;
     }
 
-    public List<AvisClient> getAvisClients() { return avisClients;   }
+    public List<AvisClient> getAvisClients() {
+        return avisClients;
+    }
 
 
-    public void setAvisClients(List<AvisClient> avisClients) { this.avisClients = avisClients;  }
+    public void setAvisClients(List<AvisClient> avisClients) {
+        this.avisClients = avisClients;
+    }
 
     /**
      * Remplace la liste de catégorie par celui-ci mit en paramètre
@@ -203,4 +213,23 @@ public class Produit {
     public void setDateAjout(LocalDateTime dateAjout) {
         this.dateAjout = dateAjout;
     }
+
+    /**
+     * Permet d'obtenir la photo principale
+     *
+     * @return
+     */
+    public Photo getPhotoPrincipale() {
+        return photoPrincipale;
+    }
+
+    /**
+     * Permet de définir la photo principale
+     *
+     * @return
+     */
+    public void setPhotoPrincipale(Photo photoPrincipale) {
+        this.photoPrincipale = photoPrincipale;
+    }
+
 }

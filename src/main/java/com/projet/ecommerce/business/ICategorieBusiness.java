@@ -29,7 +29,7 @@ public interface ICategorieBusiness {
      * @param categories la collection des catégories dont on cheche les chemins.
      * @return Un HashMap associant chaque catégorie à une chaîne de caractère représentant le chemin.
      */
-    HashMap<Categorie, String> construireAssociationEnfantsChemins(Collection<Categorie> categories);
+    HashMap<Categorie, Collection<Categorie>> construireAssociationEnfantsChemins(Collection<Categorie> categories);
 
     /**
      * rearrangerBornes

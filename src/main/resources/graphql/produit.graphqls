@@ -4,7 +4,7 @@ input ProduitInput {
     description: String
     prixHT: Float!
     categories: [CategorieInput]
-    photos: [PhotoInput]
+    photoPrincipale: PhotoInput
 }
 
 type Produit {
@@ -14,6 +14,7 @@ type Produit {
     prixHT: Float!
     categories: [Categorie]!
     photos: [Photo]!
+    photoPrincipale: Photo
 }
 
 extend type Query {

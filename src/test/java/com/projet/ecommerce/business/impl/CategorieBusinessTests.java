@@ -375,6 +375,7 @@ public class CategorieBusinessTests {
         Assert.assertEquals(1, categorieDTOList.get(0).getSousCategories().size());
     }
 
+
     @Test
     public void construireAssociationEnfantsChemins() {
 
@@ -405,7 +406,7 @@ public class CategorieBusinessTests {
 
         Mockito.when(categorieRepository.findParents(Mockito.any())).thenReturn(categories);
 
-        Map<Categorie, String> resultat;
+        Map<Categorie, Collection<Categorie>> resultat;
         resultat = categorieBusiness.construireAssociationEnfantsChemins(categories);
 
         // Tests
@@ -414,5 +415,6 @@ public class CategorieBusinessTests {
         Assert.assertEquals(resultat.get(cat3), "Transport > Aérien");
 
     }
+
 
 }

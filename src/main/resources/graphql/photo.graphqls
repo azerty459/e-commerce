@@ -1,6 +1,5 @@
 input PhotoInput {
-    url: String!
-    id: Int
+    idPhoto: Int
 }
 
 type Photo {

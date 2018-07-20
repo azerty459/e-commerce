@@ -2,6 +2,7 @@ package com.projet.ecommerce.business;
 
 import com.projet.ecommerce.business.dto.PhotoDTO;
 import com.projet.ecommerce.business.impl.PhotoException;
+import com.projet.ecommerce.entrypoint.image.DimensionImage;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,7 +23,7 @@ public interface IPhotoBusiness {
      */
     Boolean upload(MultipartFile fichier, String refProduit) throws PhotoException;
 
-    Resource loadPhotos(String nomFichier, String refProduit);
+    Resource loadPhotos(String nomFichier, String refProduit, DimensionImage dimension);
 
     /**
      * Méthode définissant la recherche des photos selon les paramètres ci-dessous

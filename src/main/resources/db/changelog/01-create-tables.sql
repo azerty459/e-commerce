@@ -6,6 +6,7 @@ CREATE TABLE produit
   nom VARCHAR(255) NOT NULL,
   description TEXT DEFAULT '',
   prix_ht FLOAT NOT NULL,
+  photo_principale int,
   date_ajout TIMESTAMP DEFAULT current_timestamp,
   PRIMARY KEY (reference_produit)
 );

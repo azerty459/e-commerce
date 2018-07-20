@@ -5,6 +5,7 @@ import com.projet.ecommerce.business.impl.PhotoException;
 import com.projet.ecommerce.business.impl.UtilisateurBusiness;
 import com.projet.ecommerce.entrypoint.authentification.Token;
 import com.projet.ecommerce.entrypoint.graphql.GraphQlUtility;
+import com.projet.ecommerce.entrypoint.image.DimensionImage;
 import graphql.ExecutionResult;
 import graphql.GraphQL;
 import graphql.GraphQLError;
@@ -95,10 +96,12 @@ public class GraphQLController {
         return true;
     }
 
-    @GetMapping("/fichier/{refProduit}/{nomFichier:.+}")
+    @GetMapping("/fichier/{refProduit}/{nomFichier:.+}_{width}x{height}")
     @ResponseBody
-    public ResponseEntity<Resource> getFile(@PathVariable String nomFichier, @PathVariable String refProduit) {
-        Resource fichier = photoBusiness.loadPhotos(nomFichier, refProduit);
+    public ResponseEntity<Resource> getFile(@PathVariable String nomFichier, @PathVariable String refProduit, @PathVariable int height, @PathVariable int width) {
+        DimensionImage dimension = new DimensionImage();
+        dimension.setSize(width, height);
+        Resource fichier = photoBusiness.loadPhotos(nomFichier, refProduit, dimension);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fichier.getFilename() + "\"")// "attachment; filename=" est une norme http
                 .body(fichier);

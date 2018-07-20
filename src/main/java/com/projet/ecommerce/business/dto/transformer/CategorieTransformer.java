@@ -65,7 +65,7 @@ public class CategorieTransformer {
      * @param parentDirect        la catégorie directement parente de categorie
      * @return un objet CategorieDTO
      */
-    public static CategorieDTO entityToDto(Categorie categorie, Collection<Categorie> categorieCollection, HashMap<Categorie, String> chemins, Boolean parent, Categorie parentDirect) {
+    public static CategorieDTO entityToDto(Categorie categorie, Collection<Categorie> categorieCollection, HashMap<Categorie, Collection<Categorie>> chemins, Boolean parent, Categorie parentDirect) {
         CategorieDTO categorieDTO = entityToDto(categorie);
 
         categorieDTO.getSousCategories().clear();
@@ -83,8 +83,17 @@ public class CategorieTransformer {
         categorieDTO.setLevel(categorie.getLevel());
 
         // Ajout de son chemin
-        String ch = chemins.get(categorie);
-        categorieDTO.setChemin(ch);
+        Collection<Categorie> ch = chemins.get(categorie);
+        Collection<CategorieDTO> cheminDto = new ArrayList<>();
+        if (ch == null) {
+
+        } else {
+            for (Categorie cat : ch) {
+                cheminDto.add(entityToDto(cat));
+            }
+            categorieDTO.setChemin(cheminDto);
+        }
+
 
         // Ajout de son parent direct s'il est donné
         if (parent && parentDirect != null) {
@@ -107,7 +116,7 @@ public class CategorieTransformer {
      * @param parentDirect        la catégorie directement parente de la catégorie unique de categorieList
      * @return une collection d'objets CategorieDTO
      */
-    public static Collection<CategorieDTO> entityToDto(Collection<Categorie> categorieCollection, HashMap<Categorie, String> chemins, Boolean sousCat, Boolean parent, Categorie parentDirect) {
+    public static Collection<CategorieDTO> entityToDto(Collection<Categorie> categorieCollection, HashMap<Categorie, Collection<Categorie>> chemins, Boolean sousCat, Boolean parent, Categorie parentDirect) {
         List<CategorieDTO> categorieDTOList = new ArrayList<>();
         if (!categorieCollection.isEmpty()) {
             int levelMin = Integer.MAX_VALUE;
