@@ -51,12 +51,6 @@ public class ProduitTransformer {
         produitDTO.setPhotos(new ArrayList<>(PhotoTransformer.entityToDto(produit.getPhotos())));
         if (produit.getPhotoPrincipale() != null) {
             produitDTO.setPhotoPrincipale(PhotoTransformer.entityToDto(produit.getPhotoPrincipale()));
-        } else {
-            PhotoDTO photoVide = new PhotoDTO();
-            photoVide.setIdPhoto(0);
-            photoVide.setUrl("");
-            photoVide.setNom("");
-            produitDTO.setPhotoPrincipale(photoVide);
         }
 
         // Ajout du paramètre de chemins (US#192)
