@@ -9,6 +9,7 @@ import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Photo;
 import com.projet.ecommerce.persistance.entity.Produit;
 import com.projet.ecommerce.persistance.repository.*;
+import com.projet.ecommerce.persistance.repository.impl.ProduitRepositoryCustomImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -250,5 +251,12 @@ public class ProduitBusiness implements IProduitBusiness {
             return produitRepository.findByNomContainingIgnoreCase(page, nom);
         }
         return produitRepository.findAll(page);
+    }
+
+    @Override
+    public Collection<Produit> getAllComplexCriteria(){
+
+        Collection<Produit> liste = produitRepository.findAllWithComplexCriterias(4,5, null, null, null);
+        return liste;
     }
 }

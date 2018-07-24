@@ -4,6 +4,7 @@ import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.persistance.entity.Produit;
 import org.springframework.data.domain.Page;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -67,5 +68,6 @@ public interface IProduitBusiness {
      */
     Page<Produit> getPage(int pageNumber, int nb, String nom, int IDcategorie);
 
+    Collection<Produit> getAllComplexCriteria();
 
 }

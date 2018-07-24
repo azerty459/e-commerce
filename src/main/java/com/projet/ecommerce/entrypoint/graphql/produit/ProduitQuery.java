@@ -20,6 +20,10 @@ public class ProduitQuery {
                 produitBusiness.getAll(env.getArgument("ref"), env.getArgument("cat"), env.getArgument("nom")
                 ));
 
+        builder.dataFetcher("produitComplexCriteria", (DataFetchingEnvironment env) ->
+               produitBusiness.getAllComplexCriteria()
+        );
+
         return builder.build();
     }
 }
