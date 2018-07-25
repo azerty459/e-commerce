@@ -38,7 +38,7 @@ public class UtilisateurDTO {
     /**
      * Une collection de rôle associer à l'utilisateur
      */
-    private Collection<RoleDTO> roles = new ArrayList<>();
+    private RoleDTO role = new RoleDTO();
 
     /**
      * Obtenir l'id de l'utilisateur
@@ -135,16 +135,16 @@ public class UtilisateurDTO {
      *
      * @return la collection de rôle associé à l'utilisateur
      */
-    public Collection<RoleDTO> getRoles() {
-        return roles;
+    public RoleDTO getRole() {
+        return role;
     }
 
     /**
      * Définir la nouvelle collection de rôle à associer à l'utilisateur
      *
-     * @param roles La nouvelle collection de rôle
+     * @param role La nouvelle collection de rôle
      */
-    public void setRoles(List<RoleDTO> roles) {
-        this.roles = roles;
+    public void setRole(RoleDTO role) {
+        this.role = role;
     }
 }

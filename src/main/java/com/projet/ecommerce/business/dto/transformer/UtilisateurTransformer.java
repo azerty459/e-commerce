@@ -45,7 +45,7 @@ public class UtilisateurTransformer {
         utilisateurDTO.setMdp(utilisateur.getMdp());
         utilisateurDTO.setNom(utilisateur.getNom());
         utilisateurDTO.setPrenom(utilisateur.getPrenom());
-        utilisateurDTO.setRoles(new ArrayList<>(RoleTransformer.entityToDto(utilisateur.getRoles())));
+        utilisateurDTO.setRole(RoleTransformer.entityToDto(utilisateur.getRole()));
         return utilisateurDTO;
     }
 
@@ -82,7 +82,7 @@ public class UtilisateurTransformer {
         utilisateur.setMdp(utilisateurDTO.getMdp());
         utilisateur.setPrenom(utilisateurDTO.getPrenom());
         utilisateur.setEmail(utilisateurDTO.getEmail());
-        utilisateur.setRoles(new ArrayList<>(RoleTransformer.dtoToEntity(utilisateurDTO.getRoles())));
+        utilisateur.setRole(RoleTransformer.dtoToEntity(utilisateurDTO.getRole()));
         return utilisateur;
     }
 }

@@ -19,13 +19,9 @@ public class Role {
     @Column(name = "nom")
     private String nom;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "utilisateur_role",
-            inverseJoinColumns = {@JoinColumn(name = "id_utilisateur")},
-            joinColumns = {@JoinColumn(name = "id_role")}
-    )
+    @OneToMany(mappedBy = "role", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private List<Utilisateur> utilisateurs;
+
 
     /**
      * Retourne l'id du rôle.

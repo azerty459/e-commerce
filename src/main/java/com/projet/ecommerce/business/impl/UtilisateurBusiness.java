@@ -2,6 +2,7 @@ package com.projet.ecommerce.business.impl;
 
 import com.projet.ecommerce.business.IUtilisateurBusiness;
 import com.projet.ecommerce.business.dto.UtilisateurDTO;
+import com.projet.ecommerce.business.dto.transformer.RoleTransformer;
 import com.projet.ecommerce.business.dto.transformer.UtilisateurTransformer;
 import com.projet.ecommerce.entrypoint.authentification.AuthData;
 import com.projet.ecommerce.entrypoint.authentification.SigninPayload;
@@ -62,32 +63,12 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
         if (utilisateurRepository.findByEmail(utilisateur.getEmail()).isPresent()) {
             throw new GraphQLCustomException("L'adresse email déjà utilisée");
         }
-
-        utilisateur.setRoles(completeRoleData(utilisateur.getRoles()));
         utilisateur.setMdp(passwordEncoder.encode(utilisateurDTO.getMdp()));
 
         return UtilisateurTransformer.entityToDto(utilisateurRepository.save(utilisateur));
     }
 
-    /**
-     * Remplace la liste de rôle par une nouvelle liste contenant l'ensemble des données des rôles.
-     *
-     * @param roleList Une array list contenant des nom de rôle
-     * @return une collection de rôle
-     */
-    private Collection<Role> completeRoleData(Collection<Role> roleList) {
-        List<Role> retourList = new ArrayList<>();
-        System.out.println("ok");
-        for (Role role : roleList) {
-            Optional<Role> roleOptional = roleRepository.findByNom(role.getNom());
-            if (roleOptional.isPresent()) {
-                retourList.add(roleOptional.get());
-            } else {
-                throw new GraphQLCustomException("Le rôle n'existe pas.");
-            }
-        }
-        return retourList;
-    }
+
 
     /**
      * Modifie l'utilisateur dans la base de données selon l'id de l'utilisateur
@@ -133,7 +114,7 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
         } else if (prenom != null) {
             utilisateurCollection = utilisateurRepository.findByPrenomContainingIgnoreCaseOrderByPrenom(prenom);
         } else if (role != null) {
-            utilisateurCollection = utilisateurRepository.findByRoles_NomContainingIgnoreCase(role);
+            utilisateurCollection = utilisateurRepository.findByRole_NomContainingIgnoreCase(role);
         } else if (id != 0) {
             Optional<Utilisateur> utilisateurOptional = utilisateurRepository.findById(id);
             if (utilisateurOptional.isPresent()) {
