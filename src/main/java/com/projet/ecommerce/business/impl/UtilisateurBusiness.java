@@ -63,6 +63,8 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
         if (utilisateurRepository.findByEmail(utilisateur.getEmail()).isPresent()) {
             throw new GraphQLCustomException("L'adresse email déjà utilisée");
         }
+        Optional<Role> roleOptional = roleRepository.findByNom(utilisateur.getRole().getNom());
+        utilisateur.setRole(roleOptional.get());
         utilisateur.setMdp(passwordEncoder.encode(utilisateurDTO.getMdp()));
 
         return UtilisateurTransformer.entityToDto(utilisateurRepository.save(utilisateur));
