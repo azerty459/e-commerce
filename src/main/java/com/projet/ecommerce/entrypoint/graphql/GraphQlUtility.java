@@ -123,6 +123,9 @@ public class GraphQlUtility {
     private GraphQLSchema graphQLSchema() {
 
         File categorieSchemaFile = new File("src/main/resources/graphql/categorie.graphqls");
+        File caracteristiqueSchemaFile = new File("src/main/resources/graphql/caracteristique.graphqls");
+        File typeCaracteristiqueSchemaFile = new File("src/main/resources/graphql/caracteristiqueType.graphqls");
+
         File photoSchemaFile = new File("src/main/resources/graphql/photo.graphqls");
         File produitSchemaFile = new File("src/main/resources/graphql/produit.graphqls");
         File utilisateurSchemaFile = new File("src/main/resources/graphql/utilisateur.graphqls");
@@ -134,6 +137,8 @@ public class GraphQlUtility {
         TypeDefinitionRegistry typeRegistry = new TypeDefinitionRegistry();
         // chaque registre est fusionné dans le registre principal
         typeRegistry.merge(schemaParser.parse(categorieSchemaFile));
+        typeRegistry.merge(schemaParser.parse(caracteristiqueSchemaFile));
+        typeRegistry.merge(schemaParser.parse(typeCaracteristiqueSchemaFile));
         typeRegistry.merge(schemaParser.parse(photoSchemaFile));
         typeRegistry.merge(schemaParser.parse(produitSchemaFile));
         typeRegistry.merge(schemaParser.parse(roleSchemaFile));

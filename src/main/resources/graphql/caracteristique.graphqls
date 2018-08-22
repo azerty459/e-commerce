@@ -1,0 +1,21 @@
+input CaracteristiqueInput{
+    refProduit:String!
+    idType:Int!
+    valeur:String!
+}
+
+type Caracteristique{
+
+    valeur:String!
+    type:String!
+    }
+
+extend type Query{
+    caracteristique(refProduit:String!):[Caracteristique]!
+    }
+
+extend type Mutation{
+    addCaracteristique(caracteristique:CaracteristiqueInput!):Caracteristique!
+    updateCaracteristique(caracteristique:CaracteristiqueInput!):Caracteristique!
+    deleteCaracteristique(refProduit:String!,idType:Int!):Boolean!
+}

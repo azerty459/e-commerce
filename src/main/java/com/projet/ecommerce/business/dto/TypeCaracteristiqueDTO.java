@@ -6,7 +6,7 @@ package com.projet.ecommerce.business.dto;
 
 public class TypeCaracteristiqueDTO {
 
-    private int idTypeCaracteristique;
+    private int id;
 
     private String type;
 
@@ -15,17 +15,17 @@ public class TypeCaracteristiqueDTO {
      *
      * @return l'id du type caractéristique
      */
-    public int getIdTypeCaracteristique() {
-        return idTypeCaracteristique;
+    public int getId() {
+        return id;
     }
 
     /**
      * Remplace l'id du type caractéristique par celui-ci mit en paramètre.
      *
-     * @param idTypeCaracteristique Le nouveau ID
+     * @param id Le nouveau ID
      */
-    public void setIdTypeCaracteristique(int idTypeCaracteristique) {
-        this.idTypeCaracteristique = idTypeCaracteristique;
+    public void setId(int id) {
+        this.id = id;
     }
 
     /**

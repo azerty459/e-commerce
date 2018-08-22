@@ -1,0 +1,19 @@
+input TypeCaracteristiqueInput{
+    id:int!
+    type:String!
+}
+
+type TypeCaracteristique{
+    id:int!
+    type:String!
+    }
+
+extend type Query{
+    caracteristiqueType():[TypeCaracteristique]!
+    }
+
+extend type Mutation{
+    addCaracteristiqueType(type:String!):TypeCaracteristique!
+    updateCaracteristiqueType(type:TypeCaracteristiqueInput!):TypeCaracteristique!
+    deleteCaracteristiqueType(id:Int!):Boolean!
+}

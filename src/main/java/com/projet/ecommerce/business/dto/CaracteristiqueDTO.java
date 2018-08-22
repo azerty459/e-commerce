@@ -1,33 +1,40 @@
 package com.projet.ecommerce.business.dto;
 
-import com.projet.ecommerce.persistance.entity.TypeCaracteristique;
-
 /**
  * Entité qui permet d'assurer le découplage entre la couche de présentation et les objets métier stockés sur le serveur (Cracteristique).
  */
 
 public class CaracteristiqueDTO {
 
-    private TypeCaracteristique typeCaracteristique;
 
+    private ProduitDTO produit;
+    private TypeCaracteristiqueDTO type;
     private String valeur;
+
+    public ProduitDTO getProduit() {
+        return produit;
+    }
+
+    public void setProduit(ProduitDTO produit) {
+        this.produit = produit;
+    }
 
     /**
      * Retourne l'objet TypeCaracteristique contenu dans la caracteristique.
      *
      * @return l'objet TypeCaracteristique
      */
-    public TypeCaracteristique getTypeCaracteristique() {
-        return typeCaracteristique;
+    public TypeCaracteristiqueDTO getType() {
+        return type;
     }
 
     /**
      * Remplace l'objet TypeCaracteristique contenu dans la caracteristique par celui-ci mit en paramètre.
      *
-     * @param typeCaracteristique Un objet TypeCaracteristique
+     * @param type Un objet TypeCaracteristique
      */
-    public void setTypeCaracteristique(TypeCaracteristique typeCaracteristique) {
-        this.typeCaracteristique = typeCaracteristique;
+    public void setType(TypeCaracteristiqueDTO type) {
+        this.type = type;
     }
 
     /**
@@ -47,4 +54,6 @@ public class CaracteristiqueDTO {
     public void setValeur(String valeur) {
         this.valeur = valeur;
     }
+
+
 }

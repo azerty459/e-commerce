@@ -13,6 +13,7 @@ type Produit {
     description: String!
     prixHT: Float!
     categories: [Categorie]!
+    caracteristiques:[Caracteristique]
     photos: [Photo]!
     photoPrincipale: Photo
 }
