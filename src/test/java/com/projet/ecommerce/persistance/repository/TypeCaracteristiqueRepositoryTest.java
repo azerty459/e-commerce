@@ -10,6 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.projet.ecommerce.persistance.entity.TypeCaracteristique;
 
+import java.util.Collection;
+import java.util.List;
+
 import org.junit.Assert;
 
 @RunWith(SpringRunner.class)
@@ -20,7 +23,7 @@ public class TypeCaracteristiqueRepositoryTest {
 
 	
 	private static final TypeCaracteristique TEMP_INSERT = new TypeCaracteristique();
-	private static final TypeCaracteristique TEMP_GET = new TypeCaracteristique();
+	private static final TypeCaracteristique TEMP_UPDATE = new TypeCaracteristique();
 	
 	static {
 		//Permet d'écraser la config application.properties par application-test.properties
@@ -29,8 +32,8 @@ public class TypeCaracteristiqueRepositoryTest {
         TEMP_INSERT.setIdTypeCaracteristique(1);
         TEMP_INSERT.setType("Langue");
         
-        TEMP_GET.setIdTypeCaracteristique(2);
-        TEMP_INSERT.setType("Format");
+        TEMP_UPDATE.setIdTypeCaracteristique(2);
+        TEMP_UPDATE.setType("Format");
 	}
 	
 	@Autowired 
@@ -45,9 +48,42 @@ public class TypeCaracteristiqueRepositoryTest {
 		
 	}
 	
-/*	@Test
-	public void getTypeCaracteristique() {
-		TypeCaracteristique typeCara = typeCaracteristiqueRepo.find
-	}*/
+	@Test
+	public void updateTypeCaracteristique() {
+		Assert.assertNotNull(typeCaracteristiqueRepo.save(TEMP_UPDATE));
+		TypeCaracteristique typeCara = typeCaracteristiqueRepo.findById(TEMP_UPDATE.getIdTypeCaracteristique()).orElse(null);
+		Assert.assertNotNull(typeCara);
+		typeCara.setType("Couleur");
+		Assert.assertNotNull(typeCaracteristiqueRepo.save(typeCara));
+		typeCara = typeCaracteristiqueRepo.findById(TEMP_UPDATE.getIdTypeCaracteristique()).orElse(null);
+		Assert.assertEquals(typeCara.getType(), "Couleur");
+		Assert.assertEquals(typeCara.getIdTypeCaracteristique(),TEMP_UPDATE.getIdTypeCaracteristique());
+		
+	}
+	
+	@Test
+	public void deleteTypeCaracteristique() {
+		Assert.assertNotNull(typeCaracteristiqueRepo.save(TEMP_INSERT));
+		TypeCaracteristique typeCara = typeCaracteristiqueRepo.findById(TEMP_INSERT.getIdTypeCaracteristique()).orElse(null);
+		Assert.assertNotNull(typeCara);
+		typeCaracteristiqueRepo.delete(typeCara);
+		typeCara = typeCaracteristiqueRepo.findById(TEMP_INSERT.getIdTypeCaracteristique()).orElse(null);
+		Assert.assertNull(typeCara);
+	}
+	
+	@Test
+	public void getAllTypeCaracteristique() {
+		Assert.assertNotNull(typeCaracteristiqueRepo.save(TEMP_INSERT));
+		TypeCaracteristique typeCara = typeCaracteristiqueRepo.findById(TEMP_INSERT.getIdTypeCaracteristique()).orElse(null);
+		Assert.assertNotNull(typeCara);
+		
+		Assert.assertNotNull(typeCaracteristiqueRepo.save(TEMP_UPDATE));
+		typeCara = typeCaracteristiqueRepo.findById(TEMP_INSERT.getIdTypeCaracteristique()).orElse(null);
+		Assert.assertNotNull(typeCara);
+		Collection<TypeCaracteristique> lstTypeCara = typeCaracteristiqueRepo.findAll();
+		Assert.assertNotNull(lstTypeCara);
+		Assert.assertEquals(2, lstTypeCara.size());
+		
+	}
 	
 }

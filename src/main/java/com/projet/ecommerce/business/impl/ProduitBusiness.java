@@ -272,4 +272,7 @@ public class ProduitBusiness implements IProduitBusiness {
         }
         return produitRepository.findAll(page);
     }
+    
+    
+    
 }

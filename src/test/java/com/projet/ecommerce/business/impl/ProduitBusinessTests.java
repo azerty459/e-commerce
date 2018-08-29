@@ -295,7 +295,7 @@ public class ProduitBusinessTests {
 
         Mockito.when(produitRepository.findById(Mockito.anyString())).thenReturn(Optional.of(produit));
         //TODO A décommenter quand les produits auront des caractéristiques
-        // Mockito.when(caracteristiqueRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(caracteristique));
+        Mockito.when(caracteristiqueRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(caracteristique));
         Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
 
         ProduitDTO retour = produitBusiness.update(produit);
