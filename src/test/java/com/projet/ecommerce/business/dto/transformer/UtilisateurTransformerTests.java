@@ -40,8 +40,7 @@ public class UtilisateurTransformerTests {
         UTILISATEUR.setNom("Test");
 
         ArrayList<Role> roleArrayList = new ArrayList<>();
-        roleArrayList.add(ROLE);
-        UTILISATEUR.setRoles(roleArrayList);
+        UTILISATEUR.setRole(ROLE);
 
         ArrayList<Utilisateur> utilisateurArrayList = new ArrayList<>();
         utilisateurArrayList.add(UTILISATEUR);
@@ -54,9 +53,8 @@ public class UtilisateurTransformerTests {
         UTILISATEUR_DTO.setPrenom("Toto");
         UTILISATEUR_DTO.setNom("Test");
 
-        ArrayList<RoleDTO> roleDTOArrayList = new ArrayList<>();
-        roleDTOArrayList.add(ROLE_DTO);
-        UTILISATEUR_DTO.setRoles(roleDTOArrayList);
+
+        UTILISATEUR_DTO.setRole(ROLE_DTO);
     }
 
     @Test
@@ -69,12 +67,12 @@ public class UtilisateurTransformerTests {
         Assert.assertEquals(utilisateur.getId(), UTILISATEUR_DTO.getId());
         Assert.assertEquals(utilisateur.getNom(), UTILISATEUR_DTO.getNom());
         Assert.assertEquals(utilisateur.getPrenom(), UTILISATEUR_DTO.getPrenom());
-        Assert.assertEquals(utilisateur.getRoles().size(), 1);
+        Assert.assertEquals(utilisateur.getRole(), 1);
 
-        List<Role> roleList = new ArrayList<>(utilisateur.getRoles());
-        List<RoleDTO> roleDTOList = new ArrayList<>(UTILISATEUR_DTO.getRoles());
-        Assert.assertEquals(roleList.get(0).getId(), roleDTOList.get(0).getId());
-        Assert.assertEquals(roleList.get(0).getNom(), roleDTOList.get(0).getNom());
+        Role role = utilisateur.getRole();
+        RoleDTO roleDTO = UTILISATEUR_DTO.getRole();
+        Assert.assertEquals(role.getId(), roleDTO.getId());
+        Assert.assertEquals(role.getNom(), roleDTO.getNom());
     }
 
     @Test
@@ -87,12 +85,12 @@ public class UtilisateurTransformerTests {
         Assert.assertEquals(UTILISATEUR.getId(), utilisateurDTO.getId());
         Assert.assertEquals(UTILISATEUR.getNom(), utilisateurDTO.getNom());
         Assert.assertEquals(UTILISATEUR.getPrenom(), utilisateurDTO.getPrenom());
-        Assert.assertEquals(1, utilisateurDTO.getRoles().size());
+        Assert.assertEquals(1, utilisateurDTO.getRole());
 
-        List<RoleDTO> roleDTOList = new ArrayList<>(utilisateurDTO.getRoles());
-        List<Role> roleList = new ArrayList<>(UTILISATEUR.getRoles());
-        Assert.assertEquals(roleDTOList.get(0).getId(), roleList.get(0).getId());
-        Assert.assertEquals(roleDTOList.get(0).getNom(), roleList.get(0).getNom());
+        RoleDTO roleDTO = utilisateurDTO.getRole();
+        Role role = UTILISATEUR.getRole();
+        Assert.assertEquals(roleDTO.getId(), role.getId());
+        Assert.assertEquals(roleDTO.getNom(), role.getNom());
     }
 
     @Test
@@ -117,7 +115,7 @@ public class UtilisateurTransformerTests {
         Assert.assertEquals(utilisateurList.get(0).getId(), UTILISATEUR_DTO.getId());
         Assert.assertEquals(utilisateurList.get(0).getNom(), UTILISATEUR_DTO.getNom());
         Assert.assertEquals(utilisateurList.get(0).getPrenom(), UTILISATEUR_DTO.getPrenom());
-        Assert.assertEquals(1, utilisateurList.get(0).getRoles().size());
+        Assert.assertEquals(1, utilisateurList.get(0).getRole());
 
 
         Assert.assertEquals(utilisateurList.get(1).getMdp(), utilisateurDTO2.getMdp());
@@ -125,7 +123,7 @@ public class UtilisateurTransformerTests {
         Assert.assertEquals(utilisateurList.get(1).getId(), utilisateurDTO2.getId());
         Assert.assertEquals(utilisateurList.get(1).getNom(), utilisateurDTO2.getNom());
         Assert.assertEquals(utilisateurList.get(1).getPrenom(), utilisateurDTO2.getPrenom());
-        Assert.assertEquals(0, utilisateurList.get(1).getRoles().size());
+        Assert.assertEquals(0, utilisateurList.get(1).getRole());
     }
 
     @Test
@@ -136,7 +134,7 @@ public class UtilisateurTransformerTests {
         utilisateur2.setMdp("test2");
         utilisateur2.setPrenom("Toto2");
         utilisateur2.setNom("Test2");
-        utilisateur2.setRoles(new ArrayList<>());
+        utilisateur2.setRole(new Role());
 
         Collection<Utilisateur> utilisateurArrayList = new ArrayList<>();
         utilisateurArrayList.add(UTILISATEUR);
@@ -151,7 +149,7 @@ public class UtilisateurTransformerTests {
         Assert.assertEquals(utilisateurDTOList.get(0).getId(), UTILISATEUR.getId());
         Assert.assertEquals(utilisateurDTOList.get(0).getNom(), UTILISATEUR.getNom());
         Assert.assertEquals(utilisateurDTOList.get(0).getPrenom(), UTILISATEUR.getPrenom());
-        Assert.assertEquals(1, utilisateurDTOList.get(0).getRoles().size());
+        Assert.assertEquals(1, utilisateurDTOList.get(0).getRole());
 
 
         Assert.assertEquals(utilisateurDTOList.get(1).getMdp(), utilisateur2.getMdp());
@@ -159,6 +157,6 @@ public class UtilisateurTransformerTests {
         Assert.assertEquals(utilisateurDTOList.get(1).getId(), utilisateur2.getId());
         Assert.assertEquals(utilisateurDTOList.get(1).getNom(), utilisateur2.getNom());
         Assert.assertEquals(utilisateurDTOList.get(1).getPrenom(), utilisateur2.getPrenom());
-        Assert.assertEquals(0, utilisateurDTOList.get(1).getRoles().size());
+        Assert.assertEquals(0, utilisateurDTOList.get(1).getRole());
     }
 }

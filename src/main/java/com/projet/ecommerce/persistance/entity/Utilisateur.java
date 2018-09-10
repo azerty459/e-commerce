@@ -31,13 +31,9 @@ public class Utilisateur {
     @Column(name = "prenom")
     private String prenom;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "utilisateur_role",
-            joinColumns = {@JoinColumn(name = "id_utilisateur")},
-            inverseJoinColumns = {@JoinColumn(name = "id_role")}
-    )
-    private Collection<Role> roles;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_role")
+    private Role role;
 
     /**
      * Retourne l'id de l'utilisateur
@@ -98,17 +94,17 @@ public class Utilisateur {
      *
      * @return une liste de rôle associé à l'utilisateur
      */
-    public Collection<Role> getRoles() {
-        return roles;
+    public Role getRole() {
+        return role;
     }
 
     /**
      * Remplace la liste de rôles par celle-ci mit en paramètre.
      *
-     * @param roles Une nouvelle liste de rôle à associer à l'utilisateur
+     * @param role Une nouvelle liste de rôle à associer à l'utilisateur
      */
-    public void setRoles(Collection<Role> roles) {
-        this.roles = roles;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     /**

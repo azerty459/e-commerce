@@ -28,7 +28,7 @@ public interface UtilisateurRepository extends PagingAndSortingRepository<Utilis
 
     Collection<Utilisateur> findByPrenomContainingIgnoreCaseOrderByPrenom(String prenom);
 
-    Collection<Utilisateur> findByRoles_NomContainingIgnoreCase(String nom);
+    Collection<Utilisateur> findByRole_NomContainingIgnoreCase(String nom);
 
     Page<Utilisateur> findAllByOrderByEmail(Pageable pageable);
 }

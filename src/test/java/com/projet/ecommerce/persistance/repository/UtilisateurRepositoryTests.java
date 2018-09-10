@@ -44,7 +44,7 @@ public class UtilisateurRepositoryTests {
         TEMP_UPDATE.setNom("Ruhade");
         TEMP_UPDATE.setEmail("titi.ruhade@gmail.com");
         TEMP_UPDATE.setMdp("azerty");
-        TEMP_UPDATE.setRoles(new ArrayList<>());
+        TEMP_UPDATE.setRole(new Role());
 
         TEMP_GET.setPrenom("Tutu");
         TEMP_GET.setNom("Ruhade");
@@ -53,10 +53,8 @@ public class UtilisateurRepositoryTests {
 
         Role role = new Role();
         role.setNom("Utilisateur");
-        List<Role> roleArrayList = new ArrayList<>();
-        roleArrayList.add(role);
 
-        TEMP_GET.setRoles(roleArrayList);
+        TEMP_GET.setRole(role);
     }
 
     @Autowired
@@ -92,7 +90,6 @@ public class UtilisateurRepositoryTests {
         Assert.assertEquals(utilisateur.getEmail(), TEMP_GET.getEmail());
         Assert.assertEquals(utilisateur.getPrenom(), TEMP_GET.getPrenom());
         Assert.assertEquals(utilisateur.getNom(), TEMP_GET.getNom());
-        Assert.assertEquals(utilisateur.getRoles().size(), TEMP_GET.getRoles().size());
     }
 
     @Test
@@ -105,7 +102,6 @@ public class UtilisateurRepositoryTests {
         Assert.assertEquals(utilisateur.getEmail(), TEMP_GET.getEmail());
         Assert.assertEquals(utilisateur.getPrenom(), TEMP_GET.getPrenom());
         Assert.assertEquals(utilisateur.getNom(), TEMP_GET.getNom());
-        Assert.assertEquals(utilisateur.getRoles().size(), TEMP_GET.getRoles().size());
     }
 
     @Test
@@ -138,7 +134,7 @@ public class UtilisateurRepositoryTests {
     @Test
     public void findByRoles_NomContainingIgnoreCase() {
         Assert.assertNotNull(utilisateurRepository.save(TEMP_GET));
-        Collection<Utilisateur> utilisateurCollection = utilisateurRepository.findByRoles_NomContainingIgnoreCase("Utilisateur");
+        Collection<Utilisateur> utilisateurCollection = utilisateurRepository.findByRole_NomContainingIgnoreCase("Utilisateur");
         Assert.assertEquals(1, utilisateurCollection.size());
     }
 
@@ -151,7 +147,6 @@ public class UtilisateurRepositoryTests {
         Assert.assertEquals(utilisateur.getEmail(), TEMP_UPDATE.getEmail());
         Assert.assertEquals(utilisateur.getPrenom(), TEMP_UPDATE.getPrenom());
         Assert.assertEquals(utilisateur.getNom(), TEMP_UPDATE.getNom());
-        Assert.assertEquals(utilisateur.getRoles().size(), TEMP_UPDATE.getRoles().size());
 
         // On modifie le rôle
         utilisateur.setNom("Fondateur");
@@ -162,7 +157,6 @@ public class UtilisateurRepositoryTests {
         Assert.assertEquals(utilisateurRetour.getEmail(), utilisateur.getEmail());
         Assert.assertEquals(utilisateurRetour.getPrenom(), utilisateur.getPrenom());
         Assert.assertEquals(utilisateurRetour.getNom(), utilisateur.getNom());
-        Assert.assertEquals(utilisateurRetour.getRoles().size(), utilisateur.getRoles().size());
     }
 
     @Test

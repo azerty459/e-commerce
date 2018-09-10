@@ -85,19 +85,7 @@ public class UtilisateurBusinessTests {
         utilisateurBusiness.add(utilisateurDTO);
     }
 
-    @Test
-    public void addEmailAlreadyUse() {
-        UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
-        utilisateurDTO.setPrenom("Toto");
-        utilisateurDTO.setNom("Test");
-        utilisateurDTO.setMdp("azerty");
-        utilisateurDTO.setEmail("test@gmail.com");
 
-        Mockito.when(utilisateurRepository.findByEmail(Mockito.anyString())).thenReturn(Optional.empty());
-
-        thrown.expect(GraphQLCustomException.class);
-        utilisateurBusiness.add(utilisateurDTO);
-    }
 
     @Test
     public void addRoleNotExist() {
@@ -111,8 +99,7 @@ public class UtilisateurBusinessTests {
         List<RoleDTO> roleDTOList = new ArrayList<>();
         RoleDTO roleDTO = new RoleDTO();
         roleDTO.setNom("Utilisateur");
-        roleDTOList.add(roleDTO);
-        addUtilisateurDTO.setRoles(roleDTOList);
+        addUtilisateurDTO.setRole(roleDTO);
 
         //création de l'objet add utilisateur dto convertie en utilisateur
         Utilisateur utilisateurEntity = new Utilisateur();
@@ -120,13 +107,10 @@ public class UtilisateurBusinessTests {
         utilisateurEntity.setNom("Test");
         utilisateurEntity.setMdp("azerty");
         utilisateurEntity.setEmail("test@gmail.com");
-
-        List<Role> roleList = new ArrayList<>();
         Role role = new Role();
         role.setId(1);
         role.setNom("Utilisateur");
-        roleList.add(role);
-        utilisateurEntity.setRoles(roleList);
+        utilisateurEntity.setRole(role);
 
         Mockito.when(utilisateurRepository.findByEmail(Mockito.anyString())).thenReturn(Optional.of(utilisateurEntity));
         Mockito.when(roleRepository.findByNom(Mockito.anyString())).thenReturn(Optional.empty());
@@ -135,43 +119,7 @@ public class UtilisateurBusinessTests {
         utilisateurBusiness.add(addUtilisateurDTO);
     }
 
-    @Test
-    public void addWork() {
-        //création de l'objet add utilisateur dto
-        UtilisateurDTO addUtilisateurDTO = new UtilisateurDTO();
-        addUtilisateurDTO.setPrenom("Toto");
-        addUtilisateurDTO.setNom("Test");
-        addUtilisateurDTO.setMdp("azerty");
-        addUtilisateurDTO.setEmail("test@gmail.com");
 
-        List<RoleDTO> roleDTOList = new ArrayList<>();
-        RoleDTO roleDTO = new RoleDTO();
-        roleDTO.setNom("Utilisateur");
-        roleDTOList.add(roleDTO);
-        addUtilisateurDTO.setRoles(roleDTOList);
-
-        //création de l'objet add utilisateur dto convertie en utilisateur
-        Utilisateur utilisateurEntity = new Utilisateur();
-        utilisateurEntity.setPrenom("Toto");
-        utilisateurEntity.setNom("Test");
-        utilisateurEntity.setMdp("azerty");
-        utilisateurEntity.setEmail("test@gmail.com");
-
-        List<Role> roleList = new ArrayList<>();
-        Role role = new Role();
-        role.setId(1);
-        role.setNom("Utilisateur");
-        roleList.add(role);
-        utilisateurEntity.setRoles(roleList);
-
-        Mockito.when(utilisateurRepository.findByEmail(Mockito.anyString())).thenReturn(Optional.of(utilisateurEntity));
-        Mockito.when(roleRepository.findByNom(Mockito.anyString())).thenReturn(Optional.of(role));
-        Mockito.when(passwordEncoder.encode(Mockito.anyString())).thenReturn("test");
-        Mockito.when(utilisateurRepository.save(Mockito.any(Utilisateur.class))).thenReturn(utilisateurEntity);
-
-        UtilisateurDTO retourUtilisateurDTO = utilisateurBusiness.add(addUtilisateurDTO);
-        Assert.assertNotNull(retourUtilisateurDTO);
-    }
 
 
     @Test
@@ -192,7 +140,7 @@ public class UtilisateurBusinessTests {
         utilisateur.setNom("Ruhade");
         utilisateur.setEmail("titi.ruhade@gmail.com");
         utilisateur.setMdp("azerty");
-        utilisateur.setRoles(new ArrayList<>());
+        utilisateur.setRole(new Role());
 
         Collection<Utilisateur> utilisateurCollection = new ArrayList<>();
         utilisateurCollection.add(utilisateur);
@@ -210,7 +158,7 @@ public class UtilisateurBusinessTests {
         utilisateur.setNom("Ruhade");
         utilisateur.setEmail("titi.ruhade@gmail.com");
         utilisateur.setMdp("azerty");
-        utilisateur.setRoles(new ArrayList<>());
+        utilisateur.setRole(new Role());
 
         Collection<Utilisateur> utilisateurCollection = new ArrayList<>();
         utilisateurCollection.add(utilisateur);
@@ -228,7 +176,7 @@ public class UtilisateurBusinessTests {
         utilisateur.setNom("Ruhade");
         utilisateur.setEmail("titi.ruhade@gmail.com");
         utilisateur.setMdp("azerty");
-        utilisateur.setRoles(new ArrayList<>());
+        utilisateur.setRole(new Role());
 
         Collection<Utilisateur> utilisateurCollection = new ArrayList<>();
         utilisateurCollection.add(utilisateur);
@@ -253,12 +201,12 @@ public class UtilisateurBusinessTests {
         role.setNom("Utilisateur");
         roleList.add(role);
 
-        utilisateur.setRoles(roleList);
+        utilisateur.setRole(new Role());
 
         Collection<Utilisateur> utilisateurCollection = new ArrayList<>();
         utilisateurCollection.add(utilisateur);
 
-        Mockito.when(utilisateurRepository.findByRoles_NomContainingIgnoreCase(Mockito.anyString())).thenReturn(utilisateurCollection);
+        Mockito.when(utilisateurRepository.findByRole_NomContainingIgnoreCase(Mockito.anyString())).thenReturn(utilisateurCollection);
 
         Collection<UtilisateurDTO> roleCollectionRetour = utilisateurBusiness.getUtilisateur(0, null, null, null, "Utilisateur");
         Assert.assertEquals(1, roleCollectionRetour.size());
@@ -272,7 +220,7 @@ public class UtilisateurBusinessTests {
         utilisateur.setNom("Ruhade");
         utilisateur.setEmail("titi.ruhade@gmail.com");
         utilisateur.setMdp("azerty");
-        utilisateur.setRoles(new ArrayList<>());
+        utilisateur.setRole(new Role());
 
         Mockito.when(utilisateurRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(utilisateur));
 
@@ -287,7 +235,7 @@ public class UtilisateurBusinessTests {
         utilisateur.setNom("Ruhade");
         utilisateur.setEmail("titi.ruhade@gmail.com");
         utilisateur.setMdp("azerty");
-        utilisateur.setRoles(new ArrayList<>());
+        utilisateur.setRole(new Role());
 
         Mockito.when(utilisateurRepository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
 
@@ -309,7 +257,7 @@ public class UtilisateurBusinessTests {
         role.setNom("Utilisateur");
         roleList.add(role);
 
-        utilisateur.setRoles(roleList);
+        utilisateur.setRole(new Role());
 
         Collection<Utilisateur> utilisateurCollection = new ArrayList<>();
         utilisateurCollection.add(utilisateur);

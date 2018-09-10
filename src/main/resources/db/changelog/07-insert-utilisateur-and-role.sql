@@ -3,10 +3,12 @@
 
 CREATE TABLE utilisateur
 (
-  id_utilisateur SERIAL,
+  id_utilisateur SERIAL
+  ,
   adresse_email VARCHAR(255) NOT NULL UNIQUE,
   mot_de_passe VARCHAR(255) NOT NULL,
   nom VARCHAR(50) DEFAULT '',
+  id_role VARCHAR(255),
   prenom VARCHAR(50) DEFAULT '',
   PRIMARY KEY (id_utilisateur)
 );
@@ -14,21 +16,12 @@ CREATE TABLE utilisateur
 CREATE TABLE role
 (
   id_role SERIAL,
-  nom VARCHAR(100) NOT NULL UNIQUE,
+
+  nom VARCHAR(100) ,
   PRIMARY KEY (id_role)
 );
 
-CREATE TABLE utilisateur_role
-(
-  id_utilisateur int NOT NULL,
-  id_role int NOT NULL,
-  PRIMARY KEY (id_utilisateur, id_role),
-  CONSTRAINT FK_idUtilisateur FOREIGN KEY (id_utilisateur)
-  REFERENCES utilisateur(id_utilisateur),
-  CONSTRAINT FK_idRole FOREIGN KEY (id_role)
-  REFERENCES role(id_role)
-);
+
 
 INSERT INTO utilisateur (adresse_email, mot_de_passe, nom, prenom) VALUES ('a', '$2a$10$tKoa.0HtlizobJijofNHIeJkIXOBYFFJMelG075rNqupjJAtKcFSW', '', ''),('utilisateur@gmail.com', 'utilisateur', '', ''),('visiteur@gmail.com', 'visiteur', '', '');
 INSERT INTO role (nom) VALUES ('Administrateur'),('Utilisateur'),('Visiteur');
-INSERT INTO utilisateur_role (id_utilisateur, id_role) VALUES (1, 1),(2, 2),(3, 3);

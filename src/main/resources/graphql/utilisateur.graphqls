@@ -1,7 +1,7 @@
 input UtilisateurAddInput {
     email: String!
     mdp: String!
-    roles: [RoleAddInput]
+    role: RoleAddInput
 }
 
 input UtilisateurUpdateInput {
@@ -9,7 +9,7 @@ input UtilisateurUpdateInput {
     mdp: String!
     nom: String
     prenom: String
-    roles: [RoleUpdateInput]
+    role: RoleUpdateInput
 }
 
 input AuthData {
@@ -22,7 +22,7 @@ type Utilisateur {
     email: String!
     nom: String!
     prenom: String!
-    roles: [Role]!
+    role: Role
 }
 type Token {
     token: String!
