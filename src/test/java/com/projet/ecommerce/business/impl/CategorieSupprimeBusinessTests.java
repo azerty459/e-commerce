@@ -174,7 +174,6 @@ public class CategorieSupprimeBusinessTests {
         produit.setNom("produit");
         produit.setDescription("description");
         produit.setPrixHT(5);
-        produit.setCaracteristiques(new ArrayList<>());
         produit.setPhotos(new ArrayList<>());
         produit.setCategories(new ArrayList<>());
         Categorie categorie1 = new Categorie();
@@ -182,7 +181,7 @@ public class CategorieSupprimeBusinessTests {
         categorie1.setBorneGauche(1);
         categorie1.setBorneDroit(4);
         categorie1.setLevel(1);
-        List<Produit> produits = new ArrayList<Produit>();
+        List<Produit> produits = new ArrayList<>();
         produits.add(produit);
         categorie1.setProduits(produits);
         CategorieSupprime categorieSupprime1 = new CategorieSupprime();

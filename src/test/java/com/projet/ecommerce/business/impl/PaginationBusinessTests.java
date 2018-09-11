@@ -52,7 +52,6 @@ public class PaginationBusinessTests {
     public void getPaginationByTypeProduit() {
         ArrayList<Produit> produitArrayList = new ArrayList<>();
         Produit produit = new Produit();
-        produit.setCaracteristiques(new ArrayList<>());
         produit.setPhotos(new ArrayList<>());
         produit.setCategories(new ArrayList<>());
         produit.setReferenceProduit("A01A47");

@@ -4,11 +4,9 @@ import com.projet.ecommerce.business.IProduitBusiness;
 import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.business.dto.transformer.ProduitTransformer;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
-import com.projet.ecommerce.persistance.entity.Caracteristique;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Photo;
 import com.projet.ecommerce.persistance.entity.Produit;
-import com.projet.ecommerce.persistance.repository.CaracteristiqueRepository;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import com.projet.ecommerce.persistance.repository.PhotoRepository;
 import com.projet.ecommerce.persistance.repository.ProduitRepository;
@@ -40,9 +38,6 @@ public class ProduitBusiness implements IProduitBusiness {
     @Autowired
     private PhotoRepository photoRepository;
 
-    @Autowired
-    private CaracteristiqueRepository caracteristiqueRepository;
-
     /**
      * Ajoute un produit dans la base de données.
      *
@@ -70,7 +65,6 @@ public class ProduitBusiness implements IProduitBusiness {
         produit.setNom(nom);
         produit.setDescription(description);
         produit.setPrixHT(prixHT);
-        produit.setCaracteristiques(new ArrayList<>());
         produit.setPhotos(new ArrayList<>());
 
         List<Categorie> categorieList = new ArrayList<>();
@@ -156,7 +150,6 @@ public class ProduitBusiness implements IProduitBusiness {
         } else {
             throw new GraphQLCustomException("La photo n'existe pas.");
         }
-
     }
 
     /**
@@ -173,26 +166,6 @@ public class ProduitBusiness implements IProduitBusiness {
                 retourList.add(categorieOptional.get());
             } else {
                 throw new GraphQLCustomException("La catégorie n'existe pas.");
-            }
-        }
-        return retourList;
-    }
-
-
-    /**
-     * Remplace la liste de catégorie par une nouvelle liste contenant l'ensemble des données des catégories.
-     *
-     * @param caracteristiqueList Une list contenant des id de caracteristique
-     * @return une collection de catégorie
-     */
-    private Collection<Caracteristique> completeCharacteristicData(List<Caracteristique> caracteristiqueList) {
-        List<Caracteristique> retourList = new ArrayList<>();
-        for (Caracteristique caracteristique : caracteristiqueList) {
-            Optional<Caracteristique> caracteristiqueOptional = caracteristiqueRepository.findById(caracteristique.getIdCaracteristique());
-            if (caracteristiqueOptional.isPresent()) {
-                retourList.add(caracteristiqueOptional.get());
-            } else {
-                throw new GraphQLCustomException("La caractéristique n'existe pas.");
             }
         }
         return retourList;
