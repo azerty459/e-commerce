@@ -33,11 +33,6 @@ public class ProduitDTO {
     private List<CategorieDTO> categories;
 
     /**
-     * la liste des caractéristiques du produit
-     */
-    private List<CaracteristiqueDTO> caracteristiques;
-
-    /**
      * la liste des photos du produit
      */
     private List<PhotoDTO> photos;
@@ -136,24 +131,6 @@ public class ProduitDTO {
      */
     public void setCategories(List<CategorieDTO> categories) {
         this.categories = categories;
-    }
-
-    /**
-     * Obtenir les caractéristiques du produit
-     *
-     * @return les caractéristiques du produit
-     */
-    public List<CaracteristiqueDTO> getCaracteristiques() {
-        return caracteristiques;
-    }
-
-    /**
-     * Définir les caractéristiques du produit
-     *
-     * @param caracteristiques les caractéristiques du produit
-     */
-    public void setCaracteristiques(List<CaracteristiqueDTO> caracteristiques) {
-        this.caracteristiques = caracteristiques;
     }
 
     /**

@@ -1,6 +1,5 @@
 package com.projet.ecommerce.business.dto.transformer;
 
-import com.projet.ecommerce.business.dto.PhotoDTO;
 import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Produit;
@@ -47,14 +46,13 @@ public class ProduitTransformer {
         produitDTO.setNom(produit.getNom());
         produitDTO.setDescription(produit.getDescription());
         produitDTO.setPrixHT(produit.getPrixHT());
-        produitDTO.setCaracteristiques(new ArrayList<>(CaracteristiqueTransformer.entityToDto(produit.getCaracteristiques())));
         produitDTO.setPhotos(new ArrayList<>(PhotoTransformer.entityToDto(produit.getPhotos())));
         if (produit.getPhotoPrincipale() != null) {
             produitDTO.setPhotoPrincipale(PhotoTransformer.entityToDto(produit.getPhotoPrincipale()));
         }
 
         // Ajout du paramètre de chemins (US#192)
-        HashMap<Categorie, Collection<Categorie>> chemins = new HashMap<Categorie, Collection<Categorie>>();
+        HashMap<Categorie, Collection<Categorie>> chemins = new HashMap<>();
         produitDTO.setCategories(new ArrayList<>(CategorieTransformer.entityToDto(produit.getCategories(), chemins, false, false, null)));
         return produitDTO;
     }
@@ -91,7 +89,6 @@ public class ProduitTransformer {
         produit.setNom(produitDTO.getNom());
         produit.setDescription(produitDTO.getDescription());
         produit.setPrixHT(produitDTO.getPrixHT());
-        produit.setCaracteristiques(new ArrayList<>(CaracteristiqueTransformer.dtoToEntity(produitDTO.getCaracteristiques())));
         produit.setPhotos(new ArrayList<>(PhotoTransformer.dtoToEntity(produitDTO.getPhotos())));
         produit.setCategories(new ArrayList<>(CategorieTransformer.dtoToEntity(produitDTO.getCategories())));
         produit.setPhotoPrincipale(PhotoTransformer.dtoToEntity(produitDTO.getPhotoPrincipale()));
