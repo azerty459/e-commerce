@@ -1,10 +1,11 @@
 package com.projet.ecommerce.business.dto.transformer;
 
-import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
 import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.business.dto.PhotoDTO;
 import com.projet.ecommerce.business.dto.ProduitDTO;
-import com.projet.ecommerce.persistance.entity.*;
+import com.projet.ecommerce.persistance.entity.Categorie;
+import com.projet.ecommerce.persistance.entity.Photo;
+import com.projet.ecommerce.persistance.entity.Produit;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,16 +15,6 @@ import java.util.List;
 
 @SpringBootTest
 public class ProduitTransformerTests {
-
-    private static final TypeCaracteristique TYPE_CARACTERISTIQUE;
-
-    private static final CaracteristiqueDTO CARACTERISTIQUE_DTO;
-
-    private static final Caracteristique CARACTERISTIQUE;
-
-    private static final ArrayList<CaracteristiqueDTO> LIST_CARACTERISTIQUE_DTO;
-
-    private static final ArrayList<Caracteristique> LIST_CARACTERISTIQUE;
 
     private static final CategorieDTO SOUS_CATEGORIE_DTO;
 
@@ -50,24 +41,6 @@ public class ProduitTransformerTests {
     private static final List<ProduitDTO> LIST_PRODUIT_DTO;
 
     static {
-        TYPE_CARACTERISTIQUE = new TypeCaracteristique();
-        TYPE_CARACTERISTIQUE.setIdTypeCaracteristique(0);
-        TYPE_CARACTERISTIQUE.setType("testType");
-
-        CARACTERISTIQUE_DTO = new CaracteristiqueDTO();
-        CARACTERISTIQUE_DTO.setValeur("testCar");
-        CARACTERISTIQUE_DTO.setTypeCaracteristique(TYPE_CARACTERISTIQUE);
-
-        CARACTERISTIQUE = new Caracteristique();
-        CARACTERISTIQUE.setValeur("testCar");
-        CARACTERISTIQUE.setTypeCaracteristique(TYPE_CARACTERISTIQUE);
-
-        LIST_CARACTERISTIQUE_DTO = new ArrayList<>();
-        LIST_CARACTERISTIQUE_DTO.add(CARACTERISTIQUE_DTO);
-
-        LIST_CARACTERISTIQUE = new ArrayList<>();
-        LIST_CARACTERISTIQUE.add(CARACTERISTIQUE);
-
         SOUS_CATEGORIE_DTO = new CategorieDTO();
         CATEGORIE_DTO = new CategorieDTO();
         LIST_CATEGORIE_DTO1 = new ArrayList<>();
@@ -93,7 +66,6 @@ public class ProduitTransformerTests {
         LIST_PHOTO.add(PHOTO);
 
         PRODUIT_DTO1 = new ProduitDTO();
-        PRODUIT_DTO1.setCaracteristiques(LIST_CARACTERISTIQUE_DTO);
         PRODUIT_DTO1.setCategories(LIST_CATEGORIE_DTO2);
         PRODUIT_DTO1.setPhotos(LIST_PHOTO_DTO);
         PRODUIT_DTO1.setDescription("ceci est un test");
@@ -102,7 +74,6 @@ public class ProduitTransformerTests {
         PRODUIT_DTO1.setRef("A4224");
 
         PRODUIT_DTO2 = new ProduitDTO();
-        PRODUIT_DTO2.setCaracteristiques(LIST_CARACTERISTIQUE_DTO);
         PRODUIT_DTO2.setCategories(LIST_CATEGORIE_DTO2);
         PRODUIT_DTO2.setPhotos(LIST_PHOTO_DTO);
         PRODUIT_DTO2.setDescription("ceci est un test");
@@ -111,7 +82,6 @@ public class ProduitTransformerTests {
         PRODUIT_DTO2.setRef("A4224");
 
         PRODUIT1 = new Produit();
-        PRODUIT1.setCaracteristiques(LIST_CARACTERISTIQUE);
         PRODUIT1.setCategories(LISTE_CATEGORIE1);
         PRODUIT1.setPhotos(LIST_PHOTO);
         PRODUIT1.setDescription("ceci est un test");
@@ -120,7 +90,6 @@ public class ProduitTransformerTests {
         PRODUIT1.setReferenceProduit("A4224");
 
         PRODUIT2 = new Produit();
-        PRODUIT2.setCaracteristiques(LIST_CARACTERISTIQUE);
         PRODUIT2.setCategories(LISTE_CATEGORIE1);
         PRODUIT2.setPhotos(LIST_PHOTO);
         PRODUIT2.setDescription("ceci est un test");
@@ -141,8 +110,6 @@ public class ProduitTransformerTests {
     public void singleDtoToEntity() {
         Produit prod = ProduitTransformer.dtoToEntity(PRODUIT_DTO1);
         Assert.assertNotNull(prod);
-        Assert.assertEquals((PRODUIT_DTO1.getCaracteristiques()).get(0).getValeur(), prod.getCaracteristiques().get(0).getValeur());
-        Assert.assertEquals(PRODUIT_DTO1.getCaracteristiques().get(0).getTypeCaracteristique(), prod.getCaracteristiques().get(0).getTypeCaracteristique());
         Assert.assertEquals(PRODUIT_DTO1.getCategories().get(0).getNom(), prod.getCategories().get(0).getNomCategorie());
         Assert.assertEquals(PRODUIT_DTO1.getDescription(), prod.getDescription());
         Assert.assertEquals(PRODUIT_DTO1.getNom(), prod.getNom());
@@ -156,8 +123,6 @@ public class ProduitTransformerTests {
     public void singleEntityToDto() {
         ProduitDTO prodDto = ProduitTransformer.entityToDto(PRODUIT1);
         Assert.assertNotNull(prodDto);
-        Assert.assertEquals(PRODUIT1.getCaracteristiques().get(0).getValeur(), prodDto.getCaracteristiques().get(0).getValeur());
-        Assert.assertEquals(PRODUIT1.getCaracteristiques().get(0).getTypeCaracteristique(), prodDto.getCaracteristiques().get(0).getTypeCaracteristique());
         Assert.assertTrue(PRODUIT1.getCategories().containsAll(prodDto.getCategories()));
         Assert.assertEquals(PRODUIT1.getDescription(), prodDto.getDescription());
         Assert.assertEquals(PRODUIT1.getNom(), prodDto.getNom());
@@ -172,8 +137,6 @@ public class ProduitTransformerTests {
         List<Produit> listProd = new ArrayList<>(ProduitTransformer.dtoToEntity(LIST_PRODUIT_DTO));
 
         Assert.assertNotNull(listProd);
-        Assert.assertEquals(listProd.get(0).getCaracteristiques().get(0).getValeur(), LIST_PRODUIT_DTO.get(0).getCaracteristiques().get(0).getValeur());
-        Assert.assertEquals(listProd.get(0).getCaracteristiques().get(0).getTypeCaracteristique(), LIST_PRODUIT_DTO.get(0).getCaracteristiques().get(0).getTypeCaracteristique());
         Assert.assertEquals(listProd.get(0).getCategories().get(0).getNomCategorie(), LIST_PRODUIT_DTO.get(0).getCategories().get(0).getNom());
         Assert.assertEquals(listProd.get(0).getDescription(), LIST_PRODUIT_DTO.get(0).getDescription());
         Assert.assertEquals(listProd.get(0).getNom(), LIST_PRODUIT_DTO.get(0).getNom());
@@ -188,8 +151,6 @@ public class ProduitTransformerTests {
         List<ProduitDTO> listDTO = new ArrayList<>(ProduitTransformer.entityToDto(LIST_PRODUIT));
 
         Assert.assertNotNull(listDTO);
-        Assert.assertEquals(listDTO.get(0).getCaracteristiques().get(0).getTypeCaracteristique(), LIST_PRODUIT.get(0).getCaracteristiques().get(0).getTypeCaracteristique());
-        Assert.assertEquals(listDTO.get(0).getCaracteristiques().get(0).getValeur(), LIST_PRODUIT.get(0).getCaracteristiques().get(0).getValeur());
         Assert.assertEquals(listDTO.get(0).getCategories(), LIST_PRODUIT.get(0).getCategories());
         Assert.assertEquals(listDTO.get(0).getDescription(), LIST_PRODUIT.get(0).getDescription());
         Assert.assertEquals(listDTO.get(0).getNom(), LIST_PRODUIT.get(0).getNom());

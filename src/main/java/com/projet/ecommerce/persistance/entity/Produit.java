@@ -38,10 +38,6 @@ public class Produit {
     )
     private List<Categorie> categories;
 
-    @OneToMany(mappedBy = "produit", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-    private List<Caracteristique> caracteristiques;
-
-
     @OneToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinColumn(name = "photo_principale")
     private Photo photoPrincipale;
@@ -125,15 +121,6 @@ public class Produit {
     }
 
     /**
-     * Retourne une liste de caratéristiques liées à ce produit.
-     *
-     * @return une liste de caratéristiques liées à ce produit
-     */
-    public List<Caracteristique> getCaracteristiques() {
-        return caracteristiques;
-    }
-
-    /**
      * Retourne une liste de photos liées à ce produit.
      *
      * @return une liste de photos liées à ce produit
@@ -158,15 +145,6 @@ public class Produit {
      */
     public void setCategories(List<Categorie> categories) {
         this.categories = categories;
-    }
-
-    /**
-     * Remplace la liste de caractéristiques par celui-ci mit en paramètre.
-     *
-     * @param caracteristiques La nouvelle liste de caractéristique du produit
-     */
-    public void setCaracteristiques(List<Caracteristique> caracteristiques) {
-        this.caracteristiques = caracteristiques;
     }
 
     /**
