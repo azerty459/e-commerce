@@ -7,7 +7,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import java.util.Collection;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Repository
@@ -27,6 +28,24 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
             "SELECT cat_recherchee2.borneDroit " +
             "FROM Categorie AS cat_recherchee2 " +
             "WHERE cat_recherchee2.nomCategorie =:cat)";
+
+    private static final String SQL_WHERE_AVERAGE_LOWER_BOUND_FILTER =
+            "(SELECT AVG(ac.note) " +
+                    "FROM AvisClient AS ac " +
+                    "INNER JOIN Produit p2 ON p2.referenceProduit = ac.produit.referenceProduit " +
+                    "GROUP BY (note) " +
+                    "HAVING p.referenceProduit = p2.referenceProduit) " +
+                    "> :averageLowerBound";
+    private static final String SQL_WHERE_AVERAGE_UPPER_BOUND_FILTER =
+            "(SELECT AVG(ac.note) " +
+                    "FROM AvisClient AS ac " +
+                    "INNER JOIN Produit p2 ON p2.referenceProduit = ac.produit.referenceProduit " +
+                    "GROUP BY (note) " +
+                    "HAVING p.referenceProduit = p2.referenceProduit) " +
+                    "< :averageUpperBound";
+    private static final String SQL_WHERE_FULL_NAME_FILTER = "p.nom = :name";
+    private static final String SQL_WHERE_PART_NAME_FILTER = "p.nom LIKE :partname";
+    private static final String SQL_WHERE_SAME_CAT_FILTER = "p.categories IN (" + SQL_PRODUCTS_BY_CATEGORY + ")";
 
     @Autowired
     private EntityManager entityManager;
@@ -52,4 +71,52 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
         System.out.println(query.getResultList().size());
         return query.getResultList();
     }
+
+    @Override
+    public Collection<Produit> findWithFiltersWithCriteria(Float averageLowerBoundFilter,
+                                                           Float averageUpperBoundFilter,
+                                                           String fullNameFilter,
+                                                           String partNameFilter,
+                                                           String sameCatFilter,
+                                                           String subCatFilter) {
+        Collection<Produit> produits;
+        Map<String, Object> paramsToSet = new HashMap<>();
+
+        StringBuilder queryStringBuilder = new StringBuilder(SQL_ALL_PRODUCTS);
+        if (!(averageLowerBoundFilter == null && averageUpperBoundFilter == null && fullNameFilter == null
+                && partNameFilter == null && sameCatFilter == null && subCatFilter == null))
+        {
+            queryStringBuilder.append(" WHERE ");
+        }
+            StringJoiner queryWhereStringJoiner = new StringJoiner(" AND ");
+        // ajout à la requête des filtres optionnels
+        if (averageLowerBoundFilter != null) {
+            queryWhereStringJoiner.add(SQL_WHERE_AVERAGE_LOWER_BOUND_FILTER);
+            paramsToSet.put("averageLowerBound", averageLowerBoundFilter + "");
+        }
+        if (averageUpperBoundFilter != null) {
+            queryWhereStringJoiner.add(SQL_WHERE_AVERAGE_UPPER_BOUND_FILTER);
+            paramsToSet.put("averageUpperBound", averageUpperBoundFilter + "");
+        }
+        if (fullNameFilter != null) {
+            queryWhereStringJoiner.add(SQL_WHERE_FULL_NAME_FILTER);
+            paramsToSet.put("name", fullNameFilter);
+        }
+        if (partNameFilter != null) {
+            queryWhereStringJoiner.add(SQL_WHERE_PART_NAME_FILTER);
+            paramsToSet.put("partname", "%" + partNameFilter + "%");
+        }
+        if (sameCatFilter != null) {
+            queryWhereStringJoiner.add(SQL_WHERE_SAME_CAT_FILTER);
+            paramsToSet.put("cat", sameCatFilter);
+        }
+        // construction de la requête finale
+        String finalStringQuery = queryStringBuilder.toString() + queryWhereStringJoiner.toString();
+        Query query = entityManager.createQuery(finalStringQuery, Produit.class);
+        paramsToSet.forEach(query::setParameter);
+        produits = query.getResultList();
+
+        return produits;
+    }
+
 }

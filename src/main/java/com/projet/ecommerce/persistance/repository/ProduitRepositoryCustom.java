@@ -8,4 +8,10 @@ public interface ProduitRepositoryCustom {
 
     Collection<Produit> findAllWithCriteria(String ref, String cat);
 
+    Collection<Produit> findWithFiltersWithCriteria(Float averageLowerBoundFilter,
+                                                    Float averageUpperBoundFilter,
+                                                    String fullNameFilter,
+                                                    String partNameFilter,
+                                                    String sameCatFilter,
+                                                    String subCatFilter);
 }
