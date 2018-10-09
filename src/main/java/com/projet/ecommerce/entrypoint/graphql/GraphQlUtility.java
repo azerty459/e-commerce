@@ -2,6 +2,7 @@ package com.projet.ecommerce.entrypoint.graphql;
 
 import com.projet.ecommerce.entrypoint.graphql.avisclient.AvisClientMutation;
 import com.projet.ecommerce.entrypoint.graphql.avisclient.AvisClientQuery;
+import com.projet.ecommerce.entrypoint.graphql.caracteristique.CaracteristiqueMutation;
 import com.projet.ecommerce.entrypoint.graphql.categorie.CategorieMutation;
 import com.projet.ecommerce.entrypoint.graphql.categorie.CategorieQuery;
 import com.projet.ecommerce.entrypoint.graphql.pagination.PaginationQuery;
@@ -76,6 +77,9 @@ public class GraphQlUtility {
     @Autowired
     private AvisClientMutation avisClientMutation;
 
+    @Autowired
+    private CaracteristiqueMutation caracteristiqueMutation;
+
     @PostConstruct
     public GraphQL createGraphQlObject() {
         return GraphQL.newGraphQL(graphQLSchema())
@@ -117,12 +121,14 @@ public class GraphQlUtility {
                 .type(paginationQuery.produitWiring())
                 .type(avisClientQuery.produitWiring())
                 .type(avisClientMutation.produitWiring())
+                .type(caracteristiqueMutation.produitWiring())
                 .build();
     }
 
     private GraphQLSchema graphQLSchema() {
 
         File categorieSchemaFile = new File("src/main/resources/graphql/categorie.graphqls");
+        File caracteristiqueSchemaFile = new File("src/main/resources/graphql/caracteristique.graphqls");
         File photoSchemaFile = new File("src/main/resources/graphql/photo.graphqls");
         File produitSchemaFile = new File("src/main/resources/graphql/produit.graphqls");
         File utilisateurSchemaFile = new File("src/main/resources/graphql/utilisateur.graphqls");
@@ -134,12 +140,14 @@ public class GraphQlUtility {
         TypeDefinitionRegistry typeRegistry = new TypeDefinitionRegistry();
         // chaque registre est fusionné dans le registre principal
         typeRegistry.merge(schemaParser.parse(categorieSchemaFile));
+        // TODO à debug
         typeRegistry.merge(schemaParser.parse(photoSchemaFile));
         typeRegistry.merge(schemaParser.parse(produitSchemaFile));
         typeRegistry.merge(schemaParser.parse(roleSchemaFile));
         typeRegistry.merge(schemaParser.parse(utilisateurSchemaFile));
         typeRegistry.merge(schemaParser.parse(paginationSchemaFile));
         typeRegistry.merge(schemaParser.parse(avisClientSchemaFile));
+        typeRegistry.merge(schemaParser.parse(caracteristiqueSchemaFile));
 
         RuntimeWiring wiring = buildRuntimeWiring();
 

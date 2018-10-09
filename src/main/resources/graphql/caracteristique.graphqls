@@ -1,0 +1,13 @@
+input CaracteristiqueInput {
+    id: Int
+    label: String!
+}
+
+type Caracteristique {
+    id: Int!
+    label: String!
+}
+
+extend type Mutation {
+    addCaracteristique(caracteristique: CaracteristiqueInput!): Caracteristique!
+}
