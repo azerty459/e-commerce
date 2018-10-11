@@ -1,14 +1,15 @@
 package com.projet.ecommerce.persistance.repository.impl;
 
 import com.projet.ecommerce.persistance.entity.Produit;
+import com.projet.ecommerce.utilitaire.ProduitFilterCustomUtilitaire;
 import com.projet.ecommerce.persistance.repository.ProduitRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 @Repository
@@ -32,16 +33,12 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
     private static final String SQL_WHERE_AVERAGE_LOWER_BOUND_FILTER =
             "(SELECT AVG(ac.note) " +
                     "FROM AvisClient AS ac " +
-                    "INNER JOIN Produit p2 ON p2.referenceProduit = ac.produit.referenceProduit " +
-                    "GROUP BY (note) " +
-                    "HAVING p.referenceProduit = p2.referenceProduit) " +
+                    "WHERE p = ac.produit) " +
                     "> :averageLowerBound";
     private static final String SQL_WHERE_AVERAGE_UPPER_BOUND_FILTER =
             "(SELECT AVG(ac.note) " +
                     "FROM AvisClient AS ac " +
-                    "INNER JOIN Produit p2 ON p2.referenceProduit = ac.produit.referenceProduit " +
-                    "GROUP BY (note) " +
-                    "HAVING p.referenceProduit = p2.referenceProduit) " +
+                    "WHERE p = ac.produit) " +
                     "< :averageUpperBound";
     private static final String SQL_WHERE_FULL_NAME_FILTER = "p.nom = :name";
     private static final String SQL_WHERE_PART_NAME_FILTER = "p.nom LIKE :partname";
@@ -59,7 +56,6 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
             if (cat == null) {
                 query = entityManager.createQuery(SQL_ALL_PRODUCTS, Produit.class);
             } else {
-                System.out.println("testsdfsdfsdfsdf");
                 query = entityManager.createQuery(SQL_PRODUCTS_BY_CATEGORY, Collection.class);
                 query.setParameter("cat", cat);
             }
@@ -73,50 +69,43 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
     }
 
     @Override
-    public Collection<Produit> findWithFiltersWithCriteria(Float averageLowerBoundFilter,
-                                                           Float averageUpperBoundFilter,
-                                                           String fullNameFilter,
-                                                           String partNameFilter,
-                                                           String sameCatFilter,
-                                                           String subCatFilter) {
-        Collection<Produit> produits;
+    public Collection<Produit> findWithFiltersWithCriteria(ProduitFilterCustomUtilitaire produitFilterCustomUtilitaire) {
+        // TODO CriteriaBuilder
         Map<String, Object> paramsToSet = new HashMap<>();
 
         StringBuilder queryStringBuilder = new StringBuilder(SQL_ALL_PRODUCTS);
-        if (!(averageLowerBoundFilter == null && averageUpperBoundFilter == null && fullNameFilter == null
-                && partNameFilter == null && sameCatFilter == null && subCatFilter == null))
+        if (!(produitFilterCustomUtilitaire.getAverageLowerBoundFilter() == null && produitFilterCustomUtilitaire.getAverageUpperBoundFilter() == null && produitFilterCustomUtilitaire.getFullNameFilter() == null
+                && produitFilterCustomUtilitaire.getPartNameFilter() == null && produitFilterCustomUtilitaire.getSameCatFilter() == null && produitFilterCustomUtilitaire.getSubCatFilter() == null))
         {
             queryStringBuilder.append(" WHERE ");
         }
             StringJoiner queryWhereStringJoiner = new StringJoiner(" AND ");
         // ajout à la requête des filtres optionnels
-        if (averageLowerBoundFilter != null) {
+        if (produitFilterCustomUtilitaire.getAverageLowerBoundFilter() != null) {
             queryWhereStringJoiner.add(SQL_WHERE_AVERAGE_LOWER_BOUND_FILTER);
-            paramsToSet.put("averageLowerBound", averageLowerBoundFilter + "");
+            paramsToSet.put("averageLowerBound", produitFilterCustomUtilitaire.getAverageLowerBoundFilter() + "");
         }
-        if (averageUpperBoundFilter != null) {
+        if (produitFilterCustomUtilitaire.getAverageUpperBoundFilter() != null) {
             queryWhereStringJoiner.add(SQL_WHERE_AVERAGE_UPPER_BOUND_FILTER);
-            paramsToSet.put("averageUpperBound", averageUpperBoundFilter + "");
+            paramsToSet.put("averageUpperBound", produitFilterCustomUtilitaire.getAverageUpperBoundFilter() + "");
         }
-        if (fullNameFilter != null) {
+        if (produitFilterCustomUtilitaire.getFullNameFilter() != null) {
             queryWhereStringJoiner.add(SQL_WHERE_FULL_NAME_FILTER);
-            paramsToSet.put("name", fullNameFilter);
+            paramsToSet.put("name", produitFilterCustomUtilitaire.getFullNameFilter());
         }
-        if (partNameFilter != null) {
+        if (produitFilterCustomUtilitaire.getPartNameFilter() != null) {
             queryWhereStringJoiner.add(SQL_WHERE_PART_NAME_FILTER);
-            paramsToSet.put("partname", "%" + partNameFilter + "%");
+            paramsToSet.put("partname", "%" + produitFilterCustomUtilitaire.getPartNameFilter() + "%");
         }
-        if (sameCatFilter != null) {
+        if (produitFilterCustomUtilitaire.getSameCatFilter() != null) {
             queryWhereStringJoiner.add(SQL_WHERE_SAME_CAT_FILTER);
-            paramsToSet.put("cat", sameCatFilter);
+            paramsToSet.put("cat", produitFilterCustomUtilitaire.getSameCatFilter());
         }
         // construction de la requête finale
         String finalStringQuery = queryStringBuilder.toString() + queryWhereStringJoiner.toString();
-        Query query = entityManager.createQuery(finalStringQuery, Produit.class);
+        TypedQuery<Produit> query = entityManager.createQuery(finalStringQuery, Produit.class);
         paramsToSet.forEach(query::setParameter);
-        produits = query.getResultList();
-
-        return produits;
+        return query.getResultList();
     }
 
 }

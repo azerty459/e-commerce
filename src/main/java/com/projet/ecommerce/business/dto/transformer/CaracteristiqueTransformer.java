@@ -3,6 +3,9 @@ package com.projet.ecommerce.business.dto.transformer;
 import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
 import com.projet.ecommerce.persistance.entity.Caracteristique;
 
+import java.util.Collection;
+import java.util.stream.Collectors;
+
 public class CaracteristiqueTransformer {
 
     /**
@@ -18,10 +21,20 @@ public class CaracteristiqueTransformer {
         return result;
     }
 
-    public static CaracteristiqueDTO entityToDTO(Caracteristique caracteristique) {
+    public static CaracteristiqueDTO entityToDto(Caracteristique caracteristique) {
         CaracteristiqueDTO result = new CaracteristiqueDTO();
         result.setId(caracteristique.getId());
         result.setLabel(caracteristique.getLabel());
         return result;
+    }
+
+    public static Collection<CaracteristiqueDTO> entityToDto(Collection<Caracteristique> caracteristiqueCollection) {
+        if (caracteristiqueCollection == null) {
+            return null;
+        }
+        return caracteristiqueCollection
+                .stream()
+                .map(CaracteristiqueTransformer::entityToDto)
+                .collect(Collectors.toList());
     }
 }

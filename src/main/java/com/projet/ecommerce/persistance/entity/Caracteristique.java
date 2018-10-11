@@ -1,26 +1,24 @@
 package com.projet.ecommerce.persistance.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "caracteristique")
 public class Caracteristique {
 
     @Id
-    @Column(name="id")
-    private int id;
+    @Column(name="id_caracteristique")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-    @Column(name = "label")
+    @Column(name="label")
     private String label;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

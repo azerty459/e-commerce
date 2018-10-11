@@ -3,6 +3,7 @@ package com.projet.ecommerce.entrypoint.graphql;
 import com.projet.ecommerce.entrypoint.graphql.avisclient.AvisClientMutation;
 import com.projet.ecommerce.entrypoint.graphql.avisclient.AvisClientQuery;
 import com.projet.ecommerce.entrypoint.graphql.caracteristique.CaracteristiqueMutation;
+import com.projet.ecommerce.entrypoint.graphql.caracteristique.CaracteristiqueQuery;
 import com.projet.ecommerce.entrypoint.graphql.categorie.CategorieMutation;
 import com.projet.ecommerce.entrypoint.graphql.categorie.CategorieQuery;
 import com.projet.ecommerce.entrypoint.graphql.pagination.PaginationQuery;
@@ -80,6 +81,9 @@ public class GraphQlUtility {
     @Autowired
     private CaracteristiqueMutation caracteristiqueMutation;
 
+    @Autowired
+    private CaracteristiqueQuery caracteristiqueQuery;
+
     @PostConstruct
     public GraphQL createGraphQlObject() {
         return GraphQL.newGraphQL(graphQLSchema())
@@ -122,6 +126,7 @@ public class GraphQlUtility {
                 .type(avisClientQuery.produitWiring())
                 .type(avisClientMutation.produitWiring())
                 .type(caracteristiqueMutation.produitWiring())
+                .type(caracteristiqueQuery.produitWiring())
                 .build();
     }
 
@@ -140,7 +145,6 @@ public class GraphQlUtility {
         TypeDefinitionRegistry typeRegistry = new TypeDefinitionRegistry();
         // chaque registre est fusionné dans le registre principal
         typeRegistry.merge(schemaParser.parse(categorieSchemaFile));
-        // TODO à debug
         typeRegistry.merge(schemaParser.parse(photoSchemaFile));
         typeRegistry.merge(schemaParser.parse(produitSchemaFile));
         typeRegistry.merge(schemaParser.parse(roleSchemaFile));

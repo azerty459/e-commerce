@@ -3,6 +3,7 @@ package com.projet.ecommerce.persistance.repository;
 import com.projet.ecommerce.persistance.entity.AvisClient;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Produit;
+import com.projet.ecommerce.utilitaire.ProduitFilterCustomUtilitaire;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -208,60 +209,35 @@ public class ProduitRepositoryCustomTests {
     @Test
     public void findWithFiltersAverageLowerBoundWithCriteria() {
         Collection<Produit> produitCollection = produitRepository.findWithFiltersWithCriteria(
-                2.0f,
-                null,
-                null,
-                null,
-                null,
-                null);
+                new ProduitFilterCustomUtilitaire(2.0f, null, null, null, null, null));
         Assert.assertEquals(1, produitCollection.size());
     }
 
     @Test
     public void findWithFiltersAverageUppperBoundWithCriteria() {
         Collection<Produit> produitCollection = produitRepository.findWithFiltersWithCriteria(
-                null,
-                4.0f,
-                null,
-                null,
-                null,
-                null);
+                new ProduitFilterCustomUtilitaire(null, 4.0f, null, null, null, null));
         Assert.assertEquals(1, produitCollection.size());
     }
 
     @Test
     public void findWithFiltersFullNameWithCriteria() {
         Collection<Produit> produitCollection = produitRepository.findWithFiltersWithCriteria(
-                null,
-                null,
-                "Ordinateur portable",
-                 null,
-                 null,
-                 null);
+                new ProduitFilterCustomUtilitaire(null, null, "Ordinateur portable", null, null, null));
         Assert.assertEquals(1, produitCollection.size());
     }
 
     @Test
     public void findWithFiltersPartNameWithCriteria() {
         Collection<Produit> produitCollection = produitRepository.findWithFiltersWithCriteria(
-                null,
-                null,
-                null,
-                "Crayon",
-                null,
-                null);
+                new ProduitFilterCustomUtilitaire(null, null, null, "Crayon", null, null));
         Assert.assertEquals(2, produitCollection.size());
     }
 
     @Test
     public void findWithFiltersSameCatWithCriteria() {
         Collection<Produit> produitCollection = produitRepository.findWithFiltersWithCriteria(
-                null,
-                null,
-                null,
-                null,
-                "Fournitures",
-                null);
+                new ProduitFilterCustomUtilitaire(null, null, null, null, "Fournitures", null));
         Assert.assertEquals(2, produitCollection.size());
     }
 

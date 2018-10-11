@@ -10,4 +10,9 @@ type Caracteristique {
 
 extend type Mutation {
     addCaracteristique(caracteristique: CaracteristiqueInput!): Caracteristique!
+    deleteCaracteristique(id: Int!): Boolean!
+}
+
+extend type Query {
+    caracteristiques(id: Int, nom: String): [Caracteristique]!
 }
