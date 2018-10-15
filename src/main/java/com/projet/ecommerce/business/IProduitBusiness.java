@@ -24,12 +24,12 @@ public interface IProduitBusiness {
     ProduitDTO add(String referenceProduit, String nom, String description, float prixHT, List<Integer> nouvelleCat);
 
     /**
-     * Méthode définissant la modification d'un produit.
+     * Méthode définissant la modification d'un produitDTO.
      *
-     * @param produit L'objet produit modifié à sauvegarder
-     * @return l'objet produit modifié
+     * @param produitDTO L'objet produitDTO modifié à sauvegarder
+     * @return l'objet produitDTO modifié
      */
-    ProduitDTO update(Produit produit);
+    ProduitDTO update(ProduitDTO produitDTO);
 
     /**
      * Méthode définissant la suppression d'un produit.

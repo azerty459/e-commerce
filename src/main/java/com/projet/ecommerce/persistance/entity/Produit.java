@@ -3,6 +3,7 @@ package com.projet.ecommerce.persistance.entity;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Entité représentant la table produit sous forme de classe.
@@ -38,6 +39,14 @@ public class Produit {
     )
     private List<Categorie> categories;
 
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "produit_caracteristique_associated",
+            joinColumns = {@JoinColumn(name = "reference_produit")},
+            inverseJoinColumns = {@JoinColumn(name = "id_caracteristique_associated")}
+    )
+    private List<CaracteristiqueAssociated> caracteristiqueAssociated;
+
     @OneToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinColumn(name = "photo_principale")
     private Photo photoPrincipale;
@@ -47,7 +56,6 @@ public class Produit {
 
     @OneToMany(mappedBy = "produit", cascade = {CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<AvisClient> avisClients;
-
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinTable(
@@ -210,4 +218,21 @@ public class Produit {
         this.photoPrincipale = photoPrincipale;
     }
 
+    /**
+     * Permet d'obtenir les caractéristiques associées
+     *
+     * @return la caractéristiques associées
+     */
+    public List<CaracteristiqueAssociated> getCaracteristiqueAssociated() {
+        return caracteristiqueAssociated;
+    }
+
+    /**
+     * Permet de définir les caractéristiques associées
+     *
+     * @param caracteristiqueAssociated les caractéristiques associées à set
+     */
+    public void setCaracteristiqueAssociated(List<CaracteristiqueAssociated> caracteristiqueAssociated) {
+        this.caracteristiqueAssociated = caracteristiqueAssociated;
+    }
 }

@@ -1,5 +1,6 @@
 package com.projet.ecommerce.entrypoint.graphql.produit;
 
+import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.business.impl.ProduitBusiness;
 import com.projet.ecommerce.persistance.entity.Produit;
 import graphql.schema.DataFetcher;
@@ -86,7 +87,7 @@ public class ProduitMutationTests {
         Assert.assertNotNull(retourMap.get("updateProduit"));
         retourMap.get("updateProduit").get(dataFetchingEnvironment);
         // Test avec nb appel
-        Mockito.verify(produitBusiness, Mockito.times(1)).update(Mockito.any(Produit.class));
+        Mockito.verify(produitBusiness, Mockito.times(1)).update(Mockito.any(ProduitDTO.class));
     }
 
     @Test

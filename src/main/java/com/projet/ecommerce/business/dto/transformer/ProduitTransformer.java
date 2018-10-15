@@ -50,6 +50,9 @@ public class ProduitTransformer {
         if (produit.getPhotoPrincipale() != null) {
             produitDTO.setPhotoPrincipale(PhotoTransformer.entityToDto(produit.getPhotoPrincipale()));
         }
+        produitDTO.setCaracteristiqueAssociated(
+                new ArrayList<>(CaracteristiqueAssociatedTransformer.entityToDto(produit.getCaracteristiqueAssociated()))
+        );
 
         // Ajout du paramètre de chemins (US#192)
         HashMap<Categorie, Collection<Categorie>> chemins = new HashMap<>();

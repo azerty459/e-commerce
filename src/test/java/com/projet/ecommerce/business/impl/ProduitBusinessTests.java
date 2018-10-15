@@ -1,6 +1,7 @@
 package com.projet.ecommerce.business.impl;
 
 import com.projet.ecommerce.business.dto.ProduitDTO;
+import com.projet.ecommerce.business.dto.transformer.ProduitTransformer;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Photo;
@@ -149,7 +150,7 @@ public class ProduitBusinessTests {
         Mockito.when(produitRepository.findById(Mockito.any())).thenReturn(Optional.of(produit));
         Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
 
-        ProduitDTO retour = produitBusiness.update(produit);
+        ProduitDTO retour = produitBusiness.update(ProduitTransformer.entityToDto(produit));
         Assert.assertNotNull(retour);
 
         Assert.assertEquals(produit.getNom(), retour.getNom());
@@ -166,10 +167,10 @@ public class ProduitBusinessTests {
     @Test
     public void updateNotFound() {
         Mockito.when(produitRepository.findById(Mockito.any())).thenReturn(Optional.empty());
-        Produit produit = new Produit();
-        produit.setReferenceProduit("Test");
+        ProduitDTO produitDTO = new ProduitDTO();
+        produitDTO.setRef("Test");
         thrown.expect(GraphQLCustomException.class);
-        produitBusiness.update(produit);
+        produitBusiness.update(produitDTO);
     }
 
     @Test
@@ -186,7 +187,7 @@ public class ProduitBusinessTests {
         Mockito.when(produitRepository.findById(Mockito.anyString())).thenReturn(Optional.of(produit));
 
         thrown.expect(GraphQLCustomException.class);
-        produitBusiness.update(produit);
+        produitBusiness.update(ProduitTransformer.entityToDto(produit));
     }
 
     @Test
@@ -206,7 +207,7 @@ public class ProduitBusinessTests {
         Mockito.when(categorieRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(categorie));
         Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
 
-        ProduitDTO retour = produitBusiness.update(produit);
+        ProduitDTO retour = produitBusiness.update(ProduitTransformer.entityToDto(produit));
         Assert.assertNotNull(retour);
         Assert.assertEquals(1, retour.getCategories().size());
     }
@@ -225,7 +226,7 @@ public class ProduitBusinessTests {
         Mockito.when(produitRepository.findById(Mockito.anyString())).thenReturn(Optional.of(produit));
 
         thrown.expect(GraphQLCustomException.class);
-        produitBusiness.update(produit);
+        produitBusiness.update(ProduitTransformer.entityToDto(produit));
     }
 
     @Test
@@ -245,7 +246,7 @@ public class ProduitBusinessTests {
         Mockito.when(photoRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(photo));
         Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
 
-        ProduitDTO retour = produitBusiness.update(produit);
+        ProduitDTO retour = produitBusiness.update(ProduitTransformer.entityToDto(produit));
         Assert.assertNotNull(retour);
         Assert.assertEquals(1, retour.getPhotos().size());
     }

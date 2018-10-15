@@ -2,6 +2,7 @@ package com.projet.ecommerce.entrypoint.graphql.produit;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.projet.ecommerce.business.IProduitBusiness;
+import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.persistance.entity.Produit;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.idl.TypeRuntimeWiring;
@@ -21,15 +22,20 @@ public class ProduitMutation {
 
         builder.dataFetcher("addProduit", (DataFetchingEnvironment environment) -> {
                     double prixHT = environment.getArgument("prixHT");
-                    return produitBusiness.add(environment.getArgument("ref"), environment.getArgument("nom"), environment.getArgument("description"), (float) prixHT, environment.getArgument("nouvelleCat"));
+                    return produitBusiness.add(
+                            environment.getArgument("ref"),
+                            environment.getArgument("nom"),
+                            environment.getArgument("description"),
+                            (float) prixHT, environment.getArgument("nouvelleCat")
+                    );
                 }
         );
 
         builder.dataFetcher("updateProduit", (DataFetchingEnvironment environment) -> {
                     ObjectMapper mapper = new ObjectMapper();
                     Object rawInput = environment.getArgument("produit");
-                    Produit produit = mapper.convertValue(rawInput, Produit.class);
-                    return produitBusiness.update(produit);
+                    ProduitDTO produitDTO = mapper.convertValue(rawInput, ProduitDTO.class);
+                    return produitBusiness.update(produitDTO);
                 }
         );
 

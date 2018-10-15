@@ -1,5 +1,5 @@
 input ProduitInput {
-    referenceProduit: String!
+    ref: String!
     nom: String!
     description: String
     prixHT: Float!

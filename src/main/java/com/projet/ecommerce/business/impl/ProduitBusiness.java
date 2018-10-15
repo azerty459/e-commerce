@@ -80,42 +80,22 @@ public class ProduitBusiness implements IProduitBusiness {
     }
 
     /**
-     * Modifie le produit dans la base de données.
+     * Modifie le produitDTO dans la base de données.
      *
-     * @param produit L'objet produit modifié à sauvegarder
-     * @return l'objet produit modifié
+     * @param produitDTO L'objet produitDTO modifié à sauvegarder
+     * @return l'objet produitDTO modifié
      */
-    //Todo changer parametre par ProduitDTO
     @Override
-    public ProduitDTO update(Produit produit) {
+    public ProduitDTO update(ProduitDTO produitDTO) {
+        Produit produit = ProduitTransformer.dtoToEntity(produitDTO);
         if (produit == null) {
-            return null;
+            throw new GraphQLCustomException("Le produit envoyé est invalide.");
         }
         Optional<Produit> produitOptional = produitRepository.findById(produit.getReferenceProduit());
         if (!produitOptional.isPresent()) {
             throw new GraphQLCustomException("Le produit recherché n'existe pas.");
         }
-
-        // On fusionne les deux produits en un
-        Produit retourProduit = produitOptional.get();
-
-        produit.setCategories(new ArrayList<>(completeCategoriesData(produit.getCategories())));
-        if (produit.getPhotoPrincipale() != null && produit.getPhotoPrincipale().getIdPhoto() != 0) {
-            produit.setPhotoPrincipale(completePhotoPrincipaleData(produit.getPhotoPrincipale()));
-        }
-        Produit produitFinal = null;
-        try {
-            produitFinal = mergeObjects(produit, retourProduit);
-        } catch (IllegalAccessException | InstantiationException e) {
-            e.printStackTrace();
-        }
-
-        if (produitFinal == null) {
-            throw new GraphQLCustomException("Le produit ne peux pas être sauvegardé");
-        }
-
-        // On retourne le produit final et on le transforme en DTO
-        return ProduitTransformer.entityToDto(produitRepository.save(produitFinal));
+        return ProduitTransformer.entityToDto(produitRepository.save(produit));
     }
 
     /**
