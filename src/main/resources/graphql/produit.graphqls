@@ -7,6 +7,11 @@ input ProduitInput {
     photoPrincipale: PhotoInput
 }
 
+type CaracteristiqueAssociated {
+    caracteristique: Caracteristique!
+    value: String!
+}
+
 type Produit {
     ref: String!
     nom: String!
@@ -15,6 +20,7 @@ type Produit {
     categories: [Categorie]!
     photos: [Photo]!
     photoPrincipale: Photo
+    caracteristiquesAssociated: [CaracteristiqueAssociated]!
 }
 
 extend type Query {

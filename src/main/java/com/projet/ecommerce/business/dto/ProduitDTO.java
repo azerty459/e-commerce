@@ -1,7 +1,5 @@
 package com.projet.ecommerce.business.dto;
 
-import com.projet.ecommerce.persistance.entity.Caracteristique;
-
 import java.util.List;
 
 /**
@@ -37,7 +35,7 @@ public class ProduitDTO {
     /**
      * la liste des caractéristiques associées au produit
      */
-    private List<CaracteristiqueAssociatedDTO> caracteristiqueAssociated;
+    private List<CaracteristiqueAssociatedDTO> caracteristiquesAssociated;
 
     /**
      * la liste des photos du produit
@@ -145,17 +143,17 @@ public class ProduitDTO {
      *
      * @return les caractéristiques associées au produit
      */
-    public List<CaracteristiqueAssociatedDTO> getCaracteristiqueAssociated() {
-        return caracteristiqueAssociated;
+    public List<CaracteristiqueAssociatedDTO> getCaracteristiquesAssociated() {
+        return caracteristiquesAssociated;
     }
 
     /**
      * Défini la la liste des caractéristiques associées au produit
      *
-     * @param caracteristiqueAssociated la liste des caractéristiques associées au produit à définir
+     * @param caracteristiquesAssociated la liste des caractéristiques associées au produit à définir
      */
-    public void setCaracteristiqueAssociated(List<CaracteristiqueAssociatedDTO> caracteristiqueAssociated) {
-        this.caracteristiqueAssociated = caracteristiqueAssociated;
+    public void setCaracteristiquesAssociated(List<CaracteristiqueAssociatedDTO> caracteristiquesAssociated) {
+        this.caracteristiquesAssociated = caracteristiquesAssociated;
     }
 
     /**

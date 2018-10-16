@@ -1,28 +1,31 @@
 package com.projet.ecommerce.persistance.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-@Table(name = "caracteristique_associated")
-public class CaracteristiqueAssociated {
+@Table(name = "produit_caracteristique")
+public class CaracteristiqueAssociated implements Serializable {
 
     @Id
-    @Column(name="id_caracteristique_associated")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @ManyToOne
+    @JoinColumn(name = "reference_produit")
+    private Produit produit;
 
-    @OneToOne
+    @Id
+    @ManyToOne
+    @JoinColumn(name = "id_caracteristique")
     private Caracteristique caracteristique;
 
     @Column
     private String value;
 
-    public Integer getId() {
-        return id;
+    public Produit getProduit() {
+        return produit;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setProduit(Produit produit) {
+        this.produit = produit;
     }
 
     public Caracteristique getCaracteristique() {
