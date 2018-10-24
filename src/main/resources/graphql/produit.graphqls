@@ -4,7 +4,13 @@ input ProduitInput {
     description: String
     prixHT: Float!
     categories: [CategorieInput]
+    caracteristiquesAssociated: [CaracteristiqueAssociatedInput]
     photoPrincipale: PhotoInput
+}
+
+input CaracteristiqueAssociatedInput {
+    caracteristique: CaracteristiqueInput!
+    value: String!
 }
 
 type CaracteristiqueAssociated {
@@ -18,9 +24,9 @@ type Produit {
     description: String!
     prixHT: Float!
     categories: [Categorie]!
+    caracteristiquesAssociated: [CaracteristiqueAssociated]!
     photos: [Photo]!
     photoPrincipale: Photo
-    caracteristiquesAssociated: [CaracteristiqueAssociated]!
 }
 
 extend type Query {

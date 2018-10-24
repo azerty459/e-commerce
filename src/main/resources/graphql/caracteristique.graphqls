@@ -10,6 +10,7 @@ type Caracteristique {
 
 extend type Mutation {
     addCaracteristique(caracteristique: CaracteristiqueInput!): Caracteristique!
+    updateCaracteristique(caracteristique: CaracteristiqueInput!): Caracteristique!
     deleteCaracteristique(id: Int!): Boolean!
 }
 

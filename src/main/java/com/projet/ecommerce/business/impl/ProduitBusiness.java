@@ -196,8 +196,7 @@ public class ProduitBusiness implements IProduitBusiness {
         if (produitCollection.size() == 0) {
             throw new GraphQLCustomException("Aucun produit(s) trouvé(s).");
         }
-        List<ProduitDTO> result = new ArrayList<>(ProduitTransformer.entityToDto(new ArrayList<>(produitCollection)));
-        return result;
+        return new ArrayList<>(ProduitTransformer.entityToDto(new ArrayList<>(produitCollection)));
     }
 
     /**

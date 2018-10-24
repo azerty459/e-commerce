@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Entité représentant la table produit sous forme de classe.
@@ -39,7 +40,7 @@ public class Produit {
     )
     private List<Categorie> categories;
 
-    @OneToMany(mappedBy = "produit", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "produit", cascade = {CascadeType.REMOVE, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<CaracteristiqueAssociated> caracteristiqueAssociated;
 
     @OneToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE}, fetch = FetchType.LAZY)
@@ -229,5 +230,28 @@ public class Produit {
      */
     public void setCaracteristiqueAssociated(List<CaracteristiqueAssociated> caracteristiqueAssociated) {
         this.caracteristiqueAssociated = caracteristiqueAssociated;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Produit produit = (Produit) o;
+        return Float.compare(produit.prixHT, prixHT) == 0 &&
+                Objects.equals(referenceProduit, produit.referenceProduit) &&
+                Objects.equals(dateAjout, produit.dateAjout) &&
+                Objects.equals(nom, produit.nom) &&
+                Objects.equals(description, produit.description) &&
+                Objects.equals(categories, produit.categories) &&
+                Objects.equals(caracteristiqueAssociated, produit.caracteristiqueAssociated) &&
+                Objects.equals(photoPrincipale, produit.photoPrincipale) &&
+                Objects.equals(photos, produit.photos) &&
+                Objects.equals(avisClients, produit.avisClients) &&
+                Objects.equals(categoriesSupprime, produit.categoriesSupprime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(referenceProduit, dateAjout, nom, description, prixHT, categories, caracteristiqueAssociated, photoPrincipale, photos, avisClients, categoriesSupprime);
     }
 }

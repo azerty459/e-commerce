@@ -13,6 +13,13 @@ public interface ICaracteristiqueBusiness {
     CaracteristiqueDTO add(CaracteristiqueDTO caracteristique);
 
     /**
+     * Méthode définissant la modification d'une caractéristique
+     * @param caracteristique à modifier
+     * @return
+     */
+    CaracteristiqueDTO update(CaracteristiqueDTO caracteristique);
+
+    /**
      * Méthode définissant la suppression d'une caractéristique
      * @param id de la caractéristique à supprimer
      * @return

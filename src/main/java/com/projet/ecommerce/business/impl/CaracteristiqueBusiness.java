@@ -27,8 +27,7 @@ public class CaracteristiqueBusiness implements ICaracteristiqueBusiness {
     public CaracteristiqueDTO add(CaracteristiqueDTO caracteristiqueDTO) {
         // Renvoi d'erreurs
         if (caracteristiqueDTO == null) {
-            GraphQLCustomException graphQLCustomException = new GraphQLCustomException("Erreur dans l'ajout de la caractéristique : l'object Caractéristique ne peut pas être null.");
-            throw graphQLCustomException;
+            throw new GraphQLCustomException("Erreur dans l'ajout de la caractéristique : l'object Caractéristique ne peut pas être null.");
         } else if (caracteristiqueDTO.getLabel().isEmpty()) {
             GraphQLCustomException graphQLCustomException = new GraphQLCustomException("Erreur dans l'ajout de la caractéristique : l'un des attributs spécifié est null.");
             graphQLCustomException.ajouterExtension("label", caracteristiqueDTO.getLabel());
@@ -48,6 +47,28 @@ public class CaracteristiqueBusiness implements ICaracteristiqueBusiness {
             }
         }*/
 
+        // Si pas d'erreur
+        Caracteristique caracteristique = CaracteristiqueTransformer.dtoToEntity(caracteristiqueDTO);
+        return CaracteristiqueTransformer.entityToDto(caracteristiqueRepository.save(caracteristique));
+    }
+
+    @Override
+    public CaracteristiqueDTO update(CaracteristiqueDTO caracteristiqueDTO) {
+        // Renvoi d'erreurs
+        if (caracteristiqueDTO == null) {
+            throw new GraphQLCustomException("Erreur dans l'update de la caractéristique : " +
+                    "l'object Caractéristique ne peut pas être null.");
+        } else if (caracteristiqueDTO.getLabel().isEmpty()) {
+            GraphQLCustomException graphQLCustomException = new GraphQLCustomException(
+                    "Erreur dans l'update de la caractéristique : l'un des attributs spécifié est null.");
+            graphQLCustomException.ajouterExtension("label", caracteristiqueDTO.getLabel());
+            throw graphQLCustomException;
+        } else if (caracteristiqueDTO.getId() == null) {
+            GraphQLCustomException graphQLCustomException = new GraphQLCustomException(
+                    "Erreur dans l'update de la caractéristique : l'un des attributs spécifié est null.");
+            graphQLCustomException.ajouterExtension("id", null);
+            throw graphQLCustomException;
+        }
         // Si pas d'erreur
         Caracteristique caracteristique = CaracteristiqueTransformer.dtoToEntity(caracteristiqueDTO);
         return CaracteristiqueTransformer.entityToDto(caracteristiqueRepository.save(caracteristique));

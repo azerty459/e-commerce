@@ -2,6 +2,7 @@ package com.projet.ecommerce.persistance.entity;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "caracteristique")
@@ -16,7 +17,7 @@ public class Caracteristique {
     private String label;
 
     // TODO a delete
-    @OneToMany(mappedBy = "caracteristique", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "caracteristique", cascade = {CascadeType.REMOVE, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<CaracteristiqueAssociated> caracteristiqueAssociatedList;
 
     public Integer getId() {
@@ -41,5 +42,20 @@ public class Caracteristique {
 
     public void setCaracteristiqueAssociatedList(List<CaracteristiqueAssociated> caracteristiqueAssociatedList) {
         this.caracteristiqueAssociatedList = caracteristiqueAssociatedList;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Caracteristique that = (Caracteristique) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(label, that.label) &&
+                Objects.equals(caracteristiqueAssociatedList, that.caracteristiqueAssociatedList);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, label, caracteristiqueAssociatedList);
     }
 }

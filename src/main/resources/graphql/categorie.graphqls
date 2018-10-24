@@ -1,6 +1,6 @@
 input CategorieInput {
-    idCategorie: Int!
-    nomCategorie: String!
+    id: Int!
+    nom: String!
 }
 
 type Categorie {
