@@ -1,5 +1,6 @@
 package com.projet.ecommerce.persistance.repository.impl;
 
+import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Produit;
 import com.projet.ecommerce.persistance.repository.ProduitRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +8,9 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.criteria.*;
 import java.util.Collection;
+import java.util.List;
 
 
 @Repository
@@ -52,4 +55,114 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
         System.out.println(query.getResultList().size());
         return query.getResultList();
     }
+
+    @Override
+    public Collection<Produit> findAllWithJPACriteriaBuilder() {
+
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Produit> query = builder.createQuery(Produit.class);
+        Root<Produit> from = query.from(Produit.class);
+
+        CriteriaQuery<Produit> selectQuery = query.select(from);
+
+
+        List<Produit> result = entityManager.createQuery(selectQuery).getResultList();
+        return result;
+
+    }
+
+    @Override
+    public Collection<Produit> findByNomWithJPACriteriaBuilder(String nom, boolean like) {
+
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Produit> query = builder.createQuery(Produit.class);
+        Root<Produit> from = query.from(Produit.class);
+
+
+        Predicate whereCondition = null;
+        if(like){
+            whereCondition = builder.like(from.get("nom"),nom);
+        }else{
+            whereCondition = builder.equal(from.get("nom"),nom);
+        }
+
+        CriteriaQuery<Produit> selectQuery = query.select(from)
+                .where(whereCondition);
+
+        List<Produit> result = entityManager.createQuery(selectQuery)
+                .getResultList();
+
+        return result;
+    }
+
+    @Override
+    public Collection<Produit> findByCategorieWithJPACriteriaBuilder(String cat) {
+
+        //select p.* from produit p , produit_categorie pc , categorie c
+        // where pc.reference_produit = p.reference_produit and pc.id_categorie = c.id_categorie and c.nom_categorie = 'Photoshop';
+
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Produit> query = builder.createQuery(Produit.class);
+        Root<Produit> from = query.from(Produit.class);
+
+        Join<Produit, Categorie> joinCategories = from.join("categories");
+
+        Predicate whereCondition = builder.equal(joinCategories.get("nomCategorie"),cat);
+
+        CriteriaQuery<Produit> selectQuery = query.select(from)
+                .where(whereCondition);
+
+        List<Produit> result = entityManager.createQuery(selectQuery)
+                .getResultList();
+
+
+        return result;
+    }
+
+//    @Override
+//    public Collection<Produit> findByNoteWithJPACriteriaBuilder(Integer note) {
+//        return null;
+//    }
+
+
+//
+//    public Collection<Produit> findAllWithJPACriteriaBuilder(String nom, boolean like, String cat) {
+//
+//        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+//        CriteriaQuery<Produit> query = builder.createQuery(Produit.class);
+//        Root<Produit> from = query.from(Produit.class);
+//
+//        CriteriaQuery<Produit> selectQuery = query.select(from);
+//
+//        if(nom != null){
+//
+//            ParameterExpression<String> nomParameter = builder.parameter(String.class);
+//
+//            Predicate whereCondition = null;
+//            if(like){
+//                whereCondition = builder.like(from.get("nom"),nomParameter);
+//            }else{
+//                whereCondition = builder.equal(from.get("nom"),nomParameter);
+//            }
+//
+//        }
+//
+//        if(cat != null){
+//
+//            Join<Produit, Categorie> joinCategories = from.join("categories");
+//
+//            ParameterExpression<String> catParameter = builder.parameter(String.class);
+//
+//            Predicate whereCondition = builder.equal(joinCategories.get("nomCategorie"),catParameter);
+//
+//            CriteriaQuery<Produit> selectQuery = query.select(from)
+//                    .where(whereCondition);
+//
+//        }
+//
+//
+//        List<Produit> result = entityManager.createQuery(selectQuery).getResultList();
+//        return result;
+//
+//    }
 }

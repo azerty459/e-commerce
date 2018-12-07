@@ -8,4 +8,12 @@ public interface ProduitRepositoryCustom {
 
     Collection<Produit> findAllWithCriteria(String ref, String cat);
 
+    Collection<Produit> findAllWithJPACriteriaBuilder();
+
+    Collection<Produit> findByNomWithJPACriteriaBuilder(String nom, boolean like);
+
+    Collection<Produit> findByCategorieWithJPACriteriaBuilder(String cat);
+
+    //Collection<Produit> findByNoteWithJPACriteriaBuilder(Integer note, boolean lowerThan);
+
 }
