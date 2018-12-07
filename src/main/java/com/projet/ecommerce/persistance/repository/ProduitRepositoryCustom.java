@@ -14,6 +14,6 @@ public interface ProduitRepositoryCustom {
 
     Collection<Produit> findByCategorieWithJPACriteriaBuilder(String cat);
 
-    //Collection<Produit> findByNoteWithJPACriteriaBuilder(Integer note, boolean lowerThan);
+    Collection<Produit> findByNoteWithJPACriteriaBuilder(Double noteMin, Double noteMax);
 
 }

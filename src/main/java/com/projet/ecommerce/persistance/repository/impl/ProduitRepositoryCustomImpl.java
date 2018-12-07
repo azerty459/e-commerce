@@ -1,5 +1,6 @@
 package com.projet.ecommerce.persistance.repository.impl;
 
+import com.projet.ecommerce.persistance.entity.AvisClient;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Produit;
 import com.projet.ecommerce.persistance.repository.ProduitRepositoryCustom;
@@ -30,6 +31,8 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
             "SELECT cat_recherchee2.borneDroit " +
             "FROM Categorie AS cat_recherchee2 " +
             "WHERE cat_recherchee2.nomCategorie =:cat)";
+
+    private static final String SQL_PRODUCTS_BY_NOTE = "SELECT p FROM Produit AS p WHERE (SELECT AVG(a.note) FROM AvisClient AS a WHERE a.produit = p.referenceProduit) BETWEEN :noteMin and :noteMax";
 
     @Autowired
     private EntityManager entityManager;
@@ -119,10 +122,36 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
         return result;
     }
 
-//    @Override
-//    public Collection<Produit> findByNoteWithJPACriteriaBuilder(Integer note) {
-//        return null;
-//    }
+    @Override
+    public Collection<Produit> findByNoteWithJPACriteriaBuilder(Double noteMin, Double noteMax) {
+
+//        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+//        CriteriaQuery<Produit> query = builder.createQuery(Produit.class);
+//        Root<Produit> from = query.from(Produit.class);
+//
+//
+//        CriteriaQuery<Produit> select = query.select(from);
+//
+//        Subquery<AvisClient> subquery = query.subquery(AvisClient.class);
+//        Root fromAvis = subquery.from(AvisClient.class);
+//
+//        subquery.select(builder.avg(fromAvis.get("note")))
+//                .where(builder.equal(from.get("referenceProduit"), fromAvis.get("produit")));
+//        @TODO
+//        select.where(builder.between(subquery, noteMin, noteMax));
+//
+//        List<Produit> result = entityManager.createQuery(select)
+//                .getResultList();
+//
+//        return result;
+
+        Query query = entityManager.createQuery(SQL_PRODUCTS_BY_NOTE, Produit.class);
+        query.setParameter("noteMin", noteMin);
+        query.setParameter("noteMax", noteMax);
+
+        return query.getResultList();
+
+    }
 
 
 //

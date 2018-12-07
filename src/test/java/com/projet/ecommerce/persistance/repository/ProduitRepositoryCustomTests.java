@@ -230,15 +230,17 @@ public class ProduitRepositoryCustomTests {
     @Test
     public void findByNoteWithJPACriteriaBuilder(){
 
-//        produitRepository.findByNoteWithJPACriteriaBuilder(0,0);
-//
-//        produitRepository.findByNoteWithJPACriteriaBuilder(0,5);
-//
-//        produitRepository.findByNoteWithJPACriteriaBuilder(5,0);
-//
-//        produitRepository.findByNoteWithJPACriteriaBuilder(3,3);
-
+        Collection<Produit> produitCollection = produitRepository.findByNoteWithJPACriteriaBuilder(0.0,0.0);
+        Assert.assertEquals(0, produitCollection.size());
+        produitCollection = produitRepository.findByNoteWithJPACriteriaBuilder(0.0,5.0);
+        Assert.assertEquals(1, produitCollection.size());
+        produitCollection = produitRepository.findByNoteWithJPACriteriaBuilder(5.0,0.0);
+        Assert.assertEquals(0, produitCollection.size());
+        produitCollection = produitRepository.findByNoteWithJPACriteriaBuilder(3.0,3.0);
+        Assert.assertEquals(1, produitCollection.size());
     }
+
+
 
 
 
