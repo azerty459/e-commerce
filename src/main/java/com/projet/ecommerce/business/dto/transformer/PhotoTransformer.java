@@ -34,9 +34,11 @@ public class PhotoTransformer {
      */
     public static Photo dtoToEntity(PhotoDTO photoDTO) {
         Photo photo = new Photo();
-        photo.setUrl(photoDTO.getUrl());
-        photo.setIdPhoto(photoDTO.getId());
-        photo.setNom(photoDTO.getNom());
+        if (photoDTO != null) {
+            photo.setUrl(photoDTO.getUrl());
+            photo.setIdPhoto(photoDTO.getId());
+            photo.setNom(photoDTO.getNom());
+        }
         return photo;
     }
 

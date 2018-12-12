@@ -38,12 +38,16 @@ public class Produit {
     )
     private List<Categorie> categories;
 
-    @OneToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE}, fetch = FetchType.LAZY)
-    @JoinColumn(name = "photo_principale")
-    private Photo photoPrincipale;
+    @OneToMany(mappedBy = "produit", cascade = {CascadeType.REMOVE, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private List<Caracteristique> caracteristiques;
 
     @OneToMany(mappedBy = "produit", cascade = {CascadeType.REMOVE, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<Photo> photos;
+
+
+    @OneToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @JoinColumn(name = "photo_principale")
+    private Photo photoPrincipale;
 
     @OneToMany(mappedBy = "produit", cascade = {CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<AvisClient> avisClients;
@@ -210,4 +214,11 @@ public class Produit {
         this.photoPrincipale = photoPrincipale;
     }
 
+    public List<Caracteristique> getCaracteristiques() {
+        return caracteristiques;
+    }
+
+    public void setCaracteristiques(List<Caracteristique> caracteristiques) {
+        this.caracteristiques = caracteristiques;
+    }
 }

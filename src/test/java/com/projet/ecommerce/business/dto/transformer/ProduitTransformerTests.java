@@ -1,11 +1,10 @@
 package com.projet.ecommerce.business.dto.transformer;
 
+import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
 import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.business.dto.PhotoDTO;
 import com.projet.ecommerce.business.dto.ProduitDTO;
-import com.projet.ecommerce.persistance.entity.Categorie;
-import com.projet.ecommerce.persistance.entity.Photo;
-import com.projet.ecommerce.persistance.entity.Produit;
+import com.projet.ecommerce.persistance.entity.*;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +18,10 @@ public class ProduitTransformerTests {
     private static final CategorieDTO SOUS_CATEGORIE_DTO;
 
     private static final CategorieDTO CATEGORIE_DTO;
+
+    private static final CaracteristiqueDTO CARACTERISTIQUE_DTO1;
+    private static final CaracteristiqueDTO CARACTERISTIQUE_DTO2;
+    private static final List<CaracteristiqueDTO> CARACTERISTIQUE_DTOS = new ArrayList<>();
 
     private static final ArrayList<CategorieDTO> LIST_CATEGORIE_DTO1;
     private static final ArrayList<CategorieDTO> LIST_CATEGORIE_DTO2;
@@ -40,6 +43,11 @@ public class ProduitTransformerTests {
     private static final List<Produit> LIST_PRODUIT;
     private static final List<ProduitDTO> LIST_PRODUIT_DTO;
 
+
+    private static final Caracteristique CARACTERISTIQUE_1;
+    private static final  Caracteristique CARACTERISTIQUE_2;
+    private static final List<Caracteristique> CARACTERISTIQUES = new ArrayList<>();
+
     static {
         SOUS_CATEGORIE_DTO = new CategorieDTO();
         CATEGORIE_DTO = new CategorieDTO();
@@ -50,6 +58,28 @@ public class ProduitTransformerTests {
         CATEGORIE_DTO.setNom("catégorie");
         CATEGORIE_DTO.setSousCategories(LIST_CATEGORIE_DTO1);
         LIST_CATEGORIE_DTO2.add(CATEGORIE_DTO);
+
+        CARACTERISTIQUE_DTO1 = new CaracteristiqueDTO();
+        CARACTERISTIQUE_DTO1.setType("Broché");
+        CARACTERISTIQUE_DTO1.setValeur("223 pages");
+        CARACTERISTIQUE_DTOS.add(CARACTERISTIQUE_DTO1);
+
+        CARACTERISTIQUE_DTO2 = new CaracteristiqueDTO();
+        CARACTERISTIQUE_DTO2.setType("Editeur");
+        CARACTERISTIQUE_DTO2.setValeur("Flammarion");
+        CARACTERISTIQUE_DTOS.add(CARACTERISTIQUE_DTO2);
+
+        CARACTERISTIQUE_1 = new Caracteristique();
+        CARACTERISTIQUE_1.setIdCaracteristique(1);
+        CARACTERISTIQUE_1.setType(new TypeCaracteristique(1, "Broché"));
+        CARACTERISTIQUE_1.setValeur("223 pages");
+        CARACTERISTIQUES.add(CARACTERISTIQUE_1);
+
+        CARACTERISTIQUE_2 = new Caracteristique();
+        CARACTERISTIQUE_2.setIdCaracteristique(2);
+        CARACTERISTIQUE_2.setType(new TypeCaracteristique(2, "Editeur"));
+        CARACTERISTIQUE_2.setValeur("Flammarion");
+        CARACTERISTIQUES.add(CARACTERISTIQUE_2);
 
         LISTE_CATEGORIE1 = new ArrayList<>();
 
@@ -67,6 +97,7 @@ public class ProduitTransformerTests {
 
         PRODUIT_DTO1 = new ProduitDTO();
         PRODUIT_DTO1.setCategories(LIST_CATEGORIE_DTO2);
+        PRODUIT_DTO1.setCaracteristiques(CARACTERISTIQUE_DTOS);
         PRODUIT_DTO1.setPhotos(LIST_PHOTO_DTO);
         PRODUIT_DTO1.setDescription("ceci est un test");
         PRODUIT_DTO1.setNom("test");
@@ -75,6 +106,7 @@ public class ProduitTransformerTests {
 
         PRODUIT_DTO2 = new ProduitDTO();
         PRODUIT_DTO2.setCategories(LIST_CATEGORIE_DTO2);
+        PRODUIT_DTO2.setCaracteristiques(CARACTERISTIQUE_DTOS);
         PRODUIT_DTO2.setPhotos(LIST_PHOTO_DTO);
         PRODUIT_DTO2.setDescription("ceci est un test");
         PRODUIT_DTO2.setNom("test");
@@ -88,6 +120,7 @@ public class ProduitTransformerTests {
         PRODUIT1.setNom("test");
         PRODUIT1.setPrixHT(1);
         PRODUIT1.setReferenceProduit("A4224");
+        PRODUIT1.setCaracteristiques(CARACTERISTIQUES);
 
         PRODUIT2 = new Produit();
         PRODUIT2.setCategories(LISTE_CATEGORIE1);
@@ -96,6 +129,7 @@ public class ProduitTransformerTests {
         PRODUIT2.setNom("test");
         PRODUIT2.setPrixHT(1);
         PRODUIT2.setReferenceProduit("A4224");
+        PRODUIT2.setCaracteristiques(CARACTERISTIQUES);
 
         LIST_PRODUIT = new ArrayList<>();
         LIST_PRODUIT.add(PRODUIT1);
@@ -104,6 +138,8 @@ public class ProduitTransformerTests {
         LIST_PRODUIT_DTO = new ArrayList<>();
         LIST_PRODUIT_DTO.add(PRODUIT_DTO1);
         LIST_PRODUIT_DTO.add(PRODUIT_DTO2);
+
+
     }
 
     @Test
@@ -124,6 +160,7 @@ public class ProduitTransformerTests {
         ProduitDTO prodDto = ProduitTransformer.entityToDto(PRODUIT1);
         Assert.assertNotNull(prodDto);
         Assert.assertTrue(PRODUIT1.getCategories().containsAll(prodDto.getCategories()));
+        Assert.assertTrue(PRODUIT1.getCaracteristiques().get(0).getValeur().equals(prodDto.getCaracteristiques().get(0).getValeur()));
         Assert.assertEquals(PRODUIT1.getDescription(), prodDto.getDescription());
         Assert.assertEquals(PRODUIT1.getNom(), prodDto.getNom());
         Assert.assertEquals(PRODUIT1.getPhotos().get(0).getIdPhoto(), prodDto.getPhotos().get(0).getId());
@@ -138,6 +175,7 @@ public class ProduitTransformerTests {
 
         Assert.assertNotNull(listProd);
         Assert.assertEquals(listProd.get(0).getCategories().get(0).getNomCategorie(), LIST_PRODUIT_DTO.get(0).getCategories().get(0).getNom());
+        Assert.assertEquals(listProd.get(0).getCaracteristiques().get(0).getValeur(), LIST_PRODUIT_DTO.get(0).getCaracteristiques().get(0).getValeur());
         Assert.assertEquals(listProd.get(0).getDescription(), LIST_PRODUIT_DTO.get(0).getDescription());
         Assert.assertEquals(listProd.get(0).getNom(), LIST_PRODUIT_DTO.get(0).getNom());
         Assert.assertEquals(listProd.get(0).getPhotos().get(0).getIdPhoto(), LIST_PRODUIT_DTO.get(0).getPhotos().get(0).getId());
@@ -152,6 +190,8 @@ public class ProduitTransformerTests {
 
         Assert.assertNotNull(listDTO);
         Assert.assertEquals(listDTO.get(0).getCategories(), LIST_PRODUIT.get(0).getCategories());
+        Assert.assertEquals(listDTO.get(0).getCaracteristiques().get(0).getValeur(), LIST_PRODUIT.get(0).getCaracteristiques().get(0).getValeur());
+        Assert.assertEquals(listDTO.get(0).getCaracteristiques().get(0).getType(), LIST_PRODUIT.get(0).getCaracteristiques().get(0).getType().getType());
         Assert.assertEquals(listDTO.get(0).getDescription(), LIST_PRODUIT.get(0).getDescription());
         Assert.assertEquals(listDTO.get(0).getNom(), LIST_PRODUIT.get(0).getNom());
         Assert.assertEquals(listDTO.get(0).getPhotos().get(0).getId(), LIST_PRODUIT.get(0).getPhotos().get(0).getIdPhoto());
