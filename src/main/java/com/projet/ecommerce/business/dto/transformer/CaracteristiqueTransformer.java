@@ -33,17 +33,21 @@ public class CaracteristiqueTransformer {
 
     public static CaracteristiqueDTO entityDTO(Caracteristique c) {
         CaracteristiqueDTO dto = new CaracteristiqueDTO();
-        dto.setType(c.getType() != null ? c.getType().getType() : null);
-        dto.setValeur(c.getValeur());
+        if (c != null) {
+            dto.setType(c.getType() != null ? c.getType().getType() : null);
+            dto.setValeur(c.getValeur());
+        }
         return dto;
     }
 
     public static Caracteristique dtoToEntity(CaracteristiqueDTO dto) {
         Caracteristique c = new Caracteristique();
-        c.setValeur(dto.getValeur());
-        TypeCaracteristique t = new TypeCaracteristique();
-        t.setType(dto.getType());
-        c.setType(t);
+        if (dto != null) {
+            c.setValeur(dto.getValeur());
+            TypeCaracteristique t = new TypeCaracteristique();
+            t.setType(dto.getType());
+            c.setType(t);
+        }
         return c;
     }
 }
