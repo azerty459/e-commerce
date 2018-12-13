@@ -29,4 +29,6 @@ public interface ProduitRepository extends PagingAndSortingRepository<Produit, S
 
     Page<Produit> findAllByCategories_borneGaucheGreaterThanEqualAndCategories_borneDroitLessThanEqual(Pageable pageable, int borneGauche, int borneDroite);
 
+    Produit findByReferenceProduit(final String referenceProduit);
+
 }
