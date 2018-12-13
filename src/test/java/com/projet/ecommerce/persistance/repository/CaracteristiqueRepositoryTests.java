@@ -15,6 +15,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 
+
+/**
+ * @author nextoo
+ * tests intégration ajout - maj de caracteristiques
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("test")
