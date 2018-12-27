@@ -70,7 +70,11 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
         Root<Produit> root = query.from(Produit.class);
         Join<Produit, Caracteristique> caracteristiqueProduitJoin = root.join(Produit_.caracteristiques, JoinType.INNER);
         query.where(
-            builder.between(caracteristiqueProduitJoin.get(Caracteristique_.VALEUR), note1, note2)
+            builder.or(
+            builder.between(caracteristiqueProduitJoin.get(Caracteristique_.VALEUR), note1, note2),
+            builder.greaterThan(caracteristiqueProduitJoin.get(Caracteristique_.VALEUR), note1),
+            builder.lessThan(caracteristiqueProduitJoin.get(Caracteristique_.VALEUR), note2)
+            )
         );
         return entityManager.createQuery(query).getResultList();
     }

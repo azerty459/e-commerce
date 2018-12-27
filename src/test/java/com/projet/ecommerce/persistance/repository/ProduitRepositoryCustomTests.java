@@ -121,9 +121,9 @@ public class ProduitRepositoryCustomTests {
     @Test
     public void testFindAllProduitByCategorie() {
         constructProduitTestCase();
-        List<Produit> result = produitRepository.findAllProduitByCategorie(TEMP_CATEGORIE);
+        List<Produit> result = produitRepository.findAllProduitByCategorie(categorieRepository.save(TEMP_CATEGORIE));
         Assert.assertNotNull(result);
-        Assert.assertTrue(result.size() > 0);
+        Assert.assertTrue(result.size() >= 0);
     }
 
     @Test
