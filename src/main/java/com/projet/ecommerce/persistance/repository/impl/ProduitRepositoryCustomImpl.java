@@ -1,7 +1,6 @@
 package com.projet.ecommerce.persistance.repository.impl;
 
-import com.projet.ecommerce.persistance.entity.Categorie;
-import com.projet.ecommerce.persistance.entity.Produit;
+import com.projet.ecommerce.persistance.entity.*;
 import com.projet.ecommerce.persistance.repository.ProduitRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -69,8 +68,10 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Produit> query = builder.createQuery(Produit.class);
         Root<Produit> root = query.from(Produit.class);
-        /*PluralAttribute<Caracteristique, Produit, null> caracteristiquePath = root.get("");
-        Join<Caracteristique, Produit> caracteristiqueProduitJoin = root.fetch(caracteristiquePath);*/
+        Join<Produit, Caracteristique> caracteristiqueProduitJoin = root.join(Produit_.caracteristiques, JoinType.INNER);
+        query.where(
+            builder.between(caracteristiqueProduitJoin.get(Caracteristique_.VALEUR), note1, note2)
+        );
         return entityManager.createQuery(query).getResultList();
     }
 
