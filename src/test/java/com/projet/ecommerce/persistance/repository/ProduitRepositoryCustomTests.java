@@ -1,7 +1,10 @@
 package com.projet.ecommerce.persistance.repository;
 
+import com.projet.ecommerce.persistance.entity.Caracteristique;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Produit;
+import com.projet.ecommerce.persistance.entity.TypeCaracteristique;
+import com.projet.ecommerce.persistance.repository.impl.CategorieRepositoryCustomImpl;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,15 +25,23 @@ import java.util.List;
 @Transactional
 public class ProduitRepositoryCustomTests {
 
-    private static final Produit TEMP_INSERT;
-    private static final Categorie TEMP_CATEGORIE;
+    private static Produit TEMP_INSERT;
+    private static Categorie TEMP_CATEGORIE;
+    private static Caracteristique TEMP_CARACTERISTIQUE;
+    private static TypeCaracteristique TEMP_TYPE;
+
 
     static {
         //Permet d'écraser la config application.properties par application-test.properties
         System.setProperty("spring.config.location", "classpath:application-test.properties");
 
+        constructProduitTestCase();
+    }
+
+    private static void constructProduitTestCase() {
         TEMP_INSERT = new Produit();
         TEMP_INSERT.setReferenceProduit("A05A87");
+        TEMP_INSERT.setNom("mon produit");
         TEMP_INSERT.setPrixHT(8.7f);
         TEMP_INSERT.setDescription("joli produit");
         TEMP_INSERT.setCategories(new ArrayList<>());
@@ -42,6 +53,17 @@ public class ProduitRepositoryCustomTests {
         TEMP_CATEGORIE.setLevel(1);
         TEMP_CATEGORIE.setProduits(new ArrayList<>());
 
+        TEMP_CARACTERISTIQUE = new Caracteristique();
+        TEMP_TYPE = new TypeCaracteristique();
+        TEMP_TYPE.setType("note");
+        TEMP_CARACTERISTIQUE.setType(TEMP_TYPE);
+        TEMP_CARACTERISTIQUE.setValeur("5");
+        TEMP_CARACTERISTIQUE.setProduit(TEMP_INSERT);
+        TEMP_INSERT.setCaracteristiques(new ArrayList<>());
+        List<Caracteristique> caracteristiques = new ArrayList<>();
+        caracteristiques.add(TEMP_CARACTERISTIQUE);
+        TEMP_INSERT.setCaracteristiques(caracteristiques);
+
         Collection<Categorie> categorieCollection = TEMP_INSERT.getCategories();
         categorieCollection.add(TEMP_CATEGORIE);
         TEMP_INSERT.setCategories(new ArrayList<>(categorieCollection));
@@ -49,14 +71,60 @@ public class ProduitRepositoryCustomTests {
 
     @Before
     public void insertProduit() {
+        typeCaracteristiqueRepository.save(TEMP_TYPE);
         produitRepository.save(TEMP_INSERT);
     }
-
+    @Autowired
+    TypeCaracteristiqueRepository typeCaracteristiqueRepository;
     @Autowired
     private ProduitRepository produitRepository;
 
     @Autowired
     private CategorieRepository categorieRepository;
+    @Autowired
+    private CategorieRepositoryCustomImpl categorieRepositoryCustom;
+
+    @Test
+    public void testFindAllProduitNotNullAndHasElements() {
+        constructProduitTestCase();
+        List<Produit> result = produitRepository.findAllProduit();
+        Assert.assertNotNull(result);
+        Assert.assertTrue(result.size() > 0);
+    }
+
+    @Test
+    public void testFindAllProduitByAverageNote() {
+        constructProduitTestCase();
+        final float noteA = 2;
+        final float noteB = 6;
+        List<Produit> result = produitRepository.findAllProduitByNote(noteA, noteB);
+        Assert.assertNotNull(result);
+        Assert.assertTrue(result.size() == 1);
+    }
+
+    @Test
+    public void testFindAllProduitByAverageNom() {
+        constructProduitTestCase();
+        List<Produit> result = produitRepository.findAllProduitByNom("mon produit");
+        Assert.assertNotNull(result);
+        Assert.assertTrue(result.size() == 1);
+    }
+
+    @Test
+    public void testFindAllProduitLikeNom() {
+        constructProduitTestCase();
+        List<Produit> result = produitRepository.findAllProduitLikeNom("mon produit");
+        Assert.assertNotNull(result);
+        Assert.assertTrue(result.size() == 1);
+    }
+
+    @Test
+    public void testFindAllProduitByCategorie() {
+        constructProduitTestCase();
+        List<Produit> result = produitRepository.findAllProduitByCategorie(TEMP_CATEGORIE);
+        Assert.assertNotNull(result);
+        Assert.assertTrue(result.size() > 0);
+    }
 
     @Test
     // Je teste que la méthode si l'on l'appelle avec null dans les deux paramètres, elle retourne une collection de produit.

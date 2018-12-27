@@ -1,5 +1,6 @@
 package com.projet.ecommerce.persistance.repository.impl;
 
+import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Produit;
 import com.projet.ecommerce.persistance.repository.ProduitRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +8,9 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.criteria.*;
 import java.util.Collection;
+import java.util.List;
 
 
 @Repository
@@ -51,5 +54,59 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
         }
         System.out.println(query.getResultList().size());
         return query.getResultList();
+    }
+
+    @Override
+    public List<Produit> findAllProduit() {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Produit> query = builder.createQuery(Produit.class);
+        Root<Produit> root = query.from(Produit.class);
+        return entityManager.createQuery(query).getResultList();
+    }
+
+    @Override
+    public List<Produit> findAllProduitByNote(final float note1,final  float note2) {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Produit> query = builder.createQuery(Produit.class);
+        Root<Produit> root = query.from(Produit.class);
+        /*PluralAttribute<Caracteristique, Produit, null> caracteristiquePath = root.get("");
+        Join<Caracteristique, Produit> caracteristiqueProduitJoin = root.fetch(caracteristiquePath);*/
+        return entityManager.createQuery(query).getResultList();
+    }
+
+    @Override
+    public List<Produit> findAllProduitByNom(final String nom) {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Produit> query = builder.createQuery(Produit.class);
+        Root<Produit> root = query.from(Produit.class);
+        query.where(
+                builder.equal(root.get("nom"), nom)
+        );
+        return entityManager.createQuery(query).getResultList();
+    }
+
+    @Override
+    public List<Produit> findAllProduitLikeNom(final String nom) {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Produit> query = builder.createQuery(Produit.class);
+        Root<Produit> root = query.from(Produit.class);
+        query.where(
+                builder.like(root.get("nom"), nom)
+        );
+        return entityManager.createQuery(query).getResultList();
+    }
+
+    @Override
+    public List<Produit> findAllProduitByCategorie(final Categorie categorie) {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Produit> query = builder.createQuery(Produit.class);
+        Root<Produit> root = query.from(Produit.class);
+        Expression<Collection<Categorie>> categories = root.get("categories");
+        Expression<Categorie> paramCategorie = builder.parameter(Categorie.class);
+        Predicate predicate = builder.isMember(categorie, categories);
+        query.where(
+                predicate
+        );
+        return entityManager.createQuery(query).getResultList();
     }
 }

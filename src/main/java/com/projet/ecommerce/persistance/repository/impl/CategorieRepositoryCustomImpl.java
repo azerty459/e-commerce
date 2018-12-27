@@ -194,6 +194,11 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
 
     }
 
+    @Override
+    public void refresh(Categorie categorie) {
+        entityManager.refresh(categorie);
+    }
+
     private void refreshEveryCategories() {
         int i = 1;
         Categorie categorie = entityManager.find(Categorie.class, i);
