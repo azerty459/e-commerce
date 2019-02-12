@@ -1,0 +1,89 @@
+package com.projet.ecommerce.persistance.entity;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import com.projet.ecommerce.business.dto.TypeCaracteristiqueDTO;
+
+
+/**
+ * Entité représentant la table caracteristique sous forme de classe.
+ */
+
+@Entity
+@Table(name = "caracteristique")
+public class Caracteristique {
+	
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="id_carac")
+	private int id;
+	
+	@Column
+	private String valeur;
+	
+	
+	@Enumerated(EnumType.STRING)
+	@Column
+    private TypeCaracteristiqueDTO typeCaracteristique;
+	
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reference_produit")
+	private Produit produit;
+
+
+	public int getId() {
+		return id;
+	}
+	
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+
+
+	public String getValeur() {
+		return valeur;
+	}
+
+
+	public void setValeur(String valeur) {
+		this.valeur = valeur;
+	}
+
+
+	public TypeCaracteristiqueDTO getTypeCaracteristique() {
+		return typeCaracteristique;
+	}
+
+
+	public void setTypeCaracteristique(TypeCaracteristiqueDTO typeCaracteristique) {
+		this.typeCaracteristique = typeCaracteristique;
+	}
+
+
+	public Produit getProduit() {
+		return produit;
+	}
+
+
+	public void setProduit(Produit produit) {
+		this.produit = produit;
+	}
+	
+	
+	
+	
+
+}
