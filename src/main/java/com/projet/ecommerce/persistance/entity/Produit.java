@@ -56,6 +56,9 @@ public class Produit {
             inverseJoinColumns = {@JoinColumn(name = "id_categorie")}
     )
     private List<Categorie> categoriesSupprime;
+    
+    @OneToMany(mappedBy = "produit", cascade = {CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private List<Caracteristique> caracteristiques;
 
     /**
      * Retourne la référence du produit.
@@ -209,5 +212,15 @@ public class Produit {
     public void setPhotoPrincipale(Photo photoPrincipale) {
         this.photoPrincipale = photoPrincipale;
     }
+
+	public List<Caracteristique> getCaracteristiques() {
+		return caracteristiques;
+	}
+
+	public void setCaracteristiques(List<Caracteristique> caracteristiques) {
+		this.caracteristiques = caracteristiques;
+	}
+    
+    
 
 }
