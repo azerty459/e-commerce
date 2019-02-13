@@ -6,7 +6,7 @@ public class CaracteristiqueDTO {
 	
 	private String valeur;
 	
-	private TypeCaracteristiqueDTO type;
+	private TypeCaracteristiqueDTO typeCaracteristique;
 	
 	private String refProduit;
 
@@ -26,12 +26,12 @@ public class CaracteristiqueDTO {
 		this.valeur = valeur;
 	}
 
-	public TypeCaracteristiqueDTO getType() {
-		return type;
+	public TypeCaracteristiqueDTO getTypeCaracteristique() {
+		return typeCaracteristique;
 	}
 
-	public void setType(TypeCaracteristiqueDTO type) {
-		this.type = type;
+	public void setTypeCaracteristique(TypeCaracteristiqueDTO typeCaracteristique) {
+		this.typeCaracteristique = typeCaracteristique;
 	}
 
 	public String getRefProduit() {

@@ -27,7 +27,7 @@ public class CaracteristiqueTransformer {
     	Caracteristique caracteristique = new Caracteristique();
     	caracteristique.setId(dtoCaracteristique.getId());
     	caracteristique.setValeur(dtoCaracteristique.getValeur());
-    	caracteristique.setTypeCaracteristique(dtoCaracteristique.getType());
+    	caracteristique.setTypeCaracteristique(dtoCaracteristique.getTypeCaracteristique());
         Produit p = new Produit();
         p.setReferenceProduit(dtoCaracteristique.getRefProduit());
         caracteristique.setProduit(p);
@@ -50,7 +50,7 @@ public class CaracteristiqueTransformer {
     	CaracteristiqueDTO dtoCaracteristique = new CaracteristiqueDTO();
     	dtoCaracteristique.setId(caracteristique.getId());
     	dtoCaracteristique.setValeur(caracteristique.getValeur());
-    	dtoCaracteristique.setType(caracteristique.getTypeCaracteristique());
+    	dtoCaracteristique.setTypeCaracteristique(caracteristique.getTypeCaracteristique());
         if(caracteristique.getProduit() != null){
         	dtoCaracteristique.setRefProduit(caracteristique.getProduit().getReferenceProduit());
         }

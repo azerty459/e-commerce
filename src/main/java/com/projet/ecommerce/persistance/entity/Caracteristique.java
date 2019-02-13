@@ -34,7 +34,7 @@ public class Caracteristique {
 	
 	
 	@Enumerated(EnumType.STRING)
-	@Column
+	@Column(name="typecaracteristique")
     private TypeCaracteristiqueDTO typeCaracteristique;
 	
 	

@@ -22,7 +22,7 @@ CREATE TABLE produit_caracteristique
 );
 */
 
-INSERT INTO caracteristique (valeur, typeCaracteristique) VALUES ('Flammarion', 'EDITEUR');
-INSERT INTO caracteristique (valeur, typeCaracteristique) VALUES ('Français', 'LANGUE');
-INSERT INTO caracteristique (valeur, typeCaracteristique) VALUES ('21 x 29.7', 'DIMENSIONS');
-INSERT INTO caracteristique (valeur, typeCaracteristique) VALUES ('178g', 'POIDS');
+INSERT INTO caracteristique (valeur, typeCaracteristique, reference_produit) VALUES ('Flammarion', 'EDITEUR', 'A05A01');
+INSERT INTO caracteristique (valeur, typeCaracteristique, reference_produit) VALUES ('Français', 'LANGUE', 'A05A01');
+INSERT INTO caracteristique (valeur, typeCaracteristique, reference_produit) VALUES ('21 x 29.7', 'DIMENSIONS', 'A05A01');
+INSERT INTO caracteristique (valeur, typeCaracteristique, reference_produit) VALUES ('178g', 'POIDS', 'A05A01');
