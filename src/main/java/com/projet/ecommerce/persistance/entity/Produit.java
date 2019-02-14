@@ -1,8 +1,20 @@
 package com.projet.ecommerce.persistance.entity;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 /**
  * Entité représentant la table produit sous forme de classe.
@@ -57,7 +69,7 @@ public class Produit {
     )
     private List<Categorie> categoriesSupprime;
     
-    @OneToMany(mappedBy = "produit", cascade = {CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "produit", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Caracteristique> caracteristiques;
 
     /**
@@ -219,6 +231,22 @@ public class Produit {
 
 	public void setCaracteristiques(List<Caracteristique> caracteristiques) {
 		this.caracteristiques = caracteristiques;
+	}
+	
+	public void addCaracteristique(Caracteristique carac) {
+		if(carac==null) return;
+		if(caracteristiques==null)
+			caracteristiques = new ArrayList<>();
+		
+		caracteristiques.add(carac);
+		carac.setProduit(this);
+	}
+	
+	public void removeCaracteristique(Caracteristique carac) {
+		if(carac==null) return;
+		
+		caracteristiques.remove(carac);
+		carac.setProduit(null);
 	}
     
     

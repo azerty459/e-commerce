@@ -1,26 +1,32 @@
 package com.projet.ecommerce.business.impl;
 
-import com.projet.ecommerce.business.IProduitBusiness;
-import com.projet.ecommerce.business.dto.ProduitDTO;
-import com.projet.ecommerce.business.dto.transformer.ProduitTransformer;
-import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
-import com.projet.ecommerce.persistance.entity.Categorie;
-import com.projet.ecommerce.persistance.entity.Photo;
-import com.projet.ecommerce.persistance.entity.Produit;
-import com.projet.ecommerce.persistance.repository.CategorieRepository;
-import com.projet.ecommerce.persistance.repository.PhotoRepository;
-import com.projet.ecommerce.persistance.repository.ProduitRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Service;
+import static com.projet.ecommerce.utilitaire.Utilitaire.mergeObjects;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import static com.projet.ecommerce.utilitaire.Utilitaire.mergeObjects;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+
+import com.projet.ecommerce.business.IProduitBusiness;
+import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
+import com.projet.ecommerce.business.dto.ProduitDTO;
+import com.projet.ecommerce.business.dto.TypeCaracteristiqueDTO;
+import com.projet.ecommerce.business.dto.transformer.CaracteristiqueTransformer;
+import com.projet.ecommerce.business.dto.transformer.ProduitTransformer;
+import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
+import com.projet.ecommerce.persistance.entity.Caracteristique;
+import com.projet.ecommerce.persistance.entity.Categorie;
+import com.projet.ecommerce.persistance.entity.Photo;
+import com.projet.ecommerce.persistance.entity.Produit;
+import com.projet.ecommerce.persistance.repository.CaracteristiqueRepository;
+import com.projet.ecommerce.persistance.repository.CategorieRepository;
+import com.projet.ecommerce.persistance.repository.PhotoRepository;
+import com.projet.ecommerce.persistance.repository.ProduitRepository;
 
 /**
  * Service permettant de gérer les actions effectuées pour les produits.
@@ -37,6 +43,9 @@ public class ProduitBusiness implements IProduitBusiness {
 
     @Autowired
     private PhotoRepository photoRepository;
+    
+    @Autowired
+    private CaracteristiqueRepository caracteristiqueRepository;
 
     /**
      * Ajoute un produit dans la base de données.
@@ -245,4 +254,36 @@ public class ProduitBusiness implements IProduitBusiness {
         }
         return produitRepository.findAll(page);
     }
+
+	@Override
+	public ProduitDTO addCaracteristique(String refProduit, TypeCaracteristiqueDTO type, String valeur) {
+		 Produit produit = produitRepository.findById(refProduit)
+				 .orElseThrow(() -> new GraphQLCustomException("Le produit pour cette caracteristique n'existe pas."));
+		 
+		 Caracteristique carac = new Caracteristique();
+		 carac.setTypeCaracteristique(type);
+		 carac.setValeur(valeur);
+		 
+		 produit.addCaracteristique(carac);
+		 
+		 ProduitDTO prodDTO = ProduitTransformer.entityToDto(produitRepository.save(produit));
+		 
+		 return prodDTO;
+		          
+	}
+
+	@Override
+	public ProduitDTO removeCaracteristique(CaracteristiqueDTO carac) {
+		Produit produit = produitRepository.findById(carac.getRefProduit())
+				 .orElseThrow(() -> new GraphQLCustomException("Le produit pour cette caracteristique n'existe pas."));
+		
+		produit.removeCaracteristique(CaracteristiqueTransformer.dtoToEntity(carac));
+		
+		ProduitDTO prodDTO = ProduitTransformer.entityToDto(produitRepository.save(produit));
+		
+		return prodDTO;
+	}
+    
+    
+    
 }

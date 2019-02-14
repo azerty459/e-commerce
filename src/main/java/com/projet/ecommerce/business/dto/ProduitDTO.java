@@ -1,5 +1,6 @@
 package com.projet.ecommerce.business.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -179,5 +180,19 @@ public class ProduitDTO {
 		this.caracteristiques = caracteristiques;
 	}
     
+    public void addCaracteristiqueDTO(CaracteristiqueDTO carac) {
+    	if(carac==null) return;
+		if(caracteristiques==null)
+			caracteristiques = new ArrayList<>();
+		
+		caracteristiques.add(carac);
+		carac.setRefProduit(ref);
+    }
     
+    public void removeCaracteristiqueDTO(CaracteristiqueDTO carac) {
+    	if(carac==null) return;
+		caracteristiques.remove(carac);
+		
+		carac.setRefProduit(null);
+    }
 }

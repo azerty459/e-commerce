@@ -1,14 +1,9 @@
 package com.projet.ecommerce.business.impl;
 
-import com.projet.ecommerce.business.dto.ProduitDTO;
-import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
-import com.projet.ecommerce.persistance.entity.Categorie;
-import com.projet.ecommerce.persistance.entity.Photo;
-import com.projet.ecommerce.persistance.entity.Produit;
-import com.projet.ecommerce.persistance.repository.CategorieRepository;
-import com.projet.ecommerce.persistance.repository.PhotoRepository;
-import com.projet.ecommerce.persistance.repository.ProduitRepository;
-import com.projet.ecommerce.persistance.repository.ProduitRepositoryCustom;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -24,9 +19,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import com.projet.ecommerce.business.dto.ProduitDTO;
+import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
+import com.projet.ecommerce.persistance.entity.Categorie;
+import com.projet.ecommerce.persistance.entity.Photo;
+import com.projet.ecommerce.persistance.entity.Produit;
+import com.projet.ecommerce.persistance.repository.CaracteristiqueRepository;
+import com.projet.ecommerce.persistance.repository.CategorieRepository;
+import com.projet.ecommerce.persistance.repository.PhotoRepository;
+import com.projet.ecommerce.persistance.repository.ProduitRepository;
+import com.projet.ecommerce.persistance.repository.ProduitRepositoryCustom;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
@@ -46,6 +48,9 @@ public class ProduitBusinessTests {
 
     @Mock
     private Page page;
+    
+    @Mock
+    private CaracteristiqueRepository caracteristiqueRepository;
 
     @InjectMocks
     private ProduitBusiness produitBusiness;

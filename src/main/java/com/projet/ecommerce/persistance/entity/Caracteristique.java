@@ -1,5 +1,7 @@
 package com.projet.ecommerce.persistance.entity;
 
+import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -81,9 +83,38 @@ public class Caracteristique {
 	public void setProduit(Produit produit) {
 		this.produit = produit;
 	}
-	
-	
-	
-	
 
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + this.id;
+		result = prime * result + ((this.typeCaracteristique == null) ? 0 : this.typeCaracteristique.hashCode());
+		result = prime * result + ((this.valeur == null) ? 0 : this.valeur.hashCode());
+		return result;
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null || this.getClass() != obj.getClass() )
+			return false;
+
+		Caracteristique other = (Caracteristique) obj;
+		if (this.id != other.id)
+			return false;
+		if (this.typeCaracteristique != other.typeCaracteristique)
+			return false;
+		if (this.valeur == null) {
+			if (other.valeur != null)
+				return false;
+		} else if (!this.valeur.equals(other.valeur))
+			return false;
+		return true;
+	}
+	
+	
 }
