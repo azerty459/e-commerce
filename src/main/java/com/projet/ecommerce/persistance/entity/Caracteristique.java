@@ -1,7 +1,5 @@
 package com.projet.ecommerce.persistance.entity;
 
-import java.util.Objects;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -26,21 +24,35 @@ import com.projet.ecommerce.business.dto.TypeCaracteristiqueDTO;
 public class Caracteristique {
 	
 	
+	/**
+	 * L'id de la caractéristique
+	 */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id_carac")
 	private int id;
 	
+	/**
+	 * Valeur de la caractéristique
+	 */
 	@Column
 	private String valeur;
 	
 	
+	/**
+	 * Le type de la caractéristique
+	 * @see TypeCaracteristiqueDTO
+	 */
 	@Enumerated(EnumType.STRING)
 	@Column(name="typecaracteristique")
     private TypeCaracteristiqueDTO typeCaracteristique;
 	
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	/**
+	 * L'entité produit possedant cette caractéristique
+	 * @see Produit
+	 */
+	@ManyToOne(fetch = FetchType.LAZY, optional=false)
     @JoinColumn(name = "reference_produit")
 	private Produit produit;
 

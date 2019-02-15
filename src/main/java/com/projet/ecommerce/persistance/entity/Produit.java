@@ -69,7 +69,12 @@ public class Produit {
     )
     private List<Categorie> categoriesSupprime;
     
-    @OneToMany(mappedBy = "produit", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
+   
+    /**
+     * La liste des caractéristiques du produit
+     * @see Caracteristique
+     */
+    @OneToMany(mappedBy = "produit", orphanRemoval = true, cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
     private List<Caracteristique> caracteristiques;
 
     /**
@@ -233,6 +238,11 @@ public class Produit {
 		this.caracteristiques = caracteristiques;
 	}
 	
+	/**
+	 * Ajoute une caractéristique au produit.
+     * Le produit est aussi positionné au niveau de la caractéristique
+	 * @param carac
+	 */
 	public void addCaracteristique(Caracteristique carac) {
 		if(carac==null) return;
 		if(caracteristiques==null)
@@ -242,11 +252,15 @@ public class Produit {
 		carac.setProduit(this);
 	}
 	
+	/**
+	 * Supprime la caractéristique du produit.
+     * La reference du produit est aussi supprimée au niveau de la caracteristique
+	 * @param carac
+	 */
 	public void removeCaracteristique(Caracteristique carac) {
 		if(carac==null) return;
-		
-		caracteristiques.remove(carac);
 		carac.setProduit(null);
+		caracteristiques.remove(carac);
 	}
     
     

@@ -44,6 +44,10 @@ public class ProduitDTO {
      */
     private PhotoDTO photoPrincipale;
     
+    /**
+     * La liste des caractéristiques du produit
+     * @see CaracteristiqueDTO
+     */
     private List<CaracteristiqueDTO> caracteristiques;
 
     /**
@@ -180,6 +184,11 @@ public class ProduitDTO {
 		this.caracteristiques = caracteristiques;
 	}
     
+    /**
+     * Ajoute une caractéristique au produit.
+     * La reference du produit est aussi positionnée au niveau de la caractéristique
+     * @param carac la caractéristique ajoutée
+     */
     public void addCaracteristiqueDTO(CaracteristiqueDTO carac) {
     	if(carac==null) return;
 		if(caracteristiques==null)
@@ -189,6 +198,11 @@ public class ProduitDTO {
 		carac.setRefProduit(ref);
     }
     
+    /**
+     * Supprime la caractéristique du produit.
+     * La reference du produit est aussi supprimée au niveau de la caracteristique
+     * @param carac
+     */
     public void removeCaracteristiqueDTO(CaracteristiqueDTO carac) {
     	if(carac==null) return;
 		caracteristiques.remove(carac);

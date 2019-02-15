@@ -1,13 +1,29 @@
 package com.projet.ecommerce.business.dto;
 
+/**
+ * Entité qui permet d'assurer le découplage entre la couche de présentation et les objets métier stockés sur le serveur (Caracteristique).
+ */
 public class CaracteristiqueDTO {
 	
+	/**
+	 * l'Id de la caractéristique
+	 */
 	private int id;
 	
+	/**
+	 * la valeur de la caractéristique
+	 */
 	private String valeur;
 	
+	/**
+	 * le type de la caractéristique
+	 * @see TypeCaracteristiqueDTO
+	 */
 	private TypeCaracteristiqueDTO typeCaracteristique;
 	
+	/**
+	 * la réference du produit possedant la caractéristique
+	 */
 	private String refProduit;
 
 	public int getId() {

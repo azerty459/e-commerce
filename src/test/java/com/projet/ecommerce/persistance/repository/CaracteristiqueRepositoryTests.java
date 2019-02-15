@@ -1,9 +1,7 @@
 package com.projet.ecommerce.persistance.repository;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -14,8 +12,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
-import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.business.dto.TypeCaracteristiqueDTO;
 import com.projet.ecommerce.persistance.entity.Caracteristique;
 import com.projet.ecommerce.persistance.entity.Produit;
@@ -54,29 +50,40 @@ public class CaracteristiqueRepositoryTests {
     
     @Test
     public void findByProduit_ReferenceProduit() {
+    	Caracteristique carac = CARAC;
+    	
+    	
     	Produit p = new Produit();
         p.setReferenceProduit("CRA PRODUIT");
         p.setNom("CRA");
         p.setDescription("Test caracteristique");
         p.setPrixHT(100);
+        p.addCaracteristique(carac);
         produitRepository.save(p);
         
+        /*
         Caracteristique carac = new Caracteristique();
         carac.setValeur("Français");
         carac.setTypeCaracteristique(TypeCaracteristiqueDTO.LANGUE);
         carac.setProduit(p);
         caracteristiqueRepository.save(carac);
-        
+        */
+    	/*
+    	
+    	
+    	Produit p = produitRepository.save(PRODUIT_CARAC);
+    	*/
+    	
         List<Caracteristique> caracsDuProduit = new ArrayList<>(caracteristiqueRepository.findByProduit_ReferenceProduit(p.getReferenceProduit()));
         Assert.assertNotNull(caracsDuProduit);
         Assert.assertFalse(caracsDuProduit.isEmpty());
         Assert.assertEquals(caracsDuProduit.size(),1);
         Assert.assertNotNull(caracsDuProduit.get(0));
-        Caracteristique caracLangue = caracsDuProduit.get(0);
-        Assert.assertEquals(caracLangue.getTypeCaracteristique(), carac.getTypeCaracteristique());
-        Assert.assertEquals(caracLangue.getValeur(), carac.getValeur());
-        Assert.assertNotNull(caracLangue.getProduit());
-        Assert.assertEquals(caracLangue.getProduit().getReferenceProduit(), carac.getProduit().getReferenceProduit());
+        Caracteristique caracEditeur = caracsDuProduit.get(0);
+        Assert.assertEquals(caracEditeur.getTypeCaracteristique(), carac.getTypeCaracteristique());
+        Assert.assertEquals(caracEditeur.getValeur(), carac.getValeur());
+        Assert.assertNotNull(caracEditeur.getProduit());
+        Assert.assertEquals(caracEditeur.getProduit().getReferenceProduit(), carac.getProduit().getReferenceProduit());
             
     }
     
@@ -122,6 +129,21 @@ public class CaracteristiqueRepositoryTests {
     	Assert.assertEquals(pRetour.getCaracteristiques().size(), 0);
     		
     	    	
+    	List<Caracteristique> caracParProduit = new ArrayList<>(caracteristiqueRepository.findByProduit_ReferenceProduit(p.getReferenceProduit()));
+    	Assert.assertNotNull(caracParProduit);
+    	Assert.assertTrue(caracParProduit.isEmpty());
+    	   	
+    	
+    }
+    
+    @Test
+    public void deleteProduitWithCaracteristique() {
+    	
+    	Produit p = produitRepository.save(PRODUIT_CARAC);    	
+    	Assert.assertEquals(p.getCaracteristiques().size(), 1);
+    	
+    	produitRepository.delete(p);
+    	
     	List<Caracteristique> caracParProduit = new ArrayList<>(caracteristiqueRepository.findByProduit_ReferenceProduit(p.getReferenceProduit()));
     	Assert.assertNotNull(caracParProduit);
     	Assert.assertTrue(caracParProduit.isEmpty());

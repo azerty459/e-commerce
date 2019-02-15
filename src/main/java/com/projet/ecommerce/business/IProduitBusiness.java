@@ -71,8 +71,24 @@ public interface IProduitBusiness {
     Page<Produit> getPage(int pageNumber, int nb, String nom, int IDcategorie);
     
     
+    /**
+     * Méthode ajoutant une caractéristique au produit.
+     * La caractéristique sera inserée en base
+     * 
+     * @param refProduit  la référence du produit auquel on ajoute la caractéristique
+     * @param type  le type de la caractéristique ajoutée
+     * @param valeur  la valeur de la caractéristique ajoutée
+     * @return  un nouvel objet ProduitDTO refletant la modification
+     */
     ProduitDTO addCaracteristique(String refProduit, TypeCaracteristiqueDTO type, String valeur);
     
+    /**
+     * Méthode supprimant une caractéristique de son produit.
+     * La caractéristique sera supprimée de la base de donnée.
+     * 
+     * @param carac la caractéristique supprimée
+     * @return un nouvel objet ProduitDTO refletant la modification
+     */
     ProduitDTO removeCaracteristique(CaracteristiqueDTO carac);
 
 
