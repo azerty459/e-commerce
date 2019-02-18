@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -256,12 +258,19 @@ public class ProduitBusiness implements IProduitBusiness {
     }
 
 	@Override
-	public ProduitDTO addCaracteristique(String refProduit, TypeCaracteristiqueDTO type, String valeur) {
+	public ProduitDTO addCaracteristique(String refProduit, String type, String valeur) {
 		 Produit produit = produitRepository.findById(refProduit)
 				 .orElseThrow(() -> new GraphQLCustomException("Le produit pour cette caracteristique n'existe pas."));
 		 
+		 TypeCaracteristiqueDTO typeEnum;
+		 try {
+			 typeEnum = Enum.valueOf(TypeCaracteristiqueDTO.class, type);
+		 }
+		 catch(IllegalArgumentException | NullPointerException e) {
+			 throw new GraphQLCustomException("Le type de caracteristique n'existe pas :" + type);
+		 }
 		 Caracteristique carac = new Caracteristique();
-		 carac.setTypeCaracteristique(type);
+		 carac.setTypeCaracteristique(typeEnum);
 		 carac.setValeur(valeur);
 		 
 		 produit.addCaracteristique(carac);
@@ -273,17 +282,27 @@ public class ProduitBusiness implements IProduitBusiness {
 	}
 
 	@Override
-	public ProduitDTO removeCaracteristique(CaracteristiqueDTO carac) {
-		Produit produit = produitRepository.findById(carac.getRefProduit())
+	public ProduitDTO removeCaracteristique(CaracteristiqueDTO caracDto) {
+		Produit produit = produitRepository.findById(caracDto.getRefProduit())
 				 .orElseThrow(() -> new GraphQLCustomException("Le produit pour cette caracteristique n'existe pas."));
 		
-		produit.removeCaracteristique(CaracteristiqueTransformer.dtoToEntity(carac));
+		Caracteristique carac = CaracteristiqueTransformer.dtoToEntity(caracDto);
 		
-		ProduitDTO prodDTO = ProduitTransformer.entityToDto(produitRepository.save(produit));
+		produit.removeCaracteristique(carac);
+		
+		caracteristiqueRepository.delete(carac);
+		
+		ProduitDTO prodDTO = ProduitTransformer.entityToDto(produit);
 		
 		return prodDTO;
 	}
+
+	@Override
+	public List<String> getTypesCaracteristiques() {
+		return Stream.of(TypeCaracteristiqueDTO.values()).map(Enum::name).collect(Collectors.toList());
+	}
     
+	
     
     
 }

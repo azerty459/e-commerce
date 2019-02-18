@@ -80,7 +80,7 @@ public interface IProduitBusiness {
      * @param valeur  la valeur de la caractéristique ajoutée
      * @return  un nouvel objet ProduitDTO refletant la modification
      */
-    ProduitDTO addCaracteristique(String refProduit, TypeCaracteristiqueDTO type, String valeur);
+    ProduitDTO addCaracteristique(String refProduit, String type, String valeur);
     
     /**
      * Méthode supprimant une caractéristique de son produit.
@@ -90,6 +90,14 @@ public interface IProduitBusiness {
      * @return un nouvel objet ProduitDTO refletant la modification
      */
     ProduitDTO removeCaracteristique(CaracteristiqueDTO carac);
+    
+    /**
+     * Méthode pour récuperer la liste des types de caracteristique possibles.
+     * @return la liste des constantes possibles utilisées pour typer les caracteristiques sous forme de List<String>
+     */
+    List<String> getTypesCaracteristiques(); 
+    
+   
 
 
 }

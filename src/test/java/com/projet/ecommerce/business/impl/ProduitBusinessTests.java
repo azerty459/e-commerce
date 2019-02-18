@@ -10,6 +10,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -19,8 +20,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
 import com.projet.ecommerce.business.dto.ProduitDTO;
+import com.projet.ecommerce.business.dto.TypeCaracteristiqueDTO;
+import com.projet.ecommerce.business.dto.transformer.CaracteristiqueTransformer;
+import com.projet.ecommerce.business.dto.transformer.ProduitTransformer;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
+import com.projet.ecommerce.persistance.entity.Caracteristique;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Photo;
 import com.projet.ecommerce.persistance.entity.Produit;
@@ -348,4 +354,99 @@ public class ProduitBusinessTests {
     }
 
     //TODO Faire le teste avec id catégorie
+    
+    
+    @Test
+    public void addCaracteristique() {
+    	//Produit sans caracteristique
+    	Produit p = getDummyProduit("123456");
+    	    	
+    	Mockito.when(produitRepository.findById(Mockito.any())).thenReturn(Optional.of(p));
+    	
+    	//Meme produit auquel on ajoute une caracteristique
+    	Produit p2 = getDummyProduit("123456");
+    	Caracteristique c = getDummyCaracteristique(TypeCaracteristiqueDTO.EDITEUR);
+    	//on set l'id pour simuler une caracteristique inserée en base
+    	c.setId(150);
+    	p2.addCaracteristique(c);
+    	
+    	Mockito.when(produitRepository.save(Mockito.any())).thenReturn(p2);
+    	
+    	ProduitDTO pDto = produitBusiness.addCaracteristique(p.getReferenceProduit(), TypeCaracteristiqueDTO.EDITEUR.name(), c.getValeur());
+    	
+    	Assert.assertEquals(p.getReferenceProduit(), pDto.getRef());
+    	Assert.assertNotNull(pDto.getCaracteristiques());
+    	Assert.assertEquals(pDto.getCaracteristiques().size(), 1);
+    	
+    	CaracteristiqueDTO cDto = pDto.getCaracteristiques().get(0);
+    	Assert.assertNotNull(cDto);
+    	Assert.assertEquals(cDto, CaracteristiqueTransformer.entityToDto(c));
+    	
+    }
+    
+    @Test
+    public void removeCaracteristique() {
+    	
+    	//produit auquel on ajoute une caracteristique
+    	Produit p = getDummyProduit("123456");
+    	Caracteristique c = getDummyCaracteristique(TypeCaracteristiqueDTO.EDITEUR);
+    	//on set l'id pour simuler une caracteristique inserée en base
+    	c.setId(150);
+    	p.addCaracteristique(c);
+    	
+    	Mockito.when(produitRepository.findById(Mockito.any())).thenReturn(Optional.of(p));
+    	//on va capturer la caracteristique qui sera supprimée de la base
+    	ArgumentCaptor<Caracteristique> cap = ArgumentCaptor.forClass(Caracteristique.class);
+    	Mockito.doNothing().when(caracteristiqueRepository).delete(cap.capture());
+    	
+    	//on verifie que le produit a bien sa caracteristique avant l'appel business  	
+    	Assert.assertNotNull(p.getCaracteristiques());
+    	Assert.assertFalse(p.getCaracteristiques().isEmpty());
+    	
+    	ProduitDTO pDto = produitBusiness.removeCaracteristique(CaracteristiqueTransformer.entityToDto(c));
+    	
+    	//on verifie que le produit n'a plus la caracteristique
+    	Assert.assertEquals(p.getReferenceProduit(), pDto.getRef());
+    	Assert.assertNotNull(pDto.getCaracteristiques());
+    	Assert.assertTrue(pDto.getCaracteristiques().isEmpty());
+    	
+    	//on verifie que la caracteristique supprimée est bien celle d'origine
+    	Assert.assertEquals(c.getId(), cap.getValue().getId());
+    	
+    }
+    
+    @Test
+    public void getTypesCaracteristique() {
+    	
+    	List<String> types = produitBusiness.getTypesCaracteristiques();
+    	    	
+    	Produit p = getDummyProduit("123456");
+    	//on mock les operations en bdd car elles ne sont pas importantes pour le test
+    	Mockito.when(produitRepository.findById(Mockito.any())).thenReturn(Optional.of(p));
+    	Mockito.when(produitRepository.save(Mockito.any())).thenReturn(p);
+    	
+    	//on valide que chacun des types de la liste est valide pour recuperer une instance de l'enum
+    	types.stream().forEach(type -> produitBusiness.addCaracteristique(p.getReferenceProduit(), type, "dummy valeur"));
+    }
+    
+    private Produit getDummyProduit(String refProduit) {
+    	Produit p = new Produit();
+    	p.setReferenceProduit(refProduit);
+    	p.setPrixHT(10.875f);
+    	p.setDescription("DUMMY");
+    	p.setNom("produit dummy");
+    	p.setCategories(new ArrayList<>());
+    	p.setPhotos(new ArrayList<>());
+    	p.setAvisClients(new ArrayList<>());
+    	
+    	return p;
+    }
+    
+    private Caracteristique getDummyCaracteristique(TypeCaracteristiqueDTO type) {
+    	Caracteristique c = new Caracteristique();
+    	c.setTypeCaracteristique(type);
+    	c.setValeur("valeur dummy");
+    	   	
+    	return c;
+    }
 }

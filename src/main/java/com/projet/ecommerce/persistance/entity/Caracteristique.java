@@ -52,8 +52,8 @@ public class Caracteristique {
 	 * L'entité produit possedant cette caractéristique
 	 * @see Produit
 	 */
-	@ManyToOne(fetch = FetchType.LAZY, optional=false)
-    @JoinColumn(name = "reference_produit")
+	@ManyToOne
+    @JoinColumn(name = "reference_produit", updatable=false)
 	private Produit produit;
 
 

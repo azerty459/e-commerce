@@ -74,7 +74,7 @@ public class Produit {
      * La liste des caractéristiques du produit
      * @see Caracteristique
      */
-    @OneToMany(mappedBy = "produit", orphanRemoval = true, cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "produit", cascade = {CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
     private List<Caracteristique> caracteristiques;
 
     /**
