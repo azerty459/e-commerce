@@ -1,6 +1,10 @@
 package com.projet.ecommerce.persistance.repository;
 
-import com.projet.ecommerce.persistance.entity.Produit;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,7 +14,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
+import com.projet.ecommerce.persistance.entity.AvisClient;
+import com.projet.ecommerce.persistance.entity.Categorie;
+import com.projet.ecommerce.persistance.entity.Produit;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -99,4 +105,101 @@ public class ProduitRepositoryTests {
         produitRepository.delete(TEMP_DELETE);
         Assert.assertFalse(produitRepository.findById(TEMP_DELETE.getReferenceProduit()).isPresent());
     }
+    
+    @Test
+    public void filterProduits() {
+    	//p1 7.5 de moyenne
+    	// appartient à la "Top Categ"
+    	Produit p1 = getDummyProduit("prod1", "nom p1");
+    	AvisClient av1 = getDummyAvisClient(5);
+    	AvisClient av2 = getDummyAvisClient(10);
+    	p1.getAvisClients().add(av1);
+    	p1.getAvisClients().add(av2);
+    	av1.setProduit(p1);
+    	av2.setProduit(p1);
+    	
+    	Categorie cat1 = getDummyCategorie("Top Categ");
+    	p1.getCategories().add(cat1);
+    	cat1.getProduits().add(p1);
+    	
+    	produitRepository.save(p1);
+    	
+    	//p1 1.0 de moyenne
+    	// appartient à la "Top Categ" et à la "Down Categ"
+    	Produit p2 = getDummyProduit("prod2", "nom p2");
+    	AvisClient av3 = getDummyAvisClient(0);
+    	AvisClient av4 = getDummyAvisClient(2);
+    	p2.getAvisClients().add(av3);
+    	p2.getAvisClients().add(av4);
+    	av3.setProduit(p2);
+    	av4.setProduit(p2);
+    	
+    	Categorie cat2 = getDummyCategorie("Down Categ");
+    	p2.getCategories().add(cat2);
+    	cat2.getProduits().add(p2);
+    	p2.getCategories().add(cat1);
+    	cat1.getProduits().add(p2);
+    	
+    	produitRepository.save(p2);
+    	
+    	//Produits qui ont >0.5 de moyenne
+    	//attendu p1, p2
+    	List<Produit> produitsNoteSup1 = new ArrayList<>(produitRepository.filterProduits(0.5, null, null, null, null));
+    	assertProduits(produitsNoteSup1, p1, p2);
+    	
+    	//Produits qui ont >2 de moyenne
+    	//attendu p1
+    	List<Produit> produitsNoteSup2 = new ArrayList<>(produitRepository.filterProduits(2.0, null, null, null, null));
+    	assertProduits(produitsNoteSup2, p1);
+    	
+    	//Produits qui ont >8 de moyenne
+    	//attendu aucun
+    	List<Produit> produitsNoteSup3 = new ArrayList<>(produitRepository.filterProduits(8.0, null, null, null, null));
+    	assertProduits(produitsNoteSup3);
+    }
+    
+    private void assertProduits(List<Produit> res, Produit... prodAttendus) {
+    	Assert.assertNotNull(res);
+    	Assert.assertEquals(res.size(),prodAttendus.length);
+    	
+    	int index=0;
+    	for(Produit p:prodAttendus) {
+    		Assert.assertNotNull(res.get(index));
+    		Assert.assertEquals(res.get(index++).getReferenceProduit(), p.getReferenceProduit());
+    	}
+    }
+    
+    private Produit getDummyProduit(String refProduit, String nom) {
+    	Produit p = new Produit();
+    	p.setReferenceProduit(refProduit);
+    	p.setPrixHT(10.875f);
+    	p.setDescription("DUMMY");
+    	p.setNom(nom);
+    	p.setCategories(new ArrayList<>());
+    	p.setPhotos(new ArrayList<>());
+    	p.setAvisClients(new ArrayList<>());
+    	
+    	return p;
+    	
+    }
+    
+    private AvisClient getDummyAvisClient(int note) {
+    	AvisClient av = new AvisClient();
+    	av.setDate(LocalDateTime.now());
+    	av.setNote(note);
+    	av.setDescription("Dummy avis");
+    	
+    	return av;
+    	
+    }
+    
+    private Categorie getDummyCategorie(String categorie) {
+    	Categorie c = new Categorie();
+    	c.setNomCategorie(categorie);
+    	c.setProduits(new ArrayList<>());
+    	
+    	return c;
+    	
+    }
+    
 }
