@@ -107,7 +107,153 @@ public class ProduitRepositoryTests {
     }
     
     @Test
-    public void filterProduits() {
+    public void testMinNoteMoyenne() {
+    	List<Produit> prods = prep2Produits();
+    	Produit p1 = prods.get(0);
+    	Produit p2 = prods.get(1);
+    	
+    	//Produits qui ont >0.5 de moyenne
+    	//attendu p1, p2
+    	List<Produit> produitsNoteSup1 = new ArrayList<>(produitRepository.filterProduits(0.5, null, null, null, null));
+    	assertProduits(produitsNoteSup1, p1, p2);
+    	
+    	//Produits qui ont >2 de moyenne
+    	//attendu p1
+    	List<Produit> produitsNoteSup2 = new ArrayList<>(produitRepository.filterProduits(2.0, null, null, null, null));
+    	assertProduits(produitsNoteSup2, p1);
+    	
+    	//Produits qui ont >8 de moyenne
+    	//attendu aucun
+    	List<Produit> produitsNoteSup3 = new ArrayList<>(produitRepository.filterProduits(8.0, null, null, null, null));
+    	assertProduits(produitsNoteSup3);
+    	
+    	//Produits qui ont <8 de moyenne
+    	//attendu p1, p2
+    	List<Produit> produitsNoteInf1 = new ArrayList<>(produitRepository.filterProduits(null, 8.0, null, null, null));
+    	assertProduits(produitsNoteInf1, p1, p2);
+    }
+    
+    @Test
+    public void testMaxNoteMoyenne() {
+    	List<Produit> prods = prep2Produits();
+    	Produit p1 = prods.get(0);
+    	Produit p2 = prods.get(1);
+    	
+    	//Produits qui ont <8 de moyenne
+    	//attendu p1, p2
+    	List<Produit> produitsNoteInf1 = new ArrayList<>(produitRepository.filterProduits(null, 8.0, null, null, null));
+    	assertProduits(produitsNoteInf1, p1, p2);
+    	
+    	//Produits qui ont <5 de moyenne
+    	//attendu  p2
+    	List<Produit> produitsNoteInf2 = new ArrayList<>(produitRepository.filterProduits(null, 5.0, null, null, null));
+    	assertProduits(produitsNoteInf2, p2);
+    	
+    	//Produits qui ont <1 de moyenne
+    	//attendu  aucun
+    	List<Produit> produitsNoteInf3 = new ArrayList<>(produitRepository.filterProduits(null, 1.0, null, null, null));
+    	assertProduits(produitsNoteInf3);
+    }
+    
+    @Test
+    public void testNomProduit() {
+    	List<Produit> prods = prep2Produits();
+    	Produit p1 = prods.get(0);
+    	Produit p2 = prods.get(1);
+    	
+    	//Produits qui s'appellent "nom p1"
+    	//attendu p1
+    	List<Produit> produitsNom1 = new ArrayList<>(produitRepository.filterProduits(null, null, "nom p1", null, null));
+    	assertProduits(produitsNom1, p1);
+    	
+    	//Produits qui s'appellent "nom p2"
+    	//attendu p2
+    	List<Produit> produitsNom2 = new ArrayList<>(produitRepository.filterProduits(null, null, "nom p2", null, null));
+    	assertProduits(produitsNom2, p2);
+    	
+    	//Produits qui s'appellent "toto"
+    	//attendu aucun
+    	List<Produit> produitsNom3 = new ArrayList<>(produitRepository.filterProduits(null, null, "toto", null, null));
+    	assertProduits(produitsNom3);
+    }
+    
+    @Test
+    public void testNomProduitLike() {
+    	List<Produit> prods = prep2Produits();
+    	Produit p1 = prods.get(0);
+    	Produit p2 = prods.get(1);
+    	
+    	//Produits qui contient "nom p1"
+    	//attendu p1
+    	List<Produit> produitsNom1 = new ArrayList<>(produitRepository.filterProduits(null, null, null, "nom p1", null));
+    	assertProduits(produitsNom1, p1);
+    	
+    	//Produits qui contient "nom p2"
+    	//attendu p2
+    	List<Produit> produitsNom2 = new ArrayList<>(produitRepository.filterProduits(null, null, null, "nom p2", null));
+    	assertProduits(produitsNom2, p2);
+    	
+    	//Produits qui contient "toto"
+    	//attendu aucun
+    	List<Produit> produitsNom3 = new ArrayList<>(produitRepository.filterProduits(null, null, null, "toto", null));
+    	assertProduits(produitsNom3);
+    	
+    	//Produits qui contient "nom"
+    	//attendu p1, p2
+    	List<Produit> produitsNom4 = new ArrayList<>(produitRepository.filterProduits(null, null, null, "nom", null));
+    	assertProduits(produitsNom4, p1, p2);
+    }
+    
+    @Test
+    public void testCategorie() {
+    	List<Produit> prods = prep2Produits();
+    	Produit p1 = prods.get(0);
+    	Produit p2 = prods.get(1);
+    	
+    	//Produits qui sont dans la categorie "Top Categ"
+    	//attendu p1, p2
+    	List<Produit> produitsCat1 = new ArrayList<>(produitRepository.filterProduits(null, null, null, null, "Top Categ"));
+    	assertProduits(produitsCat1, p1, p2);
+    	
+    	//Produits qui sont dans la categorie "Down Categ"
+    	//attendu p2
+    	List<Produit> produitsCat2 = new ArrayList<>(produitRepository.filterProduits(null, null, null, null, "Down Categ"));
+    	assertProduits(produitsCat2, p2);
+    	
+    	//Produits qui sont dans la categorie "Categ"
+    	//attendu aucun
+    	List<Produit> produitsCat3 = new ArrayList<>(produitRepository.filterProduits(null, null, null, null, "Categ"));
+    	assertProduits(produitsCat3);
+    	
+    }
+    
+    @Test
+    public void testMultiCriteres() {
+    	List<Produit> prods = prep2Produits();
+    	Produit p1 = prods.get(0);
+    	Produit p2 = prods.get(1);
+    	
+    	//Produits qui sont dans la categorie "Top Categ" avec une note moyenne entre 5.0 et 9.0
+    	//attendu p1
+    	List<Produit> produitsMultiCrit1 = new ArrayList<>(produitRepository.filterProduits(5.0, 9.0, null, null, "Top Categ"));
+    	assertProduits(produitsMultiCrit1, p1);
+    	
+    	//Produits qui sont dans la categorie "Down Categ" avec une note moyenne > 4.0
+    	//attendu aucun
+    	List<Produit> produitsMultiCrit2 = new ArrayList<>(produitRepository.filterProduits(4.0, null, null, null, "Down Categ"));
+    	assertProduits(produitsMultiCrit2);
+    	
+    	//Produits qui sont dans la categorie "Down Categ", un nom qui contient "nom" et une note moyenne entre 0.5 et 2.0
+    	//attendu p2
+    	List<Produit> produitsMultiCrit3 = new ArrayList<>(produitRepository.filterProduits(0.5, 2.0, null, "nom", "Down Categ"));
+    	assertProduits(produitsMultiCrit3, p2);
+    	
+    }
+    
+    private List<Produit> prep2Produits() {
+    	
+    	List<Produit> res = new ArrayList<>();
+    	
     	//p1 7.5 de moyenne
     	// appartient à la "Top Categ"
     	Produit p1 = getDummyProduit("prod1", "nom p1");
@@ -123,8 +269,9 @@ public class ProduitRepositoryTests {
     	cat1.getProduits().add(p1);
     	
     	produitRepository.save(p1);
+    	res.add(p1);
     	
-    	//p1 1.0 de moyenne
+    	//p2 1.0 de moyenne
     	// appartient à la "Top Categ" et à la "Down Categ"
     	Produit p2 = getDummyProduit("prod2", "nom p2");
     	AvisClient av3 = getDummyAvisClient(0);
@@ -141,21 +288,9 @@ public class ProduitRepositoryTests {
     	cat1.getProduits().add(p2);
     	
     	produitRepository.save(p2);
+    	res.add(p2);
     	
-    	//Produits qui ont >0.5 de moyenne
-    	//attendu p1, p2
-    	List<Produit> produitsNoteSup1 = new ArrayList<>(produitRepository.filterProduits(0.5, null, null, null, null));
-    	assertProduits(produitsNoteSup1, p1, p2);
-    	
-    	//Produits qui ont >2 de moyenne
-    	//attendu p1
-    	List<Produit> produitsNoteSup2 = new ArrayList<>(produitRepository.filterProduits(2.0, null, null, null, null));
-    	assertProduits(produitsNoteSup2, p1);
-    	
-    	//Produits qui ont >8 de moyenne
-    	//attendu aucun
-    	List<Produit> produitsNoteSup3 = new ArrayList<>(produitRepository.filterProduits(8.0, null, null, null, null));
-    	assertProduits(produitsNoteSup3);
+    	return res;
     }
     
     private void assertProduits(List<Produit> res, Produit... prodAttendus) {

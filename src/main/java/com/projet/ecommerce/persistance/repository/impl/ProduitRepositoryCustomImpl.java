@@ -85,7 +85,7 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
 			predicatesHaving.add(p);
 		}
 		if(noteMoySup!=null) {
-			p = cb.lessThan(cb.avg(avis.get("note")), noteMoyInf);
+			p = cb.lessThan(cb.avg(avis.get("note")), noteMoySup);
 			predicatesHaving.add(p);
 		}
 		
