@@ -1,6 +1,6 @@
 --liquibase formatted sql
 --changeset Rémy Halipré:01
-CREATE TABLE produit
+CREATE TABLE IF NOT EXISTS produit
 (
   reference_produit VARCHAR(255) NOT NULL,
   nom VARCHAR(255) NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE produit
   PRIMARY KEY (reference_produit)
 );
 
-CREATE TABLE categorie
+CREATE TABLE IF NOT EXISTS categorie
 (
   id_categorie SERIAL,
   nom_categorie VARCHAR(255) NOT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE categorie
   PRIMARY KEY (id_categorie)
 );
 
-CREATE TABLE produit_categorie
+CREATE TABLE IF NOT EXISTS produit_categorie
 (
   reference_produit VARCHAR(255) NOT NULL,
   id_categorie int NOT NULL,
@@ -33,7 +33,7 @@ CREATE TABLE produit_categorie
 );
 
 
-CREATE TABLE photo
+CREATE TABLE IF NOT EXISTS photo
 (
   id_photo SERIAL,
   url VARCHAR(255) NOT NULL UNIQUE,
@@ -43,4 +43,25 @@ CREATE TABLE photo
   CONSTRAINT FK_idProduit FOREIGN KEY (reference_produit)
   REFERENCES produit(reference_produit)
 );
+
+CREATE TABLE IF NOT EXISTS type_caracteristique
+(
+  id_type_caracteristique SERIAL,
+  type_carac VARCHAR(255) NOT NULL,
+  PRIMARY KEY (id_type_caracteristique)
+);
+
+CREATE TABLE IF NOT EXISTS caracteristique
+(
+  id_caracteristique SERIAL,
+  valeur VARCHAR(255) NOT NULL,
+  reference_produit VARCHAR(255) NOT NULL,
+  PRIMARY KEY (id_caracteristique),
+  CONSTRAINT FK_idProduit FOREIGN KEY (reference_produit)
+  REFERENCES produit(reference_produit),
+  id_type_caracteristique SERIAL,
+  CONSTRAINT FK_idTypeCaracteristique FOREIGN KEY (id_type_caracteristique)
+  REFERENCES type_caracteristique(id_type_caracteristique)
+);
+
 

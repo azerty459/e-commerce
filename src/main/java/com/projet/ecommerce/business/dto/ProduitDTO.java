@@ -42,8 +42,18 @@ public class ProduitDTO {
      * La photo pricnipale
      */
     private PhotoDTO photoPrincipale;
+    
+    private List<CaracteristiqueDTO> caracteristiques;
 
-    /**
+    public List<CaracteristiqueDTO> getCaracteristiques() {
+		return caracteristiques;
+	}
+
+	public void setCaracteristiques(List<CaracteristiqueDTO> caracteristiques) {
+		this.caracteristiques = caracteristiques;
+	}
+
+	/**
      * Obtenir la référence du produit
      *
      * @return la référence du produit

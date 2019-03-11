@@ -57,6 +57,7 @@ public class ProduitTransformerTests {
         LIST_PHOTO_DTO = new ArrayList<>();
         PHOTO_DTO.setIdPhoto(1);
         PHOTO_DTO.setUrl("test");
+        PHOTO_DTO.setNom("test");
         LIST_PHOTO_DTO.add(PHOTO_DTO);
 
         PHOTO = new Photo();
@@ -72,6 +73,7 @@ public class ProduitTransformerTests {
         PRODUIT_DTO1.setNom("test");
         PRODUIT_DTO1.setPrixHT(1);
         PRODUIT_DTO1.setRef("A4224");
+        PRODUIT_DTO1.setPhotoPrincipale(PHOTO_DTO);
 
         PRODUIT_DTO2 = new ProduitDTO();
         PRODUIT_DTO2.setCategories(LIST_CATEGORIE_DTO2);
@@ -80,6 +82,7 @@ public class ProduitTransformerTests {
         PRODUIT_DTO2.setNom("test");
         PRODUIT_DTO2.setPrixHT(1);
         PRODUIT_DTO2.setRef("A4224");
+        PRODUIT_DTO2.setPhotoPrincipale(PHOTO_DTO);
 
         PRODUIT1 = new Produit();
         PRODUIT1.setCategories(LISTE_CATEGORIE1);

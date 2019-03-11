@@ -1,15 +1,22 @@
 package com.projet.ecommerce.business.impl;
 
 import com.projet.ecommerce.business.IProduitBusiness;
+import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
 import com.projet.ecommerce.business.dto.ProduitDTO;
+import com.projet.ecommerce.business.dto.transformer.CaracteristiqueTransformer;
 import com.projet.ecommerce.business.dto.transformer.ProduitTransformer;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
+import com.projet.ecommerce.persistance.entity.Caracteristique;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Photo;
 import com.projet.ecommerce.persistance.entity.Produit;
+import com.projet.ecommerce.persistance.entity.TypeCaracteristique;
+import com.projet.ecommerce.persistance.repository.CaracteristiqueRepository;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import com.projet.ecommerce.persistance.repository.PhotoRepository;
 import com.projet.ecommerce.persistance.repository.ProduitRepository;
+import com.projet.ecommerce.persistance.repository.TypeCaracteristiqueRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,220 +36,274 @@ import static com.projet.ecommerce.utilitaire.Utilitaire.mergeObjects;
 @Service
 public class ProduitBusiness implements IProduitBusiness {
 
-    @Autowired
-    private ProduitRepository produitRepository;
+	@Autowired
+	private ProduitRepository produitRepository;
 
-    @Autowired
-    private CategorieRepository categorieRepository;
+	@Autowired
+	private CategorieRepository categorieRepository;
 
-    @Autowired
-    private PhotoRepository photoRepository;
+	@Autowired
+	private PhotoRepository photoRepository;
 
-    /**
-     * Ajoute un produit dans la base de données.
-     *
-     * @param referenceProduit  La référence du produit
-     * @param nom               Le nom du produit
-     * @param description       Sa description
-     * @param prixHT            Son prix hors taxe
-     * @param categoriesProduit Liste d'id de catégorie à associer au produit
-     * @return l'objet produit crée ou null, s'il il manque une referenceProduit, un nom et un prixHT.
-     */
-    @Override
-    public ProduitDTO add(String referenceProduit, String nom, String description, float prixHT, List<Integer> categoriesProduit) {
-        if (referenceProduit.isEmpty() && nom.isEmpty()) {
-            GraphQLCustomException graphQLCustomException = new GraphQLCustomException("Erreur dans l'ajout du produit (la référence, le nom et le prixHT ne peut être null)");
-            graphQLCustomException.ajouterExtension("Référence", referenceProduit);
-            graphQLCustomException.ajouterExtension("Nom", nom);
-            graphQLCustomException.ajouterExtension("PrixHT", prixHT + "");
-            throw graphQLCustomException;
-        }
-        if (produitRepository.findById(referenceProduit).isPresent()) {
-            throw new GraphQLCustomException("Le produit à ajouter existe déjà.");
-        }
-        Produit produit = new Produit();
-        produit.setReferenceProduit(referenceProduit);
-        produit.setNom(nom);
-        produit.setDescription(description);
-        produit.setPrixHT(prixHT);
-        produit.setPhotos(new ArrayList<>());
+	@Autowired
+	private CaracteristiqueRepository caracteristiqueRepository;
+	
+	@Autowired
+	private TypeCaracteristiqueRepository typeCaracteristiqueRepository;
 
-        List<Categorie> categorieList = new ArrayList<>();
-        if (categoriesProduit != null) {
-            for (int idCategorie : categoriesProduit) {
-                Optional<Categorie> categorieOptional = categorieRepository.findById(idCategorie);
-                categorieOptional
-                        .map(categorieList::add);
-            }
-        }
-        produit.setCategories(categorieList);
-        return ProduitTransformer.entityToDto(produitRepository.save(produit));
-    }
+	@Autowired
+	private CaracteristiqueBusiness caracteristiqueBusiness;
 
-    /**
-     * Modifie le produit dans la base de données.
-     *
-     * @param produit L'objet produit modifié à sauvegarder
-     * @return l'objet produit modifié
-     */
-    //Todo changer parametre par ProduitDTO
-    @Override
-    public ProduitDTO update(Produit produit) {
-        if (produit == null) {
-            return null;
-        }
-        Optional<Produit> produitOptional = produitRepository.findById(produit.getReferenceProduit());
-        if (!produitOptional.isPresent()) {
-            throw new GraphQLCustomException("Le produit recherché n'existe pas.");
-        }
+	/**
+	 * Ajoute un produit dans la base de données.
+	 *
+	 * @param referenceProduit  La référence du produit
+	 * @param nom               Le nom du produit
+	 * @param description       Sa description
+	 * @param prixHT            Son prix hors taxe
+	 * @param categoriesProduit Liste d'id de catégorie à associer au produit
+	 * @return l'objet produit crée ou null, s'il il manque une referenceProduit, un
+	 *         nom et un prixHT.
+	 */
+	@Override
+	public ProduitDTO add(String referenceProduit, String nom, String description, float prixHT,
+			List<Integer> categoriesProduit, List<CaracteristiqueDTO> caracteristiquesDTO) {
+		if (referenceProduit.isEmpty() && nom.isEmpty()) {
+			GraphQLCustomException graphQLCustomException = new GraphQLCustomException(
+					"Erreur dans l'ajout du produit (la référence, le nom et le prixHT ne peut être null)");
+			graphQLCustomException.ajouterExtension("Référence", referenceProduit);
+			graphQLCustomException.ajouterExtension("Nom", nom);
+			graphQLCustomException.ajouterExtension("PrixHT", prixHT + "");
+			throw graphQLCustomException;
+		}
+		if (produitRepository.findById(referenceProduit).isPresent()) {
+			throw new GraphQLCustomException("Le produit à ajouter existe déjà.");
+		}
+		Produit produit = new Produit();
+		produit.setReferenceProduit(referenceProduit);
+		produit.setNom(nom);
+		produit.setDescription(description);
+		produit.setPrixHT(prixHT);
+		produit.setPhotos(new ArrayList<>());
 
-        // On fusionne les deux produits en un
-        Produit retourProduit = produitOptional.get();
+		List<Categorie> categorieList = new ArrayList<>();
+		if (categoriesProduit != null) {
+			for (int idCategorie : categoriesProduit) {
+				Optional<Categorie> categorieOptional = categorieRepository.findById(idCategorie);
+				categorieOptional.map(categorieList::add);
+			}
+		}
+		produit.setCategories(categorieList);
 
-        produit.setCategories(new ArrayList<>(completeCategoriesData(produit.getCategories())));
-        if (produit.getPhotoPrincipale() != null && produit.getPhotoPrincipale().getIdPhoto() != 0) {
-            produit.setPhotoPrincipale(completePhotoPrincipaleData(produit.getPhotoPrincipale()));
-        }
-        Produit produitFinal = null;
-        try {
-            produitFinal = mergeObjects(produit, retourProduit);
-        } catch (IllegalAccessException | InstantiationException e) {
-            e.printStackTrace();
-        }
+		produitRepository.save(produit);
+		
+		if (caracteristiquesDTO != null) {
+			for (CaracteristiqueDTO caracteristiqueDTO : caracteristiquesDTO) {
+				Optional<TypeCaracteristique> typeCaracteristiqueOptional = typeCaracteristiqueRepository.findById(Integer.toString(caracteristiqueDTO.getTypeCaracteristiqueDTO().getId()));
+		        typeCaracteristiqueOptional.orElseThrow(() -> new GraphQLCustomException("Le type pour cette caractéristique n'existe pas."));
+				Caracteristique caracteristique = CaracteristiqueTransformer.dtoToEntity(caracteristiqueDTO);
+				caracteristique.setProduit(produit);
+				caracteristiqueRepository.save(caracteristique);
+				//caracteristiqueBusiness.add(caracteristique, referenceProduit);
+			}
+		}
+		produit.setCaracteristiques(
+				(List<Caracteristique>) CaracteristiqueTransformer.dtoToEntity(caracteristiquesDTO));
 
-        if (produitFinal == null) {
-            throw new GraphQLCustomException("Le produit ne peux pas être sauvegardé");
-        }
+		return ProduitTransformer.entityToDto(produitRepository.save(produit));
+	}
 
-        // On retourne le produit final et on le transforme en DTO
-        return ProduitTransformer.entityToDto(produitRepository.save(produitFinal));
-    }
+	/**
+	 * Modifie le produit dans la base de données.
+	 *
+	 * @param produit L'objet produit modifié à sauvegarder
+	 * @return l'objet produit modifié
+	 */
+	// Todo changer parametre par ProduitDTO
+	@Override
+	public ProduitDTO update(Produit produit) {
+		if (produit == null) {
+			return null;
+		}
+		Optional<Produit> produitOptional = produitRepository.findById(produit.getReferenceProduit());
+		if (!produitOptional.isPresent()) {
+			throw new GraphQLCustomException("Le produit recherché n'existe pas.");
+		}
 
-    /**
-     * Remplace la liste de photo par une nouvelle liste contenant l'ensemble des données des photos.
-     *
-     * @param photoList Une array list contenant des id de photo
-     * @return une collection de Photo
-     */
-    private Collection<Photo> completePhotosData(List<Photo> photoList) {
-        List<Photo> retourList = new ArrayList<>();
-        for (Photo photo : photoList) {
-            Optional<Photo> photoOptional = photoRepository.findById(photo.getIdPhoto());
-            if (photoOptional.isPresent()) {
-                retourList.add(photoOptional.get());
-            } else {
-                throw new GraphQLCustomException("La photo n'existe pas.");
-            }
-        }
-        return retourList;
-    }
+		// On fusionne les deux produits en un
+		Produit retourProduit = produitOptional.get();
 
-    /**
-     * Remplace la liste de photo par une nouvelle liste contenant l'ensemble des données des photos.
-     *
-     * @param photoPrincipale La photo principale
-     * @return une collection de Photo
-     */
-    private Photo completePhotoPrincipaleData(Photo photoPrincipale) {
-        Optional<Photo> photoOptional = photoRepository.findById(photoPrincipale.getIdPhoto());
-        if (photoOptional.isPresent()) {
-            return photoOptional.get();
-        } else {
-            throw new GraphQLCustomException("La photo n'existe pas.");
-        }
-    }
+		produit.setCaracteristiques(new ArrayList<>(completeCaracteristiquesData(produit.getCaracteristiques())));
+		produit.setCategories(new ArrayList<>(completeCategoriesData(produit.getCategories())));
+		if (produit.getPhotoPrincipale() != null && produit.getPhotoPrincipale().getIdPhoto() != 0) {
+			produit.setPhotoPrincipale(completePhotoPrincipaleData(produit.getPhotoPrincipale()));
+		}
+		Produit produitFinal = null;
+		try {
+			produitFinal = mergeObjects(produit, retourProduit);
+		} catch (IllegalAccessException | InstantiationException e) {
+			e.printStackTrace();
+		}
 
-    /**
-     * Remplace la liste de caractéristique par une nouvelle liste contenant l'ensemble des données des caractéristiques.
-     *
-     * @param categorieList Une array list contenant des id de catégorie
-     * @return une collection de catégorie
-     */
-    private Collection<Categorie> completeCategoriesData(List<Categorie> categorieList) {
-        List<Categorie> retourList = new ArrayList<>();
-        for (Categorie categorie : categorieList) {
-            Optional<Categorie> categorieOptional = categorieRepository.findById(categorie.getIdCategorie());
-            if (categorieOptional.isPresent()) {
-                retourList.add(categorieOptional.get());
-            } else {
-                throw new GraphQLCustomException("La catégorie n'existe pas.");
-            }
-        }
-        return retourList;
-    }
+		if (produitFinal == null) {
+			throw new GraphQLCustomException("Le produit ne peux pas être sauvegardé");
+		}
 
-    /**
-     * Supprime le produit dans la base de données.
-     *
-     * @param referenceProduit Référence du produit à supprimer
-     * @return true
-     */
-    @Override
-    public boolean delete(String referenceProduit) {
-        produitRepository.deleteById(referenceProduit);
-        return true;
-    }
+		// On retourne le produit final et on le transforme en DTO
+		return ProduitTransformer.entityToDto(produitRepository.save(produitFinal));
+	}
 
-    /**
-     * Retourne la liste complète des produits liés à la base de données.
-     *
-     * @return une liste d'objet produit
-     */
-    @Override
-    public List<ProduitDTO> getAll() {
-        return new ArrayList<>(ProduitTransformer.entityToDto(new ArrayList<>(produitRepository.findAll())));
-    }
+	/**
+	 * Remplace la liste de photo par une nouvelle liste contenant l'ensemble des
+	 * données des photos.
+	 *
+	 * @param photoList Une array list contenant des id de photo
+	 * @return une collection de Photo
+	 */
+	private Collection<Photo> completePhotosData(List<Photo> photoList) {
+		List<Photo> retourList = new ArrayList<>();
+		for (Photo photo : photoList) {
+			Optional<Photo> photoOptional = photoRepository.findById(photo.getIdPhoto());
+			if (photoOptional.isPresent()) {
+				retourList.add(photoOptional.get());
+			} else {
+				throw new GraphQLCustomException("La photo n'existe pas.");
+			}
+		}
+		return retourList;
+	}
 
-    /**
-     * Va chercher les produits selon les paramètres ci-dessous
-     *
-     * @param ref la référence du produit recherché
-     * @param cat la catégorie du /des produit(s) recherché(s)
-     * @param nom le nom du produit à rechercher
-     * @return une liste de produits selon les paramètres
-     */
-    @Override
-    public List<ProduitDTO> getAll(String ref, String cat, String nom) {
+	/**
+	 * Remplace la liste de photo par une nouvelle liste contenant l'ensemble des
+	 * données des photos.
+	 *
+	 * @param photoPrincipale La photo principale
+	 * @return une collection de Photo
+	 */
+	private Photo completePhotoPrincipaleData(Photo photoPrincipale) {
+		Optional<Photo> photoOptional = photoRepository.findById(photoPrincipale.getIdPhoto());
+		if (photoOptional.isPresent()) {
+			return photoOptional.get();
+		} else {
+			throw new GraphQLCustomException("La photo n'existe pas.");
+		}
+	}
 
-        Collection<Produit> produitCollection;
+	/**
+	 * Remplace la liste de caractéristique par une nouvelle liste contenant
+	 * l'ensemble des données des caractéristiques.
+	 *
+	 * @param categorieList Une array list contenant des id de catégorie
+	 * @return une collection de catégorie
+	 */
+	private Collection<Categorie> completeCategoriesData(List<Categorie> categorieList) {
+		List<Categorie> retourList = new ArrayList<>();
+		for (Categorie categorie : categorieList) {
+			Optional<Categorie> categorieOptional = categorieRepository.findById(categorie.getIdCategorie());
+			if (categorieOptional.isPresent()) {
+				retourList.add(categorieOptional.get());
+			} else {
+				throw new GraphQLCustomException("La catégorie n'existe pas.");
+			}
+		}
+		return retourList;
+	}
 
-        if (nom == null) {
-            produitCollection = produitRepository.findAllWithCriteria(ref, cat);
+	/**
+	 * Remplace la liste de caractéristique par une nouvelle liste contenant
+	 * l'ensemble des données des caractéristiques.
+	 *
+	 * @param categorieList Une array list contenant des id de catégorie
+	 * @return une collection de catégorie
+	 */
+	private Collection<Caracteristique> completeCaracteristiquesData(List<Caracteristique> caracteristiqueList) {
+		List<Caracteristique> retourList = new ArrayList<>();
+		for (Caracteristique caracteristique : caracteristiqueList) {
+			Optional<Caracteristique> caracteristiqueOptional = caracteristiqueRepository
+					.findById(Integer.toString(caracteristique.getIdCaracteristique()));
+			if (caracteristiqueOptional.isPresent()) {
+				retourList.add(caracteristiqueOptional.get());
+			} else {
+				throw new GraphQLCustomException("La caracteristique n'existe pas.");
+			}
+		}
+		return retourList;
+	}
 
-        } else {
-            produitCollection = produitRepository.findByNomContainingIgnoreCase(nom);
-        }
+	/**
+	 * Supprime le produit dans la base de données.
+	 *
+	 * @param referenceProduit Référence du produit à supprimer
+	 * @return true
+	 */
+	@Override
+	public boolean delete(String referenceProduit) {
+		produitRepository.deleteById(referenceProduit);
+		return true;
+	}
 
-        if (produitCollection.size() == 0) {
-            throw new GraphQLCustomException("Aucun produit(s) trouvé(s).");
-        }
-        return new ArrayList<>(ProduitTransformer.entityToDto(new ArrayList<>(produitCollection)));
-    }
+	/**
+	 * Retourne la liste complète des produits liés à la base de données.
+	 *
+	 * @return une liste d'objet produit
+	 */
+	@Override
+	public List<ProduitDTO> getAll() {
+		return new ArrayList<>(ProduitTransformer.entityToDto(new ArrayList<>(produitRepository.findAll())));
+	}
 
-    /**
-     * Retourne une page de produit
-     *
-     * @param numeroPage    la page souhaitée
-     * @param nombreProduit le nombre de produit à afficher dans la
-     * @param nom           le nom du produit à rechercher
-     * @param IDcategorie   l'id de la catégorie recherchée
-     * @return une page paginée
-     */
-    @Override
-    public Page<Produit> getPage(int numeroPage, int nombreProduit, String nom, int IDcategorie) {
+	/**
+	 * Va chercher les produits selon les paramètres ci-dessous
+	 *
+	 * @param ref la référence du produit recherché
+	 * @param cat la catégorie du /des produit(s) recherché(s)
+	 * @param nom le nom du produit à rechercher
+	 * @return une liste de produits selon les paramètres
+	 */
+	@Override
+	public List<ProduitDTO> getAll(String ref, String cat, String nom) {
 
+		Collection<Produit> produitCollection;
 
-        PageRequest page = (numeroPage == 0) ? PageRequest.of(numeroPage, nombreProduit) : PageRequest.of(numeroPage - 1, nombreProduit);
-        if (nom != null && !nom.isEmpty() && IDcategorie != 0 || IDcategorie != 0) {
-            Optional<Categorie> categorieOptional = categorieRepository.findById(IDcategorie);
-            if (!categorieOptional.isPresent()) {
-                return Page.empty();
-            }
-            Categorie categorie = categorieOptional.get();
-            return produitRepository.findByNomContainingIgnoreCaseAndCategories_borneGaucheGreaterThanEqualAndCategories_borneDroitLessThanEqual(page, nom, categorie.getBorneGauche(), categorie.getBorneDroit());
-        } else if (nom != null && !nom.isEmpty()) {
-            return produitRepository.findByNomContainingIgnoreCase(page, nom);
-        }
-        return produitRepository.findAll(page);
-    }
+		if (nom == null) {
+			produitCollection = produitRepository.findAllWithCriteria(ref, cat);
+
+		} else {
+			produitCollection = produitRepository.findByNomContainingIgnoreCase(nom);
+		}
+
+		if (produitCollection.size() == 0) {
+			throw new GraphQLCustomException("Aucun produit(s) trouvé(s).");
+		}
+		return new ArrayList<>(ProduitTransformer.entityToDto(new ArrayList<>(produitCollection)));
+	}
+
+	/**
+	 * Retourne une page de produit
+	 *
+	 * @param numeroPage    la page souhaitée
+	 * @param nombreProduit le nombre de produit à afficher dans la
+	 * @param nom           le nom du produit à rechercher
+	 * @param IDcategorie   l'id de la catégorie recherchée
+	 * @return une page paginée
+	 */
+	@Override
+	public Page<Produit> getPage(int numeroPage, int nombreProduit, String nom, int IDcategorie) {
+
+		PageRequest page = (numeroPage == 0) ? PageRequest.of(numeroPage, nombreProduit)
+				: PageRequest.of(numeroPage - 1, nombreProduit);
+		if (nom != null && !nom.isEmpty() && IDcategorie != 0 || IDcategorie != 0) {
+			Optional<Categorie> categorieOptional = categorieRepository.findById(IDcategorie);
+			if (!categorieOptional.isPresent()) {
+				return Page.empty();
+			}
+			Categorie categorie = categorieOptional.get();
+			return produitRepository
+					.findByNomContainingIgnoreCaseAndCategories_borneGaucheGreaterThanEqualAndCategories_borneDroitLessThanEqual(
+							page, nom, categorie.getBorneGauche(), categorie.getBorneDroit());
+		} else if (nom != null && !nom.isEmpty()) {
+			return produitRepository.findByNomContainingIgnoreCase(page, nom);
+		}
+		return produitRepository.findAll(page);
+	}
 }

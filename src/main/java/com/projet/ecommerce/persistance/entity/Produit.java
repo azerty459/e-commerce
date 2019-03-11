@@ -57,7 +57,18 @@ public class Produit {
     )
     private List<Categorie> categoriesSupprime;
 
-    /**
+    @OneToMany(mappedBy = "produit", cascade = {CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private List<Caracteristique> caracteristiques;
+
+    public List<Caracteristique> getCaracteristiques() {
+		return caracteristiques;
+	}
+
+	public void setCaracteristiques(List<Caracteristique> caracteristiques) {
+		this.caracteristiques = caracteristiques;
+	}
+
+	/**
      * Retourne la référence du produit.
      *
      * @return la référence du produit

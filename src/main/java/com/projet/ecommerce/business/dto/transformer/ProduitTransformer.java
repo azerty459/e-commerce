@@ -51,6 +51,8 @@ public class ProduitTransformer {
             produitDTO.setPhotoPrincipale(PhotoTransformer.entityToDto(produit.getPhotoPrincipale()));
         }
 
+        produitDTO.setCaracteristiques(new ArrayList<>(CaracteristiqueTransformer.entityToDto(produit.getCaracteristiques())));
+        
         // Ajout du paramètre de chemins (US#192)
         HashMap<Categorie, Collection<Categorie>> chemins = new HashMap<>();
         produitDTO.setCategories(new ArrayList<>(CategorieTransformer.entityToDto(produit.getCategories(), chemins, false, false, null)));
@@ -92,6 +94,7 @@ public class ProduitTransformer {
         produit.setPhotos(new ArrayList<>(PhotoTransformer.dtoToEntity(produitDTO.getPhotos())));
         produit.setCategories(new ArrayList<>(CategorieTransformer.dtoToEntity(produitDTO.getCategories())));
         produit.setPhotoPrincipale(PhotoTransformer.dtoToEntity(produitDTO.getPhotoPrincipale()));
+        produit.setCaracteristiques(new ArrayList<>(CaracteristiqueTransformer.dtoToEntity(produitDTO.getCaracteristiques())));
         return produit;
     }
 }
