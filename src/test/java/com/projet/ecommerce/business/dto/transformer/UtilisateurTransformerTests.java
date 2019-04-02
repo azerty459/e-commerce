@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @SpringBootTest
@@ -38,13 +39,9 @@ public class UtilisateurTransformerTests {
         UTILISATEUR.setMdp("test");
         UTILISATEUR.setPrenom("Toto");
         UTILISATEUR.setNom("Test");
-
-        ArrayList<Role> roleArrayList = new ArrayList<>();
         UTILISATEUR.setRole(ROLE);
 
-        ArrayList<Utilisateur> utilisateurArrayList = new ArrayList<>();
-        utilisateurArrayList.add(UTILISATEUR);
-        ROLE.setUtilisateurs(utilisateurArrayList);
+        ROLE.setUtilisateurs(Collections.singletonList(UTILISATEUR));
 
         UTILISATEUR_DTO = new UtilisateurDTO();
         UTILISATEUR_DTO.setId(1);
@@ -52,8 +49,6 @@ public class UtilisateurTransformerTests {
         UTILISATEUR_DTO.setMdp("test");
         UTILISATEUR_DTO.setPrenom("Toto");
         UTILISATEUR_DTO.setNom("Test");
-
-
         UTILISATEUR_DTO.setRole(ROLE_DTO);
     }
 
@@ -67,7 +62,7 @@ public class UtilisateurTransformerTests {
         Assert.assertEquals(utilisateur.getId(), UTILISATEUR_DTO.getId());
         Assert.assertEquals(utilisateur.getNom(), UTILISATEUR_DTO.getNom());
         Assert.assertEquals(utilisateur.getPrenom(), UTILISATEUR_DTO.getPrenom());
-        Assert.assertEquals(utilisateur.getRole(), 1);
+        Assert.assertNotNull(utilisateur.getRole());
 
         Role role = utilisateur.getRole();
         RoleDTO roleDTO = UTILISATEUR_DTO.getRole();
@@ -85,7 +80,7 @@ public class UtilisateurTransformerTests {
         Assert.assertEquals(UTILISATEUR.getId(), utilisateurDTO.getId());
         Assert.assertEquals(UTILISATEUR.getNom(), utilisateurDTO.getNom());
         Assert.assertEquals(UTILISATEUR.getPrenom(), utilisateurDTO.getPrenom());
-        Assert.assertEquals(1, utilisateurDTO.getRole());
+        Assert.assertNotNull(utilisateurDTO.getRole());
 
         RoleDTO roleDTO = utilisateurDTO.getRole();
         Role role = UTILISATEUR.getRole();
@@ -110,20 +105,22 @@ public class UtilisateurTransformerTests {
 
         Assert.assertNotNull(utilisateurList);
 
-        Assert.assertEquals(utilisateurList.get(0).getMdp(), UTILISATEUR_DTO.getMdp());
-        Assert.assertEquals(utilisateurList.get(0).getEmail(), UTILISATEUR_DTO.getEmail());
-        Assert.assertEquals(utilisateurList.get(0).getId(), UTILISATEUR_DTO.getId());
-        Assert.assertEquals(utilisateurList.get(0).getNom(), UTILISATEUR_DTO.getNom());
-        Assert.assertEquals(utilisateurList.get(0).getPrenom(), UTILISATEUR_DTO.getPrenom());
-        Assert.assertEquals(1, utilisateurList.get(0).getRole());
+        final Utilisateur utilisateur1 = utilisateurList.get(0);
+        Assert.assertEquals(utilisateur1.getMdp(), UTILISATEUR_DTO.getMdp());
+        Assert.assertEquals(utilisateur1.getEmail(), UTILISATEUR_DTO.getEmail());
+        Assert.assertEquals(utilisateur1.getId(), UTILISATEUR_DTO.getId());
+        Assert.assertEquals(utilisateur1.getNom(), UTILISATEUR_DTO.getNom());
+        Assert.assertEquals(utilisateur1.getPrenom(), UTILISATEUR_DTO.getPrenom());
+        Assert.assertNotNull(utilisateur1.getRole());
 
 
-        Assert.assertEquals(utilisateurList.get(1).getMdp(), utilisateurDTO2.getMdp());
-        Assert.assertEquals(utilisateurList.get(1).getEmail(), utilisateurDTO2.getEmail());
-        Assert.assertEquals(utilisateurList.get(1).getId(), utilisateurDTO2.getId());
-        Assert.assertEquals(utilisateurList.get(1).getNom(), utilisateurDTO2.getNom());
-        Assert.assertEquals(utilisateurList.get(1).getPrenom(), utilisateurDTO2.getPrenom());
-        Assert.assertEquals(0, utilisateurList.get(1).getRole());
+        final Utilisateur utilisateur2 = utilisateurList.get(1);
+        Assert.assertEquals(utilisateur2.getMdp(), utilisateurDTO2.getMdp());
+        Assert.assertEquals(utilisateur2.getEmail(), utilisateurDTO2.getEmail());
+        Assert.assertEquals(utilisateur2.getId(), utilisateurDTO2.getId());
+        Assert.assertEquals(utilisateur2.getNom(), utilisateurDTO2.getNom());
+        Assert.assertEquals(utilisateur2.getPrenom(), utilisateurDTO2.getPrenom());
+        Assert.assertNull(utilisateur2.getRole());
     }
 
     @Test
@@ -149,7 +146,7 @@ public class UtilisateurTransformerTests {
         Assert.assertEquals(utilisateurDTOList.get(0).getId(), UTILISATEUR.getId());
         Assert.assertEquals(utilisateurDTOList.get(0).getNom(), UTILISATEUR.getNom());
         Assert.assertEquals(utilisateurDTOList.get(0).getPrenom(), UTILISATEUR.getPrenom());
-        Assert.assertEquals(1, utilisateurDTOList.get(0).getRole());
+        Assert.assertNotNull(utilisateurDTOList.get(0).getRole());
 
 
         Assert.assertEquals(utilisateurDTOList.get(1).getMdp(), utilisateur2.getMdp());
@@ -157,6 +154,6 @@ public class UtilisateurTransformerTests {
         Assert.assertEquals(utilisateurDTOList.get(1).getId(), utilisateur2.getId());
         Assert.assertEquals(utilisateurDTOList.get(1).getNom(), utilisateur2.getNom());
         Assert.assertEquals(utilisateurDTOList.get(1).getPrenom(), utilisateur2.getPrenom());
-        Assert.assertEquals(0, utilisateurDTOList.get(1).getRole());
+        Assert.assertNotNull(utilisateurDTOList.get(1).getRole());
     }
 }
