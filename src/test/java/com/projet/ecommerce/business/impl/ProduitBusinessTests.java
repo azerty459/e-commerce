@@ -20,10 +20,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.projet.ecommerce.business.dto.ProduitDTO;
+import com.projet.ecommerce.business.dto.transformer.CaracteristiqueTransformer;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
+import com.projet.ecommerce.persistance.entity.Caracteristique;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Photo;
 import com.projet.ecommerce.persistance.entity.Produit;
+import com.projet.ecommerce.persistance.entity.TypeCaracteristique;
+import com.projet.ecommerce.persistance.repository.CaracteristiqueRepository;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import com.projet.ecommerce.persistance.repository.PhotoRepository;
 import com.projet.ecommerce.persistance.repository.ProduitRepository;
@@ -44,6 +48,9 @@ public class ProduitBusinessTests {
 
     @Mock
     private PhotoRepository photoRepository;
+    
+    @Mock
+    private CaracteristiqueRepository caracteristiqueRepository;
 
     @Mock
     private Page page;
@@ -135,6 +142,34 @@ public class ProduitBusinessTests {
         Assert.assertNotNull(retour);
         Assert.assertEquals(retour.getClass(), ProduitDTO.class);
         Assert.assertEquals(retour.getCategories().get(0).getNom(), "Transport");
+    }
+    
+    @Test
+    public void addProductWithCaracteristiques() {
+        Produit produit = new Produit();
+        produit.setReferenceProduit("A05A01");
+        produit.setPrixHT(2.1f);
+        produit.setDescription("Un livre");
+        produit.setNom("Livre1");
+        
+        TypeCaracteristique tc1 = new TypeCaracteristique();
+        tc1.setNomCaracteristique("Langue");
+        
+        Caracteristique c1 = new Caracteristique();
+        c1.setValeurCaracteristique("fr");
+        
+        List<Caracteristique> listeCaracteristiques = new ArrayList<Caracteristique>();
+        listeCaracteristiques.add(c1);
+
+        Mockito.when(caracteristiqueRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(c1));
+        Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
+        
+        ProduitDTO retour = produitBusiness.add("A05A01", "Test", "Test", 4.7f, null, CaracteristiqueTransformer.entityToDto(listeCaracteristiques));
+
+        Assert.assertNotNull(retour);
+        Assert.assertEquals(retour.getClass(), ProduitDTO.class);
+        Assert.assertEquals(retour.getCaracteristiques().get(0).getTypeCaracteristique().getNomCaracteristique(), "Langue");
+        Assert.assertEquals(retour.getCaracteristiques().get(0).getValeurCaracteristique(), "fr");
     }
 
     @Test
