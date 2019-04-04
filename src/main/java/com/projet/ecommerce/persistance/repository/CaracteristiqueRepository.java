@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import com.projet.ecommerce.persistance.entity.Caracteristique;
 import com.projet.ecommerce.persistance.entity.Photo;
 
 /**
@@ -12,10 +13,10 @@ import com.projet.ecommerce.persistance.entity.Photo;
  */
 
 @Repository
-public interface CaracteristiqueRepository extends CrudRepository<Photo, Integer> {
+public interface CaracteristiqueRepository extends CrudRepository<Caracteristique, Integer> {
 	
 	@Override
-    Collection<Photo> findAll();
+    Collection<Caracteristique> findAll();
 
-    Collection<Photo> findByProduit_ReferenceProduit(String ref);
+    Collection<Caracteristique> findByProduit_ReferenceProduit(String ref);
 }
