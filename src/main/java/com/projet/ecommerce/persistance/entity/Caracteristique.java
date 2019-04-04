@@ -20,7 +20,7 @@ public class Caracteristique {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@Column(name = "id_type_caracteristique")
-	private TypeCaracteristque typeCaracteristique;
+	private TypeCaracteristique typeCaracteristique;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@Column(name = "reference_produit")
@@ -28,6 +28,37 @@ public class Caracteristique {
 	
 	@Column(name = "valeur_caracteristique")
     private String valeurCaracteristique;
-	
+
+	public int getIdCaracteristique() {
+		return idCaracteristique;
+	}
+
+	public void setIdCaracteristique(int idCaracteristique) {
+		this.idCaracteristique = idCaracteristique;
+	}
+
+	public TypeCaracteristique getTypeCaracteristique() {
+		return typeCaracteristique;
+	}
+
+	public void setTypeCaracteristique(TypeCaracteristique typeCaracteristique) {
+		this.typeCaracteristique = typeCaracteristique;
+	}
+
+	public Produit getProduit() {
+		return produit;
+	}
+
+	public void setProduit(Produit produit) {
+		this.produit = produit;
+	}
+
+	public String getValeurCaracteristique() {
+		return valeurCaracteristique;
+	}
+
+	public void setValeurCaracteristique(String valeurCaracteristique) {
+		this.valeurCaracteristique = valeurCaracteristique;
+	}
 	
 }
