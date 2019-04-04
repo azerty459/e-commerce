@@ -30,6 +30,10 @@ public class Produit {
     @Column(name = "prix_ht")
     private float prixHT;
 
+    @Column
+    @OneToMany
+    private List<Caracteristique> caracteristiques;
+
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinTable(
             name = "produit_categorie",
@@ -109,6 +113,14 @@ public class Produit {
      */
     public void setPrixHT(float prixHT) {
         this.prixHT = prixHT;
+    }
+
+    public List<Caracteristique> getCaracteristiques() {
+        return caracteristiques;
+    }
+
+    public void setCaracteristiques(List<Caracteristique> caracteristiques) {
+        this.caracteristiques = caracteristiques;
     }
 
     /**
