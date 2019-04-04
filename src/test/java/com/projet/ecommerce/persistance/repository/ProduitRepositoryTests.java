@@ -1,6 +1,9 @@
 package com.projet.ecommerce.persistance.repository;
 
-import com.projet.ecommerce.persistance.entity.Produit;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,7 +13,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
+import com.projet.ecommerce.persistance.entity.Caracteristique;
+import com.projet.ecommerce.persistance.entity.Produit;
+import com.projet.ecommerce.persistance.entity.TypeCaracteristique;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -30,6 +35,11 @@ public class ProduitRepositoryTests {
         TEMP_INSERT.setReferenceProduit("A05A87");
         TEMP_INSERT.setPrixHT(8.7f);
         TEMP_INSERT.setDescription("joli produit");
+        List<Caracteristique> caracs = new ArrayList<>();
+        TypeCaracteristique type = createTypeCaracteristique(1);
+        caracs.add(createCaracteristique(type));
+        caracs.add(createCaracteristique(type));
+        TEMP_INSERT.setCaracteristiques(caracs);
 
         TEMP_DELETE.setReferenceProduit("A05A88");
         TEMP_DELETE.setPrixHT(11.7f);
@@ -99,4 +109,17 @@ public class ProduitRepositoryTests {
         produitRepository.delete(TEMP_DELETE);
         Assert.assertFalse(produitRepository.findById(TEMP_DELETE.getReferenceProduit()).isPresent());
     }
+    
+    private static TypeCaracteristique createTypeCaracteristique(int id) {
+    	TypeCaracteristique type = new TypeCaracteristique();
+    	type.setIdTypeCaracteristique(id);
+    	return type;
+    }
+    
+    private static Caracteristique createCaracteristique(TypeCaracteristique type) {
+    	Caracteristique c = new Caracteristique();
+    	c.setTypeCaracteristique(type);
+    	return c;
+    }
+    
 }

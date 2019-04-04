@@ -44,3 +44,4 @@ CREATE TABLE photo
   REFERENCES produit(reference_produit)
 );
 
+

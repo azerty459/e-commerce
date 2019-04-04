@@ -1,10 +1,12 @@
 package com.projet.ecommerce.business;
 
-import com.projet.ecommerce.business.dto.ProduitDTO;
-import com.projet.ecommerce.persistance.entity.Produit;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 
-import java.util.List;
+import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
+import com.projet.ecommerce.business.dto.ProduitDTO;
+import com.projet.ecommerce.persistance.entity.Produit;
 
 /**
  * Interface du service ProduitBusiness.
@@ -21,7 +23,8 @@ public interface IProduitBusiness {
      * @param prixHT           Son prix hors taxe
      * @return le produit ajouté
      */
-    ProduitDTO add(String referenceProduit, String nom, String description, float prixHT, List<Integer> nouvelleCat);
+    ProduitDTO add(String referenceProduit, String nom, String description, float prixHT, List<Integer> nouvelleCat,
+    		List<CaracteristiqueDTO> caracteristiques);
 
     /**
      * Méthode définissant la modification d'un produit.

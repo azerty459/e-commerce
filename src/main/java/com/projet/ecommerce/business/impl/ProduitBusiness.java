@@ -1,7 +1,21 @@
 package com.projet.ecommerce.business.impl;
 
+import static com.projet.ecommerce.utilitaire.Utilitaire.mergeObjects;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+
 import com.projet.ecommerce.business.IProduitBusiness;
+import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
 import com.projet.ecommerce.business.dto.ProduitDTO;
+import com.projet.ecommerce.business.dto.transformer.CaracteristiqueTransformer;
 import com.projet.ecommerce.business.dto.transformer.ProduitTransformer;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Categorie;
@@ -10,17 +24,6 @@ import com.projet.ecommerce.persistance.entity.Produit;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import com.projet.ecommerce.persistance.repository.PhotoRepository;
 import com.projet.ecommerce.persistance.repository.ProduitRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-
-import static com.projet.ecommerce.utilitaire.Utilitaire.mergeObjects;
 
 /**
  * Service permettant de gérer les actions effectuées pour les produits.
@@ -37,7 +40,6 @@ public class ProduitBusiness implements IProduitBusiness {
 
     @Autowired
     private PhotoRepository photoRepository;
-
     /**
      * Ajoute un produit dans la base de données.
      *
@@ -46,10 +48,12 @@ public class ProduitBusiness implements IProduitBusiness {
      * @param description       Sa description
      * @param prixHT            Son prix hors taxe
      * @param categoriesProduit Liste d'id de catégorie à associer au produit
+     * @param caracteristiques  liste des caracteristiques du produit
      * @return l'objet produit crée ou null, s'il il manque une referenceProduit, un nom et un prixHT.
      */
     @Override
-    public ProduitDTO add(String referenceProduit, String nom, String description, float prixHT, List<Integer> categoriesProduit) {
+    public ProduitDTO add(String referenceProduit, String nom, String description, float prixHT, List<Integer> categoriesProduit,
+    		List<CaracteristiqueDTO> caracteristiques) {
         if (referenceProduit.isEmpty() && nom.isEmpty()) {
             GraphQLCustomException graphQLCustomException = new GraphQLCustomException("Erreur dans l'ajout du produit (la référence, le nom et le prixHT ne peut être null)");
             graphQLCustomException.ajouterExtension("Référence", referenceProduit);
@@ -60,13 +64,18 @@ public class ProduitBusiness implements IProduitBusiness {
         if (produitRepository.findById(referenceProduit).isPresent()) {
             throw new GraphQLCustomException("Le produit à ajouter existe déjà.");
         }
+        long countDistinctCaracType = caracteristiques.stream().map(carac -> carac.getTypeCaracteristique()).distinct().count();
+        if(caracteristiques.size() > countDistinctCaracType) {
+        	s
+        }
         Produit produit = new Produit();
         produit.setReferenceProduit(referenceProduit);
         produit.setNom(nom);
         produit.setDescription(description);
         produit.setPrixHT(prixHT);
         produit.setPhotos(new ArrayList<>());
-
+        produit.setCaracteristiques(CaracteristiqueTransformer.dtoToEntities(caracteristiques));
+        
         List<Categorie> categorieList = new ArrayList<>();
         if (categoriesProduit != null) {
             for (int idCategorie : categoriesProduit) {
