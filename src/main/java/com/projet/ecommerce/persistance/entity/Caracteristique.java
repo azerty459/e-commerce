@@ -12,14 +12,12 @@ public class Caracteristique {
     @Column(name = "id_caracteristique")
     private int idCaracteristique;
 
-    @Column(name = "type_caracteristique")
     @ManyToOne
     private TypeCaracteristique typeCaracteristique;
 
     @Column
     private String valeur;
-
-    @Column
+    
     @ManyToOne
     private Produit produit;
 
