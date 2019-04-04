@@ -4,9 +4,11 @@ import com.projet.ecommerce.business.IProduitBusiness;
 import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.business.dto.transformer.ProduitTransformer;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
+import com.projet.ecommerce.persistance.entity.Caracteristique;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Photo;
 import com.projet.ecommerce.persistance.entity.Produit;
+import com.projet.ecommerce.persistance.repository.CaracteristiqueRepository;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import com.projet.ecommerce.persistance.repository.PhotoRepository;
 import com.projet.ecommerce.persistance.repository.ProduitRepository;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,6 +40,9 @@ public class ProduitBusiness implements IProduitBusiness {
 
     @Autowired
     private PhotoRepository photoRepository;
+    
+    @Autowired
+    private CaracteristiqueRepository caracteristiqueRepository;
 
     /**
      * Ajoute un produit dans la base de données.
@@ -49,8 +55,8 @@ public class ProduitBusiness implements IProduitBusiness {
      * @return l'objet produit crée ou null, s'il il manque une referenceProduit, un nom et un prixHT.
      */
     @Override
-    public ProduitDTO add(String referenceProduit, String nom, String description, float prixHT, List<Integer> categoriesProduit) {
-        if (referenceProduit.isEmpty() && nom.isEmpty()) {
+    public ProduitDTO add(String referenceProduit, String nom, String description, float prixHT, List<Integer> categoriesProduit, List<CaracteristiqueDTO> listeCaracteristique) {
+    	if (referenceProduit.isEmpty() && nom.isEmpty()) {
             GraphQLCustomException graphQLCustomException = new GraphQLCustomException("Erreur dans l'ajout du produit (la référence, le nom et le prixHT ne peut être null)");
             graphQLCustomException.ajouterExtension("Référence", referenceProduit);
             graphQLCustomException.ajouterExtension("Nom", nom);
@@ -76,6 +82,9 @@ public class ProduitBusiness implements IProduitBusiness {
             }
         }
         produit.setCategories(categorieList);
+        
+        
+        
         return ProduitTransformer.entityToDto(produitRepository.save(produit));
     }
 
