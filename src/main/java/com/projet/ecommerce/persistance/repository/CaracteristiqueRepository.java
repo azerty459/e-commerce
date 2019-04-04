@@ -13,10 +13,10 @@ import com.projet.ecommerce.persistance.entity.Caracteristique;
  *
  */
 @Repository
-public interface CaracteristiqueRepository extends PagingAndSortingRepository<Caracteristique, String>{
+public interface CaracteristiqueRepository extends PagingAndSortingRepository<Caracteristique, Integer>{
 
 	Optional<Caracteristique> findById(int ref);
 	
-	Optional<Caracteristique> findByName(String name);
+	Optional<Caracteristique> findByValeur(String valeur);
 	
 }

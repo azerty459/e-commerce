@@ -30,7 +30,7 @@ public class Caracteristique {
 	
 	@NotNull
 	@Column(name = "valeur_caracteristique")
-	private String valeurCaracteristique;
+	private String valeur;
 
 	/**
 	 * @return the idCaracteristique
@@ -78,14 +78,14 @@ public class Caracteristique {
 	 * @return the valeurCaracteristique
 	 */
 	public String getValeurCaracteristique() {
-		return valeurCaracteristique;
+		return valeur;
 	}
 
 	/**
 	 * @param valeurCaracteristique the valeurCaracteristique to set
 	 */
 	public void setValeurCaracteristique(String valeurCaracteristique) {
-		this.valeurCaracteristique = valeurCaracteristique;
+		this.valeur = valeurCaracteristique;
 	}
 
 }
