@@ -18,7 +18,9 @@ import com.projet.ecommerce.persistance.entity.TypeCaracteristique;
 @Repository
 public interface TypeCaracteristiqueRepository extends PagingAndSortingRepository<TypeCaracteristique, String>{
 	
-	Optional<TypeCaracteristique> findById(int ref);
+	Optional<TypeCaracteristique> findById(int id);
 	
 	Optional<TypeCaracteristique> findByName(String name);
+	
+	Optional<TypeCaracteristique> deleteById(int id);
 }

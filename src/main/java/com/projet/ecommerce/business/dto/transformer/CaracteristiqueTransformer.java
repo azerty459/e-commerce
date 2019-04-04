@@ -20,7 +20,7 @@ public class CaracteristiqueTransformer {
 	private CaracteristiqueTransformer() {
 	}
 
-	public static Collection<CaracteristiqueDTO> entityToDto(Collection<Caracteristique> caracteristiqueCollection){
+	public static List<CaracteristiqueDTO> entityToDto(List<Caracteristique> caracteristiqueCollection){
 		if (caracteristiqueCollection == null) {
 			return null;
 		}
@@ -52,7 +52,7 @@ public class CaracteristiqueTransformer {
 		return cdto;
 	}
 
-	public static Collection<Caracteristique> dtoToEntity(Collection<CaracteristiqueDTO> caracteristiqueDTOCollection){
+	public static List<Caracteristique> dtoToEntity(List<CaracteristiqueDTO> caracteristiqueDTOCollection){
 		if (caracteristiqueDTOCollection== null) {
 			return null;
 		}
