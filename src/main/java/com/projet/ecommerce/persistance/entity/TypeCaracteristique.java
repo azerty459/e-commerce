@@ -16,6 +16,7 @@ public class TypeCaracteristique {
 	@Column(name = "type_caracteristique")
     private String typeCaracteristique;
 
+
 	public int getIdTypeCaracteristique() {
 		return idTypeCaracteristique;
 	}
