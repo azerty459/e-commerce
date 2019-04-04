@@ -27,6 +27,8 @@ public class ProduitDTO {
      */
     private float prixHT;
 
+    private List<CaracteristiqueDTO> caracteristiques;
+
     /**
      * la liste des catégories auxquelles appartient le produit
      */
@@ -113,6 +115,14 @@ public class ProduitDTO {
      */
     public void setPrixHT(float prixHT) {
         this.prixHT = prixHT;
+    }
+
+    public List<CaracteristiqueDTO> getCaracteristiques() {
+        return caracteristiques;
+    }
+
+    public void setCaracteristiques(List<CaracteristiqueDTO> caracteristiques) {
+        this.caracteristiques = caracteristiques;
     }
 
     /**
