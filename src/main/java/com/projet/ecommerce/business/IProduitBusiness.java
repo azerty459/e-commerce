@@ -1,10 +1,12 @@
 package com.projet.ecommerce.business;
 
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+
 import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
 import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.persistance.entity.Produit;
-import org.springframework.data.domain.Page;
-import java.util.List;
 
 /**
  * Interface du service ProduitBusiness.
@@ -67,9 +69,4 @@ public interface IProduitBusiness {
      * @return une page de produit
      */
     Page<Produit> getPage(int pageNumber, int nb, String nom, int IDcategorie);
-
-	ProduitDTO add(String referenceProduit, String nom, String description, float prixHT,
-			List<Integer> categoriesProduit);
-
-
 }
