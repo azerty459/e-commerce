@@ -1,36 +1,26 @@
 /**
  * 
  */
-package com.projet.ecommerce.persistance.entity;
+package com.projet.ecommerce.business.dto;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 /**
  * @author liam
  *
  */
-@Entity
-@Table(name = "caracteristique")
-public class Caracteristique {
+public class CaracteristiqueDTO {
 	
-	@Id
-    @Column(name = "id_caracteristique")
 	private int idCaracteristique;
 	
-	@ManyToOne
-	private TypeCaracteristique typeCaracteristique;
+
+	private TypeCaracteristiqueDTO typeCaracteristique;
 	
-	@ManyToOne
-	private Produit produit;
+
+	private ProduitDTO produit;
 	
-	@NotNull
-	@Column(name = "valeur_caracteristique")
+
 	private String valeurCaracteristique;
+
 
 	/**
 	 * @return the idCaracteristique
@@ -39,6 +29,7 @@ public class Caracteristique {
 		return idCaracteristique;
 	}
 
+
 	/**
 	 * @param idCaracteristique the idCaracteristique to set
 	 */
@@ -46,33 +37,38 @@ public class Caracteristique {
 		this.idCaracteristique = idCaracteristique;
 	}
 
+
 	/**
-	 * @return the typeDeCaracteristique
+	 * @return the typeCaracteristique
 	 */
-	public TypeCaracteristique getTypeCaracteristique() {
+	public TypeCaracteristiqueDTO getTypeCaracteristique() {
 		return typeCaracteristique;
 	}
 
+
 	/**
-	 * @param typeDeCaracteristique the typeDeCaracteristique to set
+	 * @param typeCaracteristique the typeCaracteristique to set
 	 */
-	public void setTypeCaracteristique(TypeCaracteristique typeCaracteristique) {
+	public void setTypeCaracteristique(TypeCaracteristiqueDTO typeCaracteristique) {
 		this.typeCaracteristique = typeCaracteristique;
 	}
+
 
 	/**
 	 * @return the produit
 	 */
-	public Produit getProduit() {
+	public ProduitDTO getProduit() {
 		return produit;
 	}
+
 
 	/**
 	 * @param produit the produit to set
 	 */
-	public void setProduit(Produit produit) {
+	public void setProduit(ProduitDTO produit) {
 		this.produit = produit;
 	}
+
 
 	/**
 	 * @return the valeurCaracteristique
@@ -81,11 +77,13 @@ public class Caracteristique {
 		return valeurCaracteristique;
 	}
 
+
 	/**
 	 * @param valeurCaracteristique the valeurCaracteristique to set
 	 */
 	public void setValeurCaracteristique(String valeurCaracteristique) {
 		this.valeurCaracteristique = valeurCaracteristique;
 	}
-
+	
+	
 }

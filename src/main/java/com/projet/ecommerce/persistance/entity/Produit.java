@@ -2,6 +2,7 @@ package com.projet.ecommerce.persistance.entity;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,6 +30,9 @@ public class Produit {
 
     @Column(name = "prix_ht")
     private float prixHT;
+    
+    @OneToMany
+    private List<Caracteristique> caracteristiques;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinTable(
@@ -209,5 +213,19 @@ public class Produit {
     public void setPhotoPrincipale(Photo photoPrincipale) {
         this.photoPrincipale = photoPrincipale;
     }
+
+	/**
+	 * @return the caracteristiques
+	 */
+	public List<Caracteristique> getCaracteristiques() {
+		return caracteristiques;
+	}
+
+	/**
+	 * @param caracteristiques the caracteristiques to set
+	 */
+	public void setCaracteristiques(List<Caracteristique> caracteristiques) {
+		this.caracteristiques = caracteristiques;
+	}
 
 }

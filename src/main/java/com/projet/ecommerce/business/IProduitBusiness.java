@@ -1,9 +1,9 @@
 package com.projet.ecommerce.business;
 
+import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
 import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.persistance.entity.Produit;
 import org.springframework.data.domain.Page;
-
 import java.util.List;
 
 /**
@@ -15,13 +15,14 @@ public interface IProduitBusiness {
     /**
      * Méthode définissant la modification d'un produit.
      *
-     * @param referenceProduit La référence du produit
-     * @param nom              Le nom du produit
-     * @param description      Sa description
-     * @param prixHT           Son prix hors taxe
+     * @param referenceProduit      La référence du produit
+     * @param nom                   Le nom du produit
+     * @param description           Sa description
+     * @param prixHT                Son prix hors taxe
+     * @param listeCaracteristique  liste des caracteristiques du produit
      * @return le produit ajouté
      */
-    ProduitDTO add(String referenceProduit, String nom, String description, float prixHT, List<Integer> nouvelleCat);
+    ProduitDTO add(String referenceProduit, String nom, String description, float prixHT, List<Integer> nouvelleCat, List<CaracteristiqueDTO> listeCaracteristique);
 
     /**
      * Méthode définissant la modification d'un produit.
@@ -66,6 +67,9 @@ public interface IProduitBusiness {
      * @return une page de produit
      */
     Page<Produit> getPage(int pageNumber, int nb, String nom, int IDcategorie);
+
+	ProduitDTO add(String referenceProduit, String nom, String description, float prixHT,
+			List<Integer> categoriesProduit);
 
 
 }
