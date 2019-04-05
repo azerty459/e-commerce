@@ -23,7 +23,7 @@ public class Produit {
 
     @Column
     private String nom;
-
+    
     @Column
     private String description;
 
@@ -56,8 +56,22 @@ public class Produit {
             inverseJoinColumns = {@JoinColumn(name = "id_categorie")}
     )
     private List<Categorie> categoriesSupprime;
+    
+    //AJOUTÉ
+    @OneToMany
+    private List<ValeurCaracteristique> listValeurCaracteristique;
+    
+    //AJOUTÉ
+    public List<ValeurCaracteristique> getListCaracteristique() {
+		return listValeurCaracteristique;
+	}
+    
+    //AJOUTÉ
+	public void setListCaracteristique(List<ValeurCaracteristique> listCaracteristique) {
+		this.listValeurCaracteristique = listCaracteristique;
+	}
 
-    /**
+	/**
      * Retourne la référence du produit.
      *
      * @return la référence du produit
