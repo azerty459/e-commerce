@@ -5,14 +5,11 @@ import com.projet.ecommerce.persistance.entity.Produit;
 import com.projet.ecommerce.persistance.entity.ProduitCaracteristique;
 import com.projet.ecommerce.persistance.repository.CaracteristiqueRepository;
 import com.projet.ecommerce.persistance.repository.ProduitRepository;
-import java.util.ArrayList;
-import java.util.List;
 import javax.persistence.EntityManager;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -34,40 +31,33 @@ public class TestExo2 {
     private EntityManager em;
     
     @Test
-    public void testInserCarac() {        
-        /*Caracteristique c = new Caracteristique();
-        c.setLabel("Test");
-        c.setProduits(null);
-        System.out.println(caracteristiqueRepository.count());
-        caracteristiqueRepository.save(c);
-        System.out.println(caracteristiqueRepository.count());
-        Query q = em.createQuery("Select c From Caracteristique c");
-        c = (Caracteristique) q.getSingleResult();
-        System.out.println(c);*/
-        
-        /*TypedQuery<Produit> tq = em.createQuery("Select p From Produit p Where p.referenceProduit='A01A05'", Produit.class);
-        Produit p = tq.getResultList().get(0);
-        int size = p.getCaracterisitiques().size();
-        System.out.println(size);*/
-        
-        /*
-        ProduitCaracteristique pc = new ProduitCaracteristique();
-        pc.setValeur("Refresh");
-        pc.setProduit(p);
-        pc.setCaracteristique(c);
-        produitCaracteristiqueRepository.save(pc);
-        
-        List<ProduitCaracteristique> lc = new ArrayList<>();
-        lc.add(pc);
-        p.setCaracterisitiques(lc);
-        produitRepository.save(p);
-        //*/
-        
+    public void testInserCarac() {                
         TypedQuery<Caracteristique> tqc = em.createQuery("Select c From Caracteristique c", Caracteristique.class);
-        Caracteristique c = tqc.getResultList().get(0);
-        System.out.println(c);
-        System.out.println(c.getProduits().size());
-        System.out.println(c.getProduits().get(0).getProduit());
+        Caracteristique carac = tqc.getResultList().get(0);
+        System.out.println(carac);
+        System.out.println(carac.getProduits().size());
+        Produit p = carac.getProduits().get(0).getProduit();
+        
+        Caracteristique c = new Caracteristique();
+        c.setLabel("Loul");
+        caracteristiqueRepository.save(c);
+        
+        ProduitCaracteristique pc = new ProduitCaracteristique(p, c);
+        p.getCaracterisitiques().add(pc);
+        c.getProduits().add(pc);
+        produitRepository.save(p);
+        caracteristiqueRepository.save(c);
+        
+        tqc = em.createQuery("Select c From Caracteristique c", Caracteristique.class);
+        System.out.println(tqc.getResultList().size());
+        
+        TypedQuery<Produit> tqp = em.createQuery("Select p From Produit p Where p.referenceProduit=:ref", Produit.class);
+        tqp.setParameter("ref", p.getReferenceProduit());
+        p = tqp.getSingleResult();
+        System.out.println(p.getCaracterisitiques().size());
+        for(ProduitCaracteristique var : p.getCaracterisitiques()) {
+            System.out.println(var.getCaracteristique());
+        }
     }
     
 }

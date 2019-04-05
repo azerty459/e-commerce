@@ -57,7 +57,7 @@ public class Caracteristique {
     
     @Override
     public String toString() {
-        return idCaracteristique + " " + label;
+        return "(" + idCaracteristique + ") " + label;
     }
     
 }
