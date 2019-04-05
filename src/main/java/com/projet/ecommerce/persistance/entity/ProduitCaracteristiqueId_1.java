@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.projet.ecommerce.persistance.entity;
 
 import com.google.common.base.Objects;
@@ -6,19 +11,19 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class ProduitCaracteristiqueId implements Serializable{
+public class ProduitCaracteristiqueId_1 implements Serializable{
     
     @Column(name = "reference_produit")
     private String referenceProduit;
     
     @Column(name = "id_caracteristique")
     private long idCaracteristique;
-
-    public ProduitCaracteristiqueId() {
-        //Utilisé par JPA
+    
+    public ProduitCaracteristiqueId_1() {
+        //Vide
     }
     
-    public ProduitCaracteristiqueId(String reference, long id) {
+    public ProduitCaracteristiqueId_1(String reference, long id) {
         this.referenceProduit = reference;
         this.idCaracteristique = id;
     }
@@ -37,8 +42,8 @@ public class ProduitCaracteristiqueId implements Serializable{
             return false;
         } else if(this == o) {
             return true;
-        } else if(o instanceof ProduitCaracteristiqueId) {
-            ProduitCaracteristiqueId pci = (ProduitCaracteristiqueId) o;
+        } else if(o instanceof ProduitCaracteristiqueId_1) {
+            ProduitCaracteristiqueId_1 pci = (ProduitCaracteristiqueId_1) o;
             return this.referenceProduit.equals(pci.referenceProduit) && this.idCaracteristique == pci.idCaracteristique;
         }
         return false;

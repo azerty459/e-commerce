@@ -1,17 +1,21 @@
 package com.projet.ecommerce.persistance.entity;
 
 import java.util.Objects;
+import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "produit_caracteristique")
-public class ProduitCaracteristique {
+public class ProduitCaracteristique_1 {
     
     @EmbeddedId
     private ProduitCaracteristiqueId id = new ProduitCaracteristiqueId();
@@ -19,7 +23,7 @@ public class ProduitCaracteristique {
     @MapsId("referenceProduit")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reference_produit")
-    private Produit produit;
+    private Produit produ;
     
     @MapsId("idCaracteristique")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -27,13 +31,13 @@ public class ProduitCaracteristique {
     private Caracteristique caracteristique;
     
     private String valeur;
-
-    public ProduitCaracteristique() {
-        //Utilisé par JPA
+    
+    public ProduitCaracteristique_1() {
+        
     }
     
-    public ProduitCaracteristique(Produit p, Caracteristique c) {
-        this.produit = p;
+    public ProduitCaracteristique_1(Produit p, Caracteristique c) {
+        this.produ = p;
         this.caracteristique = c;
         this.id = new ProduitCaracteristiqueId(p.getReferenceProduit(), c.getIdCaracteristique());
     }
@@ -46,12 +50,12 @@ public class ProduitCaracteristique {
         this.id = id;
     }
 
-    public Produit getProduit() {
-        return produit;
+    public Produit getProdu() {
+        return produ;
     }
 
-    public void setProduit(Produit produit) {
-        this.produit = produit;
+    public void setProdu(Produit produit) {
+        this.produ = produit;
     }
 
     public Caracteristique getCaracteristique() {
@@ -77,13 +81,15 @@ public class ProduitCaracteristique {
         } else if(obj == null || getClass() != obj.getClass()){
             return false;
         }
-        ProduitCaracteristique other = (ProduitCaracteristique) obj;
-        return this.produit.getReferenceProduit().equals(other.produit.getReferenceProduit()) && this.caracteristique.getIdCaracteristique() == other.caracteristique.getIdCaracteristique();
+        ProduitCaracteristique_1 other = (ProduitCaracteristique_1) obj;
+        return this.produ.getReferenceProduit().equals(other.produ.getReferenceProduit()) && this.caracteristique.getIdCaracteristique() == other.caracteristique.getIdCaracteristique();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.produit, this.caracteristique);
+        return Objects.hash(this.produ, this.caracteristique);
     }
+    
+    
     
 }
