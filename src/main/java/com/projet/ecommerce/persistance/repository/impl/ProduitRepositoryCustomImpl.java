@@ -1,8 +1,6 @@
 package com.projet.ecommerce.persistance.repository.impl;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -10,7 +8,6 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
-import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,12 +78,12 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
     	}
     	
     	if(containsInProductName != null) {
-    		query.where(criteriaBuilder.like(fromProduit.get("nom"), ""));
+    		query.where(criteriaBuilder.like(fromProduit.get("nom"), "%"+containsInProductName+"%"));
     	}
     	
     	if((noteMoyenneMin != null) ||(noteMoyenneMax != null)) {
     		Join<Produit, AvisClient> avisClient = fromProduit.join("avisClients");
-        	query.groupBy(avisClient.get("produit"));
+        	query.groupBy(fromProduit);
         	
     		if(noteMoyenneMin != null) {
         		query.having(criteriaBuilder.greaterThan(criteriaBuilder.avg(avisClient.get("note")), noteMoyenneMin));
@@ -102,15 +99,6 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
     		query.where(criteriaBuilder.equal(categories.get("nomCategorie"), categorie.getNomCategorie()));
     	}
     	
-    	TypedQuery<Produit> typedQuery = entityManager.createQuery(query
-    	        //.select(fromProduit)
-    	        //.where(criteriaBuilder.equal(fromProduit.get("nom"), nomProduit))
-    	        //.where(criteriaBuilder.like(fromProduit.get("nom"), pattern))
-    	        //.groupBy(fromProduit.get("reference_produit"))
-    	        //.having(criteriaBuilder.greaterThan(criteriaBuilder.avg(avisClient.get("note")), noteMoyenneMin))
-    	        //.having(criteriaBuilder.lessThan(criteriaBuilder.avg(avisClient.get("note")), noteMoyenneMax))
-    	);
-
-    	return typedQuery.getResultList();
+    	return entityManager.createQuery(query).getResultList();
     }
 }

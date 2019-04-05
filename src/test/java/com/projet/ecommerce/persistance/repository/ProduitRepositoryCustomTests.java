@@ -117,16 +117,46 @@ public class ProduitRepositoryCustomTests {
     	prods.add(prod2);
     	AvisClient avi3 = createAvisClient(2);
     	AvisClient avi4 = createAvisClient(3);
-    	avi3.setProduit(prod1);
-    	avi4.setProduit(prod1);
+    	avi3.setProduit(prod2);
+    	avi4.setProduit(prod2);
     	prod2.getAvisClients().add(avi3);
     	prod2.getAvisClients().add(avi4);
-
+    	
     	produitRepository.saveAll(prods);
     	
     	Collection<Produit> produits = produitRepository.findAllWithCriteria(5d, null,null,null,null);
     	assertTrue(produits.contains(prod1));
     	assertFalse(produits.contains(prod2));
+    }
+    
+    @Test
+    public void findAllWithCriteriaWithNoteMoyenneMax() {
+    	List<Produit> prods = new ArrayList<>();
+    	
+    	Produit prod1 = createProduit();
+    	prods.add(prod1);
+    	AvisClient avi1 = createAvisClient(7);
+    	AvisClient avi2 = createAvisClient(8);
+    	avi1.setProduit(prod1);
+    	avi2.setProduit(prod1);
+    	prod1.getAvisClients().add(avi1);
+    	prod1.getAvisClients().add(avi2);
+    	
+
+    	Produit prod2 = createProduit();
+    	prods.add(prod2);
+    	AvisClient avi3 = createAvisClient(2);
+    	AvisClient avi4 = createAvisClient(3);
+    	avi3.setProduit(prod2);
+    	avi4.setProduit(prod2);
+    	prod2.getAvisClients().add(avi3);
+    	prod2.getAvisClients().add(avi4);
+    	
+    	produitRepository.saveAll(prods);
+    	
+    	Collection<Produit> produits = produitRepository.findAllWithCriteria(null, 5d,null,null,null);
+    	assertFalse(produits.contains(prod1));
+    	assertTrue(produits.contains(prod2));
     }
 
     @Test
@@ -138,13 +168,19 @@ public class ProduitRepositoryCustomTests {
     	Categorie categ1 = new Categorie();categ1.setNomCategorie("A");
     	categs1.add(categ1);
     	prod1.setCategories(categs1); // categ A 
+    	List<Produit> prodCateg1 = new ArrayList<>();
+    	prodCateg1.add(prod1);
+    	categ1.setProduits(prodCateg1);
     	prods.add(prod1);
 
     	Produit prod2 = createProduit();
     	List<Categorie> categs2 = new ArrayList<>();
     	Categorie categ2 = new Categorie();categ2.setNomCategorie("B");
     	categs2.add(categ2);
-    	prod1.setCategories(categs2); // categ B
+    	prod2.setCategories(categs2); // categ B
+    	List<Produit> prodCateg2 = new ArrayList<>();
+    	prodCateg2.add(prod2);
+    	categ2.setProduits(prodCateg2);
     	prods.add(prod2);
 
     	produitRepository.saveAll(prods);
@@ -197,6 +233,38 @@ public class ProduitRepositoryCustomTests {
     	assertFalse(produits.contains(prod2));
     }
 
+    @Test
+    public void findAllWithAllParamNotNull() {
+    	List<Produit> prods = new ArrayList<>();
+    	
+    	Produit prod1 = createProduit();
+    	prod1.setNom("AB");
+    	AvisClient avi1 = createAvisClient(7);
+    	AvisClient avi2 = createAvisClient(8);
+    	avi1.setProduit(prod1);
+    	avi2.setProduit(prod1);
+    	prod1.getAvisClients().add(avi1);
+    	prod1.getAvisClients().add(avi2);
+    	List<Categorie> categs1 = new ArrayList<>();
+    	Categorie categ = new Categorie();categ.setNomCategorie("A");
+    	categs1.add(categ);
+    	prod1.setCategories(categs1); // categ A 
+    	
+    	prods.add(prod1);
+
+    	Produit prod2 = createProduit();
+    	prod2.setNom("BX");
+    	prods.add(prod2);
+    	
+    	
+    	produitRepository.saveAll(prods);
+    	
+    	Collection<Produit> produits = produitRepository.findAllWithCriteria(5d, 10d,"AB","A",categ);
+    	
+    	assertTrue(produits.contains(prod1));
+    	assertFalse(produits.contains(prod2));
+    }
+    
 
     
     private AvisClient createAvisClient(int note) {
