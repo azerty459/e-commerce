@@ -9,13 +9,21 @@ import java.util.List;
 
 public class TypeCaracteristiqueTransformer {
 
-    /*public static Collection<TypeCaracteristique> dtoToEntity(Collection<TypeCaracteristiqueDTO> typeCaracteristiqueDTOCollection){
+    public static Collection<TypeCaracteristique> dtoToEntity(Collection<TypeCaracteristiqueDTO> typeCaracteristiqueDTOCollection){
         List<TypeCaracteristique> typeCaracteristiqueList = new ArrayList<>();
         for (TypeCaracteristiqueDTO typeCaracteristiqueDTO : typeCaracteristiqueDTOCollection) {
             typeCaracteristiqueList.add(dtoToEntity(typeCaracteristiqueDTO));
         }
         return typeCaracteristiqueList;
-    }*/
+    }
+
+    public static Collection<TypeCaracteristiqueDTO> entityToDto(Collection<TypeCaracteristique> typeCaracteristiqueCollection){
+        List<TypeCaracteristiqueDTO> typeCaracteristiqueDTOList = new ArrayList<>();
+        for (TypeCaracteristique typeCaracteristique : typeCaracteristiqueCollection) {
+            typeCaracteristiqueDTOList.add(entityToDto(typeCaracteristique));
+        }
+        return typeCaracteristiqueDTOList;
+    }
 
     public static TypeCaracteristique dtoToEntity(TypeCaracteristiqueDTO typeCaracteristiqueDTO) {
         TypeCaracteristique typeCaracteristique = new TypeCaracteristique();
