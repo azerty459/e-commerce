@@ -66,7 +66,7 @@ public class ProduitBusiness implements IProduitBusiness {
         }
         long countDistinctCaracType = caracteristiques.stream().map(carac -> carac.getTypeCaracteristique()).distinct().count();
         if(caracteristiques.size() > countDistinctCaracType) {
-        	s
+        	throw new GraphQLCustomException("Le produit ne peut avoir deux caracteristiques de meme type.");
         }
         Produit produit = new Produit();
         produit.setReferenceProduit(referenceProduit);

@@ -232,4 +232,29 @@ public class Produit {
 		this.caracteristiques = caracteristiques;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((referenceProduit == null) ? 0 : referenceProduit.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Produit other = (Produit) obj;
+		if (referenceProduit == null) {
+			if (other.referenceProduit != null)
+				return false;
+		} else if (!referenceProduit.equals(other.referenceProduit))
+			return false;
+		return true;
+	}
+
 }

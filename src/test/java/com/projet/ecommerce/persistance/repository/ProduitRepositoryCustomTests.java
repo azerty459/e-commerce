@@ -1,7 +1,14 @@
 package com.projet.ecommerce.persistance.repository;
 
-import com.projet.ecommerce.persistance.entity.Categorie;
-import com.projet.ecommerce.persistance.entity.Produit;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Random;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,9 +19,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import com.projet.ecommerce.persistance.entity.AvisClient;
+import com.projet.ecommerce.persistance.entity.Categorie;
+import com.projet.ecommerce.persistance.entity.Produit;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -83,5 +90,125 @@ public class ProduitRepositoryCustomTests {
         Assert.assertEquals(retourProduitCollection.get(0).getCategories().get(0).getNomCategorie(), TEMP_CATEGORIE.getNomCategorie());
 
         Assert.assertEquals(0, produitRepository.findAllWithCriteria("Toto", null).size());
+    }
+    
+    @Test
+    public void findAllWithCriteriaWithNullParam() {
+    	Collection<Produit> allProduits = produitRepository.findAll();
+    	Collection<Produit> produits = produitRepository.findAllWithCriteria(null, null,null,null,null);
+    	assertEquals(allProduits.size(),produits.size());
+    }
+    
+    @Test
+    public void findAllWithCriteriaWithNoteMoyenneMin() {
+    	List<Produit> prods = new ArrayList<>();
+    	
+    	Produit prod1 = createProduit();
+    	prods.add(prod1);
+    	AvisClient avi1 = createAvisClient(7);
+    	AvisClient avi2 = createAvisClient(8);
+    	avi1.setProduit(prod1);
+    	avi2.setProduit(prod1);
+    	prod1.getAvisClients().add(avi1);
+    	prod1.getAvisClients().add(avi2);
+    	
+
+    	Produit prod2 = createProduit();
+    	prods.add(prod2);
+    	AvisClient avi3 = createAvisClient(2);
+    	AvisClient avi4 = createAvisClient(3);
+    	avi3.setProduit(prod1);
+    	avi4.setProduit(prod1);
+    	prod2.getAvisClients().add(avi3);
+    	prod2.getAvisClients().add(avi4);
+
+    	produitRepository.saveAll(prods);
+    	
+    	Collection<Produit> produits = produitRepository.findAllWithCriteria(5d, null,null,null,null);
+    	assertTrue(produits.contains(prod1));
+    	assertFalse(produits.contains(prod2));
+    }
+
+    @Test
+    public void findAllWithCriteriaWithCategorie() {
+    	List<Produit> prods = new ArrayList<>();
+    	
+    	Produit prod1 = createProduit();
+    	List<Categorie> categs1 = new ArrayList<>();
+    	Categorie categ1 = new Categorie();categ1.setNomCategorie("A");
+    	categs1.add(categ1);
+    	prod1.setCategories(categs1); // categ A 
+    	prods.add(prod1);
+
+    	Produit prod2 = createProduit();
+    	List<Categorie> categs2 = new ArrayList<>();
+    	Categorie categ2 = new Categorie();categ2.setNomCategorie("B");
+    	categs2.add(categ2);
+    	prod1.setCategories(categs2); // categ B
+    	prods.add(prod2);
+
+    	produitRepository.saveAll(prods);
+    	
+    	Collection<Produit> produits = produitRepository.findAllWithCriteria(null, null,null,null,categ1);
+    	
+    	assertTrue(produits.contains(prod1));
+    	assertFalse(produits.contains(prod2));
+    }
+
+    
+    
+    @Test
+    public void findAllWithCriteriaWithcontainsInProductName() {
+    	List<Produit> prods = new ArrayList<>();
+    	
+    	Produit prod1 = createProduit();
+    	prod1.setNom("AB");
+    	prods.add(prod1);
+
+    	Produit prod2 = createProduit();
+    	prod2.setNom("BX");
+    	prods.add(prod2);
+
+    	produitRepository.saveAll(prods);
+    	
+    	Collection<Produit> produits = produitRepository.findAllWithCriteria(null, null,null,"A",null);
+    	
+    	assertTrue(produits.contains(prod1));
+    	assertFalse(produits.contains(prod2));
+    }
+    
+    @Test
+    public void findAllWithCriteriaWithNameProduct() {
+    	List<Produit> prods = new ArrayList<>();
+    	
+    	Produit prod1 = createProduit();
+    	prod1.setNom("A");
+    	prods.add(prod1);
+
+    	Produit prod2 = createProduit();
+    	prod2.setNom("B");
+    	prods.add(prod2);
+
+    	produitRepository.saveAll(prods);
+    	
+    	Collection<Produit> produits = produitRepository.findAllWithCriteria(null, null,"A",null,null);
+    	
+    	assertTrue(produits.contains(prod1));
+    	assertFalse(produits.contains(prod2));
+    }
+
+
+    
+    private AvisClient createAvisClient(int note) {
+    	AvisClient avis = new AvisClient();
+    	avis.setNote(note);
+    	return avis;
+    }
+    
+    private Produit createProduit() {
+    	Produit produit = new Produit();
+    	produit.setReferenceProduit("A"+new Random().nextInt(100));
+    	produit.setAvisClients(new ArrayList());
+    	return produit;
     }
 }
