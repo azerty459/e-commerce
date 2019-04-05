@@ -84,4 +84,10 @@ public class ProduitRepositoryCustomTests {
 
         Assert.assertEquals(0, produitRepository.findAllWithCriteria("Toto", null).size());
     }
+
+    @Test
+    public void findProduitsWithCriteria(){
+        List<Produit> retourProduitCollection = new ArrayList<>(produitRepository.findProduitsWithCriteria());
+        Assert.assertEquals(1,retourProduitCollection.size());
+    }
 }

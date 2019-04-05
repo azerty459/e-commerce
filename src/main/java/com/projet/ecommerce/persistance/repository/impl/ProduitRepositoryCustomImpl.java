@@ -7,7 +7,12 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.Collection;
+import java.util.List;
 
 
 @Repository
@@ -51,5 +56,19 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
         }
         System.out.println(query.getResultList().size());
         return query.getResultList();
+    }
+
+    public Collection<Produit> findProduitsWithCriteria(){
+
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Produit> q = criteriaBuilder.createQuery(Produit.class);
+        Root root = q.from(Produit.class);
+
+        Predicate predicate = criteriaBuilder.conjunction();
+
+        List<Produit> result = entityManager.createQuery(q).getResultList();
+
+        return result;
+
     }
 }
