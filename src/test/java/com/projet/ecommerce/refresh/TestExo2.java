@@ -39,7 +39,7 @@ public class TestExo2 {
         Produit p = carac.getProduits().get(0).getProduit();
         
         Caracteristique c = new Caracteristique();
-        c.setLabel("Loul");
+        c.setLibelle("Loul");
         caracteristiqueRepository.save(c);
         
         ProduitCaracteristique pc = new ProduitCaracteristique(p, c);

@@ -21,7 +21,7 @@ public class Caracteristique {
     private int idCaracteristique;
     
     @Column(name = "label_caracteristique")
-    private String label;
+    private String libelle;
     
     @OneToMany(
         mappedBy = "caracteristique",
@@ -39,12 +39,12 @@ public class Caracteristique {
         this.idCaracteristique = idCaracteristique;
     }
 
-    public String getLabel() {
-        return label;
+    public String getLibelle() {
+        return libelle;
     }
 
-    public void setLabel(String label) {
-        this.label = label;
+    public void setLibelle(String label) {
+        this.libelle = label;
     }
 
     public List<ProduitCaracteristique> getProduits() {
@@ -57,7 +57,7 @@ public class Caracteristique {
     
     @Override
     public String toString() {
-        return "(" + idCaracteristique + ") " + label;
+        return "(" + idCaracteristique + ") " + libelle;
     }
     
 }
