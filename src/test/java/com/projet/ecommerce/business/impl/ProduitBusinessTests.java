@@ -19,8 +19,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
 import com.projet.ecommerce.business.dto.ProduitDTO;
+import com.projet.ecommerce.business.dto.TypeCaracteristiqueDTO;
 import com.projet.ecommerce.business.dto.transformer.CaracteristiqueTransformer;
+import com.projet.ecommerce.business.dto.transformer.TypeCaracteristiqueTransformer;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Caracteristique;
 import com.projet.ecommerce.persistance.entity.Categorie;
@@ -92,6 +95,7 @@ public class ProduitBusinessTests {
 
     @Test
     public void addProductAlreadyExist() {
+        
         Produit produit = new Produit();
         produit.setReferenceProduit("A05A01");
         produit.setPrixHT(2.1f);
@@ -99,11 +103,12 @@ public class ProduitBusinessTests {
         produit.setNom("Livre1");
         produit.setCategories(new ArrayList<>());
         produit.setPhotos(new ArrayList<>());
+        ProduitDTO retour = produitBusiness.add("A05A01", "Test", "Test", 4.7f, null, null);
 
+        Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
         // Je teste si le produit business m'envoie bien une GraphQLCustomException, si le produit existe déjà
         thrown.expect(GraphQLCustomException.class);
         Mockito.when(produitRepository.findById(Mockito.anyString())).thenReturn(Optional.of(produit));
-        ProduitDTO retour = produitBusiness.add("A05A01", "Test", "Test", 4.7f, null, null);
         Assert.assertNull(retour);
     }
 
@@ -134,7 +139,6 @@ public class ProduitBusinessTests {
 
 
         Mockito.when(categorieRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(categorie));
-        Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
 
         ProduitDTO retour = produitBusiness.add("A05A01", "Test", "Test", 4.7f, categoriesProduit, null);
 
@@ -157,14 +161,28 @@ public class ProduitBusinessTests {
         
         Caracteristique c1 = new Caracteristique();
         c1.setValeurCaracteristique("fr");
+        c1.setTypeCaracteristique(tc1);
+        c1.setProduit(produit);
         
         List<Caracteristique> listeCaracteristiques = new ArrayList<Caracteristique>();
         listeCaracteristiques.add(c1);
+        produit.setCaracteristiques(listeCaracteristiques);
 
+        
         Mockito.when(caracteristiqueRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(c1));
         Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
+        //List<CaracteristiqueDTO> debug_Cara_DTO = CaracteristiqueTransformer.entityToDto(listeCaracteristiques);
         
-        ProduitDTO retour = produitBusiness.add("A05A01", "Test", "Test", 4.7f, null, CaracteristiqueTransformer.entityToDto(listeCaracteristiques));
+        //Assert.assertNotNull(debug_Cara_DTO);
+        CaracteristiqueDTO cdto1 = new CaracteristiqueDTO();
+        cdto1.setTypeCaracteristique(TypeCaracteristiqueTransformer.entityToDto(tc1));
+        ProduitDTO pdto1 = new ProduitDTO();
+        cdto1.setProduit(pdto1);
+        List<CaracteristiqueDTO> ldto = new ArrayList<>();
+        ldto.add(cdto1);
+        pdto1.setCaracteristiques(ldto);
+        
+        ProduitDTO retour = produitBusiness.add("A05A01", "Test", "Test", 4.7f, null, ldto);
 
         Assert.assertNotNull(retour);
         Assert.assertEquals(retour.getClass(), ProduitDTO.class);
@@ -225,45 +243,46 @@ public class ProduitBusinessTests {
         produitBusiness.update(produit);
     }
 
+
     @Test
     public void updateCatFound() {
-        Categorie categorie = new Categorie();
-
-        Produit produit = new Produit();
-        produit.setReferenceProduit("A05A01");
-
-        List<Categorie> categorieList = new ArrayList<>();
-        categorieList.add(categorie);
-
-        produit.setCategories(categorieList);
-        produit.setPhotos(new ArrayList<>());
-
-        Mockito.when(produitRepository.findById(Mockito.anyString())).thenReturn(Optional.of(produit));
-        Mockito.when(categorieRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(categorie));
-        Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
-
-        ProduitDTO retour = produitBusiness.update(produit);
-        Assert.assertNotNull(retour);
-        Assert.assertEquals(1, retour.getCategories().size());
+    	Categorie categorie = new Categorie();
+    	
+    	Produit produit = new Produit();
+    	produit.setReferenceProduit("A05A01");
+    	
+    	List<Categorie> categorieList = new ArrayList<>();
+    	categorieList.add(categorie);
+    	
+    	produit.setCategories(categorieList);
+    	produit.setPhotos(new ArrayList<>());
+    	
+    	Mockito.when(produitRepository.findById(Mockito.anyString())).thenReturn(Optional.of(produit));
+    	Mockito.when(categorieRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(categorie));
+    	Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
+    	
+    	ProduitDTO retour = produitBusiness.update(produit);
+    	Assert.assertNotNull(retour);
+    	Assert.assertEquals(1, retour.getCategories().size());
     }
-
+    
     @Test
     public void updatePictureNotFound() {
-        Produit produit = new Produit();
-        produit.setReferenceProduit("A05A01");
-        produit.setCategories(new ArrayList<>());
-
-        List<Photo> photoList = new ArrayList<>();
-        photoList.add(new Photo());
-
-        produit.setPhotos(photoList);
-
-        Mockito.when(produitRepository.findById(Mockito.anyString())).thenReturn(Optional.of(produit));
-
-        thrown.expect(GraphQLCustomException.class);
-        produitBusiness.update(produit);
+    	Produit produit = new Produit();
+    	produit.setReferenceProduit("A05A01");
+    	produit.setCategories(new ArrayList<>());
+    	
+    	List<Photo> photoList = new ArrayList<>();
+    	photoList.add(new Photo());
+    	
+    	produit.setPhotos(photoList);
+    	
+    	
+    	Mockito.when(produitRepository.findById(Mockito.anyString())).thenReturn(Optional.of(produit));
+    	
+    	thrown.expect(GraphQLCustomException.class);
+    	produitBusiness.update(produit);
     }
-
     @Test
     public void updatePictureFound() {
         Photo photo = new Photo();

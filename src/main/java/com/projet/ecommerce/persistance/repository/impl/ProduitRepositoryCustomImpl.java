@@ -1,13 +1,23 @@
 package com.projet.ecommerce.persistance.repository.impl;
 
-import com.projet.ecommerce.persistance.entity.Produit;
-import com.projet.ecommerce.persistance.repository.ProduitRepositoryCustom;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import java.util.Collection;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Root;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.projet.ecommerce.persistance.entity.AvisClient;
+import com.projet.ecommerce.persistance.entity.Categorie;
+import com.projet.ecommerce.persistance.entity.Produit;
+import com.projet.ecommerce.persistance.repository.ProduitRepositoryCustom;
+
 
 
 @Repository
@@ -51,5 +61,25 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
         }
         System.out.println(query.getResultList().size());
         return query.getResultList();
+    }
+    
+    public Collection<Produit> exerice3(Integer valeurMin, Integer valeurMax, String nomProduit, String valeurContenue, Categorie categorie){
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Produit> cq = cb.createQuery(Produit.class);
+		Root<Produit> table = cq.from(Produit.class);
+		Join<Produit, AvisClient> collision = table.join("AvisClient");
+		CriteriaQuery<Produit> select = cq.select(table);
+		
+		//Predicate predicate = cb.equal(table.get(""), );
+		
+		//if(valeurMin != null)
+			//cq.groupBy(cq.get(""));
+		
+		
+		
+		Query q = entityManager.createQuery(select);
+		List<Produit> listeProduits = q.getResultList();
+		
+    	return listeProduits;
     }
 }
