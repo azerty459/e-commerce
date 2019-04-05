@@ -3,6 +3,7 @@ package com.projet.ecommerce.business.impl;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.projet.ecommerce.business.ITypeCaracteristiqueBusiness;
 import com.projet.ecommerce.business.dto.TypeCaracteristiqueDTO;
@@ -10,6 +11,7 @@ import com.projet.ecommerce.business.dto.transformer.TypeCaracteristiqueTransfor
 import com.projet.ecommerce.persistance.entity.TypeCaracteristique;
 import com.projet.ecommerce.persistance.repository.TypeCaracteristiqueRepository;
 
+@Service
 public class TypeCaracteristiqueBusiness implements ITypeCaracteristiqueBusiness {
 	
 	@Autowired
