@@ -12,8 +12,7 @@ public class CaracteristiqueTransformer {
 	public CaracteristiqueTransformer() {
 		super();
 	}
-
-	public static Collection<Caracteristique> dtoToEntity(Collection<CaracteristiqueDTO> caracteristiqueDTOCollection){
+	public static Collection<Caracteristique> listeDtoToEntity(Collection<CaracteristiqueDTO> caracteristiqueDTOCollection){
 		List<Caracteristique> listeCaracteristique = new ArrayList<Caracteristique>();
 		for(CaracteristiqueDTO caracteristiqueDTO : caracteristiqueDTOCollection) {
 			listeCaracteristique.add(dtoToEntity(caracteristiqueDTO));
@@ -22,7 +21,7 @@ public class CaracteristiqueTransformer {
 		return listeCaracteristique;
 	}
 
-	private static Caracteristique dtoToEntity(CaracteristiqueDTO caracteristiqueDTO) {
+	public static Caracteristique dtoToEntity(CaracteristiqueDTO caracteristiqueDTO) {
 		Caracteristique caracteristique = new Caracteristique();
 		caracteristique.setIdCaracteristique(caracteristiqueDTO.getIdCaracteristique());
 		caracteristique.setValeurCaracteristique(caracteristiqueDTO.getValeur());
@@ -30,14 +29,14 @@ public class CaracteristiqueTransformer {
 	}
 	
 	
-	private static CaracteristiqueDTO entityToDto(Caracteristique caracteristique) {
+	public static CaracteristiqueDTO entityToDto(Caracteristique caracteristique) {
 		CaracteristiqueDTO caracteristiqueDTO = new CaracteristiqueDTO();
 		caracteristiqueDTO.setIdCaracteristique(caracteristique.getIdCaracteristique());
 		caracteristiqueDTO.setValeur(caracteristique.getValeurCaracteristique());
 		return caracteristiqueDTO;
 	}
 	
-	public static Collection<CaracteristiqueDTO> entityToDTO(Collection<Caracteristique> caracteristiqueCollection){
+	public static Collection<CaracteristiqueDTO> listeEntityToDto(Collection<Caracteristique> caracteristiqueCollection){
 		List<CaracteristiqueDTO> listeCaracteristiqueDTO = new ArrayList<CaracteristiqueDTO>();
 		for(Caracteristique caracteristique : caracteristiqueCollection) {
 			listeCaracteristiqueDTO.add(entityToDto(caracteristique));

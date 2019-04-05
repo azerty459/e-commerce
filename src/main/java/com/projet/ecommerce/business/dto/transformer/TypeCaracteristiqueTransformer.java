@@ -13,7 +13,7 @@ public class TypeCaracteristiqueTransformer {
 		super();
 	}
 
-	private static TypeCaracteristique dtoToEntity(TypeCaracteristiqueDTO typeCaracteristiqueDTO) {
+	public static TypeCaracteristique dtoToEntity(TypeCaracteristiqueDTO typeCaracteristiqueDTO) {
 		TypeCaracteristique typeCaracteristique = new TypeCaracteristique();
 		typeCaracteristique.setIdTypeCaracteristique(typeCaracteristiqueDTO.getIdTypeCaracteristique());
 		typeCaracteristique.setTypeCaracteristique(typeCaracteristiqueDTO.getTypeCaracteristique());
@@ -29,14 +29,14 @@ public class TypeCaracteristiqueTransformer {
 		return listeTypeCaracteristique;
 	}
 	
-	private static TypeCaracteristiqueDTO entityToDto(TypeCaracteristique typeCaracteristique) {
+	public static TypeCaracteristiqueDTO entityToDto(TypeCaracteristique typeCaracteristique) {
 		TypeCaracteristiqueDTO typeCaracteristiqueDTO = new TypeCaracteristiqueDTO();
 		typeCaracteristiqueDTO.setIdTypeCaracteristique(typeCaracteristique.getIdTypeCaracteristique());
 		typeCaracteristiqueDTO.setTypeCaracteristique(typeCaracteristique.getTypeCaracteristique());
 		return typeCaracteristiqueDTO;
 	}
 	
-	public static Collection<TypeCaracteristiqueDTO> entityToDTO(Collection<TypeCaracteristique> typeCaracteristiqueCollection){
+	public static Collection<TypeCaracteristiqueDTO> entityToDto(Collection<TypeCaracteristique> typeCaracteristiqueCollection){
 		List<TypeCaracteristiqueDTO> listeTypeCaracteristiqueDTO = new ArrayList<TypeCaracteristiqueDTO>();
 		for(TypeCaracteristique typeCaracteristique : typeCaracteristiqueCollection) {
 			listeTypeCaracteristiqueDTO.add(entityToDto(typeCaracteristique));

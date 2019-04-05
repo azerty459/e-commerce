@@ -10,6 +10,10 @@ public class CaracteristiqueDTO {
 	 */
 	private String valeur;
 	
+	private ProduitDTO produitDTO;
+	
+	private TypeCaracteristiqueDTO typeCaracteristiqueDTO;
+	
 	public int getIdCaracteristique() {
 		return idCaracteristique;
 	}
@@ -25,6 +29,21 @@ public class CaracteristiqueDTO {
 	public void setValeur(String valeur) {
 		this.valeur = valeur;
 	}
-	
+
+	public ProduitDTO getProduitDTO() {
+		return produitDTO;
+	}
+
+	public void setProduitDTO(ProduitDTO produitDTO) {
+		this.produitDTO = produitDTO;
+	}
+
+	public TypeCaracteristiqueDTO getTypeCaracteristiqueDTO() {
+		return typeCaracteristiqueDTO;
+	}
+
+	public void setTypeCaracteristiqueDTO(TypeCaracteristiqueDTO typeCaracteristiqueDTO) {
+		this.typeCaracteristiqueDTO = typeCaracteristiqueDTO;
+	}
 	
 }

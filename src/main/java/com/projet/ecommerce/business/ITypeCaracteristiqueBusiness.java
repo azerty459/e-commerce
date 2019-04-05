@@ -6,7 +6,9 @@ import com.projet.ecommerce.business.dto.TypeCaracteristiqueDTO;
 
 public interface ITypeCaracteristiqueBusiness {
 	
-	List<TypeCaracteristiqueDTO> getAll(int idTypeCaracteristique);
+	List<TypeCaracteristiqueDTO> getAll();
+
+	TypeCaracteristiqueDTO createTypeCaracteristique(TypeCaracteristiqueDTO typeCaracacteristiqueDTO);
 	
-	TypeCaracteristiqueDTO add(TypeCaracteristiqueDTO typeCaracteristiqueDTO);
+	TypeCaracteristiqueDTO update(TypeCaracteristiqueDTO typeDto);
 }
