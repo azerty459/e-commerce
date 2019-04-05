@@ -32,7 +32,6 @@ CREATE TABLE produit_categorie
   REFERENCES categorie(id_categorie)
 );
 
-
 CREATE TABLE photo
 (
   id_photo SERIAL,
