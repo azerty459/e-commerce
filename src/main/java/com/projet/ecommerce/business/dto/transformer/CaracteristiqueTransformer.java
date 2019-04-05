@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
 import com.projet.ecommerce.persistance.entity.Caracteristique;
+import com.projet.ecommerce.persistance.entity.CaracteristiquePK;
 
 public class CaracteristiqueTransformer {
 	
@@ -18,6 +19,7 @@ public class CaracteristiqueTransformer {
     public static Caracteristique dtoToEntity(CaracteristiqueDTO caracteristiqueDTO) {
        Caracteristique caracteristique = new Caracteristique();
        caracteristique.setIdCaracteristique(caracteristiqueDTO.getId());
+       caracteristique.setCaracteristiquePk(new CaracteristiquePK());
        caracteristique.getCaracteristiquePk()
        		.setTypeCaracteristique(TypeCaracteristiqueTransformer.dtoToEntity(caracteristiqueDTO.getTypeCaracteristiqueDto()));
        caracteristique.getCaracteristiquePk()
