@@ -20,7 +20,7 @@ import java.util.List;
 @SpringBootTest
 @ActiveProfiles("test")
 @Transactional
-public class ProduitRepositoryCustomTests {
+public class  ProduitRepositoryCustomTests {
 
     private static final Produit TEMP_INSERT;
     private static final Categorie TEMP_CATEGORIE;
@@ -34,8 +34,10 @@ public class ProduitRepositoryCustomTests {
         TEMP_INSERT.setPrixHT(8.7f);
         TEMP_INSERT.setDescription("joli produit");
         TEMP_INSERT.setCategories(new ArrayList<>());
+        TEMP_INSERT.setNom("Indiana Jones");
 
         TEMP_CATEGORIE = new Categorie();
+        TEMP_CATEGORIE.setIdCategorie(18);
         TEMP_CATEGORIE.setNomCategorie("Livre");
         TEMP_CATEGORIE.setBorneGauche(1);
         TEMP_CATEGORIE.setBorneDroit(2);
@@ -45,6 +47,7 @@ public class ProduitRepositoryCustomTests {
         Collection<Categorie> categorieCollection = TEMP_INSERT.getCategories();
         categorieCollection.add(TEMP_CATEGORIE);
         TEMP_INSERT.setCategories(new ArrayList<>(categorieCollection));
+        TEMP_CATEGORIE.getProduits().add(TEMP_INSERT);
     }
 
     @Before
@@ -83,5 +86,12 @@ public class ProduitRepositoryCustomTests {
         Assert.assertEquals(retourProduitCollection.get(0).getCategories().get(0).getNomCategorie(), TEMP_CATEGORIE.getNomCategorie());
 
         Assert.assertEquals(0, produitRepository.findAllWithCriteria("Toto", null).size());
+    }
+    
+    @Test
+    public void findAllWithParamTest() {
+        Collection<Produit> retourProduitCollection = produitRepository.findAllWithParam(null, null, null, null, "Livre");
+        
+        Assert.assertEquals(1, retourProduitCollection.size());
     }
 }

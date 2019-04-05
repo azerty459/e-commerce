@@ -1,3 +1,4 @@
+
 --liquibase formatted sql
 --changeset Rémy Halipré:01
 CREATE TABLE produit

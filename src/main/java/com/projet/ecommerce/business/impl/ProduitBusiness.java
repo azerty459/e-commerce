@@ -1,7 +1,9 @@
 package com.projet.ecommerce.business.impl;
 
 import com.projet.ecommerce.business.IProduitBusiness;
+import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
 import com.projet.ecommerce.business.dto.ProduitDTO;
+import com.projet.ecommerce.business.dto.transformer.CaracteristiqueTransformer;
 import com.projet.ecommerce.business.dto.transformer.ProduitTransformer;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Categorie;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,7 +52,7 @@ public class ProduitBusiness implements IProduitBusiness {
      * @return l'objet produit crée ou null, s'il il manque une referenceProduit, un nom et un prixHT.
      */
     @Override
-    public ProduitDTO add(String referenceProduit, String nom, String description, float prixHT, List<Integer> categoriesProduit) {
+    public ProduitDTO add(String referenceProduit, String nom, String description, float prixHT, List<Integer> categoriesProduit, List<CaracteristiqueDTO> caracsDTO) {
         if (referenceProduit.isEmpty() && nom.isEmpty()) {
             GraphQLCustomException graphQLCustomException = new GraphQLCustomException("Erreur dans l'ajout du produit (la référence, le nom et le prixHT ne peut être null)");
             graphQLCustomException.ajouterExtension("Référence", referenceProduit);
@@ -60,12 +63,17 @@ public class ProduitBusiness implements IProduitBusiness {
         if (produitRepository.findById(referenceProduit).isPresent()) {
             throw new GraphQLCustomException("Le produit à ajouter existe déjà.");
         }
+        
+        Long count = caracsDTO.stream().distinct().count();
+        if(count.intValue() < caracsDTO.size()) throw new GraphQLCustomException("Il existe des doublons dnas les caractéristiques");
+        
         Produit produit = new Produit();
         produit.setReferenceProduit(referenceProduit);
         produit.setNom(nom);
         produit.setDescription(description);
         produit.setPrixHT(prixHT);
         produit.setPhotos(new ArrayList<>());
+        produit.setCaracs(CaracteristiqueTransformer.listDtoToEntity(caracsDTO));
 
         List<Categorie> categorieList = new ArrayList<>();
         if (categoriesProduit != null) {

@@ -1,10 +1,7 @@
 package com.projet.ecommerce.business;
 
 import com.projet.ecommerce.business.dto.AvisClientDTO;
-import com.projet.ecommerce.persistance.entity.AvisClient;
-
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Interface du service AvisClientBusiness.

@@ -1,6 +1,9 @@
 package com.projet.ecommerce.persistance.repository;
 
-import com.projet.ecommerce.persistance.entity.Produit;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,7 +13,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
+import com.projet.ecommerce.persistance.entity.Caracteristique;
+import com.projet.ecommerce.persistance.entity.Produit;
+import com.projet.ecommerce.persistance.entity.TypeCaracteristique;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -22,6 +27,8 @@ public class ProduitRepositoryTests {
     private static final Produit TEMP_DELETE = new Produit();
     private static final Produit TEMP_UPDATE = new Produit();
     private static final Produit TEMP_GET = new Produit();
+    private static final List<Caracteristique> caracs = new ArrayList<Caracteristique>();
+    private static final  TypeCaracteristique tc;
 
     static {
         //Permet d'écraser la config application.properties par application-test.properties
@@ -30,6 +37,10 @@ public class ProduitRepositoryTests {
         TEMP_INSERT.setReferenceProduit("A05A87");
         TEMP_INSERT.setPrixHT(8.7f);
         TEMP_INSERT.setDescription("joli produit");
+        tc = creerTypeC(0, "typeC");
+        caracs.add(creerCarac(tc, "a"));
+        TEMP_INSERT.setCaracs(caracs);
+        
 
         TEMP_DELETE.setReferenceProduit("A05A88");
         TEMP_DELETE.setPrixHT(11.7f);
@@ -46,6 +57,9 @@ public class ProduitRepositoryTests {
 
     @Autowired
     private ProduitRepository produitRepository;
+    
+    @Autowired
+    private TypeCaracteristiqueRepository typeCRepository;
 
     @Test
     public void insertProduit() {
@@ -56,6 +70,7 @@ public class ProduitRepositoryTests {
 
     @Test
     public void getProduit() {
+    	typeCRepository.save(tc);
         produitRepository.deleteAll();
         Collection<Produit> produitCollection = produitRepository.findAll();
         Assert.assertEquals(0, produitCollection.size());
@@ -98,5 +113,22 @@ public class ProduitRepositoryTests {
         Assert.assertNotNull(produitRepository.save(TEMP_DELETE));
         produitRepository.delete(TEMP_DELETE);
         Assert.assertFalse(produitRepository.findById(TEMP_DELETE.getReferenceProduit()).isPresent());
+    }
+    
+
+    public static Caracteristique creerCarac(TypeCaracteristique typeC, String valeur) {
+    	Caracteristique c = new Caracteristique();
+    	c.setCaracPK(new Caracteristique.CaracPK(TEMP_INSERT, typeC));
+    	c.setValeur(valeur);
+    	
+    	return c;
+    }
+    
+    public static TypeCaracteristique creerTypeC(Integer id, String libelle) {
+    	TypeCaracteristique tc = new TypeCaracteristique();
+    	tc.setIdTypeCarac(id);
+    	tc.setLibelle(libelle);
+    	
+    	return tc;
     }
 }

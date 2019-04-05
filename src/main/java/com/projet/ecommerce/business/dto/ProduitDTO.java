@@ -36,6 +36,8 @@ public class ProduitDTO {
      * la liste des photos du produit
      */
     private List<PhotoDTO> photos;
+    
+    private List<CaracteristiqueDTO> caracs;
 
 
     /**
@@ -168,4 +170,14 @@ public class ProduitDTO {
     public void setPhotoPrincipale(PhotoDTO photoPrincipale) {
         this.photoPrincipale = photoPrincipale;
     }
+
+	public List<CaracteristiqueDTO> getCaracs() {
+		return caracs;
+	}
+
+	public void setCaracs(List<CaracteristiqueDTO> caracs) {
+		this.caracs = caracs;
+	}
+    
+    
 }
