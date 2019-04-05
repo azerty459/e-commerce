@@ -4,9 +4,11 @@ import com.projet.ecommerce.business.IProduitBusiness;
 import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.business.dto.transformer.ProduitTransformer;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
+import com.projet.ecommerce.persistance.entity.Caracteristique;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Photo;
 import com.projet.ecommerce.persistance.entity.Produit;
+import com.projet.ecommerce.persistance.repository.CaracteristiqueRepository;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import com.projet.ecommerce.persistance.repository.PhotoRepository;
 import com.projet.ecommerce.persistance.repository.ProduitRepository;
@@ -38,6 +40,9 @@ public class ProduitBusiness implements IProduitBusiness {
     @Autowired
     private PhotoRepository photoRepository;
 
+    @Autowired
+    private CaracteristiqueRepository caracteristiqueRepository;
+
     /**
      * Ajoute un produit dans la base de données.
      *
@@ -50,7 +55,7 @@ public class ProduitBusiness implements IProduitBusiness {
      */
     @Override
     // FIXME à remplacer par un DTO
-    public ProduitDTO add(String referenceProduit, String nom, String description, float prixHT, List<Integer> categoriesProduit) {
+    public ProduitDTO add(String referenceProduit, String nom, String description, float prixHT, List<Integer> categoriesProduit, List<Integer> caracteristiqueProduit) {
         if (referenceProduit.isEmpty() && nom.isEmpty()) {
             GraphQLCustomException graphQLCustomException = new GraphQLCustomException("Erreur dans l'ajout du produit (la référence, le nom et le prixHT ne peut être null)");
             graphQLCustomException.ajouterExtension("Référence", referenceProduit);
@@ -74,6 +79,13 @@ public class ProduitBusiness implements IProduitBusiness {
                 Optional<Categorie> categorieOptional = categorieRepository.findById(idCategorie);
                 categorieOptional
                         .map(categorieList::add);
+            }
+        }
+        List<Caracteristique> caracteristiqueList = new ArrayList<>();
+        if (caracteristiqueProduit != null) {
+            for (int idCaracteristique : caracteristiqueProduit) {
+                Optional<Caracteristique> caracteristiqueOptional = caracteristiqueRepository.findById(idCaracteristique);
+                caracteristiqueOptional.map(caracteristiqueList::add);
             }
         }
         produit.setCategories(categorieList);
@@ -101,6 +113,7 @@ public class ProduitBusiness implements IProduitBusiness {
         Produit retourProduit = produitOptional.get();
 
         produit.setCategories(new ArrayList<>(completeCategoriesData(produit.getCategories())));
+
         if (produit.getPhotoPrincipale() != null && produit.getPhotoPrincipale().getIdPhoto() != 0) {
             produit.setPhotoPrincipale(completePhotoPrincipaleData(produit.getPhotoPrincipale()));
         }
