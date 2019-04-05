@@ -14,7 +14,7 @@ CREATE TABLE caracteristique
   id_caracteristique SERIAL,
   valeur_caracteristique VARCHAR(255) NOT NULL,
   reference_produit VARCHAR(255) NOT NULL,
-  id_type_caracteristique int NOT NULL,
+  type_caracteristique int NOT NULL,
   PRIMARY KEY (id_caracteristique),
   CONSTRAINT fk_produit FOREIGN KEY (reference_produit)
       REFERENCES produit (reference_produit),
