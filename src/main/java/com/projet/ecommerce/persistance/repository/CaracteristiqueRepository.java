@@ -16,6 +16,4 @@ public interface CaracteristiqueRepository extends CrudRepository<Caracteristiqu
 	
 	@Override
     Collection<Caracteristique> findAll();
-
-    Collection<Caracteristique> findByProduit_ReferenceProduit(String ref);
 }
