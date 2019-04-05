@@ -2,6 +2,7 @@ package com.projet.ecommerce.persistance.entity;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -56,6 +57,13 @@ public class Produit {
             inverseJoinColumns = {@JoinColumn(name = "id_categorie")}
     )
     private List<Categorie> categoriesSupprime;
+    
+    @OneToMany(
+        mappedBy = "produ",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
+    private List<ProduitCaracteristique> caracteristiques = new ArrayList<>();
 
     /**
      * Retourne la référence du produit.
@@ -208,6 +216,14 @@ public class Produit {
      */
     public void setPhotoPrincipale(Photo photoPrincipale) {
         this.photoPrincipale = photoPrincipale;
+    }
+
+    public List<ProduitCaracteristique> getCaracterisitiques() {
+        return caracteristiques;
+    }
+
+    public void setCaracterisitiques(List<ProduitCaracteristique> caracterisitiques) {
+        this.caracteristiques = caracterisitiques;
     }
 
 }
