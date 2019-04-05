@@ -67,7 +67,7 @@ public class TestExo2 {
         Caracteristique c = tqc.getResultList().get(0);
         System.out.println(c);
         System.out.println(c.getProduits().size());
-        System.out.println(c.getProduits().get(0).getProdu().getReferenceProduit());
+        System.out.println(c.getProduits().get(0).getProduit());
     }
     
 }
