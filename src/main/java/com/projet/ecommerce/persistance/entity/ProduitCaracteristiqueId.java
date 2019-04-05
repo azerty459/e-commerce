@@ -12,13 +12,13 @@ public class ProduitCaracteristiqueId implements Serializable{
     private String referenceProduit;
     
     @Column(name = "id_caracteristique")
-    private long idCaracteristique;
+    private int idCaracteristique;
 
     public ProduitCaracteristiqueId() {
         //Utilisé par JPA
     }
     
-    public ProduitCaracteristiqueId(String reference, long id) {
+    public ProduitCaracteristiqueId(String reference, int id) {
         this.referenceProduit = reference;
         this.idCaracteristique = id;
     }
@@ -27,7 +27,7 @@ public class ProduitCaracteristiqueId implements Serializable{
         return referenceProduit;
     }
 
-    public long getIdCaracteristique() {
+    public int getIdCaracteristique() {
         return idCaracteristique;
     }
     
