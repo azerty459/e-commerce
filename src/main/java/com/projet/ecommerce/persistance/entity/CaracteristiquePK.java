@@ -3,7 +3,6 @@ package com.projet.ecommerce.persistance.entity;
 import java.io.Serializable;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -15,7 +14,7 @@ public class CaracteristiquePK implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-	@Column(name = "type_caracteristique")
+	@JoinColumn(name = "id_type_caracteristique")
 	private TypeCaracteristique typeCaracteristique;
 
 	@ManyToOne(fetch = FetchType.LAZY)

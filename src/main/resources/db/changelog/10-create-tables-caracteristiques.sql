@@ -18,6 +18,6 @@ CREATE TABLE caracteristique
   PRIMARY KEY (id_caracteristique),
   CONSTRAINT fk_produit FOREIGN KEY (reference_produit)
       REFERENCES produit (reference_produit),
-  CONSTRAINT fk_type_caracteristique FOREIGN KEY (id_type_caracteristique)
+  CONSTRAINT fk_type_caracteristique FOREIGN KEY (type_caracteristique)
       REFERENCES type_caracteristique (id_type_caracteristique)
 );
