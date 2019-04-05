@@ -27,18 +27,22 @@ public class CaracteristiqueTransformer {
         return caracteristiqueDTO;
     }
 
-    public static Collection<Caracteristique> dtoToEntity(Collection<CaracteristiqueDTO> caracteristiqueDTOCollection){
+    public static List<Caracteristique> dtoToEntity(Collection<CaracteristiqueDTO> caracteristiqueDTOCollection){
         List<Caracteristique> caracteristiqueList = new ArrayList<>();
-        for (CaracteristiqueDTO caracteristiqueDTO : caracteristiqueDTOCollection) {
-            caracteristiqueList.add(dtoToEntity(caracteristiqueDTO));
+        if (caracteristiqueDTOCollection != null) {
+            for (CaracteristiqueDTO caracteristiqueDTO : caracteristiqueDTOCollection) {
+                caracteristiqueList.add(dtoToEntity(caracteristiqueDTO));
+            }
         }
         return caracteristiqueList;
     }
 
-    public static Collection<CaracteristiqueDTO> entityToDto(Collection<Caracteristique> caracteristiqueCollection){
+    public static List<CaracteristiqueDTO> entityToDto(Collection<Caracteristique> caracteristiqueCollection){
         List<CaracteristiqueDTO> caracteristiqueDTOList = new ArrayList<>();
-        for (Caracteristique caracteristique : caracteristiqueCollection) {
-            caracteristiqueDTOList.add(entityToDto(caracteristique));
+        if (caracteristiqueCollection != null) {
+            for (Caracteristique caracteristique : caracteristiqueCollection) {
+                caracteristiqueDTOList.add(entityToDto(caracteristique));
+            }
         }
         return caracteristiqueDTOList;
     }
