@@ -4,11 +4,11 @@ public class CaracteristiqueDto {
     
     private int id;
     
-    private String label;
+    private String libelle;
     
-    public CaracteristiqueDto(int id, String label) {
+    public CaracteristiqueDto(int id, String libelle) {
         this.id = id;
-        this.label = label;
+        this.libelle = libelle;
     }
 
     public int getId() {
@@ -19,12 +19,12 @@ public class CaracteristiqueDto {
         this.id = id;
     }
 
-    public String getLabel() {
-        return label;
+    public String getLibelle() {
+        return libelle;
     }
 
-    public void setLabel(String label) {
-        this.label = label;
+    public void setLibelle(String label) {
+        this.libelle = label;
     }
     
 }
