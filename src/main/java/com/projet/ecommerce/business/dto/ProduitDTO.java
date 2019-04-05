@@ -42,6 +42,8 @@ public class ProduitDTO {
      * La photo pricnipale
      */
     private PhotoDTO photoPrincipale;
+    
+    private List<ProduitCaracteristiqueDto> caracteristique;
 
     /**
      * Obtenir la référence du produit
