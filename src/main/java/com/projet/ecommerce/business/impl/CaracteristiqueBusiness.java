@@ -1,5 +1,7 @@
 package com.projet.ecommerce.business.impl;
 
+import static com.projet.ecommerce.utilitaire.Utilitaire.mergeObjects;
+
 import com.projet.ecommerce.business.ICaracteristiqueBusiness;
 import com.projet.ecommerce.business.dto.CaracteristiqueDto;
 import com.projet.ecommerce.business.dto.transformer.CaracteristiqueTransformer;
@@ -8,11 +10,10 @@ import com.projet.ecommerce.persistance.entity.Caracteristique;
 import com.projet.ecommerce.persistance.repository.CaracteristiqueRepository;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import static com.projet.ecommerce.utilitaire.Utilitaire.mergeObjects;
 import java.util.Collection;
+import org.springframework.stereotype.Service;
 
-
+@Service
 public class CaracteristiqueBusiness implements ICaracteristiqueBusiness {
     
     @Autowired
