@@ -5,7 +5,6 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
@@ -15,7 +14,7 @@ public class Caracteristique {
 	@EmbeddedId
 	private CaracteristiquePK  caracteristiquePk;
 	
-	@Id
+//	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_caracteristique")
 	private int idCaracteristique;
@@ -31,8 +30,17 @@ public class Caracteristique {
 //    @JoinColumn(name = "reference_produit")
 //    private Produit produit;
 
+	
 	public int getIdCaracteristique() {
 		return idCaracteristique;
+	}
+
+	public CaracteristiquePK getCaracteristiquePk() {
+		return caracteristiquePk;
+	}
+
+	public void setCaracteristiquePk(CaracteristiquePK caracteristiquePk) {
+		this.caracteristiquePk = caracteristiquePk;
 	}
 
 	public void setIdCaracteristique(int idCaracteristique) {

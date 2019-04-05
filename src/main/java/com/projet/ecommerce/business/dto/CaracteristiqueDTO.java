@@ -1,19 +1,22 @@
 package com.projet.ecommerce.business.dto;
 
 /**
- * Entité qui permet d'assurer le découplage entre la couche de présentation et les objets métier stockés sur le serveur (Caracteristique).
+ * Entité qui permet d'assurer le découplage entre la couche de présentation et
+ * les objets métier stockés sur le serveur (Caracteristique).
  */
 
 public class CaracteristiqueDTO {
-	
+
 	/**
-     * L'id de la caractéristique dans la base de données/
-     */
-    private int id;
-    
-    private TypeCaracteristiqueDTO typeCaracteristique;
-    
-    private String valeur;
+	 * L'id de la caractéristique dans la base de données/
+	 */
+	private int id;
+
+	private TypeCaracteristiqueDTO typeCaracteristiqueDto;
+
+	private String valeurCaracteristique;
+
+	private ProduitDTO produitDto;
 
 	public int getId() {
 		return id;
@@ -23,21 +26,28 @@ public class CaracteristiqueDTO {
 		this.id = id;
 	}
 
-	public TypeCaracteristiqueDTO getTypeCaracteristique() {
-		return typeCaracteristique;
+	public TypeCaracteristiqueDTO getTypeCaracteristiqueDto() {
+		return typeCaracteristiqueDto;
 	}
 
-	public void setTypeCaracteristique(TypeCaracteristiqueDTO typeCaracteristique) {
-		this.typeCaracteristique = typeCaracteristique;
+	public void setTypeCaracteristiqueDto(TypeCaracteristiqueDTO typeCaracteristiqueDto) {
+		this.typeCaracteristiqueDto = typeCaracteristiqueDto;
 	}
 
-	public String getValeur() {
-		return valeur;
+	public String getValeurCaracteristique() {
+		return valeurCaracteristique;
 	}
 
-	public void setValeur(String valeur) {
-		this.valeur = valeur;
+	public void setValeurCaracteristique(String valeurCaracteristique) {
+		this.valeurCaracteristique = valeurCaracteristique;
 	}
-    
-    
+
+	public ProduitDTO getProduitDto() {
+		return produitDto;
+	}
+
+	public void setProduitDto(ProduitDTO produitDto) {
+		this.produitDto = produitDto;
+	}
+
 }
