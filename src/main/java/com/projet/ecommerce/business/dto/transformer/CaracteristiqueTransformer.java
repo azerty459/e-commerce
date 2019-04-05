@@ -18,8 +18,10 @@ public class CaracteristiqueTransformer {
     public static Caracteristique dtoToEntity(CaracteristiqueDTO caracteristiqueDTO) {
        Caracteristique caracteristique = new Caracteristique();
        caracteristique.setIdCaracteristique(caracteristiqueDTO.getId());
-       caracteristique.setTypeCaracteristique(TypeCaracteristiqueTransformer.dtoToEntity(caracteristiqueDTO.getTypeCaracteristique()));
-       caracteristique.setValeurCaracteristique(caracteristiqueDTO.getValeur());
+       caracteristique.getCaracteristiquePk()
+       		.setTypeCaracteristique(TypeCaracteristiqueTransformer.dtoToEntity(caracteristiqueDTO.getTypeCaracteristiqueDto()));
+       caracteristique.getCaracteristiquePk()
+  			.setProduit(ProduitTransformer.dtoToEntity(caracteristiqueDTO.getProduitDto()));
        return caracteristique;
     }
     
@@ -43,7 +45,12 @@ public class CaracteristiqueTransformer {
     public static CaracteristiqueDTO entityToDto(Caracteristique caracteristique) {
        CaracteristiqueDTO caracteristiqueDto = new CaracteristiqueDTO();
        caracteristiqueDto.setId(caracteristique.getIdCaracteristique());
-       caracteristiqueDto.setTypeCaracteristique(TypeCaracteristiqueTransformer.entityToDto(caracteristique.getTypeCaracteristique()));
+       caracteristiqueDto.setTypeCaracteristiqueDto(
+    		   TypeCaracteristiqueTransformer.entityToDto(caracteristique.getCaracteristiquePk().getTypeCaracteristique())
+       );
+       caracteristiqueDto.setProduitDto(
+    		   ProduitTransformer.entityToDto(caracteristique.getCaracteristiquePk().getProduit())
+       );
        return caracteristiqueDto;
     }
     
