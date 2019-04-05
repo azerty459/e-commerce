@@ -1,7 +1,9 @@
 package com.projet.ecommerce.business.impl;
 
 import com.projet.ecommerce.business.IProduitBusiness;
+import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
 import com.projet.ecommerce.business.dto.ProduitDTO;
+import com.projet.ecommerce.business.dto.transformer.CaracteristiqueTransformer;
 import com.projet.ecommerce.business.dto.transformer.ProduitTransformer;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Categorie;
@@ -49,7 +51,7 @@ public class ProduitBusiness implements IProduitBusiness {
      * @return l'objet produit crée ou null, s'il il manque une referenceProduit, un nom et un prixHT.
      */
     @Override
-    public ProduitDTO add(String referenceProduit, String nom, String description, float prixHT, List<Integer> categoriesProduit) {
+    public ProduitDTO add(String referenceProduit, String nom, String description, float prixHT, List<Integer> categoriesProduit, List<CaracteristiqueDTO> caracteristiqueDTOS) {
         if (referenceProduit.isEmpty() && nom.isEmpty()) {
             GraphQLCustomException graphQLCustomException = new GraphQLCustomException("Erreur dans l'ajout du produit (la référence, le nom et le prixHT ne peut être null)");
             graphQLCustomException.ajouterExtension("Référence", referenceProduit);
@@ -65,7 +67,7 @@ public class ProduitBusiness implements IProduitBusiness {
         produit.setNom(nom);
         produit.setDescription(description);
         produit.setPrixHT(prixHT);
-        produit.setCaracteristiques(new ArrayList<>());
+        produit.setCaracteristiques(CaracteristiqueTransformer.dtoToEntity(caracteristiqueDTOS));
         produit.setPhotos(new ArrayList<>());
 
         List<Categorie> categorieList = new ArrayList<>();
