@@ -1,16 +1,16 @@
 package com.projet.ecommerce.business.dto.transformer;
 
-import com.projet.ecommerce.business.dto.AvisClientDTO;
-import com.projet.ecommerce.persistance.entity.AvisClient;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import com.projet.ecommerce.business.dto.AvisClientDTO;
+import com.projet.ecommerce.persistance.entity.AvisClient;
 
 @SpringBootTest
 public class AvisClientTransformerTests {
