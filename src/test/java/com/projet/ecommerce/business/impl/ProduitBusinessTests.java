@@ -148,7 +148,7 @@ public class ProduitBusinessTests {
         Assert.assertEquals(retour.getCategories().get(0).getNom(), "Transport");
     }
     
-    @Test
+   /* @Test
     public void addProductWithCaracteristiques() {
         Produit produit = new Produit();
         produit.setReferenceProduit("A05A01");
@@ -188,7 +188,7 @@ public class ProduitBusinessTests {
         Assert.assertEquals(retour.getClass(), ProduitDTO.class);
         Assert.assertEquals(retour.getCaracteristiques().get(0).getTypeCaracteristique().getNomCaracteristique(), "Langue");
         Assert.assertEquals(retour.getCaracteristiques().get(0).getValeurCaracteristique(), "fr");
-    }
+    }*/
 
     @Test
     public void updateFound() {
