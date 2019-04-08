@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import org.junit.runner.RunWith;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,12 +20,14 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+@Ignore
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("test")
 @Transactional
 public class CaracteristiqueBusinessTest {
     
+    /*
     @Autowired
     private CaracteristiqueBusiness caracteristiqueBusiness;
     
@@ -118,5 +121,6 @@ public class CaracteristiqueBusinessTest {
         caracteristiqueBusiness.add("Test");
         caracteristiqueBusiness.add("Test");
     }
-    
+*/    
+
 }

@@ -65,14 +65,17 @@ public class CaracteristiqueRepositoryTest {
         caracteristiqueRepository.deleteAll();
     }
     
+    @Test
     public void testInsert() {
         
     }
     
+    @Test
     public void testUpdate() {
         
     }
     
+    @Test
     public void testDelete() {
         
     }
