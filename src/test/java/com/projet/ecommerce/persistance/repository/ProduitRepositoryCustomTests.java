@@ -84,4 +84,11 @@ public class ProduitRepositoryCustomTests {
 
         Assert.assertEquals(0, produitRepository.findAllWithCriteria("Toto", null).size());
     }
+    
+    @Test
+    // Je teste que la méthode si l'on l'appelle avec null dans les deux paramètres, elle retourne une collection de produit.
+    public void findProduitWithCriteriaByNull() {
+        Collection<Produit> produitCollection = produitRepository.findProduitWithCriteria(null, null, null, null, 0);
+        Assert.assertNotNull(produitCollection);
+    }
 }

@@ -9,8 +9,12 @@ import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.ListJoin;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.EntityType;
+import javax.persistence.metamodel.Metamodel;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -63,36 +67,40 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
 	}
 
 	@Override
-	public Collection<Produit> findProduitWithCriteria(Integer noteMin, Integer noteMax, String nomProduitComplet,
-			String nomProduitNonComplet, int idCategorie) {
+	public Collection<Produit> findProduitWithCriteria(Integer noteMin, 
+													   Integer noteMax, 
+													   String nomProduitComplet,
+													   String nomProduitNonComplet, 
+													   int idCategorie) {
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 		List<Predicate> conditions = new ArrayList<Predicate>();
 		CriteriaQuery<Produit> query = builder.createQuery(Produit.class);
+		
+//		Metamodel m = entityManager.getMetamodel();
+//		EntityType<Produit> Produit_ = m.entity(Produit.class);
+//		EntityType<Categorie> Categorie_ = m.entity(Categorie.class);
+//		EntityType<AvisClient> AvisClient_ = m.entity(AvisClient.class);
+		
 		Root<Produit> produit = query.from(Produit.class);
-		Join<AvisClient, Produit> avisClient = produit.join("produits");
-		Join<Categorie, Produit> categories = produit.join("produits");
+		ListJoin<AvisClient, Produit> avisClient = produit.joinList("reference_produit", JoinType.LEFT);
+		ListJoin<Categorie, Produit> categories = produit.joinList("reference_produit", JoinType.LEFT);
 
-		if (idCategorie != 0) {
-			Categorie categorie = categorieRepo.findById(idCategorie).get();
-			conditions.add(builder.isMember(categorie, produit.get("categories")));
-		}
-
+//		if (idCategorie > 0) {
+//			Categorie categorie = categorieRepo.findById(idCategorie).get();
+//			conditions.add(builder.isMember(categorie, categories));
+//		}
 		if (noteMin > 0 && noteMin < noteMax) {
-			conditions.add(builder.lessThan(avisClient.get("note"), noteMax));
+			conditions.add(builder.greaterThanOrEqualTo(avisClient.get("note"), noteMin));
 		}
-
 		if (noteMax > 0 && noteMin < noteMax) {
-			conditions.add(builder.lessThan(avisClient.get("note"), noteMax));
+			conditions.add(builder.lessThanOrEqualTo(avisClient.get("note"), noteMax));
 		}
-
 		if (nomProduitComplet != null) {
 			conditions.add(builder.equal(produit.get("nom"), nomProduitComplet));
 		}
-
 		if (nomProduitNonComplet != null) {
-			conditions.add(builder.equal(produit.get("nom"), nomProduitNonComplet));
+			conditions.add(builder.like(produit.get("nom"), "%"+nomProduitNonComplet+"%"));
 		}
-
 		return entityManager
 				.createQuery(query.select(produit).where(builder.and(conditions.toArray(new Predicate[] {}))))
 				.getResultList();
