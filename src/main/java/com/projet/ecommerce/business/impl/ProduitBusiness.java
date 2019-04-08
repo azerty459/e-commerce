@@ -41,6 +41,9 @@ public class ProduitBusiness implements IProduitBusiness {
     @Autowired
     private CaracteristiqueRepository caracteristiqueRepository;
 
+    @Autowired
+    private CaracteristiqueRepository caracteristiqueRepository;
+
     /**
      * Ajoute un produit dans la base de données.
      *

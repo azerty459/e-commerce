@@ -105,6 +105,7 @@ public class ProduitBusinessTests {
 
         ProduitDTO retour = produitBusiness.add("A05A01", "Test", "Test", 4.7f, categoriesProduit, null);
 
+
         Assert.assertNotNull(retour);
         Assert.assertEquals(retour.getClass(), ProduitDTO.class);
         Assert.assertEquals(retour.getCategories().get(0).getNom(), "Transport");
