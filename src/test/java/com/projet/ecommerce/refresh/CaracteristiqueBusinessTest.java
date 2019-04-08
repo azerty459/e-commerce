@@ -5,6 +5,7 @@ import com.projet.ecommerce.business.dto.transformer.CaracteristiqueTransformer;
 import com.projet.ecommerce.business.impl.CaracteristiqueBusiness;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Caracteristique;
+import com.projet.ecommerce.persistance.repository.CaracteristiqueRepository;
 import java.util.Collection;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -28,13 +29,15 @@ public class CaracteristiqueBusinessTest {
     private CaracteristiqueBusiness caracteristiqueBusiness;
     
     @Autowired
+    private CaracteristiqueRepository caracteristiqueRepository;
+    
+    @Autowired
     private EntityManager entityManager;
     
     @Test
     public void testSelect() {
-        TypedQuery<Caracteristique> tqc = entityManager.createQuery("Select c From Caracteristique c", Caracteristique.class);
-        Collection<Caracteristique> expected = tqc.getResultList();
-        Collection<Caracteristique> listCarac = CaracteristiqueTransformer.dtoToEntity(caracteristiqueBusiness.getAll());
+        Iterable<Caracteristique> expected = caracteristiqueRepository.findAll();
+        Iterable<Caracteristique> listCarac = CaracteristiqueTransformer.dtoToEntity(caracteristiqueBusiness.getAll());
         Assert.assertEquals(expected, listCarac);
     }
     
@@ -45,9 +48,7 @@ public class CaracteristiqueBusinessTest {
         Collection<CaracteristiqueDTO> after = caracteristiqueBusiness.getAll();
         Assert.assertEquals(before.size() + 1, after.size());
         Assert.assertTrue("Test".equals(cdto.getLibelle()));
-        TypedQuery<Caracteristique> tqc = entityManager.createQuery("Select c From Caracteristique c Where c.idCaracteristique=:id", Caracteristique.class);
-        tqc.setParameter("id", cdto.getId());
-        Caracteristique c = tqc.getSingleResult();
+        Caracteristique c = caracteristiqueRepository.findById(cdto.getId()).get();
         Assert.assertTrue("Test".equals(c.getLibelle()));
         Assert.assertTrue(cdto.getId() == c.getIdCaracteristique());
         Assert.assertEquals(c, CaracteristiqueTransformer.dtoToEntity(cdto));  
@@ -69,9 +70,7 @@ public class CaracteristiqueBusinessTest {
         Assert.assertTrue(caracteristiqueBusiness.delete(1));
         Collection<CaracteristiqueDTO> after = caracteristiqueBusiness.getAll();
         Assert.assertEquals(before.size() - 1, after.size());
-        TypedQuery<Caracteristique> tqc = entityManager.createQuery("Select c From Caracteristique c Where c.idCaracteristique=:id", Caracteristique.class);
-        tqc.setParameter("id", 1);
-        Assert.assertEquals(0, tqc.getResultList().size());
+        Assert.assertFalse(caracteristiqueRepository.findById(1).isPresent());
     }
     
     @Test
@@ -86,9 +85,7 @@ public class CaracteristiqueBusinessTest {
         String before = c.getLibelle();
         c.setLibelle("Test");
         CaracteristiqueDTO cdto = caracteristiqueBusiness.update(CaracteristiqueTransformer.entityToDto(c));
-        tqc = entityManager.createQuery("Select c From Caracteristique c Where c.idCaracteristique=:id", Caracteristique.class);
-        tqc.setParameter("id", c.getIdCaracteristique());
-        c = tqc.getSingleResult();
+        c = caracteristiqueRepository.findById(c.getIdCaracteristique()).get();
         Assert.assertFalse("Test".equals(before));
         Assert.assertEquals(c, CaracteristiqueTransformer.dtoToEntity(cdto));
         tqc = entityManager.createQuery("Select c From Caracteristique c Where c.libelle=:lib", Caracteristique.class);
