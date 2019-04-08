@@ -52,4 +52,10 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
         System.out.println(query.getResultList().size());
         return query.getResultList();
     }
+   
+    public int getNomberProduit() {
+    	
+    	Query query = entityManager.createQuery("SELECT p FROM Produit p", Produit.class);
+    	return query.getResultList().size();
+    }
 }

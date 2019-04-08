@@ -1,32 +1,42 @@
 package com.projet.ecommerce.persistance.entity;
 
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Embeddable
 public class ValeurCaracteristiquePK {
+
+	@ManyToOne
+	@JoinColumn(name = "reference_produit")
+	private Produit produit;
 	
-	@Column(name="reference_produit", nullable=false)
-	private Produit referenceProduit;
-	
-	@Column(name="id_caracteristique", nullable=false)
-	private Caracteristique idProduit;
-
-	public Produit getReferenceProduit() {
-		return referenceProduit;
-	}
-
-	public void setReferenceProduit(Produit referenceProduit) {
-		this.referenceProduit = referenceProduit;
-	}
-
-	public Caracteristique getIdProduit() {
-		return idProduit;
-	}
-
-	public void setIdProduit(Caracteristique idProduit) {
-		this.idProduit = idProduit;
-	}
+	@ManyToOne
+	@JoinColumn(name = "id_caracteristique")
+	private Caracteristique caracteristique;
 	
 	
+	public ValeurCaracteristiquePK() {}
+	
+	public ValeurCaracteristiquePK(Produit produit, Caracteristique caracteristique) {
+		this.produit = produit;
+		this.caracteristique = caracteristique;
+	}
+
+	public Produit getProduit() {
+		return produit;
+	}
+
+	public void setProduit(Produit produit) {
+		this.produit = produit;
+	}
+
+	public Caracteristique getCaracteristique() {
+		return caracteristique;
+	}
+
+	public void setCaracteristique(Caracteristique caracteristique) {
+		this.caracteristique = caracteristique;
+	}
+
 }

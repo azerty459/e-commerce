@@ -11,17 +11,18 @@ import javax.persistence.*;
 public class Caracteristique {
 
 	@Id
-	@Column(name = "id_caracteristique")
-	private String idCaracteristique;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id_caracteristique", nullable = false)
+	private int idCaracteristique;
 	
-	@Column(name = "libelle")
+	@Column(unique=true)
 	private String libelle;
-	
-	public String getIdCaracteristique() {
+
+	public int getIdCaracteristique() {
 		return idCaracteristique;
 	}
 
-	public void setIdCaracteristique(String idCaracteristique) {
+	public void setIdCaracteristique(int idCaracteristique) {
 		this.idCaracteristique = idCaracteristique;
 	}
 

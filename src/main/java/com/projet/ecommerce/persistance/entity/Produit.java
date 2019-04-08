@@ -58,17 +58,15 @@ public class Produit {
     private List<Categorie> categoriesSupprime;
     
     //AJOUTÉ
-    @OneToMany
-    private List<ValeurCaracteristique> listValeurCaracteristique;
-    
-    //AJOUTÉ
-    public List<ValeurCaracteristique> getListCaracteristique() {
-		return listValeurCaracteristique;
+    @ManyToMany(mappedBy = "produit")
+    private List<ValeurCaracteristique> valeurCaracteristiques;
+
+	public List<ValeurCaracteristique> getValeurCaracteristiques() {
+		return valeurCaracteristiques;
 	}
-    
-    //AJOUTÉ
-	public void setListCaracteristique(List<ValeurCaracteristique> listCaracteristique) {
-		this.listValeurCaracteristique = listCaracteristique;
+
+	public void setValeurCaracteristiques(List<ValeurCaracteristique> valeurCaracteristiques) {
+		this.valeurCaracteristiques = valeurCaracteristiques;
 	}
 
 	/**
