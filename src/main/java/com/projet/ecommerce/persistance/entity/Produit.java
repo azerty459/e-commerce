@@ -1,8 +1,20 @@
 package com.projet.ecommerce.persistance.entity;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 /**
  * Entité représentant la table produit sous forme de classe.
@@ -49,7 +61,7 @@ public class Produit {
     private List<AvisClient> avisClients;
     
     @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE}, fetch = FetchType.LAZY)
-    private List<Caracteristique> caracteristiques;
+    private Collection<Caracteristique> caracteristiques;
 
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
@@ -212,5 +224,17 @@ public class Produit {
     public void setPhotoPrincipale(Photo photoPrincipale) {
         this.photoPrincipale = photoPrincipale;
     }
+
+	public Collection<Caracteristique> getCaracteristiques() {
+		return caracteristiques;
+	}
+
+	public void setCaracteristiques(Collection<Caracteristique> caracteristiques) {
+		this.caracteristiques = caracteristiques;
+	}
+
+	
+    
+    
 
 }

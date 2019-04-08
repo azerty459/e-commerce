@@ -10,4 +10,6 @@ public interface TypeCaracteristiqueRepository extends CrudRepository<TypeCaract
 
 	@Override
 	Collection<TypeCaracteristique> findAll();
+	
+	TypeCaracteristique findById(int id);
 }

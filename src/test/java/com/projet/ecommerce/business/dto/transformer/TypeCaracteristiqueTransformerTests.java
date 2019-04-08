@@ -40,14 +40,14 @@ public class TypeCaracteristiqueTransformerTests {
     public void singleDtoToEntity() {
         TypeCaracteristique typeCaracteristique = TypeCaracteristiqueTransformer.dtoToEntity(TYPE_CARACTERISTIQUE_DTO1);
 
-        assertData(TYPE_CARACTERISTIQUE_DTO1, typeCaracteristique);
+        assertDataTypeCaracteristique(TYPE_CARACTERISTIQUE_DTO1, typeCaracteristique);
     }
 	
 	@Test
     public void singleEntityToDto() {
         TypeCaracteristiqueDTO typeCaracteristiqueDto = TypeCaracteristiqueTransformer.entityToDto(TYPE_CARACTERISTIQUE_1);
 
-        assertData(typeCaracteristiqueDto, TYPE_CARACTERISTIQUE_1);
+        assertDataTypeCaracteristique(typeCaracteristiqueDto, TYPE_CARACTERISTIQUE_1);
     }
 	
 	@Test
@@ -59,8 +59,8 @@ public class TypeCaracteristiqueTransformerTests {
         List<TypeCaracteristique> typeCaracteristiqueList = new ArrayList<>(TypeCaracteristiqueTransformer.dtoToEntity(typeCaracteristiqueDTOList));
 
         Assert.assertNotNull(typeCaracteristiqueList);
-        this.assertData(typeCaracteristiqueDTOList.get(0), typeCaracteristiqueList.get(0));
-        this.assertData(typeCaracteristiqueDTOList.get(1), typeCaracteristiqueList.get(1));
+        this.assertDataTypeCaracteristique(typeCaracteristiqueDTOList.get(0), typeCaracteristiqueList.get(0));
+        this.assertDataTypeCaracteristique(typeCaracteristiqueDTOList.get(1), typeCaracteristiqueList.get(1));
     }
 	
 	@Test
@@ -72,11 +72,11 @@ public class TypeCaracteristiqueTransformerTests {
         List<TypeCaracteristiqueDTO> typeCaracteristiqueDtoList = new ArrayList<>(TypeCaracteristiqueTransformer.entityToDto(typeCaracteristiqueList));
 
         Assert.assertNotNull(typeCaracteristiqueList);
-        this.assertData(typeCaracteristiqueDtoList.get(0), typeCaracteristiqueList.get(0));
-        this.assertData(typeCaracteristiqueDtoList.get(1), typeCaracteristiqueList.get(1));
+        this.assertDataTypeCaracteristique(typeCaracteristiqueDtoList.get(0), typeCaracteristiqueList.get(0));
+        this.assertDataTypeCaracteristique(typeCaracteristiqueDtoList.get(1), typeCaracteristiqueList.get(1));
     }
 
-	private void assertData(TypeCaracteristiqueDTO typeCaracteristiqueDto, TypeCaracteristique typeCaracteristique) {
+	private void assertDataTypeCaracteristique(TypeCaracteristiqueDTO typeCaracteristiqueDto, TypeCaracteristique typeCaracteristique) {
 		Assert.assertNotNull(typeCaracteristique);
 		Assert.assertNotNull(typeCaracteristiqueDto);
         Assert.assertEquals(typeCaracteristiqueDto.getId(), typeCaracteristique.getIdTypeCaracteristique());
