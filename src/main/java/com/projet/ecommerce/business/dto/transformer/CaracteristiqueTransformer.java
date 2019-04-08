@@ -53,7 +53,7 @@ public class CaracteristiqueTransformer {
 	}
 
 	public static List<Caracteristique> dtoToEntity(List<CaracteristiqueDTO> caracteristiqueDTOCollection){
-		if (caracteristiqueDTOCollection== null) {
+		if (caracteristiqueDTOCollection == null) {
 			return null;
 		}
 		List<Caracteristique> caracteristiques = new ArrayList<>();

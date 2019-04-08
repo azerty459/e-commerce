@@ -15,7 +15,7 @@ import com.projet.ecommerce.persistance.entity.Caracteristique;
 @Repository
 public interface CaracteristiqueRepository extends PagingAndSortingRepository<Caracteristique, Integer>{
 
-	Optional<Caracteristique> findById(int ref);
+	Optional<Caracteristique> findById(Integer ref);
 	
 	Optional<Caracteristique> findByValeur(String valeur);
 	

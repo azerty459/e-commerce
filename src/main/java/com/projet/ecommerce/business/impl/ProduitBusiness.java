@@ -71,7 +71,7 @@ public class ProduitBusiness implements IProduitBusiness {
 		produit.setPhotos(new ArrayList<>());
 
 		List<Categorie> categorieList = new ArrayList<>();
-		if (categoriesProduit != null && categorieList.size()>0) {
+		if (categoriesProduit != null) {
 			for (int idCategorie : categoriesProduit) {
 				Optional<Categorie> categorieOptional = categorieRepository.findById(idCategorie);
 				categorieOptional
