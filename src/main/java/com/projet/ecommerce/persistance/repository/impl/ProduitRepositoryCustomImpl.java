@@ -6,9 +6,9 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 
+import org.hibernate.Metamodel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -62,26 +62,27 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
     }
 
 	@Override
-	public Collection<Produit> findAllWithParam(Integer noteMin, Integer noteMax, String name, String partOfName,
+	public List<Produit> findAllWithParam(Integer noteMin, Integer noteMax, String name, String partOfName,
 			String categorie) {
 		
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Produit> criteriaQuery = criteriaBuilder.createQuery(Produit.class);
 		
 		Root<Produit> produit = criteriaQuery.from(Produit.class);
-		
 
-		Join<Produit, AvisClient> avis = produit.joinList("avisClients", JoinType.LEFT);
-		Join<Produit, Categorie> categ = produit.joinList("categories", JoinType.LEFT);
 		List<Predicate> havingPredicates = new ArrayList<>();
 		List<Predicate> wherePredicates = new ArrayList<>();
 		
 
-		if(noteMin!=null)
-			havingPredicates.add(criteriaBuilder.greaterThan(criteriaBuilder.avg(avis.get("note")), noteMin.doubleValue()));
+		if(noteMin!=null ) {
+			Join<Produit, AvisClient> avis = produit.join("avisClients");
+			havingPredicates.add(criteriaBuilder.greaterThanOrEqualTo(criteriaBuilder.avg(avis.get("note")), noteMin.doubleValue()));
+		}
 		
-		if(noteMax!=null)
-			havingPredicates.add(criteriaBuilder.lessThan(criteriaBuilder.avg(avis.get("note")), noteMax.doubleValue()));
+		if(noteMax!=null) {
+			Join<Produit, AvisClient> avis = produit.join("avisClients");
+			havingPredicates.add(criteriaBuilder.lessThanOrEqualTo(criteriaBuilder.avg(avis.get("note")), noteMax.doubleValue()));
+		}
 
 		if(name!=null)
 			wherePredicates.add(criteriaBuilder.equal(produit.get("nom"), name));
@@ -89,17 +90,18 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
 		if(partOfName!=null)
 			wherePredicates.add(criteriaBuilder.like(produit.get("nom"), "%"+partOfName+"%"));
 		
-		if(categorie!=null)
+		if(categorie!=null) {
+			Join<Produit, Categorie> categ = produit.join("categories");
 			wherePredicates.add(criteriaBuilder.equal(categ.get("nomCategorie"), categorie));
+		}
 		
 		Predicate pHaving = criteriaBuilder.and(havingPredicates.toArray(new Predicate[havingPredicates.size()]));
 		Predicate pWhere = criteriaBuilder.and(wherePredicates.toArray(new Predicate[wherePredicates.size()]));
 		
 		criteriaQuery.select(produit);
 
-		criteriaQuery.where(pWhere).distinct(true).having(pHaving);
+		criteriaQuery.where(pWhere).distinct(true).having(pHaving).groupBy(produit);
 
-		
 		return entityManager.createQuery(criteriaQuery).getResultList();
 	}
 }
