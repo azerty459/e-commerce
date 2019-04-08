@@ -42,7 +42,7 @@ public class PhotoBusiness implements IPhotoBusiness {
     /**
      * Le répertoire de base pour les images.
      */
-    @Value("repertoire.img")
+    @Value("${repertoire.img}")
     private String repertoireImg;
 
     /**
@@ -91,7 +91,7 @@ public class PhotoBusiness implements IPhotoBusiness {
             if (!repertoire.mkdirs()) {
                 throw new GraphQLCustomException("Le dossier image pour le produit n'a pas pu être créé");
             } else {
-                System.out.println("Le dossier " + repertoire.getPath().split("resources/img/")[1] + " a bien été créé.");
+                System.out.println("Le dossier " + repertoire.getPath() + " a bien été créé.");
             }
         }
 

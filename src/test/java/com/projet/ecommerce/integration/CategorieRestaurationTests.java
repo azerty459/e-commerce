@@ -1,5 +1,6 @@
 package com.projet.ecommerce.integration;
 
+import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.business.impl.CategorieBusiness;
 import com.projet.ecommerce.business.impl.CategorieSupprimeBusiness;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
@@ -17,6 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -123,14 +125,14 @@ public class CategorieRestaurationTests {
 
     @Test
     public void addSameNom() {
+        CategorieDTO cat = categorieBusiness.addParent("nom");
         categorieBusiness.addParent("nom");
         categorieBusiness.addParent("nom");
         categorieBusiness.addParent("nom");
-        categorieBusiness.addParent("nom");
-        categorieBusiness.addEnfant("nom", 1);
-        categorieBusiness.addEnfant("nom", 1);
-        categorieBusiness.addEnfant("nom", 1);
-        ArrayList<Categorie> categories = new ArrayList<>(categorieRepository.findAll());
+        categorieBusiness.addEnfant("nom", cat.getId());
+        categorieBusiness.addEnfant("nom", cat.getId());
+        categorieBusiness.addEnfant("nom", cat.getId());
+        Collection<Categorie> categories = categorieRepository.findAll();
         Assert.assertEquals(7, categories.size());
 
     }

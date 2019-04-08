@@ -46,7 +46,7 @@ public class CategorieMutationTests {
     public void testNbDataFetcher() {
         Map<String, DataFetcher> retourMap = categorieMutation.produitWiring().getFieldDataFetchers();
         Assert.assertNotNull(retourMap);
-        Assert.assertEquals(5, retourMap.size());
+        Assert.assertEquals(6, retourMap.size());
     }
 
     @Test
@@ -125,5 +125,9 @@ public class CategorieMutationTests {
         Mockito.verify(categorieBusiness, Mockito.times(1)).updateCategorie(1, "Toto");
         // Test avec nb appel add avec mauvais param
         Mockito.verify(categorieBusiness, Mockito.times(0)).updateCategorie(7, "Test");
+    }
+
+    public void restoreCategorie() {
+        // FIXME à faire
     }
 }
