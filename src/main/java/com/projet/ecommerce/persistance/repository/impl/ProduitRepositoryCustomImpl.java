@@ -7,10 +7,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -58,13 +56,84 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
         return query.getResultList();
     }
 
-    public Collection<Produit> findProduitsWithCriteria(){
+    /*public Collection<Produit> findProduitsWithCriteria(){
 
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Produit> q = criteriaBuilder.createQuery(Produit.class);
         Root root = q.from(Produit.class);
 
         Predicate predicate = criteriaBuilder.conjunction();
+
+        List<Produit> result = entityManager.createQuery(q).getResultList();
+
+        return result;
+
+    }*/
+
+    /*public Collection<Produit> findProduitsWithCriteria(String nomProduit){
+
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Produit> q = criteriaBuilder.createQuery(Produit.class);
+        Root root = q.from(Produit.class);
+        List<Predicate> predicates = new ArrayList<>();
+
+        if (nomProduit != null) {
+            predicates.add(criteriaBuilder.like(root.get("nom"), nomProduit));
+        }
+
+        q.where(predicates.toArray(new Predicate[predicates.size()]));
+
+        List<Produit> result = entityManager.createQuery(q).getResultList();
+
+        return result;
+
+    }*/
+    /*
+    public Collection<Produit> findProduitsWithCriteria(String nomProduit, String partieNomProduit){
+
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Produit> q = criteriaBuilder.createQuery(Produit.class);
+        Root root = q.from(Produit.class);
+        List<Predicate> predicates = new ArrayList<>();
+
+        if (nomProduit != null) {
+            predicates.add(criteriaBuilder.equal(root.get("nom"), nomProduit));
+        }
+
+        if (partieNomProduit != null) {
+            predicates.add(criteriaBuilder.like(root.get("nom"), "%" + partieNomProduit + "%"));
+        }
+
+        q.where(predicates.toArray(new Predicate[predicates.size()]));
+
+        List<Produit> result = entityManager.createQuery(q).getResultList();
+
+        return result;
+
+    }*/
+
+    public Collection<Produit> findProduitsWithCriteria(String nomProduit, String partieNomProduit, String nomCategorie){
+
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Produit> q = criteriaBuilder.createQuery(Produit.class);
+        Root root = q.from(Produit.class);
+        List<Predicate> predicates = new ArrayList<>();
+
+        if (nomProduit != null) {
+            predicates.add(criteriaBuilder.equal(root.get("nom"), nomProduit));
+        }
+
+        if (partieNomProduit != null) {
+            predicates.add(criteriaBuilder.like(root.get("nom"), "%" + partieNomProduit + "%"));
+        }
+
+        if (nomCategorie != null) {
+            Join categoriesJoin = root.join("categories");
+            predicates.add(criteriaBuilder.equal(categoriesJoin.get("nomCategorie"), nomCategorie));
+        }
+
+
+        q.where(predicates.toArray(new Predicate[predicates.size()]));
 
         List<Produit> result = entityManager.createQuery(q).getResultList();
 

@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -23,7 +24,9 @@ import java.util.List;
 public class ProduitRepositoryCustomTests {
 
     private static final Produit TEMP_INSERT;
+    private static final Produit TEMP_INSERT2;
     private static final Categorie TEMP_CATEGORIE;
+    private static final Categorie TEMP_CATEGORIE2;
 
     static {
         //Permet d'écraser la config application.properties par application-test.properties
@@ -34,6 +37,7 @@ public class ProduitRepositoryCustomTests {
         TEMP_INSERT.setPrixHT(8.7f);
         TEMP_INSERT.setDescription("joli produit");
         TEMP_INSERT.setCategories(new ArrayList<>());
+        TEMP_INSERT.setNom("Test");
 
         TEMP_CATEGORIE = new Categorie();
         TEMP_CATEGORIE.setNomCategorie("Livre");
@@ -42,14 +46,35 @@ public class ProduitRepositoryCustomTests {
         TEMP_CATEGORIE.setLevel(1);
         TEMP_CATEGORIE.setProduits(new ArrayList<>());
 
+        TEMP_INSERT2 = new Produit();
+        TEMP_INSERT2.setReferenceProduit("A05A89");
+        TEMP_INSERT2.setPrixHT(8.0f);
+        TEMP_INSERT2.setDescription("beau produit");
+        TEMP_INSERT2.setCategories(new ArrayList<>());
+        TEMP_INSERT2.setNom("Test produit");
+
+
+        TEMP_CATEGORIE2 = new Categorie();
+        TEMP_CATEGORIE2.setNomCategorie("Jouet");
+        TEMP_CATEGORIE2.setBorneGauche(1);
+        TEMP_CATEGORIE2.setBorneDroit(2);
+        TEMP_CATEGORIE2.setLevel(1);
+        TEMP_CATEGORIE2.setProduits(new ArrayList<>());
+
         Collection<Categorie> categorieCollection = TEMP_INSERT.getCategories();
         categorieCollection.add(TEMP_CATEGORIE);
+        categorieCollection.add(TEMP_CATEGORIE2);
         TEMP_INSERT.setCategories(new ArrayList<>(categorieCollection));
+
+        Collection<Categorie> categorieCollection2 = TEMP_INSERT2.getCategories();
+        categorieCollection.add(TEMP_CATEGORIE);
+        TEMP_INSERT2.setCategories(new ArrayList<>(categorieCollection2));
     }
 
     @Before
     public void insertProduit() {
         produitRepository.save(TEMP_INSERT);
+        produitRepository.save(TEMP_INSERT2);
     }
 
     @Autowired
@@ -76,7 +101,7 @@ public class ProduitRepositoryCustomTests {
     @Transactional
     public void findAllWithCriteriaByCat() {
         List<Produit> retourProduitCollection = new ArrayList<>(produitRepository.findAllWithCriteria(null, "Livre"));
-        Assert.assertEquals(1, retourProduitCollection.size());
+        Assert.assertEquals(2, retourProduitCollection.size());
         Assert.assertEquals(retourProduitCollection.get(0).getReferenceProduit(), TEMP_INSERT.getReferenceProduit());
         Assert.assertEquals(retourProduitCollection.get(0).getNom(), TEMP_INSERT.getNom());
         Assert.assertEquals(retourProduitCollection.get(0).getPrixHT(), TEMP_INSERT.getPrixHT(), 0);
@@ -86,8 +111,30 @@ public class ProduitRepositoryCustomTests {
     }
 
     @Test
-    public void findProduitsWithCriteria(){
-        List<Produit> retourProduitCollection = new ArrayList<>(produitRepository.findProduitsWithCriteria());
-        Assert.assertEquals(1,retourProduitCollection.size());
+    public void findProduitsWithNoCriteria(){
+        List<Produit> retourProduitCollection = new ArrayList<>(produitRepository.findProduitsWithCriteria(null, null, null));
+        Assert.assertEquals(2,retourProduitCollection.size());
     }
+
+    @Test
+    public void findProduitsWithNomProduitCriteria(){
+        List<Produit> retourProduitCollection = new ArrayList<>(produitRepository.findProduitsWithCriteria("Test", null, null));
+        Assert.assertEquals(1,retourProduitCollection.size());
+        Assert.assertEquals("Test",retourProduitCollection.get(0).getNom());
+    }
+
+    @Test
+    public void findProduitsWithPartieNomProduitCriteria(){
+        List<Produit> retourProduitCollection = new ArrayList<>(produitRepository.findProduitsWithCriteria(null, "es", null));
+        Assert.assertEquals(2,retourProduitCollection.size());
+        Assert.assertEquals("Test",retourProduitCollection.get(0).getNom());
+    }
+
+   /* @Test
+    public void findProduitsWithNomProduitAndPartieNomProduitAndCategorieCriteria(){
+        List<Produit> retourProduitCollection = new ArrayList<>(produitRepository.findProduitsWithCriteria(null, null, "Livre"));
+        Assert.assertEquals(1,retourProduitCollection.size());
+        Assert.assertEquals(1,retourProduitCollection.get(0).getCategories().stream().map(Categorie::getNomCategorie).filter(x -> x == "Livre").count());
+        Assert.assertEquals(0,retourProduitCollection.get(1).getCategories().stream().map(Categorie::getNomCategorie).filter(x -> x == "Jouet").count());
+    }*/
 }
