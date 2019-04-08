@@ -198,10 +198,7 @@ public class CategorieSupprimeBusinessTests {
 
     @Test
     public void saveInCategorieSupprimeNull() {
-        Categorie categorie1 = null;
-        CategorieSupprime categorieSupprime1 = new CategorieSupprime();
-        Mockito.when(categorieSupprimeRepository.save(Mockito.any())).thenReturn(categorieSupprime1);
-        boolean retour1 = categorieSupprimeBusiness.saveInCategorieSupprime(categorie1);
+        boolean retour1 = categorieSupprimeBusiness.saveInCategorieSupprime(null);
         Assert.assertFalse(retour1);
     }
 

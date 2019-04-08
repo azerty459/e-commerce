@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data-sources>
+	<data-source id="postgres-jdbc-169e769f2a8-1232352d17d468d9" provider="postgresql" driver="postgres-jdbc" name="PostgreSQL - postgres" save-password="true" read-only="false">
+		<connection host="localhost" port="6666" server="" database="projet-e-commerce" url="jdbc:postgresql://localhost:6666/projet-e-commerce" user="postgres" password="Eh4DMlVaJPc=" type="dev">
+			<provider-property name="@dbeaver-show-non-default-db@" value="false"/>
+			<provider-property name="@dbeaver-show-template-db@" value="false"/>
+		</connection>
+	</data-source>
+	<filters/>
+</data-sources>

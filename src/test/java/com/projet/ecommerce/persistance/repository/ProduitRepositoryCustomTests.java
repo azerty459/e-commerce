@@ -93,4 +93,11 @@ public class ProduitRepositoryCustomTests {
 	  	Assert.assertNotNull(produitCollection);
 	  	Assert.assertEquals(lesProduits.size(),produitCollection.size());
 	}
+    
+    @Test
+    public void findAllWithCriteriaRequeteComplexeByNom() {
+    	Collection<Produit> lesProduits = produitRepository.findAll();
+    	
+    	
+    }
 }
