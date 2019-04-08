@@ -4,11 +4,14 @@ import com.projet.ecommerce.business.IProduitBusiness;
 import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
 import com.projet.ecommerce.business.dto.ProduitCaracteristiqueDTO;
 import com.projet.ecommerce.business.dto.ProduitDTO;
+import com.projet.ecommerce.business.dto.transformer.CaracteristiqueTransformer;
 import com.projet.ecommerce.business.dto.transformer.ProduitTransformer;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
+import com.projet.ecommerce.persistance.entity.Caracteristique;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Photo;
 import com.projet.ecommerce.persistance.entity.Produit;
+import com.projet.ecommerce.persistance.entity.ProduitCaracteristique;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import com.projet.ecommerce.persistance.repository.PhotoRepository;
 import com.projet.ecommerce.persistance.repository.ProduitRepository;
@@ -250,12 +253,24 @@ public class ProduitBusiness implements IProduitBusiness {
     }
 
     @Override
-    public ProduitDTO addCaracteristique(CaracteristiqueDTO caracteristique) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public ProduitDTO addCaracteristique(String reference, CaracteristiqueDTO caracteristique, String valeur) {
+        Optional<Produit> produitOptional = produitRepository.findById(reference);
+        if (!produitOptional.isPresent()) {
+            throw new GraphQLCustomException("Le produit recherché n'existe pas.");
+        }
+        //Ajout de la caracteristique
+        Produit produit = produitOptional.get();
+        ProduitCaracteristique produitCaracteristique = new ProduitCaracteristique(produit, CaracteristiqueTransformer.dtoToEntity(caracteristique));
+        produitCaracteristique.setValeur(valeur);
+        List<ProduitCaracteristique> listCaracteristique = produit.getCaracterisitiques();
+        listCaracteristique.add(produitCaracteristique);
+        //Sauvegarde et retour
+        produitRepository.save(produit);
+        return ProduitTransformer.entityToDto(produit);
     }
 
     @Override
-    public ProduitDTO deleteCaracterisitque(CaracteristiqueDTO caracteristique) {
+    public ProduitDTO deleteCaracterisitque(String reference, CaracteristiqueDTO caracteristique) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
