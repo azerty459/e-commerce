@@ -15,7 +15,7 @@ CREATE TABLE valeur_caracteristique
 
 CREATE TABLE caracteristique
 (
-  id_caracteristique SERIAL
+  id_caracteristique SERIAL NOT NULL 
   libelle TEXT NOT NULL, 
   PRIMARY KEY (id_caracteristique)
 );

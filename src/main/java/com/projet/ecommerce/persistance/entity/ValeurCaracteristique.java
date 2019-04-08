@@ -1,6 +1,5 @@
 package com.projet.ecommerce.persistance.entity;
 
-import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -8,20 +7,18 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "valeur_caracteristique")
 public class ValeurCaracteristique {
-
 	
 	@EmbeddedId
-	private ValeurCaracteristiquePK valeurCaracteristiquePK = new ValeurCaracteristiquePK();
+	ValeurCaracteristiquePK valeurCaracteristiquePK;
 	
-	@Column(name = "valeur")
 	private String valeur;
 
 	public ValeurCaracteristiquePK getValeurCaracteristiquePK() {
 		return valeurCaracteristiquePK;
 	}
 
-	public void setVc(ValeurCaracteristiquePK vc) {
-		this.valeurCaracteristiquePK = vc;
+	public void setValeurCaracteristiquePK(ValeurCaracteristiquePK valeurCaracteristiquePK) {
+		this.valeurCaracteristiquePK = valeurCaracteristiquePK;
 	}
 
 	public String getValeur() {
@@ -31,6 +28,5 @@ public class ValeurCaracteristique {
 	public void setValeur(String valeur) {
 		this.valeur = valeur;
 	}
-	
 	
 }
