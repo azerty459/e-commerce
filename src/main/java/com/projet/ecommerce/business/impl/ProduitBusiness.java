@@ -12,6 +12,7 @@ import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Photo;
 import com.projet.ecommerce.persistance.entity.Produit;
 import com.projet.ecommerce.persistance.entity.ProduitCaracteristique;
+import com.projet.ecommerce.persistance.repository.CaracteristiqueRepository;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import com.projet.ecommerce.persistance.repository.PhotoRepository;
 import com.projet.ecommerce.persistance.repository.ProduitRepository;
@@ -42,6 +43,9 @@ public class ProduitBusiness implements IProduitBusiness {
 
     @Autowired
     private PhotoRepository photoRepository;
+    
+    @Autowired
+    private CaracteristiqueRepository caracteristiqueRepository;
 
     /**
      * Ajoute un produit dans la base de données.
@@ -254,13 +258,27 @@ public class ProduitBusiness implements IProduitBusiness {
 
     @Override
     public ProduitDTO addCaracteristique(String reference, CaracteristiqueDTO caracteristique, String valeur) {
+        if(reference == null || caracteristique == null || valeur == null) {
+            throw new GraphQLCustomException("Erreur dans l'ajout de la caracteristique au produit (la référence, la caracteristique et la valeur ne peuvent pas être null)");
+        } else if(reference.trim().isEmpty() || valeur.trim().isEmpty()) {
+            GraphQLCustomException graphQLCustomException = new GraphQLCustomException("Erreur dans l'ajout de la caracteristique au produit (la référence, la caracteristique et la valeur ne peuvent pas être null)");
+            graphQLCustomException.ajouterExtension("Référence", reference);
+            graphQLCustomException.ajouterExtension("Caracteristique", caracteristique.getLibelle());
+            graphQLCustomException.ajouterExtension("Valeur", valeur);
+            throw graphQLCustomException;
+        }
+        //Verif que le produit et la caracteristique existe
         Optional<Produit> produitOptional = produitRepository.findById(reference);
         if (!produitOptional.isPresent()) {
             throw new GraphQLCustomException("Le produit recherché n'existe pas.");
         }
+        Optional<Caracteristique> carateristiqueOptional = caracteristiqueRepository.findById(caracteristique.getId());
+        if (!carateristiqueOptional.isPresent() || !carateristiqueOptional.get().getLibelle().equals(caracteristique.getLibelle())) {
+            throw new GraphQLCustomException("La caracteristique recherchée n'existe pas.");
+        }
         //Ajout de la caracteristique
         Produit produit = produitOptional.get();
-        ProduitCaracteristique produitCaracteristique = new ProduitCaracteristique(produit, CaracteristiqueTransformer.dtoToEntity(caracteristique));
+        ProduitCaracteristique produitCaracteristique = new ProduitCaracteristique(produit, carateristiqueOptional.get());
         produitCaracteristique.setValeur(valeur);
         List<ProduitCaracteristique> listCaracteristique = produit.getCaracterisitiques();
         listCaracteristique.add(produitCaracteristique);

@@ -9,6 +9,7 @@ import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
 import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.business.dto.transformer.CaracteristiqueTransformer;
 import com.projet.ecommerce.business.impl.ProduitBusiness;
+import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Caracteristique;
 import com.projet.ecommerce.persistance.entity.Produit;
 import com.projet.ecommerce.persistance.entity.ProduitCaracteristique;
@@ -62,6 +63,58 @@ public class ProduitCaracteristiqueTest {
             have = have || ("Test".equals(pc.getValeur()) && pc.getCaracteristique().getLibelle().equals(carac.getLibelle()));
         }
         Assert.assertTrue(have);
+    }
+    
+    @Test(expected = GraphQLCustomException.class)
+    public void testAddNullCaracteristique() {
+        TypedQuery<Produit> tqp = entityManager.createQuery("Select p From Produit p", Produit.class);
+        Produit p = tqp.getResultList().get(0);
+        int before = p.getCaracterisitiques().size();    
+        ProduitDTO pdto = produitBusiness.addCaracteristique(p.getReferenceProduit(), null, "Test");
+    }
+    
+    @Test(expected = GraphQLCustomException.class)
+    public void testAddBadCaracteristique() {
+        //Recup un produit
+        TypedQuery<Produit> tqp = entityManager.createQuery("Select p From Produit p", Produit.class);
+        Produit p = tqp.getResultList().get(0);
+        int before = p.getCaracterisitiques().size();
+        
+        //Ajoute une caracteristique
+        TypedQuery<Integer> tqc = entityManager.createQuery("Select max(c.idCaracteristique) From Caracteristique c", Integer.class);
+        int lastid = tqc.getSingleResult();
+        Caracteristique carac = new Caracteristique();
+        carac.setIdCaracteristique(lastid + 1);
+        carac.setLibelle("Bonjour");
+        ProduitDTO pdto = produitBusiness.addCaracteristique(p.getReferenceProduit(), CaracteristiqueTransformer.entityToDto(carac), "Test");
+    }
+    
+    @Test(expected = GraphQLCustomException.class)
+    public void testAddNullProduit() {
+        CaracteristiqueDTO carac = CaracteristiqueTransformer.entityToDto(caracteristiqueRepository.findById(1).get());
+        produitBusiness.addCaracteristique(null, carac, "Test");
+    }
+    
+    @Test(expected = GraphQLCustomException.class)
+    public void testAddEmptyProduit() {
+        CaracteristiqueDTO carac = CaracteristiqueTransformer.entityToDto(caracteristiqueRepository.findById(1).get());
+        produitBusiness.addCaracteristique("\t", carac, "Test");
+    }
+    
+    @Test(expected = GraphQLCustomException.class)
+    public void testAddNullValeur() {
+        TypedQuery<Produit> tqp = entityManager.createQuery("Select p From Produit p", Produit.class);
+        Produit p = tqp.getResultList().get(0);
+        CaracteristiqueDTO carac = CaracteristiqueTransformer.entityToDto(caracteristiqueRepository.findById(1).get());
+        produitBusiness.addCaracteristique(p.getReferenceProduit(), carac, null);
+    }
+    
+    @Test(expected = GraphQLCustomException.class)
+    public void testAddEmptyValeur() {
+        TypedQuery<Produit> tqp = entityManager.createQuery("Select p From Produit p", Produit.class);
+        Produit p = tqp.getResultList().get(0);
+        CaracteristiqueDTO carac = CaracteristiqueTransformer.entityToDto(caracteristiqueRepository.findById(1).get());
+        produitBusiness.addCaracteristique(p.getReferenceProduit(), carac, "\t");
     }
     
 }
