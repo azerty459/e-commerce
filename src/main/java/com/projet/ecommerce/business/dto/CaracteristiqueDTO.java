@@ -1,12 +1,12 @@
 package com.projet.ecommerce.business.dto;
 
-public class CaracteristiqueDto {
+public class CaracteristiqueDTO {
     
     private int id;
     
     private String libelle;
     
-    public CaracteristiqueDto(int id, String libelle) {
+    public CaracteristiqueDTO(int id, String libelle) {
         this.id = id;
         this.libelle = libelle;
     }
@@ -26,5 +26,5 @@ public class CaracteristiqueDto {
     public void setLibelle(String label) {
         this.libelle = label;
     }
-    
+
 }

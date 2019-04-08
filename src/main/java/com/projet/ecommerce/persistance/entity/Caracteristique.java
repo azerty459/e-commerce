@@ -21,7 +21,7 @@ public class Caracteristique {
     private int idCaracteristique;
     
     @Column(name = "libelle_caracteristique")
-    private String libelle;
+    private String libelle = "";
     
     @OneToMany(
         mappedBy = "caracteristique",
@@ -58,6 +58,19 @@ public class Caracteristique {
     @Override
     public String toString() {
         return "(" + idCaracteristique + ") " + libelle;
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) {
+            return true;
+        }
+        else if(o == null || !(o instanceof Caracteristique)) {
+            return false;
+        }
+        Caracteristique other = (Caracteristique) o;
+        return this.idCaracteristique == other.idCaracteristique &&
+                this.libelle.equals(other.libelle);
     }
     
 }

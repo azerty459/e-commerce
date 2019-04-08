@@ -3,7 +3,7 @@ package com.projet.ecommerce.business.impl;
 import static com.projet.ecommerce.utilitaire.Utilitaire.mergeObjects;
 
 import com.projet.ecommerce.business.ICaracteristiqueBusiness;
-import com.projet.ecommerce.business.dto.CaracteristiqueDto;
+import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
 import com.projet.ecommerce.business.dto.transformer.CaracteristiqueTransformer;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Caracteristique;
@@ -20,7 +20,7 @@ public class CaracteristiqueBusiness implements ICaracteristiqueBusiness {
     private CaracteristiqueRepository caracteristiqueRepository;
 
     @Override
-    public CaracteristiqueDto add(String libelle) {
+    public CaracteristiqueDTO add(String libelle) {
         if(libelle == null || libelle.trim().isEmpty()) {
             GraphQLCustomException gqlex = new GraphQLCustomException("Erreur dans l'ajout de la caracteristique (le libellé ne peut pas être null)");
             gqlex.ajouterExtension("libelle", libelle);
@@ -32,7 +32,7 @@ public class CaracteristiqueBusiness implements ICaracteristiqueBusiness {
     }
 
     @Override
-    public CaracteristiqueDto update(CaracteristiqueDto carac) {
+    public CaracteristiqueDTO update(CaracteristiqueDTO carac) {
         if(carac == null) {
             return null;
         } else if(carac.getLibelle().trim().isEmpty()) {
@@ -66,7 +66,7 @@ public class CaracteristiqueBusiness implements ICaracteristiqueBusiness {
     }
 
     @Override
-    public Collection<CaracteristiqueDto> getAll() {
+    public Collection<CaracteristiqueDTO> getAll() {
         Iterable<Caracteristique> collectionCarac = caracteristiqueRepository.findAll();
         return CaracteristiqueTransformer.entityToDto(collectionCarac);
     }
