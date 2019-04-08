@@ -1,5 +1,7 @@
 package com.projet.ecommerce.business;
 
+import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
+import com.projet.ecommerce.business.dto.ProduitCaracteristiqueDTO;
 import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.persistance.entity.Produit;
 import org.springframework.data.domain.Page;
@@ -66,6 +68,28 @@ public interface IProduitBusiness {
      * @return une page de produit
      */
     Page<Produit> getPage(int pageNumber, int nb, String nom, int IDcategorie);
+    
+    /**
+     * Ajoute une caracteristique au produit
+     * 
+     * @param caracteristique La caracteristique à ajouter
+     * @return L'objet produit modifié
+     */
+    ProduitDTO addCaracteristique(CaracteristiqueDTO caracteristique);
 
+    /**
+     * Supprime une caracteristique au produit
+     * 
+     * @param caracteristique La caracteristique à supprimer
+     * @return L'objet produit modifié
+     */
+    ProduitDTO deleteCaracterisitque(CaracteristiqueDTO caracteristique);
+    
+    /**
+     * Retourne toutes les caracteristiques d'un produit
+     * 
+     * @return La liste des caracteristiques et leur valeur pour le porduit
+     */
+    List<ProduitCaracteristiqueDTO> getAllCaracteristiques();
 
 }
