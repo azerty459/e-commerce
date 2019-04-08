@@ -406,13 +406,23 @@ public class CategorieBusinessTests {
 
         Mockito.when(categorieRepository.findParents(Mockito.any())).thenReturn(categories);
 
-        Map<Categorie, Collection<Categorie>> resultat;
-        resultat = categorieBusiness.construireAssociationEnfantsChemins(categories);
+        Map<Categorie, Collection<Categorie>> resultat = categorieBusiness.construireAssociationEnfantsChemins(categories);
 
         // Tests
-        Assert.assertEquals(resultat.get(cat1), "");
-        Assert.assertEquals(resultat.get(cat2), "Transport");
-        Assert.assertEquals(resultat.get(cat3), "Transport > Aérien");
+        final Collection<Categorie> categoryParent1 = resultat.get(cat1);
+        Assert.assertNotNull(categoryParent1);
+        Assert.assertEquals(0, categoryParent1.size());
+
+        final Collection<Categorie> categoryParent2 = resultat.get(cat2);
+        Assert.assertNotNull(categoryParent2);
+        Assert.assertEquals(1, categoryParent2.size());
+        Assert.assertEquals(cat2.getNomCategorie(), new ArrayList<>(categoryParent2).get(0).getNomCategorie());
+
+        final Collection<Categorie> categoryParent3 = resultat.get(cat3);
+        Assert.assertNotNull(categoryParent3);
+        final List<Categorie> categoryParentList3 = new ArrayList<>(categoryParent3);
+        Assert.assertEquals(cat1.getNomCategorie(), categoryParentList3.get(0).getNomCategorie());
+        Assert.assertEquals(cat2.getNomCategorie(), categoryParentList3.get(1).getNomCategorie());
 
     }
 
