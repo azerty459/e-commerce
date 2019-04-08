@@ -100,7 +100,7 @@ public class ProduitBusinessTests {
         categoriesProduit.add(2);
         categoriesProduit.add(3);
 
-        Mockito.when(categorieRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(categorie));
+        //Mockito.when(categorieRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(categorie));
         Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
 
         ProduitDTO retour = produitBusiness.add("A05A01", "Test", "Test", 4.7f, categoriesProduit, null);
