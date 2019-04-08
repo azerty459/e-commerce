@@ -9,6 +9,6 @@ public interface ProduitRepositoryCustom {
 
     Collection<Produit> findAllWithCriteria(String ref, String cat);
     
-    Collection<Produit> findAllWithCriteriaRequeteComplexe(String nom, String partieNom, double moyenneAvisInferieurA, double moyenneAvisSuperieurA, Categorie categorie);
+    Collection<Produit> findAllWithCriteriaRequeteComplexe(String nom, String partieNom, Double moyenneAvisInferieurA, Double moyenneAvisSuperieurA, Categorie categorie);
 
 }

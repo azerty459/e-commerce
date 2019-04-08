@@ -1,7 +1,9 @@
 package com.projet.ecommerce.persistance.repository;
 
-import com.projet.ecommerce.persistance.entity.Categorie;
-import com.projet.ecommerce.persistance.entity.Produit;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,9 +14,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import com.projet.ecommerce.persistance.entity.Categorie;
+import com.projet.ecommerce.persistance.entity.Produit;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -83,5 +84,13 @@ public class ProduitRepositoryCustomTests {
         Assert.assertEquals(retourProduitCollection.get(0).getCategories().get(0).getNomCategorie(), TEMP_CATEGORIE.getNomCategorie());
 
         Assert.assertEquals(0, produitRepository.findAllWithCriteria("Toto", null).size());
-    }
+    } 
+    
+    @Test
+	public void findAllWithCriteriaRequeteComplexeByNull() {
+		Collection<Produit> lesProduits = produitRepository.findAll();
+	  	Collection<Produit> produitCollection = produitRepository.findAllWithCriteriaRequeteComplexe(null, null, null, null, null);
+	  	Assert.assertNotNull(produitCollection);
+	  	Assert.assertEquals(lesProduits.size(),produitCollection.size());
+	}
 }

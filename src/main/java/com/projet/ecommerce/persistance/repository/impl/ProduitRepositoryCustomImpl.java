@@ -1,5 +1,6 @@
 package com.projet.ecommerce.persistance.repository.impl;
 
+import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Produit;
 import com.projet.ecommerce.persistance.repository.ProduitRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,4 +53,40 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
         System.out.println(query.getResultList().size());
         return query.getResultList();
     }
+
+
+	@Override
+	public Collection<Produit> findAllWithCriteriaRequeteComplexe(String nom, String partieNom,
+			Double moyenneAvisInferieurA, Double moyenneAvisSuperieurA, Categorie categorie) {
+		Query query = null;
+		
+		if(nom == null) {
+			if(partieNom == null) {
+				if(moyenneAvisInferieurA == null) {
+					if(moyenneAvisSuperieurA == null) {
+						if(categorie == null) {
+							query = entityManager.createQuery(SQL_ALL_PRODUCTS, Produit.class);
+						}
+						else {
+							System.out.println("Else categorie");
+						}
+					}
+					else {
+						System.out.println("Else moyenneAvisSuperieurA");
+					}
+				}
+				else {
+					System.out.println("Else moyenneAvisInferieurA");
+				}
+			}
+			else {
+				System.out.println("Else partieNom");
+			}
+		}
+		else {
+			System.out.println("Else nom");
+		}
+		return query.getResultList();
+	}
+	
 }
