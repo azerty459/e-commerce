@@ -30,23 +30,23 @@ public class ProduitCaracteristiqueTransformer {
         return pcdto;
     }
     
-    public static ProduitCaracteristique dtoToEntity(ProduitCaracteristiqueDTO pcdto) {
-        if(pcdto == null) {
+    public static ProduitCaracteristique dtoToEntity(ProduitCaracteristiqueDTO pcDto) {
+        if(pcDto == null) {
             return null;
         }
         ProduitCaracteristique pc = new ProduitCaracteristique();
-        pc.setCaracteristique(CaracteristiqueTransformer.dtoToEntity(pcdto.getCaracteristique()));
+        pc.setCaracteristique(CaracteristiqueTransformer.dtoToEntity(pcDto.getCaracteristique()));
         pc.setId(new ProduitCaracteristiqueId(pc.getProduit().getReferenceProduit(), pc.getCaracteristique().getIdCaracteristique()));
-        pc.setValeur(pcdto.getValeur());
+        pc.setValeur(pcDto.getValeur());
         return pc;
     }
     
-    public static Collection<ProduitCaracteristique> dtoToEntity(Iterable<ProduitCaracteristiqueDTO> pcdtoIte) {
-        if(pcdtoIte == null) {
+    public static Collection<ProduitCaracteristique> dtoToEntity(Iterable<ProduitCaracteristiqueDTO> pcDtoIte) {
+        if(pcDtoIte == null) {
             return null;
         }
         Collection<ProduitCaracteristique> pc = new ArrayList<>();
-        for(ProduitCaracteristiqueDTO pcdto : pcdtoIte) {
+        for(ProduitCaracteristiqueDTO pcdto : pcDtoIte) {
             pc.add(dtoToEntity(pcdto));
         }
         return pc;
