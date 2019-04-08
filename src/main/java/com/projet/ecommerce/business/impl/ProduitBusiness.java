@@ -289,7 +289,41 @@ public class ProduitBusiness implements IProduitBusiness {
 
     @Override
     public ProduitDTO deleteCaracterisitque(String reference, CaracteristiqueDTO caracteristique) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(reference == null || caracteristique == null) {
+            throw new GraphQLCustomException("Erreur dans l'ajout de la caracteristique au produit (la référence, la caracteristique et la valeur ne peuvent pas être null)");
+        } else if(reference.trim().isEmpty()) {
+            GraphQLCustomException graphQLCustomException = new GraphQLCustomException("Erreur dans l'ajout de la caracteristique au produit (la référence, la caracteristique et la valeur ne peuvent pas être null)");
+            graphQLCustomException.ajouterExtension("Référence", reference);
+            graphQLCustomException.ajouterExtension("Caracteristique", caracteristique.getLibelle());
+            throw graphQLCustomException;
+        }
+        //Verif que le produit et la caracteristique existe
+        Optional<Produit> produitOptional = produitRepository.findById(reference);
+        if (!produitOptional.isPresent()) {
+            throw new GraphQLCustomException("Le produit recherché n'existe pas.");
+        }
+        Optional<Caracteristique> carateristiqueOptional = caracteristiqueRepository.findById(caracteristique.getId());
+        if (!carateristiqueOptional.isPresent() || !carateristiqueOptional.get().getLibelle().equals(caracteristique.getLibelle())) {
+            throw new GraphQLCustomException("La caracteristique recherchée n'existe pas.");
+        }
+        //Trouve la caracteristique sur le produit
+        Produit produit = produitOptional.get();
+        Caracteristique c = carateristiqueOptional.get();
+        ProduitCaracteristique produitCaracteristique = null;
+        for(ProduitCaracteristique pc : produit.getCaracterisitiques()) {
+            if(pc.getCaracteristique().getIdCaracteristique() == caracteristique.getId()) {
+                produitCaracteristique = pc;
+                break;
+            }
+        }
+        if(produitCaracteristique == null) {
+            throw new GraphQLCustomException("Le produit n'a pas la caracteristique recherchée n'existe pas.");
+        }
+        //Supprime la carateristique
+        if(!produit.getCaracterisitiques().remove(produitCaracteristique)) {
+            throw new GraphQLCustomException("Le produit n'a pas la caracteristique recherchée n'existe pas.");
+        }
+        return ProduitTransformer.entityToDto(produitRepository.save(produit));
     }
 
     @Override
