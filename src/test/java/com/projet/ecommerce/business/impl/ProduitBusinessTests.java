@@ -1,9 +1,14 @@
 package com.projet.ecommerce.business.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
+import com.projet.ecommerce.business.dto.ProduitDTO;
+import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
+import com.projet.ecommerce.persistance.entity.Categorie;
+import com.projet.ecommerce.persistance.entity.Photo;
+import com.projet.ecommerce.persistance.entity.Produit;
+import com.projet.ecommerce.persistance.repository.CategorieRepository;
+import com.projet.ecommerce.persistance.repository.PhotoRepository;
+import com.projet.ecommerce.persistance.repository.ProduitRepository;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -19,22 +24,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
-import com.projet.ecommerce.business.dto.ProduitDTO;
-import com.projet.ecommerce.business.dto.TypeCaracteristiqueDTO;
-import com.projet.ecommerce.business.dto.transformer.CaracteristiqueTransformer;
-import com.projet.ecommerce.business.dto.transformer.TypeCaracteristiqueTransformer;
-import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
-import com.projet.ecommerce.persistance.entity.Caracteristique;
-import com.projet.ecommerce.persistance.entity.Categorie;
-import com.projet.ecommerce.persistance.entity.Photo;
-import com.projet.ecommerce.persistance.entity.Produit;
-import com.projet.ecommerce.persistance.entity.TypeCaracteristique;
-import com.projet.ecommerce.persistance.repository.CaracteristiqueRepository;
-import com.projet.ecommerce.persistance.repository.CategorieRepository;
-import com.projet.ecommerce.persistance.repository.PhotoRepository;
-import com.projet.ecommerce.persistance.repository.ProduitRepository;
-import com.projet.ecommerce.persistance.repository.ProduitRepositoryCustom;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
@@ -47,13 +39,7 @@ public class ProduitBusinessTests {
     private CategorieRepository categorieRepository;
 
     @Mock
-    private ProduitRepositoryCustom produitRepositoryCustom;
-
-    @Mock
     private PhotoRepository photoRepository;
-    
-    @Mock
-    private CaracteristiqueRepository caracteristiqueRepository;
 
     @Mock
     private Page page;
@@ -71,13 +57,7 @@ public class ProduitBusinessTests {
 
     @Test
     public void add() {
-        Produit produit = new Produit();
-        produit.setReferenceProduit("A05A01");
-        produit.setPrixHT(2.1f);
-        produit.setDescription("Un livre");
-        produit.setNom("Livre1");
-        produit.setCategories(new ArrayList<>());
-        produit.setPhotos(new ArrayList<>());
+        Produit produit = buildProduit();
         Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
 
         ProduitDTO retour1 = produitBusiness.add("A05A01", "Test", "Test", 4.7f, null, null);
@@ -95,110 +75,44 @@ public class ProduitBusinessTests {
 
     @Test
     public void addProductAlreadyExist() {
-        
-        Produit produit = new Produit();
-        produit.setReferenceProduit("A05A01");
-        produit.setPrixHT(2.1f);
-        produit.setDescription("Un livre");
-        produit.setNom("Livre1");
-        produit.setCategories(new ArrayList<>());
-        produit.setPhotos(new ArrayList<>());
-        ProduitDTO retour = produitBusiness.add("A05A01", "Test", "Test", 4.7f, null, null);
+        Produit produit = buildProduit();
 
-        Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
         // Je teste si le produit business m'envoie bien une GraphQLCustomException, si le produit existe déjà
         thrown.expect(GraphQLCustomException.class);
         Mockito.when(produitRepository.findById(Mockito.anyString())).thenReturn(Optional.of(produit));
+        ProduitDTO retour = produitBusiness.add("A05A01", "Test", "Test", 4.7f, null, null);
         Assert.assertNull(retour);
     }
 
     @Test
     public void addProductWithCategories() {
-        Produit produit = new Produit();
-        produit.setReferenceProduit("A05A01");
-        produit.setPrixHT(2.1f);
-        produit.setDescription("Un livre");
-        produit.setNom("Livre1");
+        Produit produit = buildProduit();
 
         Categorie categorie = new Categorie();
         categorie.setNomCategorie("Transport");
         categorie.setIdCategorie(1);
         categorie.setBorneGauche(1);
         categorie.setBorneDroit(8);
-
-        List<Categorie> categorieList = new ArrayList<>();
-        categorieList.add(categorie);
-
-        produit.setCategories(categorieList);
-        produit.setPhotos(new ArrayList<>());
+        produit.getCategories().add(categorie);
 
         List<Integer> categoriesProduit = new ArrayList<>();
         categoriesProduit.add(1);
         categoriesProduit.add(2);
         categoriesProduit.add(3);
 
-
         Mockito.when(categorieRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(categorie));
+        Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
 
         ProduitDTO retour = produitBusiness.add("A05A01", "Test", "Test", 4.7f, categoriesProduit, null);
-
 
         Assert.assertNotNull(retour);
         Assert.assertEquals(retour.getClass(), ProduitDTO.class);
         Assert.assertEquals(retour.getCategories().get(0).getNom(), "Transport");
     }
-    
-   /* @Test
-    public void addProductWithCaracteristiques() {
-        Produit produit = new Produit();
-        produit.setReferenceProduit("A05A01");
-        produit.setPrixHT(2.1f);
-        produit.setDescription("Un livre");
-        produit.setNom("Livre1");
-        
-        TypeCaracteristique tc1 = new TypeCaracteristique();
-        tc1.setNomCaracteristique("Langue");
-        
-        Caracteristique c1 = new Caracteristique();
-        c1.setValeurCaracteristique("fr");
-        c1.setTypeCaracteristique(tc1);
-        c1.setProduit(produit);
-        
-        List<Caracteristique> listeCaracteristiques = new ArrayList<Caracteristique>();
-        listeCaracteristiques.add(c1);
-        produit.setCaracteristiques(listeCaracteristiques);
-
-        
-        Mockito.when(caracteristiqueRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(c1));
-        Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
-        //List<CaracteristiqueDTO> debug_Cara_DTO = CaracteristiqueTransformer.entityToDto(listeCaracteristiques);
-        
-        //Assert.assertNotNull(debug_Cara_DTO);
-        CaracteristiqueDTO cdto1 = new CaracteristiqueDTO();
-        cdto1.setTypeCaracteristique(TypeCaracteristiqueTransformer.entityToDto(tc1));
-        ProduitDTO pdto1 = new ProduitDTO();
-        cdto1.setProduit(pdto1);
-        List<CaracteristiqueDTO> ldto = new ArrayList<>();
-        ldto.add(cdto1);
-        pdto1.setCaracteristiques(ldto);
-        
-        ProduitDTO retour = produitBusiness.add("A05A01", "Test", "Test", 4.7f, null, ldto);
-
-        Assert.assertNotNull(retour);
-        Assert.assertEquals(retour.getClass(), ProduitDTO.class);
-        Assert.assertEquals(retour.getCaracteristiques().get(0).getTypeCaracteristique().getNomCaracteristique(), "Langue");
-        Assert.assertEquals(retour.getCaracteristiques().get(0).getValeurCaracteristique(), "fr");
-    }*/
 
     @Test
     public void updateFound() {
-        Produit produit = new Produit();
-        produit.setReferenceProduit("A05A01");
-        produit.setPrixHT(2.1f);
-        produit.setDescription("Un livre");
-        produit.setNom("Livre");
-        produit.setCategories(new ArrayList<>());
-        produit.setPhotos(new ArrayList<>());
+        Produit produit = buildProduit();
 
         Mockito.when(produitRepository.findById(Mockito.any())).thenReturn(Optional.of(produit));
         Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
@@ -219,23 +133,19 @@ public class ProduitBusinessTests {
 
     @Test
     public void updateNotFound() {
+        Produit produit = buildProduit();
+
         Mockito.when(produitRepository.findById(Mockito.any())).thenReturn(Optional.empty());
-        Produit produit = new Produit();
-        produit.setReferenceProduit("Test");
+
         thrown.expect(GraphQLCustomException.class);
         produitBusiness.update(produit);
     }
 
     @Test
     public void updateCatNotFound() {
-        Produit produit = new Produit();
-        produit.setReferenceProduit("A05A01");
+        Produit produit = buildProduit();
 
-        List<Categorie> categorieList = new ArrayList<>();
-        categorieList.add(new Categorie());
-
-        produit.setCategories(categorieList);
-        produit.setPhotos(new ArrayList<>());
+        produit.getCategories().add(new Categorie());
 
         Mockito.when(produitRepository.findById(Mockito.anyString())).thenReturn(Optional.of(produit));
 
@@ -243,66 +153,50 @@ public class ProduitBusinessTests {
         produitBusiness.update(produit);
     }
 
-
     @Test
     public void updateCatFound() {
-    	Categorie categorie = new Categorie();
-    	
-    	Produit produit = new Produit();
-    	produit.setReferenceProduit("A05A01");
-    	
-    	List<Categorie> categorieList = new ArrayList<>();
-    	categorieList.add(categorie);
-    	
-    	produit.setCategories(categorieList);
-    	produit.setPhotos(new ArrayList<>());
-    	
-    	Mockito.when(produitRepository.findById(Mockito.anyString())).thenReturn(Optional.of(produit));
-    	Mockito.when(categorieRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(categorie));
-    	Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
-    	
-    	ProduitDTO retour = produitBusiness.update(produit);
-    	Assert.assertNotNull(retour);
-    	Assert.assertEquals(1, retour.getCategories().size());
-    }
-    
-    @Test
-    public void updatePictureNotFound() {
-    	Produit produit = new Produit();
-    	produit.setReferenceProduit("A05A01");
-    	produit.setCategories(new ArrayList<>());
-    	
-    	List<Photo> photoList = new ArrayList<>();
-    	photoList.add(new Photo());
-    	
-    	produit.setPhotos(photoList);
-    	
-    	
-    	Mockito.when(produitRepository.findById(Mockito.anyString())).thenReturn(Optional.of(produit));
-    	
-    	thrown.expect(GraphQLCustomException.class);
-    	produitBusiness.update(produit);
-    }
-    @Test
-    public void updatePictureFound() {
-        Photo photo = new Photo();
+        Produit produit = buildProduit();
 
-        Produit produit = new Produit();
-        produit.setReferenceProduit("A05A01");
-        produit.setCategories(new ArrayList<>());
-
-        List<Photo> photoList = new ArrayList<>();
-        photoList.add(photo);
-
-        produit.setPhotos(photoList);
+        Categorie categorie = new Categorie();
+        produit.getCategories().add(categorie);
 
         Mockito.when(produitRepository.findById(Mockito.anyString())).thenReturn(Optional.of(produit));
-        Mockito.when(photoRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(photo));
+        Mockito.when(categorieRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(categorie));
         Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
 
         ProduitDTO retour = produitBusiness.update(produit);
         Assert.assertNotNull(retour);
-        Assert.assertEquals(1, retour.getPhotos().size());
+        Assert.assertEquals(1, retour.getCategories().size());
+    }
+
+    @Test
+    public void updatePictureNotFound() {
+        Produit produit = buildProduit();
+
+        final Photo photo = new Photo();
+        photo.setIdPhoto(1);
+        produit.setPhotoPrincipale(photo);
+
+        Mockito.when(photoRepository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
+        Mockito.when(produitRepository.findById(Mockito.anyString())).thenReturn(Optional.of(produit));
+
+        thrown.expect(GraphQLCustomException.class);
+        produitBusiness.update(produit);
+    }
+
+    @Test
+    public void updatePictureFound() {
+        Produit produit = buildProduit();
+
+        Photo photo = new Photo();
+        produit.setPhotoPrincipale(photo);
+
+        Mockito.when(produitRepository.findById(produit.getReferenceProduit())).thenReturn(Optional.of(produit));
+        Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
+
+        ProduitDTO retour = produitBusiness.update(produit);
+        Assert.assertNotNull(retour);
+        Assert.assertNotNull(retour.getPhotoPrincipale());
     }
 
     @Test
@@ -316,13 +210,7 @@ public class ProduitBusinessTests {
         Mockito.when(produitRepository.findAll()).thenReturn(produitList);
         Assert.assertEquals(produitBusiness.getAll().size(), 0);
 
-        Produit produit = new Produit();
-        produit.setReferenceProduit("A05A01");
-        produit.setPrixHT(2.1f);
-        produit.setDescription("Un livre");
-        produit.setNom("Livre1");
-        produit.setPhotos(new ArrayList<>());
-        produit.setCategories(new ArrayList<>());
+        Produit produit = buildProduit();
         produitList.add(produit);
 
         Mockito.when(produitRepository.findAll()).thenReturn(produitList);
@@ -341,35 +229,33 @@ public class ProduitBusinessTests {
 
     @Test
     public void getAllByRefAndCatAndName() {
-        // Initialisation
-        List<Produit> produitList = new ArrayList<>();
-        Mockito.when(produitRepositoryCustom.findAllWithCriteria(Mockito.anyString(), Mockito.anyString())).thenReturn(produitList);
-        Assert.assertEquals(produitRepositoryCustom.findAllWithCriteria(Mockito.anyString(), Mockito.anyString()).size(), 0);
+        List<ProduitDTO> produitDTOList;
 
-        Produit produit = new Produit();
-        produit.setReferenceProduit("A05A01");
-        produit.setPrixHT(2.1f);
-        produit.setDescription("Un livre");
-        produit.setNom("Livre1");
-        produit.setPhotos(new ArrayList<>());
-        produit.setCategories(new ArrayList<>());
+        // Initialisation
+        Produit produit = buildProduit();
+        List<Produit> produitList = new ArrayList<>();
         produitList.add(produit);
 
+        Mockito.when(produitRepository.findAllWithCriteria(Mockito.any(), Mockito.any())).thenReturn(produitList);
+        Mockito.when(produitRepository.findByNomContainingIgnoreCase(Mockito.any())).thenReturn(produitList);
+
         // Permets de tester si la méthode retourne une List avec une référence
-        Mockito.when(produitRepositoryCustom.findAllWithCriteria(Mockito.any(), Mockito.any())).thenReturn(produitList);
-        Mockito.verify(produitRepositoryCustom, Mockito.times(1)).findAllWithCriteria(Mockito.any(), Mockito.any());
-        List<ProduitDTO> produitDTOList = produitBusiness.getAll("ref", null, null);
+        produitDTOList = produitBusiness.getAll(produit.getReferenceProduit(), null, null);
         Assert.assertEquals(produitDTOList.size(), 1);
+        Mockito.verify(produitRepository, Mockito.times(1)).findAllWithCriteria(Mockito.any(), Mockito.any());
+        Mockito.verify(produitRepository, Mockito.times(0)).findByNomContainingIgnoreCase(Mockito.any());
 
         // Permets de tester si la méthode retourne une Liste avec un nom de catégorie
         produitDTOList = produitBusiness.getAll(null, "cat", null);
         Assert.assertEquals(produitDTOList.size(), 1);
+        Mockito.verify(produitRepository, Mockito.times(2)).findAllWithCriteria(Mockito.any(), Mockito.any());
+        Mockito.verify(produitRepository, Mockito.times(0)).findByNomContainingIgnoreCase(Mockito.any());
 
         // Permets de tester si la méthode retourne une Liste avec un nom de produit
-        Mockito.when(produitRepository.findByNomContainingIgnoreCase(Mockito.any())).thenReturn(produitList);
-        produitDTOList = produitBusiness.getAll(null, null, "Livre1");
-        Mockito.verify(produitRepository, Mockito.times(1)).findByNomContainingIgnoreCase(Mockito.anyString());
+        produitDTOList = produitBusiness.getAll(null, null, produit.getNom());
         Assert.assertEquals(produitDTOList.size(), 1);
+        Mockito.verify(produitRepository, Mockito.times(2)).findAllWithCriteria(Mockito.any(), Mockito.any());
+        Mockito.verify(produitRepository, Mockito.times(1)).findByNomContainingIgnoreCase(Mockito.any());
 
         // Teste si les valeurs sont cohérentes avec le produit retournées
         ProduitDTO retour = produitDTOList.get(0);
@@ -377,6 +263,18 @@ public class ProduitBusinessTests {
         Assert.assertEquals(produit.getDescription(), retour.getDescription());
         Assert.assertEquals(produit.getPrixHT(), retour.getPrixHT(), 0);
         Assert.assertEquals(produit.getReferenceProduit(), retour.getRef());
+    }
+
+    @NotNull
+    private Produit buildProduit() {
+        Produit produit = new Produit();
+        produit.setReferenceProduit("A05A01");
+        produit.setPrixHT(2.1f);
+        produit.setDescription("Un livre");
+        produit.setNom("Livre1");
+        produit.setPhotos(new ArrayList<>());
+        produit.setCategories(new ArrayList<>());
+        return produit;
     }
 
     @Test

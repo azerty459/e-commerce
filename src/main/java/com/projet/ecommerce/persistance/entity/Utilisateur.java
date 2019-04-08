@@ -2,7 +2,6 @@ package com.projet.ecommerce.persistance.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Collection;
 
 /**
  * Entité représentant la table utilisateur sous forme de classe.
@@ -31,7 +30,7 @@ public class Utilisateur {
     @Column(name = "prenom")
     private String prenom;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_role")
     private Role role;
 

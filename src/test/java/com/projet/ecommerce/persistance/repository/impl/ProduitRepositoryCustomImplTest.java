@@ -26,7 +26,7 @@ public class ProduitRepositoryCustomImplTest {
 	@Autowired
 	private CategorieBusiness serviceCategorie;
 	
-	@Test
+	/*@Test
 	public void requetecriteria() {
 		
 		//Les categories
@@ -88,6 +88,6 @@ public class ProduitRepositoryCustomImplTest {
 		
 		serviceProduit.add("produit1", "DisqueDur", "", 45.5f, lc, null);
 		
-	}
+	}*/
 
 }
