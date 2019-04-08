@@ -19,6 +19,23 @@ public class TypeCaracteristique {
     @Column
     private String libelle;
 
+    @Override
+    public boolean equals(Object o) {
+
+        if(this == o) {
+            return true;
+        }
+
+        if(o == null || o.getClass()!= this.getClass()) {
+            return false;
+        }
+
+        TypeCaracteristique typeCaracteristique = (TypeCaracteristique) o;
+
+        return (this.idTypeCaracteristique == ((TypeCaracteristique) o).getIdTypeCaracteristique() && this.libelle == ((TypeCaracteristique) o).getLibelle());
+
+    }
+
     public int getIdTypeCaracteristique() {
         return idTypeCaracteristique;
     }
