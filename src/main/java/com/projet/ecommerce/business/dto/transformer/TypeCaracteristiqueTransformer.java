@@ -20,7 +20,7 @@ public class TypeCaracteristiqueTransformer {
 		return typeCaracteristique;
 	}
 	
-	public static Collection<TypeCaracteristique> dtoToEntity(Collection<TypeCaracteristiqueDTO> typeCaracteristiqueDTOCollection){
+	public static Collection<TypeCaracteristique> listeDtoToEntity(Collection<TypeCaracteristiqueDTO> typeCaracteristiqueDTOCollection){
 		List<TypeCaracteristique> listeTypeCaracteristique = new ArrayList<TypeCaracteristique>();
 		for(TypeCaracteristiqueDTO typeCaracteristiqueDTO : typeCaracteristiqueDTOCollection) {
 			listeTypeCaracteristique.add(dtoToEntity(typeCaracteristiqueDTO));
@@ -36,7 +36,7 @@ public class TypeCaracteristiqueTransformer {
 		return typeCaracteristiqueDTO;
 	}
 	
-	public static Collection<TypeCaracteristiqueDTO> entityToDto(Collection<TypeCaracteristique> typeCaracteristiqueCollection){
+	public static Collection<TypeCaracteristiqueDTO> listeEntityToDto(Collection<TypeCaracteristique> typeCaracteristiqueCollection){
 		List<TypeCaracteristiqueDTO> listeTypeCaracteristiqueDTO = new ArrayList<TypeCaracteristiqueDTO>();
 		for(TypeCaracteristique typeCaracteristique : typeCaracteristiqueCollection) {
 			listeTypeCaracteristiqueDTO.add(entityToDto(typeCaracteristique));

@@ -1,5 +1,8 @@
 package com.projet.ecommerce.business.dto;
 
+import com.projet.ecommerce.persistance.entity.Produit;
+import com.projet.ecommerce.persistance.entity.TypeCaracteristique;
+
 public class CaracteristiqueDTO {
 	/**
 	 * l'id de la caractéristique
@@ -10,9 +13,9 @@ public class CaracteristiqueDTO {
 	 */
 	private String valeur;
 	
-	private ProduitDTO produitDTO;
+	private Produit produit;
 	
-	private TypeCaracteristiqueDTO typeCaracteristiqueDTO;
+	private TypeCaracteristique typeCaracteristique;
 	
 	public int getIdCaracteristique() {
 		return idCaracteristique;
@@ -30,20 +33,20 @@ public class CaracteristiqueDTO {
 		this.valeur = valeur;
 	}
 
-	public ProduitDTO getProduitDTO() {
-		return produitDTO;
+	public Produit getProduit() {
+		return produit;
 	}
 
-	public void setProduitDTO(ProduitDTO produitDTO) {
-		this.produitDTO = produitDTO;
+	public void setProduit(Produit produit) {
+		this.produit = produit;
 	}
 
-	public TypeCaracteristiqueDTO getTypeCaracteristiqueDTO() {
-		return typeCaracteristiqueDTO;
+	public TypeCaracteristique getTypeCaracteristique() {
+		return typeCaracteristique;
 	}
 
-	public void setTypeCaracteristiqueDTO(TypeCaracteristiqueDTO typeCaracteristiqueDTO) {
-		this.typeCaracteristiqueDTO = typeCaracteristiqueDTO;
+	public void setTypeCaracteristique(TypeCaracteristique typeCaracteristique) {
+		this.typeCaracteristique = typeCaracteristique;
 	}
 	
 }

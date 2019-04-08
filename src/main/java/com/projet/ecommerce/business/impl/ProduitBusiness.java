@@ -1,6 +1,7 @@
 package com.projet.ecommerce.business.impl;
 
 import com.projet.ecommerce.business.IProduitBusiness;
+import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
 import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.business.dto.transformer.ProduitTransformer;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
@@ -8,6 +9,7 @@ import com.projet.ecommerce.persistance.entity.Caracteristique;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Photo;
 import com.projet.ecommerce.persistance.entity.Produit;
+import com.projet.ecommerce.persistance.entity.TypeCaracteristique;
 import com.projet.ecommerce.persistance.repository.CaracteristiqueRepository;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import com.projet.ecommerce.persistance.repository.PhotoRepository;
@@ -54,7 +56,7 @@ public class ProduitBusiness implements IProduitBusiness {
      * @return l'objet produit crée ou null, s'il il manque une referenceProduit, un nom et un prixHT.
      */
     @Override
-    public ProduitDTO add(String referenceProduit, String nom, String description, float prixHT, List<Integer> categoriesProduit, List<Integer> caracteristiqueProduit) {
+    public ProduitDTO add(String referenceProduit, String nom, String description, float prixHT, List<Integer> categoriesProduit, List<CaracteristiqueDTO> caracteristiqueProduit) {
         if (referenceProduit.isEmpty() && nom.isEmpty()) {
             GraphQLCustomException graphQLCustomException = new GraphQLCustomException("Erreur dans l'ajout du produit (la référence, le nom et le prixHT ne peut être null)");
             graphQLCustomException.ajouterExtension("Référence", referenceProduit);
@@ -65,6 +67,16 @@ public class ProduitBusiness implements IProduitBusiness {
         if (produitRepository.findById(referenceProduit).isPresent()) {
             throw new GraphQLCustomException("Le produit à ajouter existe déjà.");
         }
+        
+        long compteurTypeCaracteristique = 
+        		caracteristiqueProduit.stream()
+        							.map(this::tousLesTypesCaracteristique)
+        							.distinct()
+        							.count();
+        if(caracteristiqueProduit.size() > compteurTypeCaracteristique) {
+        	throw new GraphQLCustomException("PB un produit ne peut avoir deux fois le même type de caractéristique");
+        }
+        
         Produit produit = new Produit();
         produit.setReferenceProduit(referenceProduit);
         produit.setNom(nom);
@@ -82,14 +94,18 @@ public class ProduitBusiness implements IProduitBusiness {
         }
         List<Caracteristique> caracteristiqueList = new ArrayList<>();
         if(caracteristiqueProduit != null) {
-        	for (int idCaracteristique : caracteristiqueProduit) {
-        		Optional<Caracteristique> caracteristiqueOptional = caracteristiqueRepository.findById(idCaracteristique);
+        	for (CaracteristiqueDTO caracteristique : caracteristiqueProduit) {
+        		Optional<Caracteristique> caracteristiqueOptional = caracteristiqueRepository.findById(caracteristique.getIdCaracteristique());
         		caracteristiqueOptional.map(caracteristiqueList::add);
         	}
         }
         produit.setCategories(categorieList);
         return ProduitTransformer.entityToDto(produitRepository.save(produit));
     }
+
+	private TypeCaracteristique tousLesTypesCaracteristique(CaracteristiqueDTO carac) {
+		return carac.getTypeCaracteristique();
+	}
 
     /**
      * Modifie le produit dans la base de données.

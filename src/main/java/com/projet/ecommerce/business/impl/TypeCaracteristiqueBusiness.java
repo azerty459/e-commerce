@@ -21,7 +21,7 @@ public class TypeCaracteristiqueBusiness implements ITypeCaracteristiqueBusiness
 	public List<TypeCaracteristiqueDTO> getAll() {
 		List<TypeCaracteristiqueDTO> typeCaracteristiqueList = 
 				new ArrayList<>(TypeCaracteristiqueTransformer
-						.entityToDto(typeCaracteristiqueRepository.findAll()));
+						.listeEntityToDto(typeCaracteristiqueRepository.findAll()));
 		
 		return typeCaracteristiqueList;
 	}
