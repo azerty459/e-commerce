@@ -3,7 +3,7 @@
 
 CREATE TABLE caracteristique (
   id_caracteristique SERIAL,
-  label_caracteristique VARCHAR(255),
+  libelle_caracteristique VARCHAR(255),
   PRIMARY KEY (id_caracteristique)
 );
 

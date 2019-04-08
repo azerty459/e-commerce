@@ -20,7 +20,7 @@ public class Caracteristique {
     @Column(name = "id_caracteristique")
     private int idCaracteristique;
     
-    @Column(name = "label_caracteristique")
+    @Column(name = "libelle_caracteristique")
     private String libelle;
     
     @OneToMany(
