@@ -18,16 +18,18 @@ public class CaracteristiqueBusiness implements ICaracteristiqueBusiness {
     
     @Autowired
     private CaracteristiqueRepository caracteristiqueRepository;
-
+    
     @Override
-    public CaracteristiqueDTO add(String libelle) {
-        if(libelle == null || libelle.trim().isEmpty()) {
-            GraphQLCustomException gqlex = new GraphQLCustomException("Erreur dans l'ajout de la caracteristique (le libellé ne peut pas être null)");
-            gqlex.ajouterExtension("libelle", libelle);
+    public CaracteristiqueDTO add(CaracteristiqueDTO caracteristiqueDTO) {
+        if(caracteristiqueDTO == null) {
+            throw new GraphQLCustomException("Erreur dans l'ajout de la caracteristique (la caracteristique ne peut pas être null)");
+        } else if(caracteristiqueDTO.getLibelle().trim().isEmpty()) {
+            GraphQLCustomException gqlex = new GraphQLCustomException("Erreur dans l'ajout de la caracteristique (le libellé ne peut pas être vide)");
+            gqlex.ajouterExtension("libelle", caracteristiqueDTO.getLibelle());
             throw gqlex;
         }
         Caracteristique c = new Caracteristique();
-        c.setLibelle(libelle);
+        c.setLibelle(caracteristiqueDTO.getLibelle());
         return CaracteristiqueTransformer.entityToDto(caracteristiqueRepository.save(c));
     }
 

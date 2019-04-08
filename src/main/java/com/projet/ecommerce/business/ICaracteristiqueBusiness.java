@@ -6,7 +6,7 @@ import java.util.Collection;
 
 public interface ICaracteristiqueBusiness {
     
-    CaracteristiqueDTO add(String label);
+    CaracteristiqueDTO add(CaracteristiqueDTO carac);
     
     CaracteristiqueDTO update(CaracteristiqueDTO carac);
     

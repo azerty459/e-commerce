@@ -45,9 +45,11 @@ public class CaracteristiqueBusinessTest {
     public void testAdd() {
         Collection<CaracteristiqueDTO> before = caracteristiqueBusiness.getAll();
         CaracteristiqueDTO cdto = caracteristiqueBusiness.add("Test");
+        
         Collection<CaracteristiqueDTO> after = caracteristiqueBusiness.getAll();
         Assert.assertEquals(before.size() + 1, after.size());
         Assert.assertTrue("Test".equals(cdto.getLibelle()));
+        
         Caracteristique c = caracteristiqueRepository.findById(cdto.getId()).get();
         Assert.assertTrue("Test".equals(c.getLibelle()));
         Assert.assertTrue(cdto.getId() == c.getIdCaracteristique());
