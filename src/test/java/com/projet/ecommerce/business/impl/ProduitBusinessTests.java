@@ -4,10 +4,7 @@ import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.business.dto.transformer.CaracteristiqueTransformer;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.*;
-import com.projet.ecommerce.persistance.repository.CaracteristiqueRepository;
-import com.projet.ecommerce.persistance.repository.CategorieRepository;
-import com.projet.ecommerce.persistance.repository.PhotoRepository;
-import com.projet.ecommerce.persistance.repository.ProduitRepository;
+import com.projet.ecommerce.persistance.repository.*;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
@@ -42,7 +39,7 @@ public class ProduitBusinessTests {
     private PhotoRepository photoRepository;
 
     @Mock
-    CaracteristiqueRepository caracteristiqueRepository;
+    TypeCaracteristiqueRepository typeCaracteristiqueRepository;
 
     @Mock
     private Page page;
@@ -128,7 +125,7 @@ public class ProduitBusinessTests {
         liste_caracteristique.add(c);
         produit.setCaracteristiques(liste_caracteristique);
 
-        //Mockito.when(caracteristiqueRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(c));
+        //Mockito.when(typeCaracteristiqueRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(tc));
         Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
 
         ProduitDTO retour = produitBusiness.add("A05A01", "Test", "Test", 4.7f, null, CaracteristiqueTransformer.entityToDto(liste_caracteristique));
