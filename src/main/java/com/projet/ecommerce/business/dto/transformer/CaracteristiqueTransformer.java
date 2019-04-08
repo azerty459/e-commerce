@@ -13,11 +13,13 @@ public class CaracteristiqueTransformer {
 	public static List<CaracteristiqueDTO> entitiesToDto(Iterable<Caracteristique> iterable){
 		List<CaracteristiqueDTO> caracsDto = new ArrayList<CaracteristiqueDTO>();
 		
-		for(Caracteristique carac : iterable) {
-			caracsDto.add(entityToDto(carac));
-		}
-		
+		if(iterable != null) {
+			for(Caracteristique carac : iterable) {
+				caracsDto.add(entityToDto(carac));
+			}
 		return caracsDto;
+		}
+		return null;
 	}
 	public static CaracteristiqueDTO entityToDto(Caracteristique carac) {
 		CaracteristiqueDTO caracteristiqueDto = new CaracteristiqueDTO();
@@ -41,10 +43,13 @@ public class CaracteristiqueTransformer {
 	public static List<Caracteristique> dtoToEntities(List<CaracteristiqueDTO> caracteristiques) {
 		 List<Caracteristique> caracs = new ArrayList<Caracteristique>();
 		
-		for(CaracteristiqueDTO caracDto : caracteristiques) {
-			caracs.add(dtoToEntity(caracDto));
-		}
-		
-		return caracs;
+		 if(caracteristiques != null) {
+			for(CaracteristiqueDTO caracDto : caracteristiques) {
+				caracs.add(dtoToEntity(caracDto));
+			}
+			
+			return caracs;
+		 }
+		 return null;
 	}
 }

@@ -54,6 +54,7 @@ public class ProduitBusiness implements IProduitBusiness {
     @Override
     public ProduitDTO add(String referenceProduit, String nom, String description, float prixHT, List<Integer> categoriesProduit,
     		List<CaracteristiqueDTO> caracteristiques) {
+    // FIXME à remplacer par un DTO
         if (referenceProduit.isEmpty() && nom.isEmpty()) {
             GraphQLCustomException graphQLCustomException = new GraphQLCustomException("Erreur dans l'ajout du produit (la référence, le nom et le prixHT ne peut être null)");
             graphQLCustomException.ajouterExtension("Référence", referenceProduit);
@@ -64,9 +65,11 @@ public class ProduitBusiness implements IProduitBusiness {
         if (produitRepository.findById(referenceProduit).isPresent()) {
             throw new GraphQLCustomException("Le produit à ajouter existe déjà.");
         }
-        long countDistinctCaracType = caracteristiques.stream().map(carac -> carac.getTypeCaracteristique()).distinct().count();
-        if(caracteristiques.size() > countDistinctCaracType) {
-        	throw new GraphQLCustomException("Le produit ne peut avoir deux caracteristiques de meme type.");
+        if(caracteristiques != null) {
+	        long countDistinctCaracType = caracteristiques.stream().map(carac -> carac.getTypeCaracteristique()).distinct().count();
+	        if(caracteristiques.size() > countDistinctCaracType) {
+	        	throw new GraphQLCustomException("Le produit ne peut avoir deux caracteristiques de meme type.");
+	        }
         }
         Produit produit = new Produit();
         produit.setReferenceProduit(referenceProduit);
