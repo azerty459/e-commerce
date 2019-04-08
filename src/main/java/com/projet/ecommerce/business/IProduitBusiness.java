@@ -72,18 +72,21 @@ public interface IProduitBusiness {
     /**
      * Ajoute une caracteristique au produit
      * 
+     * @param reference  La reference du produit
      * @param caracteristique La caracteristique à ajouter
+     * @param valeur La valeur de la caracteristique
      * @return L'objet produit modifié
      */
-    ProduitDTO addCaracteristique(CaracteristiqueDTO caracteristique);
+    ProduitDTO addCaracteristique(String reference, CaracteristiqueDTO caracteristique, String valeur);
 
     /**
      * Supprime une caracteristique au produit
      * 
+     * @param reference La reference du produit
      * @param caracteristique La caracteristique à supprimer
      * @return L'objet produit modifié
      */
-    ProduitDTO deleteCaracterisitque(CaracteristiqueDTO caracteristique);
+    ProduitDTO deleteCaracterisitque(String reference, CaracteristiqueDTO caracteristique);
     
     /**
      * Retourne toutes les caracteristiques d'un produit
