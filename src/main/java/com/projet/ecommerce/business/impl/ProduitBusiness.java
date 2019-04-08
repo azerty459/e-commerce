@@ -1,6 +1,8 @@
 package com.projet.ecommerce.business.impl;
 
 import com.projet.ecommerce.business.IProduitBusiness;
+import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
+import com.projet.ecommerce.business.dto.ProduitCaracteristiqueDTO;
 import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.business.dto.transformer.ProduitTransformer;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
@@ -245,4 +247,20 @@ public class ProduitBusiness implements IProduitBusiness {
         }
         return produitRepository.findAll(page);
     }
+
+    @Override
+    public ProduitDTO addCaracteristique(CaracteristiqueDTO caracteristique) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ProduitDTO deleteCaracterisitque(CaracteristiqueDTO caracteristique) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<ProduitCaracteristiqueDTO> getAllCaracteristiques() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
 }
