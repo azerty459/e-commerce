@@ -25,6 +25,6 @@ public class TestEssai {
 	@Test
 	public void getSize() {
 		int nombre = produitRepositoryCustomImpl.getNomberProduit();
-		Assert.assertEquals(0, nombre);
+		Assert.assertEquals(10, nombre);
 	}
 }

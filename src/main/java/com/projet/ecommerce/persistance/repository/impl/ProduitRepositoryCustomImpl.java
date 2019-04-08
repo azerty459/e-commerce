@@ -1,6 +1,7 @@
 package com.projet.ecommerce.persistance.repository.impl;
 
 import com.projet.ecommerce.persistance.entity.Produit;
+import com.projet.ecommerce.persistance.entity.ValeurCaracteristique;
 import com.projet.ecommerce.persistance.repository.ProduitRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -52,6 +53,7 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
         System.out.println(query.getResultList().size());
         return query.getResultList();
     }
+    
    
     public int getNomberProduit() {
     	
