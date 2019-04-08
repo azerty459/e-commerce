@@ -15,7 +15,7 @@ public class Caracteristique {
 	@Column(name = "id_caracteristique", nullable = false)
 	private int idCaracteristique;
 	
-	@Column(unique=true)
+	@Column(unique=true, nullable = false)
 	private String libelle;
 
 	public int getIdCaracteristique() {
