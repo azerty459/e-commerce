@@ -1,6 +1,8 @@
 package com.projet.ecommerce.business.impl;
 
+import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
 import com.projet.ecommerce.business.dto.ProduitDTO;
+import com.projet.ecommerce.business.dto.transformer.CaracteristiqueTransformer;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.*;
 import com.projet.ecommerce.persistance.repository.*;
@@ -83,7 +85,7 @@ public class ProduitBusinessTests {
         Assert.assertNull(retour);
     }
 
-   /* @Test
+   @Test
     public void addProductWithCategories() {
         Produit produit = buildProduit();
 
@@ -102,12 +104,12 @@ public class ProduitBusinessTests {
         Mockito.when(categorieRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(categorie));
         Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
 
-        ProduitDTO retour = produitBusiness.add("A05A01", "Test", "Test", 4.7f, categoriesProduit);
+        ProduitDTO retour = produitBusiness.add("A05A01", "Test", "Test", 4.7f, categoriesProduit, null);
 
         Assert.assertNotNull(retour);
         Assert.assertEquals(retour.getClass(), ProduitDTO.class);
         Assert.assertEquals(retour.getCategories().get(0).getNom(), "Transport");
-    }*/
+    }
 
     @Test
     public void addProductWithCaracteristiques() {
@@ -118,11 +120,11 @@ public class ProduitBusinessTests {
         produit.setNom("Livre1");
 
         TypeCaracteristique typeCaracteristique = new TypeCaracteristique();
-        typeCaracteristique.setLibelle("rrrrr");
+        typeCaracteristique.setLibelle("testTypeCaracteristique");
         typeCaracteristique.setIdTypeCaracteristique(1);
 
         Caracteristique caracteristique = new Caracteristique();
-        caracteristique.setValeur("aaaaaaaaaaaa");
+        caracteristique.setValeur("testCaracteristique");
         caracteristique.setIdCaracteristique(1);
         caracteristique.setTypeCaracteristique(typeCaracteristique);
 
@@ -132,21 +134,24 @@ public class ProduitBusinessTests {
         produit.setCaracteristiques(caracteristiqueList);
         produit.setPhotos(new ArrayList<>());
 
-        List<Integer> categoriesProduit = new ArrayList<>();
+        /*List<Integer> categoriesProduit = new ArrayList<>();
         categoriesProduit.add(1);
         categoriesProduit.add(2);
-        categoriesProduit.add(3);
+        categoriesProduit.add(3);*/
 
+        produit.setCaracteristiques(caracteristiqueList);
 
-        Mockito.when(typeCaracteristiqueRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(typeCaracteristique));
+        //Mockito.when(typeCaracteristiqueRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(typeCaracteristique));
         Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
 
-        /*ProduitDTO retour = produitBusiness.add("A05A01", "Test", "Test", 4.7f, categoriesProduit, caracteristiqueList);
+        List<CaracteristiqueDTO> caracteristiqueDTOList = CaracteristiqueTransformer.entityToDto(caracteristiqueList);
+        ProduitDTO retour = produitBusiness.add("A05A01", "Test", "Test", 4.7f, null, caracteristiqueDTOList);
 
 
         Assert.assertNotNull(retour);
         Assert.assertEquals(retour.getClass(), ProduitDTO.class);
-        Assert.assertEquals(retour.getCategories().get(0).getNom(), "Transport");*/
+        Assert.assertEquals(retour.getCaracteristiques().get(0).getValeur(), "testCaracteristique");
+        Assert.assertEquals(retour.getCaracteristiques().get(0).getTypeCaracteristique().getLibelle(), "testTypeCaracteristique");
     }
 
     @Test

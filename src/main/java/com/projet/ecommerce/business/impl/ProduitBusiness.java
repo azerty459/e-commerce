@@ -64,11 +64,15 @@ public class ProduitBusiness implements IProduitBusiness {
             throw new GraphQLCustomException("Le produit à ajouter existe déjà.");
         }
 
-        long nbCaracteristique = caracteristiqueDTOS.stream().map(CaracteristiqueDTO::getTypeCaracteristique).distinct().count();
 
-        if (nbCaracteristique > caracteristiqueDTOS.size()) {
-            throw new GraphQLCustomException("Erreur dans l'ajout du produit (la liste des caractéristiques ne peut contenir deux fois la même caractéristique)");
+        if (caracteristiqueDTOS != null) {
+            long nbCaracteristique = caracteristiqueDTOS.stream().map(CaracteristiqueDTO::getTypeCaracteristique).distinct().count();
+            if (nbCaracteristique > caracteristiqueDTOS.size()) {
+                throw new GraphQLCustomException("Erreur dans l'ajout du produit (la liste des caractéristiques ne peut contenir deux fois la même caractéristique)");
+            }
         }
+
+
 
         Produit produit = new Produit();
         produit.setReferenceProduit(referenceProduit);
