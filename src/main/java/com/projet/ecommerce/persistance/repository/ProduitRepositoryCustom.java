@@ -8,6 +8,6 @@ public interface ProduitRepositoryCustom {
 
     Collection<Produit> findAllWithCriteria(String ref, String cat);
 
-    public Collection<Produit> findProduitsWithCriteria(String nom, String partieNomProduit, String nomCategorie);
+    public Collection<Produit> findProduitsWithCriteria(Double borneSupAvisClient, String nom, String partieNomProduit, String nomCategorie);
 
 }

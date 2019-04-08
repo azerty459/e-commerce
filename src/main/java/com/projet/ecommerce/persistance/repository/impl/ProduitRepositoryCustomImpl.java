@@ -52,7 +52,7 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
             query = entityManager.createQuery(SQL_PRODUCT_BY_REFERENCE, Produit.class);
             query.setParameter("ref", ref);
         }
-        System.out.println(query.getResultList().size());
+        //System.out.println(query.getResultList().size());
         return query.getResultList();
     }
 
@@ -112,12 +112,19 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
 
     }*/
 
-    public Collection<Produit> findProduitsWithCriteria(String nomProduit, String partieNomProduit, String nomCategorie){
+    public Collection<Produit> findProduitsWithCriteria(Double borneSupAvisClient, String nomProduit, String partieNomProduit, String nomCategorie){
 
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Produit> q = criteriaBuilder.createQuery(Produit.class);
-        Root root = q.from(Produit.class);
+        Root<Produit> root = q.from(Produit.class);
         List<Predicate> predicates = new ArrayList<>();
+
+        if (borneSupAvisClient != null) {
+            Join avisClientsJoin = root.join("avisClients");
+            q.groupBy(avisClientsJoin.get("id"));
+            Predicate predicatAvis = criteriaBuilder.greaterThan(criteriaBuilder.avg(avisClientsJoin.get("note")), borneSupAvisClient);
+            predicates.add(predicatAvis);
+        }
 
         if (nomProduit != null) {
             predicates.add(criteriaBuilder.equal(root.get("nom"), nomProduit));
@@ -131,7 +138,6 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
             Join categoriesJoin = root.join("categories");
             predicates.add(criteriaBuilder.equal(categoriesJoin.get("nomCategorie"), nomCategorie));
         }
-
 
         q.where(predicates.toArray(new Predicate[predicates.size()]));
 
