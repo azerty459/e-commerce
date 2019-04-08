@@ -1,6 +1,8 @@
 package com.projet.ecommerce.persistance.repository;
 
 import com.projet.ecommerce.persistance.entity.Produit;
+import com.projet.ecommerce.persistance.entity.ValeurCaracteristique;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

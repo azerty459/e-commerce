@@ -1,11 +1,15 @@
 package com.projet.ecommerce.persistance.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Embeddable
-public class ValeurCaracteristiquePK {
+public class ValeurCaracteristiquePK implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 
 	@ManyToOne
 	@JoinColumn(name = "reference_produit")

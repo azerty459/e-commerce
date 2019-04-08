@@ -58,7 +58,7 @@ public class Produit {
     private List<Categorie> categoriesSupprime;
     
     //AJOUTÉ
-    @ManyToMany(mappedBy = "produit")
+    @OneToMany(mappedBy = "valeurCaracteristiquePK.produit")
     private List<ValeurCaracteristique> valeurCaracteristiques;
 
 	public List<ValeurCaracteristique> getValeurCaracteristiques() {
