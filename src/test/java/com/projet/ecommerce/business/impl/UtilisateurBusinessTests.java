@@ -5,7 +5,6 @@ import com.projet.ecommerce.business.dto.UtilisateurDTO;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Role;
 import com.projet.ecommerce.persistance.entity.Utilisateur;
-import com.projet.ecommerce.persistance.repository.RoleRepository;
 import com.projet.ecommerce.persistance.repository.UtilisateurRepository;
 import org.junit.Assert;
 import org.junit.Before;
@@ -21,7 +20,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,13 +34,7 @@ public class UtilisateurBusinessTests {
     private UtilisateurRepository utilisateurRepository;
 
     @Mock
-    private RoleRepository roleRepository;
-
-    @Mock
     private Page page;
-
-    @Mock
-    private PasswordEncoder passwordEncoder;
 
     @InjectMocks
     private UtilisateurBusiness utilisateurBusiness;
@@ -57,8 +49,7 @@ public class UtilisateurBusinessTests {
 
     @Test
     public void addNull() {
-        UtilisateurDTO utilisateurDTO = null;
-        Assert.assertNull(utilisateurBusiness.add(utilisateurDTO));
+        Assert.assertNull(utilisateurBusiness.add(null));
     }
 
     @Test
@@ -84,8 +75,6 @@ public class UtilisateurBusinessTests {
         thrown.expect(GraphQLCustomException.class);
         utilisateurBusiness.add(utilisateurDTO);
     }
-
-
 
     @Test
     public void addRoleNotExist() {
@@ -113,14 +102,10 @@ public class UtilisateurBusinessTests {
         utilisateurEntity.setRole(role);
 
         Mockito.when(utilisateurRepository.findByEmail(Mockito.anyString())).thenReturn(Optional.of(utilisateurEntity));
-        Mockito.when(roleRepository.findByNom(Mockito.anyString())).thenReturn(Optional.empty());
 
         thrown.expect(GraphQLCustomException.class);
         utilisateurBusiness.add(addUtilisateurDTO);
     }
-
-
-
 
     @Test
     public void update() {

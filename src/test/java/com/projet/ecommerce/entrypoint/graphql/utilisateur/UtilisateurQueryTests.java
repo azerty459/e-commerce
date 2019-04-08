@@ -47,7 +47,7 @@ public class UtilisateurQueryTests {
     public void testNbDataFetcher() {
         Map<String, DataFetcher> retourMap = utilisateurQuery.produitWiring().getFieldDataFetchers();
         Assert.assertNotNull(retourMap);
-        Assert.assertEquals(2, retourMap.size());
+        Assert.assertEquals(1, retourMap.size());
     }
 
     @Test

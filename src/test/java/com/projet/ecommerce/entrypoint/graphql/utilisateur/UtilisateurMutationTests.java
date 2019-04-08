@@ -48,14 +48,14 @@ public class UtilisateurMutationTests {
     public void testNbDataFetcher() {
         Map<String, DataFetcher> retourMap = utilisateurMutation.produitWiring().getFieldDataFetchers();
         Assert.assertNotNull(retourMap);
-        Assert.assertEquals(3, retourMap.size());
+        Assert.assertEquals(5, retourMap.size());
     }
 
     @Test
     public void addUtilisateur() {
         Map<String, DataFetcher> retourMap = utilisateurMutation.produitWiring().getFieldDataFetchers();
 
-        Map<String, String> linkedHashMap = new LinkedHashMap<String, String>();
+        Map<String, String> linkedHashMap = new LinkedHashMap<>();
         linkedHashMap.put("email", "test@gmail.com");
         linkedHashMap.put("mdp", "azerty");
 
@@ -73,7 +73,7 @@ public class UtilisateurMutationTests {
     public void updateUtilisateur() {
         Map<String, DataFetcher> retourMap = utilisateurMutation.produitWiring().getFieldDataFetchers();
 
-        Map<String, String> linkedHashMap = new LinkedHashMap<String, String>();
+        Map<String, String> linkedHashMap = new LinkedHashMap<>();
         linkedHashMap.put("email", "test@gmail.com");
         linkedHashMap.put("mdp", "azerty");
 
@@ -120,5 +120,13 @@ public class UtilisateurMutationTests {
         Mockito.verify(utilisateurBusiness, Mockito.times(1)).delete("test", 0);
         // Test avec nb appel add avec mauvais param
         Mockito.verify(utilisateurBusiness, Mockito.times(0)).delete("fgdfgf", 0);
+    }
+
+    public void isLogged() {
+        // FIXME à faire
+    }
+
+    public void signinUtilisateur() {
+        // FIXME à faire
     }
 }
