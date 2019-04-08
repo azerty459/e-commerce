@@ -8,8 +8,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
-import com.projet.ecommerce.business.dto.ProduitDTO;
-import com.projet.ecommerce.business.dto.TypeCaracteristiqueDTO;
 import com.projet.ecommerce.persistance.entity.Caracteristique;
 import com.projet.ecommerce.persistance.entity.Produit;
 import com.projet.ecommerce.persistance.entity.TypeCaracteristique;
@@ -21,8 +19,16 @@ public class CaracteristiqueTransformerTests {
 		CaracteristiqueDTO caracteristiqueDTO = new CaracteristiqueDTO();
 		caracteristiqueDTO.setIdCaracteristique(new Random().nextInt(1000));
 		caracteristiqueDTO.setValeur("Valeur de la caractéristique");
-		caracteristiqueDTO.setTypeCaracteristiqueDTO(new TypeCaracteristiqueDTO());
-		caracteristiqueDTO.setProduitDTO(new ProduitDTO());
+		TypeCaracteristique typeCar = new TypeCaracteristique();
+		typeCar.setIdTypeCaracteristique(new Random().nextInt(1000));
+		typeCar.setTypeCaracteristique("Longueur");
+		caracteristiqueDTO.setTypeCaracteristique(typeCar);
+		Produit produitTest = new Produit();
+		produitTest.setDescription("ceci est un test");
+		produitTest.setNom("test");
+		produitTest.setPrixHT(1);
+
+		caracteristiqueDTO.setProduit(produitTest);
 		
 		return caracteristiqueDTO;
 	}
@@ -31,8 +37,16 @@ public class CaracteristiqueTransformerTests {
 		Caracteristique caracteristique = new Caracteristique();
 		caracteristique.setIdCaracteristique(new Random().nextInt(1000));
 		caracteristique.setValeurCaracteristique("Valeur de la caractéristique");
-		caracteristique.setTypeCaracteristique(new TypeCaracteristique());
-		caracteristique.setProduit(new Produit());
+		TypeCaracteristique typeCar = new TypeCaracteristique();
+		typeCar.setIdTypeCaracteristique(new Random().nextInt(1000));
+		typeCar.setTypeCaracteristique("Longueur");
+		caracteristique.setTypeCaracteristique(typeCar);
+		Produit produitTest = new Produit();
+		produitTest.setDescription("ceci est un test");
+		produitTest.setNom("test");
+		produitTest.setPrixHT(1);
+
+		caracteristique.setProduit(produitTest);
 		
 		return caracteristique;
 	}
@@ -43,8 +57,8 @@ public class CaracteristiqueTransformerTests {
         Assert.assertNotNull(caracteristiqueDTO);
         Assert.assertEquals(caracteristique.getIdCaracteristique(), caracteristiqueDTO.getIdCaracteristique());
         Assert.assertEquals(caracteristique.getValeurCaracteristique(), caracteristiqueDTO.getValeur());
-        Assert.assertEquals(caracteristique.getProduit(), caracteristiqueDTO.getProduitDTO());
-        Assert.assertEquals(caracteristique.getTypeCaracteristique(), caracteristiqueDTO.getTypeCaracteristiqueDTO());
+        Assert.assertEquals(caracteristique.getProduit(), caracteristiqueDTO.getProduit());
+        Assert.assertEquals(caracteristique.getTypeCaracteristique(), caracteristiqueDTO.getTypeCaracteristique());
     }
 	
 	private List<CaracteristiqueDTO> getListeCaracteristiqueDTO() {
