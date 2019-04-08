@@ -5,6 +5,7 @@ import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
 import com.projet.ecommerce.business.dto.ProduitCaracteristiqueDTO;
 import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.business.dto.transformer.CaracteristiqueTransformer;
+import com.projet.ecommerce.business.dto.transformer.ProduitCaracteristiqueTransformer;
 import com.projet.ecommerce.business.dto.transformer.ProduitTransformer;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Caracteristique;
@@ -327,8 +328,21 @@ public class ProduitBusiness implements IProduitBusiness {
     }
 
     @Override
-    public List<ProduitCaracteristiqueDTO> getAllCaracteristiques() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<ProduitCaracteristiqueDTO> getAllCaracteristiques(String reference) {
+        if(reference == null) {
+            throw new GraphQLCustomException("Erreur dans l'ajout de la caracteristique au produit (la référence, la caracteristique et la valeur ne peuvent pas être null)");
+        } else if(reference.trim().isEmpty()) {
+            GraphQLCustomException graphQLCustomException = new GraphQLCustomException("Erreur dans l'ajout de la caracteristique au produit (la référence, la caracteristique et la valeur ne peuvent pas être null)");
+            graphQLCustomException.ajouterExtension("Référence", reference);
+            throw graphQLCustomException;
+        }
+        //Verif que le produit et la caracteristique existe
+        Optional<Produit> produitOptional = produitRepository.findById(reference);
+        if (!produitOptional.isPresent()) {
+            throw new GraphQLCustomException("Le produit recherché n'existe pas.");
+        }
+        Produit produit = produitOptional.get();
+        return new ArrayList<>(ProduitCaracteristiqueTransformer.entityToDto(produit.getCaracterisitiques()));
     }
     
 }

@@ -6,6 +6,7 @@
 package com.projet.ecommerce.refresh;
 
 import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
+import com.projet.ecommerce.business.dto.ProduitCaracteristiqueDTO;
 import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.business.dto.transformer.CaracteristiqueTransformer;
 import com.projet.ecommerce.business.dto.transformer.ProduitCaracteristiqueTransformer;
@@ -16,6 +17,8 @@ import com.projet.ecommerce.persistance.entity.Produit;
 import com.projet.ecommerce.persistance.entity.ProduitCaracteristique;
 import com.projet.ecommerce.persistance.repository.CaracteristiqueRepository;
 import com.projet.ecommerce.persistance.repository.ProduitRepository;
+import java.util.Collection;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import org.junit.Assert;
@@ -102,6 +105,12 @@ public class ProduitCaracteristiqueTest {
     }
     
     @Test(expected = GraphQLCustomException.class)
+    public void testAddBadProduit() {
+        CaracteristiqueDTO carac = CaracteristiqueTransformer.entityToDto(caracteristiqueRepository.findById(1).get());
+        produitBusiness.addCaracteristique("Ceci n'est pas une reference", carac, "Test");
+    }
+    
+    @Test(expected = GraphQLCustomException.class)
     public void testAddNullValeur() {
         TypedQuery<Produit> tqp = entityManager.createQuery("Select p From Produit p", Produit.class);
         Produit p = tqp.getResultList().get(0);
@@ -154,6 +163,14 @@ public class ProduitCaracteristiqueTest {
     }
     
     @Test(expected = GraphQLCustomException.class)
+    public void testDeleteBadProduit() {
+        TypedQuery<Produit> tqp = entityManager.createQuery("Select p From Produit p Inner join p.caracteristiques pc", Produit.class);
+        Produit p = tqp.getResultList().get(0);
+        Caracteristique carac = p.getCaracterisitiques().get(0).getCaracteristique();
+        produitBusiness.deleteCaracterisitque("Ceci n'est pas une reference", CaracteristiqueTransformer.entityToDto(carac));
+    }
+    
+    @Test(expected = GraphQLCustomException.class)
     public void testDeleteNullCaracteristique() {
         TypedQuery<Produit> tqp = entityManager.createQuery("Select p From Produit p Inner join p.caracteristiques pc", Produit.class);
         Produit p = tqp.getResultList().get(0);
@@ -170,6 +187,35 @@ public class ProduitCaracteristiqueTest {
         carac.setIdCaracteristique(lastid + 1);
         carac.setLibelle("Bonjour");
         produitBusiness.deleteCaracterisitque(p.getReferenceProduit(), CaracteristiqueTransformer.entityToDto(carac));
+    }
+    
+    @Test
+    public void testGetAll() {
+        TypedQuery<Produit> tqp = entityManager.createQuery("Select p From Produit p Inner join p.caracteristiques pc", Produit.class);
+        Produit p = tqp.getResultList().get(0);
+        List<ProduitCaracteristiqueDTO> pdto = produitBusiness.getAllCaracteristiques(p.getReferenceProduit());
+        Assert.assertEquals(p.getCaracterisitiques().size(), pdto.size());
+        for(int i = 0; i < pdto.size(); i++) {
+            ProduitCaracteristique pc = p.getCaracterisitiques().get(i);
+            ProduitCaracteristiqueDTO pcdto = pdto.get(i);
+            Assert.assertEquals(pc.getValeur(), pcdto.getValeur());
+            Assert.assertEquals(pc.getCaracteristique().getLibelle(), pcdto.getCaracteristique().getLibelle());
+        }
+    }
+    
+    @Test(expected = GraphQLCustomException.class)
+    public void testGetAllNullProduit() {
+        produitBusiness.getAllCaracteristiques(null);
+    }
+    
+    @Test(expected = GraphQLCustomException.class)
+    public void testGetAllEmptyProduit() {
+        produitBusiness.getAllCaracteristiques("\t");
+    }
+    
+    @Test(expected = GraphQLCustomException.class)
+    public void testGetAllBadProduit() {
+        produitBusiness.getAllCaracteristiques("Ceci n'est pas une reference");
     }
     
 }

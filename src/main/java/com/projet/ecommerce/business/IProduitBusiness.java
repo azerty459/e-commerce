@@ -91,8 +91,9 @@ public interface IProduitBusiness {
     /**
      * Retourne toutes les caracteristiques d'un produit
      * 
+     * @param reference La reference du produit
      * @return La liste des caracteristiques et leur valeur pour le porduit
      */
-    List<ProduitCaracteristiqueDTO> getAllCaracteristiques();
+    List<ProduitCaracteristiqueDTO> getAllCaracteristiques(String reference);
 
 }
