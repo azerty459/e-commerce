@@ -63,10 +63,13 @@ public class ProduitBusiness implements IProduitBusiness {
         if (produitRepository.findById(referenceProduit).isPresent()) {
             throw new GraphQLCustomException("Le produit à ajouter existe déjà.");
         }
-        
-        Long count = caracsDTO.stream().distinct().count();
-        if(count.intValue() < caracsDTO.size()) throw new GraphQLCustomException("Il existe des doublons dnas les caractéristiques");
-        
+
+        if(caracsDTO != null) {
+            long count = caracsDTO.stream().distinct().count();
+            if ((int) count < caracsDTO.size())
+                throw new GraphQLCustomException("Il existe des doublons dnas les caractéristiques");
+        }
+
         Produit produit = new Produit();
         produit.setReferenceProduit(referenceProduit);
         produit.setNom(nom);

@@ -84,7 +84,7 @@ public class  ProduitRepositoryCustomTests {
     @Transactional
     public void findAllWithCriteriaByCat() {
         List<Produit> retourProduitCollection = new ArrayList<>(produitRepository.findAllWithCriteria(null, "Livre"));
-        Assert.assertEquals(1, retourProduitCollection.size());
+        Assert.assertEquals(2, retourProduitCollection.size());
         Assert.assertEquals(retourProduitCollection.get(0).getReferenceProduit(), TEMP_INSERT.getReferenceProduit());
         Assert.assertEquals(retourProduitCollection.get(0).getNom(), TEMP_INSERT.getNom());
         Assert.assertEquals(retourProduitCollection.get(0).getPrixHT(), TEMP_INSERT.getPrixHT(), 0);

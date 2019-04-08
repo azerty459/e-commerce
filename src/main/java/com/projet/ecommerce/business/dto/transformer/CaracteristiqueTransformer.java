@@ -33,21 +33,22 @@ public class CaracteristiqueTransformer {
 	}
 	
 	public static List<Caracteristique> listDtoToEntity(List<CaracteristiqueDTO> listDto) {
-		List<Caracteristique> list = new ArrayList<Caracteristique>();
-		
-		for (CaracteristiqueDTO typeCaracteristiqueDTO : listDto) {
-			list.add(dtoToEntity(typeCaracteristiqueDTO));
-		}
+		List<Caracteristique> list = new ArrayList<>();
+
+		if(listDto != null)
+			for (CaracteristiqueDTO typeCaracteristiqueDTO : listDto)
+				list.add(dtoToEntity(typeCaracteristiqueDTO));
+
 		
 		return list;
 	}
 	
 	public static List<CaracteristiqueDTO> listEntityToDto(List<Caracteristique> list) {
-		List<CaracteristiqueDTO> listDto = new ArrayList<CaracteristiqueDTO>();
-		
-		for (Caracteristique typeCaracteristique : list) {
-			listDto.add(entityToDto(typeCaracteristique));
-		}
+		List<CaracteristiqueDTO> listDto = new ArrayList<>();
+
+		if(list != null)
+			for (Caracteristique typeCaracteristique : list)
+				listDto.add(entityToDto(typeCaracteristique));
 		
 		return listDto;
 	}
