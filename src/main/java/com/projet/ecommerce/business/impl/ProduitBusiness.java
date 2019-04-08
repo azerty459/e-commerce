@@ -65,15 +65,6 @@ public class ProduitBusiness implements IProduitBusiness {
             throw new GraphQLCustomException("Le produit à ajouter existe déjà.");
         }
 
-        long compteurTypeCaracteristique =
-                caracteristiqueProduit.stream()
-                        .map(this::tousLesTypesCaracteristique)
-                        .distinct()
-                        .count();
-        if (caracteristiqueProduit.size() > compteurTypeCaracteristique) {
-            throw new GraphQLCustomException("PB un produit ne peut avoir deux fois le même type de caractéristique");
-        }
-
         Produit produit = new Produit();
         produit.setReferenceProduit(referenceProduit);
         produit.setNom(nom);
@@ -91,6 +82,16 @@ public class ProduitBusiness implements IProduitBusiness {
         }
         List<Caracteristique> caracteristiqueList = new ArrayList<>();
         if (caracteristiqueProduit != null) {
+        	
+        	long compteurTypeCaracteristique =
+                    caracteristiqueProduit.stream()
+                            .map(this::tousLesTypesCaracteristique)
+                            .distinct()
+                            .count();
+            if (caracteristiqueProduit.size() > compteurTypeCaracteristique) {
+                throw new GraphQLCustomException("PB un produit ne peut avoir deux fois le même type de caractéristique");
+            }
+            
             for (CaracteristiqueDTO caracteristique : caracteristiqueProduit) {
                 Optional<Caracteristique> caracteristiqueOptional = caracteristiqueRepository.findById(caracteristique.getIdCaracteristique());
                 caracteristiqueOptional.map(caracteristiqueList::add);
