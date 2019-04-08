@@ -26,22 +26,22 @@ public class CaracteristiqueTransformer {
         return caracdto;
     }
     
-    public static Caracteristique dtoToEntity(CaracteristiqueDTO caracdto) {
-        if(caracdto == null) {
+    public static Caracteristique dtoToEntity(CaracteristiqueDTO caracDto) {
+        if(caracDto == null) {
             return null;
         }
         Caracteristique c = new Caracteristique();
-        c.setIdCaracteristique(caracdto.getId());
-        c.setLibelle(caracdto.getLibelle());
+        c.setIdCaracteristique(caracDto.getId());
+        c.setLibelle(caracDto.getLibelle());
         return c;
     }
     
-    public static Collection<Caracteristique> dtoToEntity(Iterable<CaracteristiqueDTO> caracdtoIte) {
-        if(caracdtoIte == null) {
+    public static Collection<Caracteristique> dtoToEntity(Iterable<CaracteristiqueDTO> caracDtoIte) {
+        if(caracDtoIte == null) {
             return null;
         }
         Collection<Caracteristique> carac = new ArrayList<>();
-        for(CaracteristiqueDTO caracdto : caracdtoIte) {
+        for(CaracteristiqueDTO caracdto : caracDtoIte) {
             carac.add(dtoToEntity(caracdto));
         }
         return carac;
