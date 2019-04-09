@@ -47,10 +47,12 @@ public class ProduitRepositoryCustomTests {
         TEMP_AVIS_CLIENT = new AvisClient();
         TEMP_AVIS_CLIENT.setId(1);
         TEMP_AVIS_CLIENT.setNote(5);
+        TEMP_AVIS_CLIENT.setProduit(TEMP_INSERT);
 
         TEMP_AVIS_CLIENT2 = new AvisClient();
         TEMP_AVIS_CLIENT2.setId(2);
         TEMP_AVIS_CLIENT2.setNote(6);
+        TEMP_AVIS_CLIENT2.setProduit(TEMP_INSERT);
 
         TEMP_CATEGORIE = new Categorie();
         TEMP_CATEGORIE.setNomCategorie("Livre");
@@ -69,10 +71,12 @@ public class ProduitRepositoryCustomTests {
         TEMP_AVIS_CLIENT3 = new AvisClient();
         TEMP_AVIS_CLIENT3.setId(3);
         TEMP_AVIS_CLIENT3.setNote(7);
+        TEMP_AVIS_CLIENT3.setProduit(TEMP_INSERT2);
 
         TEMP_AVIS_CLIENT4 = new AvisClient();
         TEMP_AVIS_CLIENT4.setId(4);
         TEMP_AVIS_CLIENT4.setNote(6);
+        TEMP_AVIS_CLIENT4.setProduit(TEMP_INSERT2);
 
         TEMP_CATEGORIE2 = new Categorie();
         TEMP_CATEGORIE2.setNomCategorie("Jouet");
@@ -142,36 +146,46 @@ public class ProduitRepositoryCustomTests {
 
     @Test
     public void findProduitsWithNoCriteria(){
-        List<Produit> retourProduitCollection = new ArrayList<>(produitRepository.findProduitsWithCriteria(null,null, null, null));
+        List<Produit> retourProduitCollection = new ArrayList<>(produitRepository.findProduitsWithCriteria(null, null,null, null, null));
         Assert.assertEquals(2,retourProduitCollection.size());
     }
 
     @Test
     public void findProduitsWithNomProduitCriteria(){
-        List<Produit> retourProduitCollection = new ArrayList<>(produitRepository.findProduitsWithCriteria(null,"Test", null, null));
+        List<Produit> retourProduitCollection = new ArrayList<>(produitRepository.findProduitsWithCriteria(null,null,"Test", null, null));
         Assert.assertEquals(1,retourProduitCollection.size());
         Assert.assertEquals("Test",retourProduitCollection.get(0).getNom());
     }
 
     @Test
     public void findProduitsWithPartieNomProduitCriteria(){
-        List<Produit> retourProduitCollection = new ArrayList<>(produitRepository.findProduitsWithCriteria(null,null, "es", null));
+        List<Produit> retourProduitCollection = new ArrayList<>(produitRepository.findProduitsWithCriteria(null,null, null,"es", null));
         Assert.assertEquals(2,retourProduitCollection.size());
         Assert.assertEquals("Test",retourProduitCollection.get(0).getNom());
     }
 
     @Test
     public void findProduitsWithCategorieCriteria(){
-        List<Produit> retourProduitCollection = new ArrayList<>(produitRepository.findProduitsWithCriteria(null,null, null, "Livre"));
+        List<Produit> retourProduitCollection = new ArrayList<>(produitRepository.findProduitsWithCriteria(null,null,null, null, "Livre"));
         Assert.assertEquals(2,retourProduitCollection.size());
         Assert.assertEquals(1,retourProduitCollection.get(0).getCategories().stream().map(Categorie::getNomCategorie).filter(x -> x.equals("Livre")).count());
+        Assert.assertEquals(1,retourProduitCollection.get(0).getCategories().stream().map(Categorie::getNomCategorie).filter(x -> x.equals("Jouet")).count());
         Assert.assertEquals(1,retourProduitCollection.get(1).getCategories().stream().map(Categorie::getNomCategorie).filter(x -> x.equals("Livre")).count());
+        Assert.assertEquals(0,retourProduitCollection.get(1).getCategories().stream().map(Categorie::getNomCategorie).filter(x -> x.equals("Jouet")).count());
     }
 
     @Test
     public void findProduitsWithBorneSupAvisClientCriteria(){
-        List<Produit> retourProduitCollection = new ArrayList<>(produitRepository.findProduitsWithCriteria(5.5,null, null, null));
+        List<Produit> retourProduitCollection = new ArrayList<>(produitRepository.findProduitsWithCriteria(5.5,10.0,null, null, null));
         Assert.assertEquals(1,retourProduitCollection.size());
-        Assert.assertEquals(false,retourProduitCollection.get(0).getAvisClients().stream().mapToDouble(AvisClient::getNote).average().getAsDouble() > 5.5);
+        Assert.assertEquals(true,retourProduitCollection.get(0).getAvisClients().stream().mapToDouble(AvisClient::getNote).average().getAsDouble() > 5.5);
+        Assert.assertEquals(true,retourProduitCollection.get(0).getAvisClients().stream().mapToDouble(AvisClient::getNote).average().getAsDouble() < 10.0);
     }
+
+    @Test
+    public void findProduitsWithAllCriteria(){
+        List<Produit> retourProduitCollection = new ArrayList<>(produitRepository.findProduitsWithCriteria(5.5,10.0,"Test produit", "es", "Livre"));
+        Assert.assertEquals(1,retourProduitCollection.size());
+    }
+
 }

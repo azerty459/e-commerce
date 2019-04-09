@@ -1,5 +1,6 @@
 package com.projet.ecommerce.persistance.repository.impl;
 
+import com.projet.ecommerce.persistance.entity.AvisClient;
 import com.projet.ecommerce.persistance.entity.Produit;
 import com.projet.ecommerce.persistance.repository.ProduitRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,18 +113,27 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
 
     }*/
 
-    public Collection<Produit> findProduitsWithCriteria(Double borneSupAvisClient, String nomProduit, String partieNomProduit, String nomCategorie){
+    public Collection<Produit> findProduitsWithCriteria(Double borneInfAvisClient, Double borneSupAvisClient, String nomProduit, String partieNomProduit, String nomCategorie){
 
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Produit> q = criteriaBuilder.createQuery(Produit.class);
         Root<Produit> root = q.from(Produit.class);
         List<Predicate> predicates = new ArrayList<>();
+        List<Predicate> avisPredicate = new ArrayList<>();
 
-        if (borneSupAvisClient != null) {
-            Join avisClientsJoin = root.join("avisClients");
-            q.groupBy(avisClientsJoin.get("id"));
-            Predicate predicatAvis = criteriaBuilder.greaterThan(criteriaBuilder.avg(avisClientsJoin.get("note")), borneSupAvisClient);
-            predicates.add(predicatAvis);
+        if (borneInfAvisClient != null || borneSupAvisClient != null) {
+            Join<Produit,AvisClient> avisClientsJoin = root.join("avisClients");
+            Expression<Double> expressionMoyenne = criteriaBuilder.avg(avisClientsJoin.<Number>get("note"));
+            if (borneInfAvisClient != null) {
+                Predicate predicatAvisBorneInf = criteriaBuilder.greaterThan(expressionMoyenne, borneInfAvisClient);
+                avisPredicate.add(predicatAvisBorneInf);
+            }
+            if (borneSupAvisClient != null){
+                Predicate predicatAvisBorneSup = criteriaBuilder.lessThan(expressionMoyenne, borneSupAvisClient);
+                avisPredicate.add(predicatAvisBorneSup);
+            }
+            q.groupBy(root.get("referenceProduit"));
+            q.having(avisPredicate.toArray(new Predicate[predicates.size()]));
         }
 
         if (nomProduit != null) {
@@ -146,4 +156,13 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
         return result;
 
     }
+
+    /*public Collection<AvisClient> findAvisClient(){
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<AvisClient> q = criteriaBuilder.createQuery(AvisClient.class);
+        Root root = q.from(AvisClient.class);
+        List<AvisClient> result = entityManager.createQuery(q).getResultList();
+        return result;
+    }*/
+
 }
