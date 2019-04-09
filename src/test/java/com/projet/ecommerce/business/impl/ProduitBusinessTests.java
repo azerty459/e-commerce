@@ -127,12 +127,8 @@ public class ProduitBusinessTests {
         String valeur = "TestValeur";
         Produit produit = buildProduit();
         Caracteristique caracteristique = buildCaracteristique();
-        ProduitCaracteristiqueId produitCaracteristiqueId = new ProduitCaracteristiqueId(produit.getReferenceProduit(), caracteristique.getIdCaracteristique());
-        ProduitCaracteristique produitCaracteristique = new ProduitCaracteristique();
-        produitCaracteristique.setProduitCaracteristiqueId(produitCaracteristiqueId);
+        ProduitCaracteristique produitCaracteristique = new ProduitCaracteristique(produit, caracteristique);
         produitCaracteristique.setValeur(valeur);
-        produitCaracteristique.setCaracteristique(caracteristique);
-        produitCaracteristique.setProduit(produit);
         caracteristique.getProduits().add(produitCaracteristique);
         produit.getCaracterisitiques().add(produitCaracteristique);
         Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
@@ -333,7 +329,7 @@ public class ProduitBusinessTests {
         Assert.assertEquals(1, retour.getCaracteristiques().size());
         boolean have = false;
         for(ProduitCaracteristique pc : produit.getCaracterisitiques()) {
-            have = have || (valeur.equals(pc.getValeur()) && pc.getCaracteristique().getLibelle().equals(caracteristique.getLibelle()));
+            have = have || (valeur.equals(pc.getValeur()) && pc.getId().getCaracteristique().getLibelle().equals(caracteristique.getLibelle()));
         }
         Assert.assertTrue(have);
         //Test des exceptions
@@ -388,7 +384,7 @@ public class ProduitBusinessTests {
         Assert.assertEquals(sizeBefore - 1, retour.getCaracteristiques().size());
         boolean have = false;
         for(ProduitCaracteristique pc : produit.getCaracterisitiques()) {
-            have = have || (pc.getValeur().equals(pc.getValeur()) && pc.getCaracteristique().getLibelle().equals(caracteristique.getLibelle()));
+            have = have || (pc.getValeur().equals(pc.getValeur()) && pc.getId().getCaracteristique().getLibelle().equals(caracteristique.getLibelle()));
         }
         Assert.assertFalse(have);
         //Test des exceptions

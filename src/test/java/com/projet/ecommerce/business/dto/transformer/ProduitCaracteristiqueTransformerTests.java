@@ -5,7 +5,6 @@ import com.projet.ecommerce.business.dto.ProduitCaracteristiqueDTO;
 import com.projet.ecommerce.persistance.entity.Caracteristique;
 import com.projet.ecommerce.persistance.entity.Produit;
 import com.projet.ecommerce.persistance.entity.ProduitCaracteristique;
-import com.projet.ecommerce.persistance.entity.ProduitCaracteristiqueId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -60,8 +59,8 @@ public class ProduitCaracteristiqueTransformerTests {
     }
     
     private void assertTransformEquals (ProduitCaracteristique produitCaracteristique, ProduitCaracteristiqueDTO produitCaracteristiqueDTO) {
-        Assert.assertEquals(produitCaracteristique.getProduitCaracteristiqueId().getIdCaracteristique(), produitCaracteristiqueDTO.getCaracteristique().getId());
-        Assert.assertEquals(produitCaracteristique.getCaracteristique().getIdCaracteristique(), produitCaracteristiqueDTO.getCaracteristique().getId());
+        Assert.assertEquals(produitCaracteristique.getId().getCaracteristique().getIdCaracteristique(), produitCaracteristiqueDTO.getCaracteristique().getId());
+        Assert.assertEquals(produitCaracteristique.getId().getCaracteristique().getIdCaracteristique(), produitCaracteristiqueDTO.getCaracteristique().getId());
         Assert.assertEquals(produitCaracteristique.getValeur(), produitCaracteristiqueDTO.getValeur());
     }
     
@@ -78,12 +77,8 @@ public class ProduitCaracteristiqueTransformerTests {
         Produit p = new Produit();
         p.setReferenceProduit(ref);
         //Creation produit caracteristique
-        ProduitCaracteristiqueId pcid = new ProduitCaracteristiqueId(ref, id);
-        ProduitCaracteristique pc = new ProduitCaracteristique();
-        pc.setProduitCaracteristiqueId(pcid);
+        ProduitCaracteristique pc = new ProduitCaracteristique(p, c);
         pc.setValeur(randomString());
-        pc.setCaracteristique(c);
-        pc.setProduit(p);
         //Ajout du produitCaracteristique dans la Caracteristique et le po=roduit
         c.getProduits().add(pc);
         p.getCaracterisitiques().add(pc);
