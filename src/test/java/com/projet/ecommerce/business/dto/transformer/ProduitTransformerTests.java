@@ -124,7 +124,8 @@ public class ProduitTransformerTests {
         produitDto.setNom("test" + number);
         produitDto.setPrixHT(number);
         produitDto.setCategories(Collections.singletonList(buildCategorieDTOAvecSousCagorie()));
-
+        produitDto.setCaracteristiques(new ArrayList<>());
+        
         PhotoDTO photoDTO = buildPhotoDTO();
         produitDto.setPhotoPrincipale(photoDTO);
         produitDto.setPhotos(Collections.singletonList(photoDTO));
