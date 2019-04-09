@@ -11,6 +11,7 @@ import com.projet.ecommerce.persistance.repository.PhotoRepository;
 import com.projet.ecommerce.persistance.repository.ProduitRepository;
 import com.projet.ecommerce.utilitaire.ImageUtilitaire;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
@@ -31,17 +32,18 @@ import java.util.Optional;
 public class PhotoBusiness implements IPhotoBusiness {
 
     private ImageUtilitaire imageUtilitaire = new ImageUtilitaire();
+
     @Autowired
     private PhotoRepository photoRepository;
 
     @Autowired
     private ProduitRepository produitRepository;
 
-    //TODO aller chercher la variable dans le fichier properties
     /**
      * Le répertoire de base pour les images.
      */
-    private static final String repertoireImg = "src/main/resources/img/";
+    @Value("${repertoire.img}")
+    private String repertoireImg;
 
     /**
      * Methode permettant l'upload d'un fichier
@@ -89,7 +91,7 @@ public class PhotoBusiness implements IPhotoBusiness {
             if (!repertoire.mkdirs()) {
                 throw new GraphQLCustomException("Le dossier image pour le produit n'a pas pu être créé");
             } else {
-                System.out.println("Le dossier " + repertoire.getPath().split("resources/img/")[1] + " a bien été créé.");
+                System.out.println("Le dossier " + repertoire.getPath() + " a bien été créé.");
             }
         }
 

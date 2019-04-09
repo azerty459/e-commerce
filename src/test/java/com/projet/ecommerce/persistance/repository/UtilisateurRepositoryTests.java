@@ -3,6 +3,7 @@ package com.projet.ecommerce.persistance.repository;
 import com.projet.ecommerce.persistance.entity.Role;
 import com.projet.ecommerce.persistance.entity.Utilisateur;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +12,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -60,6 +59,11 @@ public class UtilisateurRepositoryTests {
     @Autowired
     private UtilisateurRepository utilisateurRepository;
 
+    @Before
+    public void init() {
+        utilisateurRepository.save(TEMP_GET);
+    }
+
     @Test
     public void insert() {
         Utilisateur utilisateur = utilisateurRepository.save(TEMP_INSERT);
@@ -82,19 +86,7 @@ public class UtilisateurRepositoryTests {
     }
 
     @Test
-    public void findByID() {
-        Utilisateur utilisateur = utilisateurRepository.save(TEMP_GET);
-        Assert.assertNotNull("L'objet utilisateur est null", utilisateur);
-
-        Assert.assertEquals(utilisateur.getMdp(), TEMP_GET.getMdp());
-        Assert.assertEquals(utilisateur.getEmail(), TEMP_GET.getEmail());
-        Assert.assertEquals(utilisateur.getPrenom(), TEMP_GET.getPrenom());
-        Assert.assertEquals(utilisateur.getNom(), TEMP_GET.getNom());
-    }
-
-    @Test
     public void findByEmail() {
-        Assert.assertNotNull(utilisateurRepository.save(TEMP_GET));
         Utilisateur utilisateur = utilisateurRepository.findByEmail(TEMP_GET.getEmail()).orElse(null);
         Assert.assertNotNull("L'objet utilisateur est null", utilisateur);
 
@@ -106,8 +98,8 @@ public class UtilisateurRepositoryTests {
 
     @Test
     public void findByEmailContainingIgnoreCaseOrderByEmail() {
-        Assert.assertNotNull(utilisateurRepository.save(TEMP_GET));
-        Collection<Utilisateur> utilisateurCollection = utilisateurRepository.findByEmailContainingIgnoreCaseOrderByEmail(TEMP_GET.getEmail());
+        String email = TEMP_GET.getEmail().substring(2, 10).toUpperCase();
+        Collection<Utilisateur> utilisateurCollection = utilisateurRepository.findByEmailContainingIgnoreCaseOrderByEmail(email);
         Assert.assertNotNull("La collection d'utilisateur est null", utilisateurCollection);
 
         Assert.assertEquals(1, utilisateurCollection.size());
@@ -115,8 +107,8 @@ public class UtilisateurRepositoryTests {
 
     @Test
     public void findByNomContainingIgnoreCaseOrderByNom() {
-        Assert.assertNotNull(utilisateurRepository.save(TEMP_GET));
-        Collection<Utilisateur> utilisateurCollection = utilisateurRepository.findByNomContainingIgnoreCaseOrderByNom(TEMP_GET.getNom());
+        String nom = TEMP_GET.getNom().substring(2, 5).toUpperCase();
+        Collection<Utilisateur> utilisateurCollection = utilisateurRepository.findByNomContainingIgnoreCaseOrderByNom(nom);
         Assert.assertNotNull("La collection d'utilisateur est null", utilisateurCollection);
 
         Assert.assertEquals(1, utilisateurCollection.size());
@@ -124,8 +116,8 @@ public class UtilisateurRepositoryTests {
 
     @Test
     public void findByPrenomContainingIgnoreCaseOrderByPrenom() {
-        Assert.assertNotNull(utilisateurRepository.save(TEMP_GET));
-        Collection<Utilisateur> utilisateurCollection = utilisateurRepository.findByPrenomContainingIgnoreCaseOrderByPrenom(TEMP_GET.getPrenom());
+        String prenom = TEMP_GET.getPrenom().substring(1, 3).toUpperCase();
+        Collection<Utilisateur> utilisateurCollection = utilisateurRepository.findByPrenomContainingIgnoreCaseOrderByPrenom(prenom);
         Assert.assertNotNull("La collection d'utilisateur est null", utilisateurCollection);
 
         Assert.assertEquals(1, utilisateurCollection.size());
@@ -133,8 +125,8 @@ public class UtilisateurRepositoryTests {
 
     @Test
     public void findByRoles_NomContainingIgnoreCase() {
-        Assert.assertNotNull(utilisateurRepository.save(TEMP_GET));
-        Collection<Utilisateur> utilisateurCollection = utilisateurRepository.findByRole_NomContainingIgnoreCase("Utilisateur");
+        String nomRole = TEMP_GET.getRole().getNom().substring(2, 5).toUpperCase();
+        Collection<Utilisateur> utilisateurCollection = utilisateurRepository.findByRole_NomContainingIgnoreCase(nomRole);
         Assert.assertEquals(1, utilisateurCollection.size());
     }
 
@@ -149,7 +141,7 @@ public class UtilisateurRepositoryTests {
         Assert.assertEquals(utilisateur.getNom(), TEMP_UPDATE.getNom());
 
         // On modifie le rôle
-        utilisateur.setNom("Fondateur");
+        utilisateur.getRole().setNom("Fondateur");
         // On sauvegarde les modifications
         Utilisateur utilisateurRetour = utilisateurRepository.save(utilisateur);
         // On regarde si les modifications à étaient prises en compte

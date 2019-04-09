@@ -1,9 +1,5 @@
 package com.projet.ecommerce.business.dto;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 /**
  * Entité qui permet d'assurer le découplage entre la couche de présentation et les objets métier stockés sur le serveur (Categorie).
  */
@@ -38,7 +34,7 @@ public class UtilisateurDTO {
     /**
      * Une collection de rôle associer à l'utilisateur
      */
-    private RoleDTO role = new RoleDTO();
+    private RoleDTO role;
 
     /**
      * Obtenir l'id de l'utilisateur

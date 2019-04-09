@@ -383,21 +383,24 @@ public class CategorieBusinessTests {
         Collection<Categorie> categories = new ArrayList<>();
 
         Categorie cat1 = new Categorie();
+        cat1.setIdCategorie(1);
         cat1.setLevel(1);
-        cat1.setBorneDroit(10);
         cat1.setBorneGauche(1);
+        cat1.setBorneDroit(10);
         cat1.setNomCategorie("Transport");
 
         Categorie cat2 = new Categorie();
+        cat1.setIdCategorie(2);
         cat2.setLevel(2);
-        cat2.setBorneDroit(7);
         cat2.setBorneGauche(2);
+        cat2.setBorneDroit(7);
         cat2.setNomCategorie("Aérien");
 
         Categorie cat3 = new Categorie();
+        cat1.setIdCategorie(3);
         cat3.setLevel(3);
-        cat3.setBorneDroit(6);
         cat3.setBorneGauche(3);
+        cat3.setBorneDroit(6);
         cat3.setNomCategorie("Avion");
 
         categories.add(cat1);
@@ -406,15 +409,29 @@ public class CategorieBusinessTests {
 
         Mockito.when(categorieRepository.findParents(Mockito.any())).thenReturn(categories);
 
-        Map<Categorie, Collection<Categorie>> resultat;
-        resultat = categorieBusiness.construireAssociationEnfantsChemins(categories);
+        Map<Categorie, Collection<Categorie>> resultat = categorieBusiness.construireAssociationEnfantsChemins(categories);
 
         // Tests
-        Assert.assertEquals(resultat.get(cat1), "");
-        Assert.assertEquals(resultat.get(cat2), "Transport");
-        Assert.assertEquals(resultat.get(cat3), "Transport > Aérien");
+        final Collection<Categorie> categoryParent1 = resultat.get(cat1);
+        Assert.assertNotNull(categoryParent1);
+        Assert.assertEquals(0, categoryParent1.size());
 
+        final Collection<Categorie> categoryParent2 = resultat.get(cat2);
+        Assert.assertNotNull(categoryParent2);
+        Assert.assertEquals(1, categoryParent2.size());
+        Assert.assertEquals(cat1.getNomCategorie(), new ArrayList<>(categoryParent2).get(0).getNomCategorie());
+
+        final Collection<Categorie> categoryParent3 = resultat.get(cat3);
+        Assert.assertNotNull(categoryParent3);
+        final List<Categorie> categoryParentList3 = new ArrayList<>(categoryParent3);
+        for (Categorie c : categoryParentList3) {
+            if (cat1.getIdCategorie() == c.getIdCategorie()) {
+                Assert.assertEquals(cat1.getNomCategorie(), c.getNomCategorie());
+            } else if (cat2.getIdCategorie() == c.getIdCategorie()) {
+                Assert.assertEquals(cat2.getNomCategorie(), c.getNomCategorie());
+            } else {
+                Assert.fail();
+            }
+        }
     }
-
-
 }

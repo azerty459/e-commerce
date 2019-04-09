@@ -25,7 +25,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
-import java.io.File;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -121,14 +122,14 @@ public class GraphQlUtility {
     }
 
     private GraphQLSchema graphQLSchema() {
-
-        File categorieSchemaFile = new File("src/main/resources/graphql/categorie.graphqls");
-        File photoSchemaFile = new File("src/main/resources/graphql/photo.graphqls");
-        File produitSchemaFile = new File("src/main/resources/graphql/produit.graphqls");
-        File utilisateurSchemaFile = new File("src/main/resources/graphql/utilisateur.graphqls");
-        File roleSchemaFile = new File("src/main/resources/graphql/role.graphqls");
-        File paginationSchemaFile = new File("src/main/resources/graphql/pagination.graphqls");
-        File avisClientSchemaFile = new File("src/main/resources/graphql/avisclient.graphqls");
+        final ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+        Reader categorieSchemaFile = new InputStreamReader(classloader.getResourceAsStream("graphql/categorie.graphqls"));
+        Reader photoSchemaFile = new InputStreamReader(classloader.getResourceAsStream("graphql/photo.graphqls"));
+        Reader produitSchemaFile = new InputStreamReader(classloader.getResourceAsStream("graphql/produit.graphqls"));
+        Reader utilisateurSchemaFile = new InputStreamReader(classloader.getResourceAsStream("graphql/utilisateur.graphqls"));
+        Reader roleSchemaFile = new InputStreamReader(classloader.getResourceAsStream("graphql/role.graphqls"));
+        Reader paginationSchemaFile = new InputStreamReader(classloader.getResourceAsStream("graphql/pagination.graphqls"));
+        Reader avisClientSchemaFile = new InputStreamReader(classloader.getResourceAsStream("graphql/avisclient.graphqls"));
 
         SchemaParser schemaParser = new SchemaParser();
         TypeDefinitionRegistry typeRegistry = new TypeDefinitionRegistry();
