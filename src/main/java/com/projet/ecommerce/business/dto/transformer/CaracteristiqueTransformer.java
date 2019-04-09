@@ -18,7 +18,7 @@ public class CaracteristiqueTransformer {
 	 * @param Une collection d'objets Caracteristique
 	 * @return une collection d'objet CaracteristiqueDTO
 	 */
-	public static Collection<CaracteristiqueDTO> entityToDto(Collection<Caracteristique> caracteristiques){
+	public static Collection<CaracteristiqueDTO> entityToDto(Iterable<Caracteristique> caracteristiques){
 
 		if(caracteristiques == null) {
 			return null;
@@ -41,7 +41,7 @@ public class CaracteristiqueTransformer {
      * @param Un objet Caracteristique
      * @return un objet CaracteristiqueDTO
      */
-	private static CaracteristiqueDTO entityToDto(Caracteristique caracteristique) {
+	public static CaracteristiqueDTO entityToDto(Caracteristique caracteristique) {
 		if(caracteristique == null)
 			return null;
 
@@ -82,7 +82,7 @@ public class CaracteristiqueTransformer {
      * @param caracteristiqueDTO Un objet Caracteristique
      * @return une objet Caracteristique
      */
-	private static Caracteristique dtoToEntity(CaracteristiqueDTO caracteristiqueDTO) {
+	public static Caracteristique dtoToEntity(CaracteristiqueDTO caracteristiqueDTO) {
 		if(caracteristiqueDTO == null)
 			return null;
 

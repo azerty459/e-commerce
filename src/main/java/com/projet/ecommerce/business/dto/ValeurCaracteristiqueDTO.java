@@ -1,27 +1,20 @@
 package com.projet.ecommerce.business.dto;
 
+import com.projet.ecommerce.persistance.entity.ValeurCaracteristiquePK;
+
 public class ValeurCaracteristiqueDTO {
 
-	private ProduitDTO referenceProduit;
 	
-	private CaracteristiqueDTO idCaracteristique;
+	private ValeurCaracteristiquePK valeurCaracteristiquePK;
 	
 	private String valeur;
 
-	public ProduitDTO getReferenceProduit() {
-		return referenceProduit;
+	public ValeurCaracteristiquePK getValeurCaracteristiquePK() {
+		return valeurCaracteristiquePK;
 	}
 
-	public void setReferenceProduit(ProduitDTO referenceProduit) {
-		this.referenceProduit = referenceProduit;
-	}
-
-	public CaracteristiqueDTO getIdCaracteristique() {
-		return idCaracteristique;
-	}
-
-	public void setIdCaracteristique(CaracteristiqueDTO idCaracteristique) {
-		this.idCaracteristique = idCaracteristique;
+	public void setValeurCaracteristiquePK(ValeurCaracteristiquePK valeurCaracteristiquePK) {
+		this.valeurCaracteristiquePK = valeurCaracteristiquePK;
 	}
 
 	public String getValeur() {
