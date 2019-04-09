@@ -24,7 +24,7 @@ maven-tests:
     - master
 
 # Build maven (only for dev/master)
-maven-build: &maven_build
+.maven-build: &maven_build
   image: maven:3-jdk-8
   stage: build
   script:
