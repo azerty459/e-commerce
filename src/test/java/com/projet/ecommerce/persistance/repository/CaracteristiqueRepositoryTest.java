@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.projet.ecommerce.persistance.repository;
 
 import com.projet.ecommerce.persistance.entity.Caracteristique;
@@ -65,7 +60,7 @@ public class CaracteristiqueRepositoryTest {
         Assert.assertEquals(insert.getIdCaracteristique(), optionalCaracteristique.get().getIdCaracteristique());
         Assert.assertEquals(insert.getLibelle(), optionalCaracteristique.get().getLibelle());
     }
-    
+
     @Test
     public void testUpdate() {
         Caracteristique insert = caracteristiqueRepository.save(TEMP_INSERT);
