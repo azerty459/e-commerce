@@ -25,7 +25,6 @@ import org.springframework.data.domain.Pageable;
 import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
 import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.business.dto.transformer.CaracteristiqueTransformer;
-import com.projet.ecommerce.business.dto.transformer.ProduitTransformer;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Caracteristique;
 import com.projet.ecommerce.persistance.entity.CaracteristiquePK;
@@ -74,17 +73,22 @@ public class ProduitBusinessTests {
         Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
 
         ProduitDTO retour1 = produitBusiness.add("A05A01", "Test", "Test", 4.7f, null, null);
-        Assert.assertNotNull(retour1);
-        Assert.assertEquals(produit.getNom(), retour1.getNom());
-        Assert.assertEquals(produit.getDescription(), retour1.getDescription());
-        Assert.assertEquals(produit.getPrixHT(), retour1.getPrixHT(), 0);
-        Assert.assertEquals(produit.getReferenceProduit(), retour1.getRef());
+        assertDataProduit(produit, retour1);
 
         // Je teste si le produit business m'envoie bien une GraphQLCustomException, si le produit existe déjà
         thrown.expect(GraphQLCustomException.class);
         ProduitDTO retour2 = produitBusiness.add("", "", "dfdfdf", 0, null, null);
         Assert.assertNull(retour2);
     }
+
+	private void assertDataProduit(Produit produit, ProduitDTO produitDto) {
+		Assert.assertNotNull(produitDto);
+		Assert.assertNotNull(produit);
+        Assert.assertEquals(produit.getNom(), produitDto.getNom());
+        Assert.assertEquals(produit.getDescription(), produitDto.getDescription());
+        Assert.assertEquals(produit.getPrixHT(), produitDto.getPrixHT(), 0);
+        Assert.assertEquals(produit.getReferenceProduit(), produitDto.getRef());
+	}
 
     @Test
     public void addProductAlreadyExist() {
@@ -125,24 +129,34 @@ public class ProduitBusinessTests {
     
     @Test
     public void addproduitAvecCaracteristiques() {
-        Produit produit = buildProduit();
+        //initialisation du contexte du test
+    	Produit produit = buildProduit();
+        
+		Caracteristique caracteristique = produit.getCaracteristiques().get(0);
+		String typeCaracteristique = caracteristique.getCaracteristiquePk().getTypeCaracteristique().getNomTypeCaracteristique();
+		List<CaracteristiqueDTO> listeCaracteristiquesDto = CaracteristiqueTransformer.entityToDto(produit.getCaracteristiques(), null );
         
         Mockito.when(produitRepository.save(Mockito.any())).then(AdditionalAnswers.returnsFirstArg());
 
-       // ProduitDTO produitDto = ProduitTransformer.entityToDto(produit);
-		List<CaracteristiqueDTO> listeCaracteristiquesDto = CaracteristiqueTransformer.entityToDto(produit.getCaracteristiques(), null );
+		// test de la méthode
+		ProduitDTO retour = produitBusiness.add("A05A01", "Livre1", "Un livre", 2.1f, null, listeCaracteristiquesDto );
 		
-		ProduitDTO retour = produitBusiness.add("A05A01", "Test", "Test", 4.7f, null, listeCaracteristiquesDto );
-
-        Assert.assertNotNull(retour);
-        //TODO vérif presence caracteristiques
+		//Vérification du test
+        
         CaracteristiqueDTO caracteristiquesRetour = retour.getCaracteristiques().get(0);
-		Caracteristique caracteristique = produit.getCaracteristiques().get(0);
-		String typeCaracteristique = caracteristique.getCaracteristiquePk().getTypeCaracteristique().getNomTypeCaracteristique();
 		
 		//TODO Assert sur tout le produit + ordre equals
-		Assert.assertEquals(caracteristiquesRetour.getTypeCaracteristiqueDto().getNomType(), typeCaracteristique);
-        Assert.assertEquals(caracteristiquesRetour.getValeurCaracteristique(), caracteristique.getValeurCaracteristique());
+		//assertDataProduit(produit, retour);
+        Assert.assertNotNull(retour);
+		Assert.assertNotNull(produit);
+        Assert.assertEquals(produit.getNom(), retour.getNom());
+        Assert.assertEquals(produit.getDescription(), retour.getDescription());
+        Assert.assertEquals(produit.getPrixHT(), retour.getPrixHT(), 0);
+        Assert.assertEquals(produit.getReferenceProduit(), retour.getRef());
+		Assert.assertNotNull(caracteristiquesRetour);
+		Assert.assertNotNull(caracteristique);
+		Assert.assertEquals(typeCaracteristique, caracteristiquesRetour.getTypeCaracteristiqueDto().getNomType());
+        Assert.assertEquals(caracteristique.getValeurCaracteristique(), caracteristiquesRetour.getValeurCaracteristique());
     }
 
 	
@@ -155,12 +169,7 @@ public class ProduitBusinessTests {
         Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
 
         ProduitDTO retour = produitBusiness.update(produit);
-        Assert.assertNotNull(retour);
-
-        Assert.assertEquals(produit.getNom(), retour.getNom());
-        Assert.assertEquals(produit.getDescription(), retour.getDescription());
-        Assert.assertEquals(produit.getPrixHT(), retour.getPrixHT(), 0);
-        Assert.assertEquals(produit.getReferenceProduit(), retour.getRef());
+        assertDataProduit(produit, retour);
     }
 
     @Test
