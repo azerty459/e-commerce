@@ -36,7 +36,7 @@ public class ProduitCaracteristiqueTransformer {
         }
         ProduitCaracteristique pc = new ProduitCaracteristique();
         pc.setCaracteristique(CaracteristiqueTransformer.dtoToEntity(pcDto.getCaracteristique()));
-        pc.setId(new ProduitCaracteristiqueId(pc.getProduit().getReferenceProduit(), pc.getCaracteristique().getIdCaracteristique()));
+        pc.setId(new ProduitCaracteristiqueId(null, pc.getCaracteristique().getIdCaracteristique()));
         pc.setValeur(pcDto.getValeur());
         return pc;
     }
