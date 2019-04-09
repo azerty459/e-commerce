@@ -1,5 +1,6 @@
 package com.projet.ecommerce.persistance.repository.impl;
 
+import com.projet.ecommerce.persistance.entity.AvisClient;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Produit;
 import com.projet.ecommerce.persistance.repository.ProduitRepositoryCustom;
@@ -8,6 +9,11 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Root;
+
 import java.util.Collection;
 
 
@@ -58,35 +64,42 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
 	@Override
 	public Collection<Produit> findAllWithCriteriaRequeteComplexe(String nom, String partieNom,
 			Double moyenneAvisInferieurA, Double moyenneAvisSuperieurA, Categorie categorie) {
-		Query query = null;
 		
-		if(nom == null) {
-			if(partieNom == null) {
-				if(moyenneAvisInferieurA == null) {
-					if(moyenneAvisSuperieurA == null) {
-						if(categorie == null) {
-							query = entityManager.createQuery(SQL_ALL_PRODUCTS, Produit.class);
-						}
-						else {
-							System.out.println("Else categorie");
-						}
-					}
-					else {
-						System.out.println("Else moyenneAvisSuperieurA");
-					}
-				}
-				else {
-					System.out.println("Else moyenneAvisInferieurA");
-				}
-			}
-			else {
-				System.out.println("Else partieNom");
-			}
+		CriteriaBuilder criteriaBuilderObj = entityManager.getCriteriaBuilder();
+	    CriteriaQuery<Produit> queryObj = criteriaBuilderObj.createQuery(Produit.class);
+
+	    Root<Produit> fromProduit = queryObj.from(Produit.class);
+
+	    queryObj.select(fromProduit);
+
+		
+		if(nom !=null) {
+			queryObj.where(criteriaBuilderObj.equal(fromProduit.get("nom"), nom));
+
 		}
-		else {
-			System.out.println("Else nom");
+		
+		else if(partieNom !=null) {
+			queryObj.where(criteriaBuilderObj.like(criteriaBuilderObj.upper(fromProduit.get("nom")), "%"+partieNom.toUpperCase()+"%"));
+
 		}
-		return query.getResultList();
+		
+		else if(moyenneAvisInferieurA != null) {
+			Join<Produit, AvisClient> avisClient = fromProduit.join("avisClients");
+			queryObj.groupBy(fromProduit.get("referenceProduit"));
+			queryObj.having(criteriaBuilderObj.lt(criteriaBuilderObj.avg(avisClient.get("note")),moyenneAvisInferieurA));
+		}
+		else if(moyenneAvisSuperieurA != null) {
+			Join<Produit, AvisClient> avisClient = fromProduit.join("avisClients");
+			queryObj.groupBy(fromProduit.get("referenceProduit"));
+			queryObj.having(criteriaBuilderObj.gt(criteriaBuilderObj.avg(avisClient.get("note")),moyenneAvisSuperieurA));
+		}
+
+		else if (categorie != null) {
+			Join<Produit, Categorie> categorieJoin = fromProduit.join("categories");
+			//Ne fonctionne pas avec les id de la catégorie
+			queryObj.where(criteriaBuilderObj.equal(categorieJoin.get("nomCategorie"), categorie.getNomCategorie()));
+		}
+		return entityManager.createQuery(queryObj).getResultList();
 	}
 	
 }
