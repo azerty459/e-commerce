@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
 import com.projet.ecommerce.business.dto.TypeCaracteristiqueDTO;
-import com.projet.ecommerce.persistance.entity.Caracteristique;
 import com.projet.ecommerce.persistance.entity.TypeCaracteristique;
 
 public class TypeCaracteristiqueTransformer {
@@ -18,6 +16,9 @@ public class TypeCaracteristiqueTransformer {
      * @return un objet typeCaracteristique
      */
     public static TypeCaracteristique dtoToEntity(TypeCaracteristiqueDTO typeCaracteristiqueDto) {
+    	if(typeCaracteristiqueDto == null) {
+    		return null;
+    	}
         TypeCaracteristique typeCaracteristique = new TypeCaracteristique();
 		typeCaracteristique.setIdTypeCaracteristique(typeCaracteristiqueDto.getId());
 		typeCaracteristique.setNomTypeCaracteristique(typeCaracteristiqueDto.getNomType());
@@ -43,6 +44,9 @@ public class TypeCaracteristiqueTransformer {
      * @return un objet typeCaracteristiqueDTO
      */
     public static TypeCaracteristiqueDTO entityToDto(TypeCaracteristique typeCaracteristique) {
+    	if(typeCaracteristique == null) {
+    		return null;
+    	}
         TypeCaracteristiqueDTO typeCaracteristiqueDto = new TypeCaracteristiqueDTO();
 		typeCaracteristiqueDto.setId(typeCaracteristique.getIdTypeCaracteristique());
 		typeCaracteristiqueDto.setNomType(typeCaracteristique.getNomTypeCaracteristique());

@@ -18,7 +18,6 @@ public class CaracteristiqueTransformer {
      * @return un objet Caracteristique
      */
     public static Caracteristique dtoToEntity(CaracteristiqueDTO caracteristiqueDTO, Produit produit) {
-    	//TODO gestion null + param produit
     	if(caracteristiqueDTO == null || produit == null ) {
     		return null;
     	}
@@ -33,7 +32,7 @@ public class CaracteristiqueTransformer {
     }
     
     public static List<CaracteristiqueDTO> entityToDto(List<Caracteristique> caracteristiques, ProduitDTO produitDto) {
-        if (caracteristiques == null) {
+        if (caracteristiques == null || produitDto == null) {
             return null;
         }
         List<CaracteristiqueDTO> caracteristiqueDTOCollection = new ArrayList<>();
@@ -50,7 +49,9 @@ public class CaracteristiqueTransformer {
      * @return un objet Caracteristique
      */
     public static CaracteristiqueDTO entityToDto(Caracteristique caracteristique, ProduitDTO produitDto) {
-    	//TODO Gestion null
+    	if(caracteristique == null || produitDto == null) {
+    		return null;
+    	}
        CaracteristiqueDTO caracteristiqueDto = new CaracteristiqueDTO();
        caracteristiqueDto.setTypeCaracteristiqueDto(
     		   TypeCaracteristiqueTransformer.entityToDto(caracteristique.getCaracteristiquePk().getTypeCaracteristique())
@@ -61,7 +62,7 @@ public class CaracteristiqueTransformer {
     }
     
     public static List<Caracteristique> dtoToEntity(List<CaracteristiqueDTO> caracteristiquesDto, Produit produit) {
-        if (caracteristiquesDto == null) {
+        if (caracteristiquesDto == null || produit == null) {
             return null;
         }
         List<Caracteristique> caracteristiqueCollection = new ArrayList<>();
