@@ -115,14 +115,12 @@ public class CaracteristiqueTransformerTests {
 		CARACTERISTIQUE_DTO2.setProduitDto(PRODUIT_DTO);
 
 		CARACTERISTIQUE_1 = new Caracteristique();
-		CARACTERISTIQUE_1.setIdCaracteristique(1);
 		CARACTERISTIQUE_1.setValeurCaracteristique("Nathan");
 		CARACTERISTIQUE_1.setCaracteristiquePk(new CaracteristiquePK());
 		CARACTERISTIQUE_1.getCaracteristiquePk().setTypeCaracteristique(TYPE_CARACTERISTIQUE_1);
 		CARACTERISTIQUE_1.getCaracteristiquePk().setProduit(PRODUIT);
 
 		CARACTERISTIQUE_2 = new Caracteristique();
-		CARACTERISTIQUE_2.setIdCaracteristique(2);
 		CARACTERISTIQUE_2.setValeurCaracteristique("Français");
 		CARACTERISTIQUE_2.setCaracteristiquePk(new CaracteristiquePK());
 		CARACTERISTIQUE_2.getCaracteristiquePk().setTypeCaracteristique(TYPE_CARACTERISTIQUE_2);
@@ -131,13 +129,13 @@ public class CaracteristiqueTransformerTests {
 
 	@Test
 	public void singleDtoToEntity() {
-		Caracteristique caracteristique = CaracteristiqueTransformer.dtoToEntity(CARACTERISTIQUE_DTO1);
+		Caracteristique caracteristique = CaracteristiqueTransformer.dtoToEntity(CARACTERISTIQUE_DTO1, PRODUIT);
 		assertDataCaracteristique(CARACTERISTIQUE_DTO1, caracteristique);
 	}
 
 	@Test
     public void singleEntityToDto() {
-        CaracteristiqueDTO caracteristiqueDto = CaracteristiqueTransformer.entityToDto(CARACTERISTIQUE_1);
+        CaracteristiqueDTO caracteristiqueDto = CaracteristiqueTransformer.entityToDto(CARACTERISTIQUE_1, PRODUIT_DTO);
         assertDataCaracteristique(caracteristiqueDto, CARACTERISTIQUE_1);
     }
 
@@ -147,7 +145,7 @@ public class CaracteristiqueTransformerTests {
         caracteristiqueDTOList.add(CARACTERISTIQUE_DTO1);
         caracteristiqueDTOList.add(CARACTERISTIQUE_DTO2);
 
-        List<Caracteristique> caracteristiqueList = new ArrayList<>(CaracteristiqueTransformer.dtoToEntity(caracteristiqueDTOList));
+        List<Caracteristique> caracteristiqueList = new ArrayList<>(CaracteristiqueTransformer.dtoToEntity(caracteristiqueDTOList, PRODUIT));
 
         Assert.assertNotNull(caracteristiqueList);
         assertDataCaracteristique(caracteristiqueDTOList.get(0), caracteristiqueList.get(0));
@@ -160,7 +158,7 @@ public class CaracteristiqueTransformerTests {
         caracteristiqueList.add(CARACTERISTIQUE_1);
         caracteristiqueList.add(CARACTERISTIQUE_2);
 
-        List<CaracteristiqueDTO> caracteristiqueDtoList = new ArrayList<>(CaracteristiqueTransformer.entityToDto(caracteristiqueList));
+        List<CaracteristiqueDTO> caracteristiqueDtoList = new ArrayList<>(CaracteristiqueTransformer.entityToDto(caracteristiqueList, PRODUIT_DTO));
 
         Assert.assertNotNull(caracteristiqueList);
         assertDataCaracteristique(caracteristiqueDtoList.get(0), caracteristiqueList.get(0));
@@ -170,7 +168,6 @@ public class CaracteristiqueTransformerTests {
 	private void assertDataCaracteristique(CaracteristiqueDTO caracteristiqueDto, Caracteristique caracteristique) {
 		Assert.assertNotNull(caracteristique);
 		Assert.assertNotNull(caracteristiqueDto);
-		Assert.assertEquals(caracteristiqueDto.getId(), caracteristique.getIdCaracteristique());
 		assertDataTypeCaracteristique(caracteristiqueDto, caracteristique);
 		assertDataProduit(caracteristiqueDto.getProduitDto(), caracteristique.getCaracteristiquePk().getProduit());
 		Assert.assertEquals(caracteristiqueDto.getValeurCaracteristique(), caracteristique.getValeurCaracteristique());

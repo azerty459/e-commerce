@@ -76,23 +76,19 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
 		List<Predicate> conditions = new ArrayList<Predicate>();
 		CriteriaQuery<Produit> query = builder.createQuery(Produit.class);
 		
-//		Metamodel m = entityManager.getMetamodel();
-//		EntityType<Produit> Produit_ = m.entity(Produit.class);
-//		EntityType<Categorie> Categorie_ = m.entity(Categorie.class);
-//		EntityType<AvisClient> AvisClient_ = m.entity(AvisClient.class);
-		
 		Root<Produit> produit = query.from(Produit.class);
-		ListJoin<AvisClient, Produit> avisClient = produit.joinList("reference_produit", JoinType.LEFT);
-		ListJoin<Categorie, Produit> categories = produit.joinList("reference_produit", JoinType.LEFT);
 
 //		if (idCategorie > 0) {
+//			ListJoin<Categorie, Produit> categories = produit.joinList("reference_produit", JoinType.LEFT);
 //			Categorie categorie = categorieRepo.findById(idCategorie).get();
 //			conditions.add(builder.isMember(categorie, categories));
 //		}
 		if (noteMin > 0 && noteMin < noteMax) {
+			Join<AvisClient, Produit> avisClient = produit.join("reference_produit");
 			conditions.add(builder.greaterThanOrEqualTo(avisClient.get("note"), noteMin));
 		}
 		if (noteMax > 0 && noteMin < noteMax) {
+			Join<AvisClient, Produit> avisClient = produit.join("reference_produit");
 			conditions.add(builder.lessThanOrEqualTo(avisClient.get("note"), noteMax));
 		}
 		if (nomProduitComplet != null) {

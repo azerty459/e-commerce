@@ -1,13 +1,10 @@
 package com.projet.ecommerce.business.impl;
 
-import com.projet.ecommerce.business.dto.ProduitDTO;
-import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
-import com.projet.ecommerce.persistance.entity.Categorie;
-import com.projet.ecommerce.persistance.entity.Photo;
-import com.projet.ecommerce.persistance.entity.Produit;
-import com.projet.ecommerce.persistance.repository.CategorieRepository;
-import com.projet.ecommerce.persistance.repository.PhotoRepository;
-import com.projet.ecommerce.persistance.repository.ProduitRepository;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
@@ -15,6 +12,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+import org.mockito.AdditionalAnswers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -24,9 +22,21 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
+import com.projet.ecommerce.business.dto.ProduitDTO;
+import com.projet.ecommerce.business.dto.transformer.CaracteristiqueTransformer;
+import com.projet.ecommerce.business.dto.transformer.ProduitTransformer;
+import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
+import com.projet.ecommerce.persistance.entity.Caracteristique;
+import com.projet.ecommerce.persistance.entity.CaracteristiquePK;
+import com.projet.ecommerce.persistance.entity.Categorie;
+import com.projet.ecommerce.persistance.entity.Photo;
+import com.projet.ecommerce.persistance.entity.Produit;
+import com.projet.ecommerce.persistance.entity.TypeCaracteristique;
+import com.projet.ecommerce.persistance.repository.CaracteristiqueRepository;
+import com.projet.ecommerce.persistance.repository.CategorieRepository;
+import com.projet.ecommerce.persistance.repository.PhotoRepository;
+import com.projet.ecommerce.persistance.repository.ProduitRepository;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
@@ -37,6 +47,9 @@ public class ProduitBusinessTests {
 
     @Mock
     private CategorieRepository categorieRepository;
+    
+    @Mock
+    private CaracteristiqueRepository caracteristiqueRepo;
 
     @Mock
     private PhotoRepository photoRepository;
@@ -60,7 +73,7 @@ public class ProduitBusinessTests {
         Produit produit = buildProduit();
         Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
 
-        ProduitDTO retour1 = produitBusiness.add("A05A01", "Test", "Test", 4.7f, null);
+        ProduitDTO retour1 = produitBusiness.add("A05A01", "Test", "Test", 4.7f, null, null);
         Assert.assertNotNull(retour1);
         Assert.assertEquals(produit.getNom(), retour1.getNom());
         Assert.assertEquals(produit.getDescription(), retour1.getDescription());
@@ -69,7 +82,7 @@ public class ProduitBusinessTests {
 
         // Je teste si le produit business m'envoie bien une GraphQLCustomException, si le produit existe déjà
         thrown.expect(GraphQLCustomException.class);
-        ProduitDTO retour2 = produitBusiness.add("", "", "dfdfdf", 0, null);
+        ProduitDTO retour2 = produitBusiness.add("", "", "dfdfdf", 0, null, null);
         Assert.assertNull(retour2);
     }
 
@@ -80,7 +93,7 @@ public class ProduitBusinessTests {
         // Je teste si le produit business m'envoie bien une GraphQLCustomException, si le produit existe déjà
         thrown.expect(GraphQLCustomException.class);
         Mockito.when(produitRepository.findById(Mockito.anyString())).thenReturn(Optional.of(produit));
-        ProduitDTO retour = produitBusiness.add("A05A01", "Test", "Test", 4.7f, null);
+        ProduitDTO retour = produitBusiness.add("A05A01", "Test", "Test", 4.7f, null, null);
         Assert.assertNull(retour);
     }
 
@@ -103,12 +116,36 @@ public class ProduitBusinessTests {
         Mockito.when(categorieRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(categorie));
         Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
 
-        ProduitDTO retour = produitBusiness.add("A05A01", "Test", "Test", 4.7f, categoriesProduit);
+        ProduitDTO retour = produitBusiness.add("A05A01", "Test", "Test", 4.7f, categoriesProduit, null);
 
         Assert.assertNotNull(retour);
         Assert.assertEquals(retour.getClass(), ProduitDTO.class);
         Assert.assertEquals(retour.getCategories().get(0).getNom(), "Transport");
     }
+    
+    @Test
+    public void addproduitAvecCaracteristiques() {
+        Produit produit = buildProduit();
+        
+        Mockito.when(produitRepository.save(Mockito.any())).then(AdditionalAnswers.returnsFirstArg());
+
+       // ProduitDTO produitDto = ProduitTransformer.entityToDto(produit);
+		List<CaracteristiqueDTO> listeCaracteristiquesDto = CaracteristiqueTransformer.entityToDto(produit.getCaracteristiques(), null );
+		
+		ProduitDTO retour = produitBusiness.add("A05A01", "Test", "Test", 4.7f, null, listeCaracteristiquesDto );
+
+        Assert.assertNotNull(retour);
+        //TODO vérif presence caracteristiques
+        CaracteristiqueDTO caracteristiquesRetour = retour.getCaracteristiques().get(0);
+		Caracteristique caracteristique = produit.getCaracteristiques().get(0);
+		String typeCaracteristique = caracteristique.getCaracteristiquePk().getTypeCaracteristique().getNomTypeCaracteristique();
+		
+		//TODO Assert sur tout le produit + ordre equals
+		Assert.assertEquals(caracteristiquesRetour.getTypeCaracteristiqueDto().getNomType(), typeCaracteristique);
+        Assert.assertEquals(caracteristiquesRetour.getValeurCaracteristique(), caracteristique.getValeurCaracteristique());
+    }
+
+	
 
     @Test
     public void updateFound() {
@@ -264,9 +301,24 @@ public class ProduitBusinessTests {
         Assert.assertEquals(produit.getPrixHT(), retour.getPrixHT(), 0);
         Assert.assertEquals(produit.getReferenceProduit(), retour.getRef());
     }
+    
+    private void addCaracteristiques(Produit produit) {
+        TypeCaracteristique typeCaracteristique = new TypeCaracteristique();
+        typeCaracteristique.setNomTypeCaracteristique("Edition");
+        
+        CaracteristiquePK caracteristiquePk = new CaracteristiquePK();
+        caracteristiquePk.setTypeCaracteristique(typeCaracteristique);
+        caracteristiquePk.setProduit(produit);
+        
+        Caracteristique caracteristique = new Caracteristique();
+		caracteristique.setCaracteristiquePk(caracteristiquePk);
+		caracteristique.setValeurCaracteristique("Nathan");
+		produit.setCaracteristiques(Collections.singletonList(caracteristique));
+	}
 
     @NotNull
-    private Produit buildProduit() {
+    private Produit buildProduit() { 	
+    	
         Produit produit = new Produit();
         produit.setReferenceProduit("A05A01");
         produit.setPrixHT(2.1f);
@@ -274,6 +326,7 @@ public class ProduitBusinessTests {
         produit.setNom("Livre1");
         produit.setPhotos(new ArrayList<>());
         produit.setCategories(new ArrayList<>());
+        addCaracteristiques(produit);
         return produit;
     }
 

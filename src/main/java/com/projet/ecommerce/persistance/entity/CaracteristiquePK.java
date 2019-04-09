@@ -11,9 +11,9 @@ import javax.persistence.ManyToOne;
 @Embeddable
 public class CaracteristiquePK implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 7612836088102921172L;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_type_caracteristique")
 	private TypeCaracteristique typeCaracteristique;
 
