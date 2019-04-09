@@ -130,7 +130,6 @@ public class CaracteristiqueRepositoryTest {
         
         Optional<Caracteristique> caracteristiqueOptional = caracteristiqueRepository.findByLibelle(TEMP_GET.getLibelle());
         Assert.assertTrue(caracteristiqueOptional.isPresent());
-        System.out.println(caracteristiqueOptional.get());
         Assert.assertEquals(TEMP_GET.getLibelle(), caracteristiqueOptional.get().getLibelle());
     }
     

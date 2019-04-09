@@ -19,7 +19,6 @@ public class CaracteristiqueTransformerTests {
     @Test
     public void testEntityToDto() {
         Caracteristique caracteristique = buildCaracteristique();
-        System.out.println(caracteristique.getLibelle());
         CaracteristiqueDTO caracteristiqueDTO = CaracteristiqueTransformer.entityToDto(caracteristique);
         assertTransformEquals(caracteristique, caracteristiqueDTO);
     }
