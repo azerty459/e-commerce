@@ -128,8 +128,10 @@ public class CaracteristiqueRepositoryTest {
         caracteristiqueRepository.save(TEMP_GET);
         caracteristiqueRepository.save(TEMP_INSERT);
         
-        Collection<Caracteristique> caracteristiqueCollection = caracteristiqueRepository.findByLibelle(TEMP_GET.getLibelle());
-        Assert.assertEquals(1, caracteristiqueCollection.size());
+        Optional<Caracteristique> caracteristiqueOptional = caracteristiqueRepository.findByLibelle(TEMP_GET.getLibelle());
+        Assert.assertTrue(caracteristiqueOptional.isPresent());
+        System.out.println(caracteristiqueOptional.get());
+        Assert.assertEquals(TEMP_GET.getLibelle(), caracteristiqueOptional.get().getLibelle());
     }
     
 }

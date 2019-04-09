@@ -2,6 +2,7 @@ package com.projet.ecommerce.persistance.repository;
 
 import com.projet.ecommerce.persistance.entity.Caracteristique;
 import java.util.Collection;
+import java.util.Optional;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,6 +12,6 @@ public interface CaracteristiqueRepository extends CrudRepository<Caracteristiqu
     @Override
     Collection<Caracteristique> findAll();
     
-    Collection<Caracteristique> findByLibelle(String libelle);
+    Optional<Caracteristique> findByLibelle(String libelle);
     
 }
