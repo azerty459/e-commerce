@@ -13,6 +13,7 @@ import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Photo;
 import com.projet.ecommerce.persistance.entity.Produit;
 import com.projet.ecommerce.persistance.entity.ProduitCaracteristique;
+import com.projet.ecommerce.persistance.entity.ProduitCaracteristiqueId;
 import com.projet.ecommerce.persistance.repository.CaracteristiqueRepository;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import com.projet.ecommerce.persistance.repository.PhotoRepository;
@@ -28,6 +29,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.projet.ecommerce.utilitaire.Utilitaire.mergeObjects;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Service permettant de gérer les actions effectuées pour les produits.
@@ -60,7 +63,7 @@ public class ProduitBusiness implements IProduitBusiness {
      */
     @Override
     // FIXME à remplacer par un DTO
-    public ProduitDTO add(String referenceProduit, String nom, String description, float prixHT, List<Integer> categoriesProduit) {
+    public ProduitDTO add(String referenceProduit, String nom, String description, float prixHT, List<Integer> categoriesProduit, Map<String, String> caracteristiqueProduit) {
         if (referenceProduit.isEmpty() && nom.isEmpty()) {
             GraphQLCustomException graphQLCustomException = new GraphQLCustomException("Erreur dans l'ajout du produit (la référence, le nom et le prixHT ne peut être null)");
             graphQLCustomException.ajouterExtension("Référence", referenceProduit);
@@ -87,6 +90,29 @@ public class ProduitBusiness implements IProduitBusiness {
             }
         }
         produit.setCategories(categorieList);
+        
+        List<ProduitCaracteristique> caracteristiques = new ArrayList<>();
+        if(caracteristiqueProduit != null && caracteristiqueProduit.size() > 0) {
+            for(Entry<String, String> entry : caracteristiqueProduit.entrySet()) {
+                String libelle = entry.getKey();
+                String valeur = entry.getValue();
+                Optional<Caracteristique> caracteristiqueOptional = caracteristiqueRepository.findByLibelle(libelle);
+                if(caracteristiqueOptional.isPresent()) {
+                    Caracteristique carac = caracteristiqueOptional.get();
+                    ProduitCaracteristiqueId produitCaracteristiqueId = new ProduitCaracteristiqueId(produit.getReferenceProduit(), carac.getIdCaracteristique());
+                    ProduitCaracteristique produitCaracteristique = new ProduitCaracteristique();
+                    produitCaracteristique.setId(produitCaracteristiqueId);
+                    produitCaracteristique.setProduit(produit);
+                    produitCaracteristique.setCaracteristique(carac);
+                    produitCaracteristique.setValeur(valeur);
+                    //Ajout dans les listes
+                    carac.getProduits().add(produitCaracteristique);
+                    caracteristiques.add(produitCaracteristique);
+                }
+            }
+        }
+        produit.setCaracterisitiques(caracteristiques);
+        
         return ProduitTransformer.entityToDto(produitRepository.save(produit));
     }
 

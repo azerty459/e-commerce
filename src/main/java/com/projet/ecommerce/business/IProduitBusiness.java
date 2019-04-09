@@ -7,6 +7,7 @@ import com.projet.ecommerce.persistance.entity.Produit;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Interface du service ProduitBusiness.
@@ -23,7 +24,7 @@ public interface IProduitBusiness {
      * @param prixHT           Son prix hors taxe
      * @return le produit ajouté
      */
-    ProduitDTO add(String referenceProduit, String nom, String description, float prixHT, List<Integer> nouvelleCat);
+    ProduitDTO add(String referenceProduit, String nom, String description, float prixHT, List<Integer> nouvelleCat, Map<String, String> caracteristique);
 
     /**
      * Méthode définissant la modification d'un produit.
