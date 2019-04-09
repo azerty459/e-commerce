@@ -64,33 +64,53 @@ docker-deploy:
     - master
 
 # -----------------------------------------------------------------------
+# --------------------------- DEV ---------------------------------------
+# -----------------------------------------------------------------------
 
 build_dev:
   <<: *maven_build
   variables:
     APP_FILE: "application-dev"
-    ENVIRONMENT: "dev-build"
+    ENVIRONMENT: "dev"
   only:
     - dev
 
 package_dev:
   <<: *docker_package
   variables:
-    ENVIRONMENT: "dev-package"
+    ENVIRONMENT: "dev"
   only:
     - dev
 
-#deploy_dev:
-#  <<: *docker_deploy
-#  variables:
-#    ENVIRONMENT: "dev-deploy"
-#  only:
-#    - dev
+deploy_dev:
+  <<: *docker_deploy
+  variables:
+    ENVIRONMENT: "dev"
+  only:
+    - dev
+
+# -----------------------------------------------------------------------
+# --------------------------- DEV ---------------------------------------
+# -----------------------------------------------------------------------
 
 build_prod:
   <<: *maven_build
   variables:
     APP_FILE: "application-prod"
-    ENVIRONMENT: "prod-build"
+    ENVIRONMENT: "prod"
+  only:
+    - master
+
+package_prod:
+  <<: *docker_package
+  variables:
+    ENVIRONMENT: "prod"
+  only:
+    - master
+
+deploy_prod:
+  <<: *docker_deploy
+  variables:
+    ENVIRONMENT: "prod"
   only:
     - master
