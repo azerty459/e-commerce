@@ -64,9 +64,9 @@ public class ProduitMutationTests {
         Assert.assertNotNull(retourMap.get("addProduit"));
         retourMap.get("addProduit").get(dataFetchingEnvironment);
         // Test avec nb appel add avec bon param
-        Mockito.verify(produitBusiness, Mockito.times(1)).add("A09A87", "test", "test", 4.7f, null);
+        Mockito.verify(produitBusiness, Mockito.times(1)).add("A09A87", "test", "test", 4.7f, null, null);
         // Test avec nb appel add avec mauvais param
-        Mockito.verify(produitBusiness, Mockito.times(0)).add("A09A82", "test", "test", 4.7f, null);
+        Mockito.verify(produitBusiness, Mockito.times(0)).add("A09A82", "test", "test", 4.7f, null, null);
     }
 
     @Test

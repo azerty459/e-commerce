@@ -21,7 +21,7 @@ public class ProduitMutation {
 
         builder.dataFetcher("addProduit", (DataFetchingEnvironment environment) -> {
                     double prixHT = environment.getArgument("prixHT");
-                    return produitBusiness.add(environment.getArgument("ref"), environment.getArgument("nom"), environment.getArgument("description"), (float) prixHT, environment.getArgument("nouvelleCat"));
+                    return produitBusiness.add(environment.getArgument("ref"), environment.getArgument("nom"), environment.getArgument("description"), (float) prixHT, environment.getArgument("nouvelleCat"), null);
                 }
         );
 
