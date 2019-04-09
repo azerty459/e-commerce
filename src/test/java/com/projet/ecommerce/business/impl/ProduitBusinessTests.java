@@ -10,6 +10,7 @@ import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Photo;
 import com.projet.ecommerce.persistance.entity.Produit;
 import com.projet.ecommerce.persistance.entity.ProduitCaracteristique;
+import com.projet.ecommerce.persistance.entity.ProduitCaracteristiqueId;
 import com.projet.ecommerce.persistance.repository.CaracteristiqueRepository;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import com.projet.ecommerce.persistance.repository.PhotoRepository;
@@ -31,7 +32,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -69,7 +72,7 @@ public class ProduitBusinessTests {
         Produit produit = buildProduit();
         Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
 
-        ProduitDTO retour1 = produitBusiness.add("A05A01", "Test", "Test", 4.7f, null);
+        ProduitDTO retour1 = produitBusiness.add("A05A01", "Test", "Test", 4.7f, null, null);
         Assert.assertNotNull(retour1);
         Assert.assertEquals(produit.getNom(), retour1.getNom());
         Assert.assertEquals(produit.getDescription(), retour1.getDescription());
@@ -78,7 +81,7 @@ public class ProduitBusinessTests {
 
         // Je teste si le produit business m'envoie bien une GraphQLCustomException, si le produit existe déjà
         thrown.expect(GraphQLCustomException.class);
-        ProduitDTO retour2 = produitBusiness.add("", "", "dfdfdf", 0, null);
+        ProduitDTO retour2 = produitBusiness.add("", "", "dfdfdf", 0, null, null);
         Assert.assertNull(retour2);
     }
 
@@ -89,7 +92,7 @@ public class ProduitBusinessTests {
         // Je teste si le produit business m'envoie bien une GraphQLCustomException, si le produit existe déjà
         thrown.expect(GraphQLCustomException.class);
         Mockito.when(produitRepository.findById(Mockito.anyString())).thenReturn(Optional.of(produit));
-        ProduitDTO retour = produitBusiness.add("A05A01", "Test", "Test", 4.7f, null);
+        ProduitDTO retour = produitBusiness.add("A05A01", "Test", "Test", 4.7f, null, null);
         Assert.assertNull(retour);
     }
 
@@ -112,11 +115,36 @@ public class ProduitBusinessTests {
         Mockito.when(categorieRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(categorie));
         Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
 
-        ProduitDTO retour = produitBusiness.add("A05A01", "Test", "Test", 4.7f, categoriesProduit);
+        ProduitDTO retour = produitBusiness.add("A05A01", "Test", "Test", 4.7f, categoriesProduit, null);
 
         Assert.assertNotNull(retour);
         Assert.assertEquals(retour.getClass(), ProduitDTO.class);
         Assert.assertEquals(retour.getCategories().get(0).getNom(), "Transport");
+    }
+    
+    @Test
+    public void testAddProduitAvecCaracteristiques() {
+        String valeur = "TestValeur";
+        Produit produit = buildProduit();
+        Caracteristique caracteristique = buildCaracteristique();
+        ProduitCaracteristiqueId produitCaracteristiqueId = new ProduitCaracteristiqueId(produit.getReferenceProduit(), caracteristique.getIdCaracteristique());
+        ProduitCaracteristique produitCaracteristique = new ProduitCaracteristique();
+        produitCaracteristique.setId(produitCaracteristiqueId);
+        produitCaracteristique.setValeur(valeur);
+        produitCaracteristique.setCaracteristique(caracteristique);
+        produitCaracteristique.setProduit(produit);
+        caracteristique.getProduits().add(produitCaracteristique);
+        produit.getCaracterisitiques().add(produitCaracteristique);
+        Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
+        Mockito.when(caracteristiqueRepository.findByLibelle(Mockito.anyString())).thenReturn(Optional.of(caracteristique));
+        
+        Map<String, String> caracteristiquesProduit = new HashMap<>();
+        caracteristiquesProduit.put(caracteristique.getLibelle(), valeur);
+        ProduitDTO retour = produitBusiness.add("A05A01", "Test", "Test", 4.7f, null, caracteristiquesProduit);
+        Assert.assertEquals(1, retour.getCaracteristiques().size());
+        ProduitCaracteristiqueDTO produitCaracteristiqueDTO = retour.getCaracteristiques().get(0);
+        Assert.assertEquals(valeur, produitCaracteristiqueDTO.getValeur());
+        Assert.assertEquals(caracteristique.getLibelle(), produitCaracteristiqueDTO.getCaracteristique().getLibelle());
     }
 
     @Test
