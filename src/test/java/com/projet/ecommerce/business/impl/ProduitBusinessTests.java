@@ -125,13 +125,8 @@ public class ProduitBusinessTests {
     @Test
     public void testAddProduitAvecCaracteristiques() {
         String valeur = "TestValeur";
-        Produit produit = buildProduit();
         Caracteristique caracteristique = buildCaracteristique();
-        ProduitCaracteristique produitCaracteristique = new ProduitCaracteristique(produit, caracteristique);
-        produitCaracteristique.setValeur(valeur);
-        caracteristique.getProduits().add(produitCaracteristique);
-        produit.getCaracterisitiques().add(produitCaracteristique);
-        Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
+        Mockito.when(produitRepository.save(Mockito.any())).then(mockInvoc -> mockInvoc.getArgument(0));
         Mockito.when(caracteristiqueRepository.findByLibelle(Mockito.anyString())).thenReturn(Optional.of(caracteristique));
         
         Map<String, String> caracteristiquesProduit = new HashMap<>();
