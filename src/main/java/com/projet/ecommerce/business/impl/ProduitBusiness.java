@@ -289,7 +289,7 @@ public class ProduitBusiness implements IProduitBusiness {
     }
 
     @Override
-    public ProduitDTO deleteCaracterisitque(String reference, CaracteristiqueDTO caracteristique) {
+    public ProduitDTO deleteCaracteristique(String reference, CaracteristiqueDTO caracteristique) {
         if(reference == null || caracteristique == null) {
             throw new GraphQLCustomException("Erreur dans l'ajout de la caracteristique au produit (la référence, la caracteristique et la valeur ne peuvent pas être null)");
         } else if(reference.trim().isEmpty()) {

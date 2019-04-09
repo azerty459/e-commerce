@@ -1,10 +1,16 @@
 package com.projet.ecommerce.business.impl;
 
+import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
+import com.projet.ecommerce.business.dto.ProduitCaracteristiqueDTO;
 import com.projet.ecommerce.business.dto.ProduitDTO;
+import com.projet.ecommerce.business.dto.transformer.CaracteristiqueTransformer;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
+import com.projet.ecommerce.persistance.entity.Caracteristique;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Photo;
 import com.projet.ecommerce.persistance.entity.Produit;
+import com.projet.ecommerce.persistance.entity.ProduitCaracteristique;
+import com.projet.ecommerce.persistance.repository.CaracteristiqueRepository;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import com.projet.ecommerce.persistance.repository.PhotoRepository;
 import com.projet.ecommerce.persistance.repository.ProduitRepository;
@@ -40,6 +46,9 @@ public class ProduitBusinessTests {
 
     @Mock
     private PhotoRepository photoRepository;
+    
+    @Mock
+    private CaracteristiqueRepository caracteristiqueRepository;
 
     @Mock
     private Page page;
@@ -265,18 +274,6 @@ public class ProduitBusinessTests {
         Assert.assertEquals(produit.getReferenceProduit(), retour.getRef());
     }
 
-    @NotNull
-    private Produit buildProduit() {
-        Produit produit = new Produit();
-        produit.setReferenceProduit("A05A01");
-        produit.setPrixHT(2.1f);
-        produit.setDescription("Un livre");
-        produit.setNom("Livre1");
-        produit.setPhotos(new ArrayList<>());
-        produit.setCategories(new ArrayList<>());
-        return produit;
-    }
-
     @Test
     public void getAllByRefAndCatEmpty() {
         thrown.expect(GraphQLCustomException.class);
@@ -294,6 +291,169 @@ public class ProduitBusinessTests {
         Mockito.when(produitRepository.findByNomContainingIgnoreCase(Mockito.any(Pageable.class), Mockito.anyString())).thenReturn(page);
         Assert.assertNotNull(produitBusiness.getPage(1, 5, "Toto", 0));
     }
+    
+    @Test
+    public void testAddCaracteristique() {
+        Produit produit = buildProduit();
+        Caracteristique caracteristique = buildCaracteristique();
+        Mockito.when(produitRepository.findById(Mockito.anyString())).thenReturn(Optional.of(produit));
+        Mockito.when(caracteristiqueRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(caracteristique));
+        Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
+        
+        String valeur = "TestValeur";
+        ProduitDTO retour = produitBusiness.addCaracteristique("TestRef", CaracteristiqueTransformer.entityToDto(caracteristique), valeur);
+        Assert.assertEquals(1, retour.getCaracteristiques().size());
+        boolean have = false;
+        for(ProduitCaracteristique pc : produit.getCaracterisitiques()) {
+            have = have || (valeur.equals(pc.getValeur()) && pc.getCaracteristique().getLibelle().equals(caracteristique.getLibelle()));
+        }
+        Assert.assertTrue(have);
+        //Test des exceptions
+        thrown.expect(GraphQLCustomException.class);
+        //CaracteristiqueDTO ne correspond pas à une caracteristique de la base
+        retour = produitBusiness.addCaracteristique("TestRef", new CaracteristiqueDTO(4, "TestDTO"), valeur);
+        Assert.assertNull(retour);
+        //CaracteristiqueDTO null
+        retour = produitBusiness.addCaracteristique("TestRef", null, valeur);
+        Assert.assertNull(retour);
+        //Reference null
+        retour = produitBusiness.addCaracteristique(null, CaracteristiqueTransformer.entityToDto(caracteristique), valeur);
+        Assert.assertNull(retour);
+        //Reference vide
+        retour = produitBusiness.addCaracteristique("\t", CaracteristiqueTransformer.entityToDto(caracteristique), valeur);
+        Assert.assertNull(retour);
+        //Valeur null
+        retour = produitBusiness.addCaracteristique("TestRef", CaracteristiqueTransformer.entityToDto(caracteristique), null);
+        Assert.assertNull(retour);
+        //Valeur vide
+        retour = produitBusiness.addCaracteristique("TestRef", CaracteristiqueTransformer.entityToDto(caracteristique), "\t");
+        Assert.assertNull(retour);
+    }
+    
+    @Test(expected = GraphQLCustomException.class)
+    public void testAddCaracteristiqueBadProduit() {
+        Mockito.when(produitRepository.findById(Mockito.anyString())).thenReturn(Optional.empty());
+        
+        produitBusiness.addCaracteristique("TestRef", CaracteristiqueTransformer.entityToDto(buildCaracteristique()), "TestValeur");
+    }
+    
+    @Test(expected = GraphQLCustomException.class)
+    public void testAddCaracteristiqueBadCaracteristique() {
+        Mockito.when(produitRepository.findById(Mockito.anyString())).thenReturn(Optional.of(buildProduit()));
+        Mockito.when(caracteristiqueRepository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
+        
+        produitBusiness.addCaracteristique("TestRef", CaracteristiqueTransformer.entityToDto(buildCaracteristique()), "TestValeur");
+    }
+    
+    @Test
+    public void testDeleteCaracteristique() {
+        Produit produit = buildProduit();
+        Caracteristique caracteristique = buildCaracteristique();
+        CaracteristiqueDTO caracteristiqueDTO = CaracteristiqueTransformer.entityToDto(caracteristique);
+        Mockito.when(produitRepository.findById(Mockito.anyString())).thenReturn(Optional.of(produit));
+        Mockito.when(caracteristiqueRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(caracteristique));
+        Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
+        ProduitDTO ajout = produitBusiness.addCaracteristique("TestRef", caracteristiqueDTO, "TestValeur");
+        int sizeBefore = ajout.getCaracteristiques().size();
+  
+        ProduitDTO retour = produitBusiness.deleteCaracteristique("TestRef", caracteristiqueDTO);
+        Assert.assertEquals(sizeBefore - 1, retour.getCaracteristiques().size());
+        boolean have = false;
+        for(ProduitCaracteristique pc : produit.getCaracterisitiques()) {
+            have = have || (pc.getValeur().equals(pc.getValeur()) && pc.getCaracteristique().getLibelle().equals(caracteristique.getLibelle()));
+        }
+        Assert.assertFalse(have);
+        //Test des exceptions
+        thrown.expect(GraphQLCustomException.class);
+        //Reference null
+        retour = produitBusiness.deleteCaracteristique(null, caracteristiqueDTO);
+        Assert.assertNull(retour);
+        //Reference vide
+        retour = produitBusiness.deleteCaracteristique("\t", caracteristiqueDTO);
+        Assert.assertNull(retour);
+        //CaracteristiqueDTO qui ne correspond pas à celui en base
+        retour = produitBusiness.deleteCaracteristique("TestRef", new CaracteristiqueDTO(4, "TestDTO"));
+        Assert.assertNull(retour);
+        //CaracteristiqueDTO null
+        retour = produitBusiness.deleteCaracteristique("TestRef", null);
+        Assert.assertNull(retour);
+    }
+    
+    @Test(expected = GraphQLCustomException.class)
+    public void testDeleteCaracteristiqueBadProduit() {
+        Mockito.when(produitRepository.findById(Mockito.anyString())).thenReturn(Optional.empty());
+        
+        produitBusiness.deleteCaracteristique("TestRef", CaracteristiqueTransformer.entityToDto(buildCaracteristique()));
+    }
+    
+    @Test(expected = GraphQLCustomException.class)
+    public void testDeleteCaracteristiqueBadCaracteristique() {
+        Mockito.when(produitRepository.findById(Mockito.anyString())).thenReturn(Optional.of(buildProduit()));
+        Mockito.when(caracteristiqueRepository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
+        
+        produitBusiness.deleteCaracteristique("TestRef", CaracteristiqueTransformer.entityToDto(buildCaracteristique()));
+    }
+    
+    @Test
+    public void testGetAllCaracteristiques() {
+        Produit produit = buildProduit();
+        Caracteristique caracteristique = buildCaracteristique();
+        Mockito.when(produitRepository.findById(Mockito.anyString())).thenReturn(Optional.of(produit));
+        Mockito.when(caracteristiqueRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(caracteristique));
+        Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
+        
+        List<ProduitCaracteristiqueDTO> listProduitCaracteristiqueDTO = produitBusiness.getAllCaracteristiques("TestRef");
+        Assert.assertEquals(0, listProduitCaracteristiqueDTO.size());
+        
+        String valeur = "TestValeur";
+        produitBusiness.addCaracteristique("TestRef", CaracteristiqueTransformer.entityToDto(caracteristique), valeur);
+        
+        listProduitCaracteristiqueDTO = produitBusiness.getAllCaracteristiques("TestRef");
+        Assert.assertEquals(1, listProduitCaracteristiqueDTO.size());
+        ProduitCaracteristiqueDTO produitCaracteristiqueDTO = listProduitCaracteristiqueDTO.get(0);
+        Assert.assertEquals(valeur, produitCaracteristiqueDTO.getValeur());
+        Assert.assertEquals(caracteristique.getLibelle(), produitCaracteristiqueDTO.getCaracteristique().getLibelle());
+        
+        //Test des exceptions
+        thrown.expect(GraphQLCustomException.class);
+        //Reference null
+        listProduitCaracteristiqueDTO = produitBusiness.getAllCaracteristiques(null);
+        Assert.assertNull(listProduitCaracteristiqueDTO);
+        //Reference vide
+        listProduitCaracteristiqueDTO = produitBusiness.getAllCaracteristiques("\t");
+        Assert.assertNull(listProduitCaracteristiqueDTO);
+    }
+    
+    @Test(expected = GraphQLCustomException.class)
+    public void testGetAllCaracteristiquesBadProduit() {
+        Mockito.when(produitRepository.findById(Mockito.anyString())).thenReturn(Optional.empty());
+        
+        produitBusiness.getAllCaracteristiques("TestRef");
+    }
 
     //TODO Faire le teste avec id catégorie
+    
+    /* ----- Builder ----- */
+    
+    @NotNull
+    private Produit buildProduit() {
+        Produit produit = new Produit();
+        produit.setReferenceProduit("A05A01");
+        produit.setPrixHT(2.1f);
+        produit.setDescription("Un livre");
+        produit.setNom("Livre1");
+        produit.setPhotos(new ArrayList<>());
+        produit.setCategories(new ArrayList<>());
+        produit.setCaracterisitiques(new ArrayList<>());
+        return produit;
+    }
+    
+    @NotNull
+    private Caracteristique buildCaracteristique() {
+        Caracteristique caracteristique = new Caracteristique();
+        caracteristique.setIdCaracteristique(8);
+        caracteristique.setLibelle("Test");
+        caracteristique.setProduits(new ArrayList<>());
+        return caracteristique;
+    }
 }

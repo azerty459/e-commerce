@@ -86,7 +86,7 @@ public interface IProduitBusiness {
      * @param caracteristique La caracteristique à supprimer
      * @return L'objet produit modifié
      */
-    ProduitDTO deleteCaracterisitque(String reference, CaracteristiqueDTO caracteristique);
+    ProduitDTO deleteCaracteristique(String reference, CaracteristiqueDTO caracteristique);
     
     /**
      * Retourne toutes les caracteristiques d'un produit
