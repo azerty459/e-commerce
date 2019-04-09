@@ -51,7 +51,7 @@ maven-tests:
 
 # Deploy docker (only for dev/master)
 #.docker-deploy: &docker_deploy
-docker-deploy:
+.docker-deploy:
   image: thywolf/alpine-openssh-client:latest
   stage: deploy
   script:
