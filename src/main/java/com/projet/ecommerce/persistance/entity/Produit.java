@@ -59,7 +59,7 @@ public class Produit {
     private List<Categorie> categoriesSupprime;
     
     @OneToMany(
-        mappedBy = "produitCaracteristiqueId.produit",
+        mappedBy = "id.produit",
         cascade = CascadeType.ALL,
         orphanRemoval = true
     )

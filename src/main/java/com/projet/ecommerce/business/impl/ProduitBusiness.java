@@ -100,7 +100,7 @@ public class ProduitBusiness implements IProduitBusiness {
                     Caracteristique carac = caracteristiqueOptional.get();
                     ProduitCaracteristiqueId produitCaracteristiqueId = new ProduitCaracteristiqueId(produit, carac);
                     ProduitCaracteristique produitCaracteristique = new ProduitCaracteristique();
-                    produitCaracteristique.setProduitCaracteristiqueId(produitCaracteristiqueId);
+                    produitCaracteristique.setId(produitCaracteristiqueId);
                     produitCaracteristique.setValeur(valeur);
                     //Ajout dans les listes
                     carac.getProduits().add(produitCaracteristique);
@@ -335,7 +335,7 @@ public class ProduitBusiness implements IProduitBusiness {
         Caracteristique c = carateristiqueOptional.get();
         ProduitCaracteristique produitCaracteristique = null;
         for(ProduitCaracteristique pc : produit.getCaracterisitiques()) {
-            if(pc.getProduitCaracteristiqueId().getCaracteristique().getIdCaracteristique() == caracteristique.getId()) {
+            if(pc.getId().getCaracteristique().getIdCaracteristique() == caracteristique.getId()) {
                 produitCaracteristique = pc;
                 break;
             }

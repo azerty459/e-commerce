@@ -9,7 +9,7 @@ import javax.persistence.Table;
 public class ProduitCaracteristique {
     
     @EmbeddedId
-    private ProduitCaracteristiqueId produitCaracteristiqueId = new ProduitCaracteristiqueId();
+    private ProduitCaracteristiqueId id = new ProduitCaracteristiqueId();
     
     private String valeur;
 
@@ -18,15 +18,15 @@ public class ProduitCaracteristique {
     }
     
     public ProduitCaracteristique(Produit p, Caracteristique c) {
-        this.produitCaracteristiqueId = new ProduitCaracteristiqueId(p, c);
+        this.id = new ProduitCaracteristiqueId(p, c);
     }
 
-    public ProduitCaracteristiqueId getProduitCaracteristiqueId() {
-        return produitCaracteristiqueId;
+    public ProduitCaracteristiqueId getId() {
+        return id;
     }
 
-    public void setProduitCaracteristiqueId(ProduitCaracteristiqueId id) {
-        this.produitCaracteristiqueId = id;
+    public void setId(ProduitCaracteristiqueId id) {
+        this.id = id;
     }
     
     public String getValeur() {
