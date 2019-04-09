@@ -37,10 +37,11 @@ maven-tests:
     expire_in: 30 min
 
 # Create docker (only for dev/master)
-docker-package:
+.docker-package: &docker_package
   stage: package
   script:
     - echo "create docker on $ENVIRONMENT"
+    - echo "$ENVIRONMENT"
 #  - docker build -t registry.gitlab.com/marcolenzo/actuator-sample .
 #  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
 #  - docker push registry.gitlab.com/marcolenzo/actuator-sample
@@ -49,11 +50,13 @@ docker-package:
     - master
 
 # Deploy docker (only for dev/master)
+#.docker-deploy: &docker_deploy
 docker-deploy:
-  image: panubo/sshd:1.0.1
+  image: thywolf/alpine-openssh-client:latest
   stage: deploy
   script:
     - echo "deploy docker with ${ENVIRONMENT}"
+    - echo "${ENVIRONMENT}"
 #     - ssh -o StrictHostKeyChecking=no -t -t go@"$DEPLOY_SERVER" 'go-destroydockerimage.sh '$CONTAINER_GROUP'/'$CONTAINER_ID' && sudo docker pull '$REGISTRY'/'$CONTAINER_GROUP'/'$CONTAINER_ID':'$CONTAINER_VERSION''
 #     - ssh -o StrictHostKeyChecking=no -t -t go@"$DEPLOY_SERVER" 'sudo docker run --restart=on-failure:10 -d -p 8080:8080 -v /etc/norauto:/etc/norauto -v /etc/localtime:/etc/localtime -v /home/nextoo/portailPro-Back/conf:/conf -v /home/nextoo/norauto/portailpro:/partage -e SKIP_CONSUL=true -e HEAP_SIZE=1g -e JAVA_OPTS="-Dfile.encoding=UTF8 -Xmx2g -Duser.timezone=Europe/Paris" --name '$APPLICATION_NAME' '$REGISTRY'/'$CONTAINER_GROUP'/'$CONTAINER_ID':'$CONTAINER_VERSION' --spring.profiles.active=dev'
   only:
@@ -66,14 +69,28 @@ build_dev:
   <<: *maven_build
   variables:
     APP_FILE: "application-dev"
-    ENVIRONMENT: "dev"
+    ENVIRONMENT: "dev-build"
   only:
     - dev
+
+package_dev:
+  <<: *docker_package
+  variables:
+    ENVIRONMENT: "dev-package"
+  only:
+    - dev
+
+#deploy_dev:
+#  <<: *docker_deploy
+#  variables:
+#    ENVIRONMENT: "dev-deploy"
+#  only:
+#    - dev
 
 build_prod:
   <<: *maven_build
   variables:
     APP_FILE: "application-prod"
-    ENVIRONMENT: "prod"
+    ENVIRONMENT: "prod-build"
   only:
     - master
