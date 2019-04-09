@@ -88,7 +88,7 @@ public class CaracteristiqueTransformer {
 
 		Caracteristique caracteristique = new Caracteristique();
 		caracteristique.setIdCaracteristique(caracteristiqueDTO.getIdCaracteristique());
-		caracteristiqueDTO.setLibelle(caracteristiqueDTO.getLibelle());
+		caracteristique.setLibelle(caracteristiqueDTO.getLibelle());
 
 		return caracteristique;
 	}

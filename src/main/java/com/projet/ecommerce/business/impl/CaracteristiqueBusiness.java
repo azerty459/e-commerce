@@ -45,7 +45,7 @@ public class CaracteristiqueBusiness implements ICaracteristique{
 	//Création d'un Objet Entity de type Caracteristique
 	@Override
 	public CaracteristiqueDTO createCaracteristique(CaracteristiqueDTO caracteristiqueDTO) {
-
+		
 		Caracteristique caracteristique = new Caracteristique();
 		String libelle = caracteristiqueDTO.getLibelle();
 		

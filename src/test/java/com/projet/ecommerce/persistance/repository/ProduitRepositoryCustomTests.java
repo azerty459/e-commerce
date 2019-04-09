@@ -34,7 +34,7 @@ public class ProduitRepositoryCustomTests {
         TEMP_INSERT.setPrixHT(8.7f);
         TEMP_INSERT.setDescription("joli produit");
         TEMP_INSERT.setCategories(new ArrayList<>());
-
+        
         TEMP_CATEGORIE = new Categorie();
         TEMP_CATEGORIE.setNomCategorie("Livre");
         TEMP_CATEGORIE.setBorneGauche(1);
