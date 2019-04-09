@@ -4,7 +4,6 @@ import com.projet.ecommerce.business.IProduitBusiness;
 import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
 import com.projet.ecommerce.business.dto.ProduitCaracteristiqueDTO;
 import com.projet.ecommerce.business.dto.ProduitDTO;
-import com.projet.ecommerce.business.dto.transformer.CaracteristiqueTransformer;
 import com.projet.ecommerce.business.dto.transformer.ProduitCaracteristiqueTransformer;
 import com.projet.ecommerce.business.dto.transformer.ProduitTransformer;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
@@ -99,11 +98,9 @@ public class ProduitBusiness implements IProduitBusiness {
                 Optional<Caracteristique> caracteristiqueOptional = caracteristiqueRepository.findByLibelle(libelle);
                 if(caracteristiqueOptional.isPresent()) {
                     Caracteristique carac = caracteristiqueOptional.get();
-                    ProduitCaracteristiqueId produitCaracteristiqueId = new ProduitCaracteristiqueId(produit.getReferenceProduit(), carac.getIdCaracteristique());
+                    ProduitCaracteristiqueId produitCaracteristiqueId = new ProduitCaracteristiqueId(produit, carac);
                     ProduitCaracteristique produitCaracteristique = new ProduitCaracteristique();
-                    produitCaracteristique.setId(produitCaracteristiqueId);
-                    produitCaracteristique.setProduit(produit);
-                    produitCaracteristique.setCaracteristique(carac);
+                    produitCaracteristique.setProduitCaracteristiqueId(produitCaracteristiqueId);
                     produitCaracteristique.setValeur(valeur);
                     //Ajout dans les listes
                     carac.getProduits().add(produitCaracteristique);
@@ -338,7 +335,7 @@ public class ProduitBusiness implements IProduitBusiness {
         Caracteristique c = carateristiqueOptional.get();
         ProduitCaracteristique produitCaracteristique = null;
         for(ProduitCaracteristique pc : produit.getCaracterisitiques()) {
-            if(pc.getCaracteristique().getIdCaracteristique() == caracteristique.getId()) {
+            if(pc.getProduitCaracteristiqueId().getCaracteristique().getIdCaracteristique() == caracteristique.getId()) {
                 produitCaracteristique = pc;
                 break;
             }

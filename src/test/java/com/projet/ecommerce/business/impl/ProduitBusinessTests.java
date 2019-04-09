@@ -129,7 +129,7 @@ public class ProduitBusinessTests {
         Caracteristique caracteristique = buildCaracteristique();
         ProduitCaracteristiqueId produitCaracteristiqueId = new ProduitCaracteristiqueId(produit.getReferenceProduit(), caracteristique.getIdCaracteristique());
         ProduitCaracteristique produitCaracteristique = new ProduitCaracteristique();
-        produitCaracteristique.setId(produitCaracteristiqueId);
+        produitCaracteristique.setProduitCaracteristiqueId(produitCaracteristiqueId);
         produitCaracteristique.setValeur(valeur);
         produitCaracteristique.setCaracteristique(caracteristique);
         produitCaracteristique.setProduit(produit);

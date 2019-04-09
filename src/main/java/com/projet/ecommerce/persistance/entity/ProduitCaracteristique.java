@@ -1,12 +1,7 @@
 package com.projet.ecommerce.persistance.entity;
 
-import java.util.Objects;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
 import javax.persistence.Table;
 
 @Entity
@@ -14,17 +9,7 @@ import javax.persistence.Table;
 public class ProduitCaracteristique {
     
     @EmbeddedId
-    private ProduitCaracteristiqueId id = new ProduitCaracteristiqueId();
-    
-    @MapsId("referenceProduit")
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reference_produit")
-    private Produit produit;
-    
-    @MapsId("idCaracteristique")
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_caracteristique")
-    private Caracteristique caracteristique;
+    private ProduitCaracteristiqueId produitCaracteristiqueId = new ProduitCaracteristiqueId();
     
     private String valeur;
 
@@ -33,33 +18,15 @@ public class ProduitCaracteristique {
     }
     
     public ProduitCaracteristique(Produit p, Caracteristique c) {
-        this.produit = p;
-        this.caracteristique = c;
-        this.id = new ProduitCaracteristiqueId(p.getReferenceProduit(), c.getIdCaracteristique());
+        this.produitCaracteristiqueId = new ProduitCaracteristiqueId(p, c);
     }
 
-    public ProduitCaracteristiqueId getId() {
-        return id;
+    public ProduitCaracteristiqueId getProduitCaracteristiqueId() {
+        return produitCaracteristiqueId;
     }
 
-    public void setId(ProduitCaracteristiqueId id) {
-        this.id = id;
-    }
-
-    public Produit getProduit() {
-        return produit;
-    }
-
-    public void setProduit(Produit produit) {
-        this.produit = produit;
-    }
-
-    public Caracteristique getCaracteristique() {
-        return caracteristique;
-    }
-
-    public void setCaracteristique(Caracteristique caracteristique) {
-        this.caracteristique = caracteristique;
+    public void setProduitCaracteristiqueId(ProduitCaracteristiqueId id) {
+        this.produitCaracteristiqueId = id;
     }
     
     public String getValeur() {
@@ -70,6 +37,7 @@ public class ProduitCaracteristique {
         this.valeur = valeur;
     }
 
+    /*
     @Override
     public boolean equals(Object obj) {
         if(this == obj) {
@@ -85,5 +53,6 @@ public class ProduitCaracteristique {
     public int hashCode() {
         return Objects.hash(this.produit, this.caracteristique);
     }
+    */
     
 }

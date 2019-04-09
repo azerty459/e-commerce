@@ -14,7 +14,7 @@ public class ProduitCaracteristiqueTransformer {
             return null;
         }
         return new ProduitCaracteristiqueDTO(
-                CaracteristiqueTransformer.entityToDto(pc.getCaracteristique()), 
+                CaracteristiqueTransformer.entityToDto(pc.getProduitCaracteristiqueId().getCaracteristique()), 
                 pc.getValeur()
         );
     }
@@ -35,8 +35,8 @@ public class ProduitCaracteristiqueTransformer {
             return null;
         }
         ProduitCaracteristique pc = new ProduitCaracteristique();
-        pc.setCaracteristique(CaracteristiqueTransformer.dtoToEntity(pcDto.getCaracteristique()));
-        pc.setId(new ProduitCaracteristiqueId(null, pc.getCaracteristique().getIdCaracteristique()));
+        ProduitCaracteristiqueId produitCaracteristiqueId = new ProduitCaracteristiqueId(null, CaracteristiqueTransformer.dtoToEntity(pcDto.getCaracteristique()));
+        pc.setProduitCaracteristiqueId(produitCaracteristiqueId);
         pc.setValeur(pcDto.getValeur());
         return pc;
     }

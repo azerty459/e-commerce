@@ -60,7 +60,7 @@ public class ProduitCaracteristiqueTransformerTests {
     }
     
     private void assertTransformEquals (ProduitCaracteristique produitCaracteristique, ProduitCaracteristiqueDTO produitCaracteristiqueDTO) {
-        Assert.assertEquals(produitCaracteristique.getId().getIdCaracteristique(), produitCaracteristiqueDTO.getCaracteristique().getId());
+        Assert.assertEquals(produitCaracteristique.getProduitCaracteristiqueId().getIdCaracteristique(), produitCaracteristiqueDTO.getCaracteristique().getId());
         Assert.assertEquals(produitCaracteristique.getCaracteristique().getIdCaracteristique(), produitCaracteristiqueDTO.getCaracteristique().getId());
         Assert.assertEquals(produitCaracteristique.getValeur(), produitCaracteristiqueDTO.getValeur());
     }
@@ -80,7 +80,7 @@ public class ProduitCaracteristiqueTransformerTests {
         //Creation produit caracteristique
         ProduitCaracteristiqueId pcid = new ProduitCaracteristiqueId(ref, id);
         ProduitCaracteristique pc = new ProduitCaracteristique();
-        pc.setId(pcid);
+        pc.setProduitCaracteristiqueId(pcid);
         pc.setValeur(randomString());
         pc.setCaracteristique(c);
         pc.setProduit(p);

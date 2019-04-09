@@ -24,7 +24,7 @@ public class Caracteristique {
     private String libelle = "";
     
     @OneToMany(
-        mappedBy = "caracteristique",
+        mappedBy = "produitCaracteristiqueId.caracteristique",
         cascade = CascadeType.ALL,
         orphanRemoval = true
     )
