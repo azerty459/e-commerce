@@ -12,8 +12,8 @@ public interface ProduitRepositoryCustom {
     /**
      * Recupère la liste des produits correspondant aux critères
      * 
-     * @param noteSup La note moyenne doit être supérieur à cette valeur (-1 pour ignorer)
-     * @param noteInf La note moyenne doit être inférieur à cette valeur (-1 pour ignorer)
+     * @param noteSup La note moyenne doit être supérieur à cette valeur (< 0 pour ignorer)
+     * @param noteInf La note moyenne doit être inférieur à cette valeur (< 0 pour ignorer)
      * @param nomProduit Le nom exact du produit
      * @param nomProduitContient Le nom du produit doit contenir cette valeur
      * @param categorie La categorie du produit
