@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.projet.ecommerce.business.ICaracteristique;
+import com.projet.ecommerce.business.ICaracteristiqueBusiness;
 import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
 import com.projet.ecommerce.business.dto.transformer.CaracteristiqueTransformer;
 import com.projet.ecommerce.persistance.entity.Caracteristique;
@@ -12,7 +12,7 @@ import com.projet.ecommerce.persistance.repository.CaracteristiqueRepository;
 import graphql.GraphQLException;
 
 @Service
-public class CaracteristiqueBusiness implements ICaracteristique{
+public class CaracteristiqueBusiness implements ICaracteristiqueBusiness{
 
 	@Autowired
 	private CaracteristiqueRepository caracteristiqueRepository;
@@ -45,37 +45,38 @@ public class CaracteristiqueBusiness implements ICaracteristique{
 	//Création d'un Objet Entity de type Caracteristique
 	@Override
 	public CaracteristiqueDTO createCaracteristique(CaracteristiqueDTO caracteristiqueDTO) {
-		
+
 		Caracteristique caracteristique = new Caracteristique();
 		String libelle = caracteristiqueDTO.getLibelle();
-		
+
 		if(!libelle.isEmpty())
 			caracteristique.setLibelle(libelle);
 		else
 			throw new GraphQLException("Le libelle ne peut-être vide !!");
-		
+
 		return CaracteristiqueTransformer.entityToDto(caracteristiqueRepository.save(caracteristique));
 	}
 
 	@Override
-	public void deleteCaracteristique(CaracteristiqueDTO caracteristiqueDTO) {
+	public boolean deleteCaracteristique(int id) {
 
-		if(caracteristiqueRepository.findById(caracteristiqueDTO.getIdCaracteristique()).isPresent())
-			
-			caracteristiqueRepository.deleteById(caracteristiqueDTO.getIdCaracteristique());
-		else
-			
-			throw new GraphQLException("Ce caracteristique n'existe pas dans la base");
+		if(caracteristiqueRepository.findById(id).isPresent()) {
+
+			caracteristiqueRepository.deleteById(id);
+			return true;
+		}
+		
+		return false;
 	}
 
 	@Override
 	public CaracteristiqueDTO updateCaracteristique(CaracteristiqueDTO caracteristiqueDTO) {
-		
+
 		Caracteristique caracteristique = new Caracteristique();
-		
+
 		if(caracteristiqueDTO == null)
 			return null;
-		
+
 		if(caracteristiqueDTO.getLibelle().isEmpty())
 			throw new GraphQLException("Le libelle ne peut-être vide !!");
 
@@ -83,7 +84,7 @@ public class CaracteristiqueBusiness implements ICaracteristique{
 			caracteristique = CaracteristiqueTransformer.dtoToEntity(caracteristiqueDTO);
 		else
 			throw new GraphQLException("Ce caracteristique n'existe pas dans la base");
-		
+
 		return CaracteristiqueTransformer.entityToDto(caracteristiqueRepository.save(caracteristique));
 	}
 
