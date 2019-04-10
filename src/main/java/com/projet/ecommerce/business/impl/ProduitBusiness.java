@@ -85,7 +85,7 @@ public class ProduitBusiness implements IProduitBusiness {
         }
         produit.setCategories(categorieList);
         if(listeCaracteristiquesDto != null) {
-        	List<Caracteristique> listeCaracteristiques = CaracteristiqueTransformer.dtoToEntity(listeCaracteristiquesDto, produit);
+        	List<Caracteristique> listeCaracteristiques = CaracteristiqueTransformer.dtoToEntityList(listeCaracteristiquesDto, produit);
             produit.setCaracteristiques(listeCaracteristiques);
         }
         

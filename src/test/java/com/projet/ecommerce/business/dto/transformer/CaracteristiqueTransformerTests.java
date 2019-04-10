@@ -132,20 +132,32 @@ public class CaracteristiqueTransformerTests {
 		Caracteristique caracteristique = CaracteristiqueTransformer.dtoToEntity(CARACTERISTIQUE_DTO1, PRODUIT);
 		assertDataCaracteristique(CARACTERISTIQUE_DTO1, caracteristique);
 	}
+	
+	@Test
+	public void singleDtoToEntityCaracteristiqueNull() {
+		Caracteristique caracteristique = CaracteristiqueTransformer.dtoToEntity(null, PRODUIT);
+		Assert.assertNull(caracteristique);
+	}
 
 	@Test
     public void singleEntityToDto() {
         CaracteristiqueDTO caracteristiqueDto = CaracteristiqueTransformer.entityToDto(CARACTERISTIQUE_1, PRODUIT_DTO);
         assertDataCaracteristique(caracteristiqueDto, CARACTERISTIQUE_1);
     }
+	
+	@Test
+    public void singleEntityToDtoCaracteristiqueNull() {
+        CaracteristiqueDTO caracteristiqueDto = CaracteristiqueTransformer.entityToDto(null, PRODUIT_DTO);
+        Assert.assertNull(caracteristiqueDto);
+    }
 
 	@Test
-    public void ListeDtoToEntity() {
+    public void listeDtoToEntity() {
         List<CaracteristiqueDTO> caracteristiqueDTOList = new ArrayList<>();
         caracteristiqueDTOList.add(CARACTERISTIQUE_DTO1);
         caracteristiqueDTOList.add(CARACTERISTIQUE_DTO2);
 
-        List<Caracteristique> caracteristiqueList = new ArrayList<>(CaracteristiqueTransformer.dtoToEntity(caracteristiqueDTOList, PRODUIT));
+        List<Caracteristique> caracteristiqueList = new ArrayList<>(CaracteristiqueTransformer.dtoToEntityList(caracteristiqueDTOList, PRODUIT));
 
         Assert.assertNotNull(caracteristiqueList);
         assertDataCaracteristique(caracteristiqueDTOList.get(0), caracteristiqueList.get(0));
@@ -153,12 +165,12 @@ public class CaracteristiqueTransformerTests {
     }
 
 	@Test
-    public void ListeEntityToDto() {
+    public void listeEntityToDto() {
         List<Caracteristique> caracteristiqueList = new ArrayList<>();
         caracteristiqueList.add(CARACTERISTIQUE_1);
         caracteristiqueList.add(CARACTERISTIQUE_2);
 
-        List<CaracteristiqueDTO> caracteristiqueDtoList = new ArrayList<>(CaracteristiqueTransformer.entityToDto(caracteristiqueList, PRODUIT_DTO));
+        List<CaracteristiqueDTO> caracteristiqueDtoList = new ArrayList<>(CaracteristiqueTransformer.entityToDtoList(caracteristiqueList, PRODUIT_DTO));
 
         Assert.assertNotNull(caracteristiqueList);
         assertDataCaracteristique(caracteristiqueDtoList.get(0), caracteristiqueList.get(0));

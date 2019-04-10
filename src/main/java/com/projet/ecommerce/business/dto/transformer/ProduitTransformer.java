@@ -55,7 +55,7 @@ public class ProduitTransformer {
         HashMap<Categorie, Collection<Categorie>> chemins = new HashMap<>();
         produitDTO.setCategories(new ArrayList<>(CategorieTransformer.entityToDto(produit.getCategories(), chemins, false, false, null)));
         
-        produitDTO.setCaracteristiques(CaracteristiqueTransformer.entityToDto(produit.getCaracteristiques(), produitDTO));
+        produitDTO.setCaracteristiques(CaracteristiqueTransformer.entityToDtoList(produit.getCaracteristiques(), produitDTO));
         
         return produitDTO;
     }
@@ -100,7 +100,7 @@ public class ProduitTransformer {
         }
         
 //        produit.setPhotoPrincipale(PhotoTransformer.dtoToEntity(produitDTO.getPhotoPrincipale()));
-        produit.setCaracteristiques(CaracteristiqueTransformer.dtoToEntity(produitDTO.getCaracteristiques(), produit));
+        produit.setCaracteristiques(CaracteristiqueTransformer.dtoToEntityList(produitDTO.getCaracteristiques(), produit));
         return produit;
     }
 }

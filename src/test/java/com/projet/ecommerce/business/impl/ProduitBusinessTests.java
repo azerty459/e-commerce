@@ -134,27 +134,30 @@ public class ProduitBusinessTests {
         
 		Caracteristique caracteristique = produit.getCaracteristiques().get(0);
 		String typeCaracteristique = caracteristique.getCaracteristiquePk().getTypeCaracteristique().getNomTypeCaracteristique();
-		List<CaracteristiqueDTO> listeCaracteristiquesDto = CaracteristiqueTransformer.entityToDto(produit.getCaracteristiques(), null );
+		List<CaracteristiqueDTO> listeCaracteristiquesDto = CaracteristiqueTransformer.entityToDtoList(produit.getCaracteristiques(), null);
         
         Mockito.when(produitRepository.save(Mockito.any())).then(AdditionalAnswers.returnsFirstArg());
 
 		// test de la méthode
-		ProduitDTO retour = produitBusiness.add("A05A01", "Livre1", "Un livre", 2.1f, null, listeCaracteristiquesDto );
+		ProduitDTO retour = produitBusiness.add("A05A01", "Livre1", "Un livre", 2.1f, null, listeCaracteristiquesDto);
 		
 		//Vérification du test
-        
+		Assert.assertNotNull(retour);
         CaracteristiqueDTO caracteristiquesRetour = retour.getCaracteristiques().get(0);
 		
 		//TODO Assert sur tout le produit + ordre equals
 		//assertDataProduit(produit, retour);
-        Assert.assertNotNull(retour);
+        
 		Assert.assertNotNull(produit);
+		
         Assert.assertEquals(produit.getNom(), retour.getNom());
         Assert.assertEquals(produit.getDescription(), retour.getDescription());
         Assert.assertEquals(produit.getPrixHT(), retour.getPrixHT(), 0);
         Assert.assertEquals(produit.getReferenceProduit(), retour.getRef());
+        
 		Assert.assertNotNull(caracteristiquesRetour);
 		Assert.assertNotNull(caracteristique);
+		
 		Assert.assertEquals(typeCaracteristique, caracteristiquesRetour.getTypeCaracteristiqueDto().getNomType());
         Assert.assertEquals(caracteristique.getValeurCaracteristique(), caracteristiquesRetour.getValeurCaracteristique());
     }

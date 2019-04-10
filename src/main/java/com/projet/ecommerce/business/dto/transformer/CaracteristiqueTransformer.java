@@ -18,7 +18,7 @@ public class CaracteristiqueTransformer {
      * @return un objet Caracteristique
      */
     public static Caracteristique dtoToEntity(CaracteristiqueDTO caracteristiqueDTO, Produit produit) {
-    	if(caracteristiqueDTO == null || produit == null ) {
+    	if(caracteristiqueDTO == null) {
     		return null;
     	}
        Caracteristique caracteristique = new Caracteristique();
@@ -31,8 +31,8 @@ public class CaracteristiqueTransformer {
        return caracteristique;
     }
     
-    public static List<CaracteristiqueDTO> entityToDto(List<Caracteristique> caracteristiques, ProduitDTO produitDto) {
-        if (caracteristiques == null || produitDto == null) {
+    public static List<CaracteristiqueDTO> entityToDtoList(List<Caracteristique> caracteristiques, ProduitDTO produitDto) {
+        if (caracteristiques == null) {
             return null;
         }
         List<CaracteristiqueDTO> caracteristiqueDTOCollection = new ArrayList<>();
@@ -49,7 +49,7 @@ public class CaracteristiqueTransformer {
      * @return un objet Caracteristique
      */
     public static CaracteristiqueDTO entityToDto(Caracteristique caracteristique, ProduitDTO produitDto) {
-    	if(caracteristique == null || produitDto == null) {
+    	if(caracteristique == null) {
     		return null;
     	}
        CaracteristiqueDTO caracteristiqueDto = new CaracteristiqueDTO();
@@ -61,8 +61,8 @@ public class CaracteristiqueTransformer {
        return caracteristiqueDto;
     }
     
-    public static List<Caracteristique> dtoToEntity(List<CaracteristiqueDTO> caracteristiquesDto, Produit produit) {
-        if (caracteristiquesDto == null || produit == null) {
+    public static List<Caracteristique> dtoToEntityList(List<CaracteristiqueDTO> caracteristiquesDto, Produit produit) {
+        if (caracteristiquesDto == null) {
             return null;
         }
         List<Caracteristique> caracteristiqueCollection = new ArrayList<>();
