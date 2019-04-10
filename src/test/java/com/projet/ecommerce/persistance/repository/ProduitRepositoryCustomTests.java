@@ -1,5 +1,6 @@
 package com.projet.ecommerce.persistance.repository;
 
+import com.projet.ecommerce.persistance.entity.AvisClient;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Produit;
 import org.junit.Assert;
@@ -24,6 +25,8 @@ public class ProduitRepositoryCustomTests {
 
     private static final Produit TEMP_INSERT;
     private static final Categorie TEMP_CATEGORIE;
+    private static final AvisClient TEMP_AVIS;
+    private static final AvisClient TEMP_AVIS2;
 
     static {
         //Permet d'écraser la config application.properties par application-test.properties
@@ -32,15 +35,31 @@ public class ProduitRepositoryCustomTests {
         TEMP_INSERT = new Produit();
         TEMP_INSERT.setReferenceProduit("A05A87");
         TEMP_INSERT.setPrixHT(8.7f);
+        TEMP_INSERT.setNom("Test nom");
         TEMP_INSERT.setDescription("joli produit");
         TEMP_INSERT.setCategories(new ArrayList<>());
+        TEMP_INSERT.setAvisClients(new ArrayList<>());
 
         TEMP_CATEGORIE = new Categorie();
+        TEMP_CATEGORIE.setIdCategorie(1);
         TEMP_CATEGORIE.setNomCategorie("Livre");
         TEMP_CATEGORIE.setBorneGauche(1);
         TEMP_CATEGORIE.setBorneDroit(2);
         TEMP_CATEGORIE.setLevel(1);
         TEMP_CATEGORIE.setProduits(new ArrayList<>());
+        
+        TEMP_AVIS = new AvisClient();
+        TEMP_AVIS.setProduit(TEMP_INSERT);
+        TEMP_AVIS.setNote(3);
+        
+        TEMP_AVIS2 = new AvisClient();
+        TEMP_AVIS2.setProduit(TEMP_INSERT);
+        TEMP_AVIS2.setNote(5);
+        
+        List<AvisClient> listeAvis = new ArrayList<AvisClient>();
+        listeAvis.add(TEMP_AVIS);
+        listeAvis.add(TEMP_AVIS2);
+        TEMP_INSERT.setAvisClients(listeAvis);
 
         Collection<Categorie> categorieCollection = TEMP_INSERT.getCategories();
         categorieCollection.add(TEMP_CATEGORIE);
@@ -54,9 +73,6 @@ public class ProduitRepositoryCustomTests {
 
     @Autowired
     private ProduitRepository produitRepository;
-
-    @Autowired
-    private CategorieRepository categorieRepository;
 
     @Test
     // Je teste que la méthode si l'on l'appelle avec null dans les deux paramètres, elle retourne une collection de produit.
@@ -86,9 +102,52 @@ public class ProduitRepositoryCustomTests {
     }
     
     @Test
-    // Je teste que la méthode si l'on l'appelle avec null dans les deux paramètres, elle retourne une collection de produit.
+    // Je teste que la méthode si l'on l'appelle avec null dans les paramètres, elle retourne une collection de produit.
     public void findProduitWithCriteriaByNull() {
-        Collection<Produit> produitCollection = produitRepository.findProduitWithCriteria(null, null, null, null, 0);
+        Collection<Produit> produitCollection = produitRepository.findProduitWithCriteria(null, null, null, null, null);
         Assert.assertNotNull(produitCollection);
+    }
+    
+    @Test
+    public void findProduitWithCriteriaByNomCompletCorrect() {
+        Collection<Produit> produitCollection = produitRepository.findProduitWithCriteria(null, null, "Test nom", null, null);
+        Assert.assertNotNull(produitCollection);
+        Assert.assertEquals(1, produitCollection.size());
+    }
+    
+    @Test
+    public void findProduitWithCriteriaByNomCompletNonCorrect() {
+        Collection<Produit> produitCollection = produitRepository.findProduitWithCriteria(null, null, "Test ", null, null);
+        Assert.assertNotNull(produitCollection);
+        Assert.assertEquals(0, produitCollection.size());
+    }
+    
+    @Test
+    public void findProduitWithCriteriaByNomIncomplet() {
+        Collection<Produit> produitCollection = produitRepository.findProduitWithCriteria(null, null, null, "Test", null);
+        Assert.assertNotNull(produitCollection);
+        Assert.assertEquals(1, produitCollection.size());
+    }
+    
+
+    @Test
+    public void findProduitWithCriteriaByMoyenneInf() {
+        Collection<Produit> produitCollection = produitRepository.findProduitWithCriteria(3, null, null,null, null);
+        Assert.assertNotNull(produitCollection);
+        Assert.assertEquals(1, produitCollection.size());
+    }
+    
+    @Test
+    public void findProduitWithCriteriaByMoyenneSup() {
+        Collection<Produit> produitCollection = produitRepository.findProduitWithCriteria(null, 6, null, null, null);
+        Assert.assertNotNull(produitCollection);
+        Assert.assertEquals(1, produitCollection.size());
+    }
+    
+    @Test
+    public void findProduitWithCriteriaByCategorie() {
+        Collection<Produit> produitCollection = produitRepository.findProduitWithCriteria(null, null, null, null, "Livre");
+        Assert.assertNotNull(produitCollection);
+        Assert.assertEquals(1, produitCollection.size());
     }
 }

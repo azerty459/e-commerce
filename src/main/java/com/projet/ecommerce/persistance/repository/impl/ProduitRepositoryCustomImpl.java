@@ -67,39 +67,36 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
 	}
 
 	@Override
-	public Collection<Produit> findProduitWithCriteria(Integer noteMin, 
-													   Integer noteMax, 
-													   String nomProduitComplet,
-													   String nomProduitNonComplet, 
-													   int idCategorie) {
+	public Collection<Produit> findProduitWithCriteria(Integer noteMin, Integer noteMax, String nomProduitComplet,
+			String nomProduitNonComplet, String nomCategorie) {
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-		List<Predicate> conditions = new ArrayList<Predicate>();
 		CriteriaQuery<Produit> query = builder.createQuery(Produit.class);
-		
+
 		Root<Produit> produit = query.from(Produit.class);
 
-//		if (idCategorie > 0) {
-//			ListJoin<Categorie, Produit> categories = produit.joinList("reference_produit", JoinType.LEFT);
-//			Categorie categorie = categorieRepo.findById(idCategorie).get();
-//			conditions.add(builder.isMember(categorie, categories));
-//		}
-		if (noteMin > 0 && noteMin < noteMax) {
-			Join<AvisClient, Produit> avisClient = produit.join("reference_produit");
-			conditions.add(builder.greaterThanOrEqualTo(avisClient.get("note"), noteMin));
-		}
-		if (noteMax > 0 && noteMin < noteMax) {
-			Join<AvisClient, Produit> avisClient = produit.join("reference_produit");
-			conditions.add(builder.lessThanOrEqualTo(avisClient.get("note"), noteMax));
-		}
+		query.select(produit);
+
 		if (nomProduitComplet != null) {
-			conditions.add(builder.equal(produit.get("nom"), nomProduitComplet));
+			query.where(builder.equal(produit.get("nom"), nomProduitComplet));
 		}
 		if (nomProduitNonComplet != null) {
-			conditions.add(builder.like(produit.get("nom"), "%"+nomProduitNonComplet+"%"));
+			query.where(builder.like(produit.get("nom"), "%" + nomProduitNonComplet + "%"));
 		}
-		return entityManager
-				.createQuery(query.select(produit).where(builder.and(conditions.toArray(new Predicate[] {}))))
-				.getResultList();
+		if (noteMin != null) {
+			Join<AvisClient, Produit> avisClient = produit.join("avisClients");
+			query.groupBy(produit.get("referenceProduit"));
+			query.having(builder.gt(builder.avg(avisClient.get("note")), noteMin));
+		}
+		if (noteMax != null) {
+			Join<AvisClient, Produit> avisClient = produit.join("avisClients");
+			query.groupBy(produit.get("referenceProduit"));
+			query.having(builder.lt(builder.avg(avisClient.get("note")), noteMax));
+		}
+		if (nomCategorie != null) {
+			Join<Categorie, Produit> categories = produit.join("categories");
+			query.where(builder.equal(categories.get("nomCategorie"), "Livre"));
+		}
+		return entityManager.createQuery(query).getResultList();
 	}
 
 }

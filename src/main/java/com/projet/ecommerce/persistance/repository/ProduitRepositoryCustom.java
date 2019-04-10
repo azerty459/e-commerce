@@ -12,6 +12,6 @@ public interface ProduitRepositoryCustom {
     											Integer noteMax, 
     											String nomProduitComplet, 
     											String nomProduitNonComplet, 
-    											int idCategorie );
+    											String nomCategorie );
 
 }
