@@ -88,9 +88,10 @@ public class ProduitRepositoryCustomTests {
     
     @Test
     public void testFindByCriteria() {
-        //Recup la catégorie
-        Categorie categorie = TEMP_CATEGORIE;
-        categorie.setIdCategorie(1);
+        //Creation la catégorie
+        Categorie categorie = new Categorie();
+        categorie.setNomCategorie("Meilleur");
+        categorie = categorieRepository.save(categorie);
         List<Categorie> listCategorie = new ArrayList<>();
         listCategorie.add(categorie);
         //Creation avis client
@@ -114,7 +115,7 @@ public class ProduitRepositoryCustomTests {
         produit.setNom("AutreProduit");
         produit.setPrixHT(6.2f);
         produit.setDescription("Autre produit");
-        produit.setCategories(new ArrayList<>());
+        produit.setCategories(listCategorie);
         produit.setAvisClients(new ArrayList<>());
         produit.getAvisClients().add(avisClient2);
         avisClient2.setProduit(produit);
@@ -170,11 +171,11 @@ public class ProduitRepositoryCustomTests {
         retour = produitRepository.findByCriteria(-1, -1, null, null, unknowCategorie);
         Assert.assertEquals(0, retour.size());
         //Test avec multiple filtre
-        retour = produitRepository.findByCriteria(5.5, -1, null, "", categorie);
+        retour = produitRepository.findByCriteria(5.5, -1, null, "        ", categorie);
         Assert.assertEquals(1, retour.size());
         retour = produitRepository.findByCriteria(5.5, -1, null, "id", categorie);
         Assert.assertEquals(0, retour.size());
-        retour = produitRepository.findByCriteria(-1, -1, "", "Produit", categorie);
+        retour = produitRepository.findByCriteria(-1, -1, "     ", "Test", categorie);
         Assert.assertEquals(1, retour.size());
         retour = produitRepository.findByCriteria(-1, 8.2, "", "dui", null);
         Assert.assertEquals(2, retour.size());
