@@ -2,7 +2,6 @@ package com.projet.ecommerce.persistance.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Collection;
 
 /**
  * Entité représentant la table utilisateur sous forme de classe.

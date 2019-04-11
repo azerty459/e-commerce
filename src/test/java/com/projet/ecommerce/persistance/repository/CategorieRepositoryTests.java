@@ -171,7 +171,6 @@ public class CategorieRepositoryTests {
         Assert.assertFalse(categorieRepository.findById(TEMP_DELETE.getIdCategorie()).isPresent());
     }
 
-
     @After
     public void end() {
         categorieRepository.deleteAll();

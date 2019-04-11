@@ -17,6 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -130,7 +131,7 @@ public class CategorieRestaurationTests {
         categorieBusiness.addEnfant("nom", 1);
         categorieBusiness.addEnfant("nom", 1);
         categorieBusiness.addEnfant("nom", 1);
-        ArrayList<Categorie> categories = new ArrayList<>(categorieRepository.findAll());
+        Collection<Categorie> categories = categorieRepository.findAll();
         Assert.assertEquals(7, categories.size());
 
     }

@@ -55,7 +55,7 @@ public class UtilisateurMutationTests {
     public void addUtilisateur() {
         Map<String, DataFetcher> retourMap = utilisateurMutation.produitWiring().getFieldDataFetchers();
 
-        Map<String, String> linkedHashMap = new LinkedHashMap<String, String>();
+        Map<String, String> linkedHashMap = new LinkedHashMap<>();
         linkedHashMap.put("email", "test@gmail.com");
         linkedHashMap.put("mdp", "azerty");
 
@@ -73,7 +73,7 @@ public class UtilisateurMutationTests {
     public void updateUtilisateur() {
         Map<String, DataFetcher> retourMap = utilisateurMutation.produitWiring().getFieldDataFetchers();
 
-        Map<String, String> linkedHashMap = new LinkedHashMap<String, String>();
+        Map<String, String> linkedHashMap = new LinkedHashMap<>();
         linkedHashMap.put("email", "test@gmail.com");
         linkedHashMap.put("mdp", "azerty");
 

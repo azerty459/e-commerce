@@ -44,6 +44,7 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
     private static final String SQL_RECOLLE_CATEGORIE = "UPDATE Categorie AS c " +
             "SET c.borneGauche = c.borneGauche - :depl, c.borneDroit = c.borneDroit - :depl " +
             "WHERE c.borneGauche >= :depl";
+
     @Autowired
     private EntityManager entityManager;
 
@@ -84,7 +85,6 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
         }
     }
 
-
     /**
      * Renvoie la catégorie directement parent d'une catégorie donnée en paramètre.
      *
@@ -117,56 +117,43 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
         }
 
         return resultat;
-
     }
 
     @Override
     public void ecarterBornes(int bg, int decalage) {
-        Query query1;
-        Query query2;
-        query1 = entityManager.createQuery(SQL_CATEGORIES_ECARTER_BORNES_GAUCHES);
+        Query query1 = entityManager.createQuery(SQL_CATEGORIES_ECARTER_BORNES_GAUCHES);
         query1.setParameter("i", decalage);
         query1.setParameter("limite", bg);
         query1.executeUpdate();
 
-        query2 = entityManager.createQuery(SQL_CATEGORIES_ECARTER_BORNES_DROITES);
+        Query query2 = entityManager.createQuery(SQL_CATEGORIES_ECARTER_BORNES_DROITES);
         query2.setParameter("i", decalage);
         query2.setParameter("limite", bg);
         query2.executeUpdate();
         refreshEveryCategories();
-
-
     }
 
     @Override
     public int rearrangerBornes(int bg, int intervalle) {
-
-        Query query1;
-        Query query2;
-
-        query1 = entityManager.createQuery(SQL_DECALER_BORNES_GAUCHES);
+        Query query1 = entityManager.createQuery(SQL_DECALER_BORNES_GAUCHES);
         query1.setParameter("i", intervalle);
         query1.setParameter("bg", bg);
-
         int nb1 = query1.executeUpdate();
 
-        query2 = entityManager.createQuery(SQL_DECALER_BORNES_DROITES);
+        Query query2 = entityManager.createQuery(SQL_DECALER_BORNES_DROITES);
         query2.setParameter("i", intervalle);
         query2.setParameter("bg", bg);
-
         int nb2 = query2.executeUpdate();
+
         refreshEveryCategories();
         return Math.max(nb1, nb2);
     }
 
     @Override
     public int findBorneMax() {
-
-        Query query;
-        query = entityManager.createQuery(SQL_BORNE_MAX);
+        Query query = entityManager.createQuery(SQL_BORNE_MAX);
 
         Integer a = (Integer) query.getSingleResult();
-        System.out.println(a);
         if (a == null) {
             return 0;
         }
@@ -182,7 +169,6 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
         query.setParameter("depl", intervalleDeDeplacement);
         query.executeUpdate();
         refreshEveryCategories();
-
     }
 
     @Override
@@ -191,7 +177,6 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
         query.setParameter("depl", decalageBorne);
         query.executeUpdate();
         refreshEveryCategories();
-
     }
 
     private void refreshEveryCategories() {

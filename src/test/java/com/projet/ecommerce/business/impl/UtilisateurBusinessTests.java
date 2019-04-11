@@ -57,8 +57,7 @@ public class UtilisateurBusinessTests {
 
     @Test
     public void addNull() {
-        UtilisateurDTO utilisateurDTO = null;
-        Assert.assertNull(utilisateurBusiness.add(utilisateurDTO));
+        Assert.assertNull(utilisateurBusiness.add(null));
     }
 
     @Test
@@ -84,8 +83,6 @@ public class UtilisateurBusinessTests {
         thrown.expect(GraphQLCustomException.class);
         utilisateurBusiness.add(utilisateurDTO);
     }
-
-
 
     @Test
     public void addRoleNotExist() {
@@ -118,9 +115,6 @@ public class UtilisateurBusinessTests {
         thrown.expect(GraphQLCustomException.class);
         utilisateurBusiness.add(addUtilisateurDTO);
     }
-
-
-
 
     @Test
     public void update() {

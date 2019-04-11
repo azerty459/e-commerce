@@ -46,7 +46,7 @@ public class CategorieMutationTests {
     public void testNbDataFetcher() {
         Map<String, DataFetcher> retourMap = categorieMutation.produitWiring().getFieldDataFetchers();
         Assert.assertNotNull(retourMap);
-        Assert.assertEquals(5, retourMap.size());
+        Assert.assertEquals(6, retourMap.size());
     }
 
     @Test

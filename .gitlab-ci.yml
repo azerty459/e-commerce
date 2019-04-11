@@ -1,38 +1,115 @@
-image: maven:3.5.3-jdk-8
-  
+# https://about.gitlab.com/2016/12/14/continuous-delivery-of-a-spring-boot-application-with-gitlab-ci-and-kubernetes/
+
+variables:
+  ID_GIT_PROJECT: "??"
+  REGISTRY_SERVER: "??"
+  DEPLOY_SERVER: "ecommercedev.nextoo.fr"
+
 stages:
   - tests
-  - deploiement
-  
-tests:
+  - build
+  - package
+  - deploy
+
+# -----------------------------------------------------------------------
+
+# Run TUs only (for standard branches)
+maven-tests:
+  image: maven:3-jdk-8
   stage: tests
   script: 
-  - echo 'test'
-  only:
-  - branches
-  
-deploiement_dev:
-  stage: deploiement
-  script: 
-    - mvn package -DskipTests
+    - mvn -B -Dmaven.repo.local=/cache clean test
+  except:
+    - dev
+    - master
+
+# Build maven (only for dev/master)
+.maven-build: &maven_build
+  image: maven:3-jdk-8
+  stage: build
+  script:
+    - mvn -B -Dmaven.repo.local=/cache clean package
   artifacts:
     paths:
-    - target/*.jar
-    - src/main/resources/application-dev.properties
-    - src/main/resources/graphql
-    expire_in: 1h
+      - target/*.jar
+      - src/main/resources/$APP_FILE.properties
+      - src/main/resources/graphql
+    expire_in: 30 min
+
+# Create docker (only for dev/master)
+.docker-package: &docker_package
+  stage: package
+  script:
+    - echo "create docker on $ENVIRONMENT"
+    - echo "$ENVIRONMENT"
+#  - docker build -t registry.gitlab.com/marcolenzo/actuator-sample .
+#  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+#  - docker push registry.gitlab.com/marcolenzo/actuator-sample
+  only:
+    - dev
+    - master
+
+# Deploy docker (only for dev/master)
+.docker-deploy: &docker_deploy
+  image: thywolf/alpine-openssh-client:latest
+  stage: deploy
+  script:
+    - echo "deploy docker with ${ENVIRONMENT}"
+    - echo "${ENVIRONMENT}"
+#     - ssh -o StrictHostKeyChecking=no -t -t go@"$DEPLOY_SERVER" 'go-destroydockerimage.sh '$CONTAINER_GROUP'/'$CONTAINER_ID' && sudo docker pull '$REGISTRY'/'$CONTAINER_GROUP'/'$CONTAINER_ID':'$CONTAINER_VERSION''
+#     - ssh -o StrictHostKeyChecking=no -t -t go@"$DEPLOY_SERVER" 'sudo docker run --restart=on-failure:10 -d -p 8080:8080 -v /etc/norauto:/etc/norauto -v /etc/localtime:/etc/localtime -v /home/nextoo/portailPro-Back/conf:/conf -v /home/nextoo/norauto/portailpro:/partage -e SKIP_CONSUL=true -e HEAP_SIZE=1g -e JAVA_OPTS="-Dfile.encoding=UTF8 -Xmx2g -Duser.timezone=Europe/Paris" --name '$APPLICATION_NAME' '$REGISTRY'/'$CONTAINER_GROUP'/'$CONTAINER_ID':'$CONTAINER_VERSION' --spring.profiles.active=dev'
+  only:
+    - dev
+    - master
+
+# -----------------------------------------------------------------------
+# --------------------------- DEV ---------------------------------------
+# -----------------------------------------------------------------------
+
+build_dev:
+  <<: *maven_build
+  variables:
+    APP_FILE: "application-dev"
+    ENVIRONMENT: "dev"
   only:
     - dev
 
-deploiement_master:
-  stage: deploiement
-  script: 
-    - mvn package -DskipTests
-  artifacts:
-    paths:
-    - target/*.jar
-    - src/main/resources/application-prod.properties
-    - src/main/resources/graphql
-    expire_in: 1h
+package_dev:
+  <<: *docker_package
+  variables:
+    ENVIRONMENT: "dev"
+  only:
+    - dev
+
+deploy_dev:
+  <<: *docker_deploy
+  variables:
+    ENVIRONMENT: "dev"
+  only:
+    - dev
+
+# -----------------------------------------------------------------------
+# --------------------------- DEV ---------------------------------------
+# -----------------------------------------------------------------------
+
+build_prod:
+  <<: *maven_build
+  variables:
+    APP_FILE: "application-prod"
+    ENVIRONMENT: "prod"
+  only:
+    - master
+
+package_prod:
+  <<: *docker_package
+  variables:
+    ENVIRONMENT: "prod"
+  only:
+    - master
+
+deploy_prod:
+  <<: *docker_deploy
+  variables:
+    ENVIRONMENT: "prod"
   only:
     - master
