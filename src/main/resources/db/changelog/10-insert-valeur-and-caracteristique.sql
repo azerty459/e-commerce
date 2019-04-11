@@ -1,6 +1,14 @@
 --liquibase formatted sql
 --changeset Ludovic Lahousse:10
 
+CREATE TABLE caracteristique
+(
+  id_caracteristique SERIAL NOT NULL, 
+  libelle TEXT NOT NULL, 
+  PRIMARY KEY (id_caracteristique)
+);
+
+
 CREATE TABLE valeur_caracteristique
 (
   reference_produit VARCHAR(255) NOT NULL,
@@ -11,11 +19,4 @@ CREATE TABLE valeur_caracteristique
   	REFERENCES produit(reference_produit),
   CONSTRAINT FK_idCaracteristique FOREIGN KEY (id_caracteristique)
   	REFERENCES caracteristique(id_caracteristique)
-);
-
-CREATE TABLE caracteristique
-(
-  id_caracteristique SERIAL NOT NULL 
-  libelle TEXT NOT NULL, 
-  PRIMARY KEY (id_caracteristique)
 );

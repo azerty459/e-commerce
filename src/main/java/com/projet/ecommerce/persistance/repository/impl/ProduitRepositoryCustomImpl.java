@@ -1,5 +1,6 @@
 package com.projet.ecommerce.persistance.repository.impl;
 
+import com.projet.ecommerce.persistance.entity.AvisClient;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Produit;
 import com.projet.ecommerce.persistance.entity.ValeurCaracteristique;
@@ -13,6 +14,7 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -65,33 +67,61 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
 	}
 
 	@Override
-	public Collection<Produit> findProductWithCriteria(double noteMoyenneMin, double noteMoyenneMax, String nomProduit, String valeurNomProduit, String nomCategorie) {
+	public Collection<Produit> findProductWithCriteria(double noteMoyenneMin, double noteMoyenneMax, String nomProduit, String valeurNomProduit, Categorie categorie) {
 
 		CriteriaBuilder criteriaBuilderObj = entityManager.getCriteriaBuilder();
 
 		//Création de l'objet de requête à partir de l'instance 'CriteriaBuilder'.
 		CriteriaQuery<Produit>  queryObj = criteriaBuilderObj.createQuery(Produit.class);
 		Root<Produit> produit = queryObj.from(Produit.class);
-		List<Predicate> predicateList = new ArrayList<>();
 
 		//recuperation de tout les produits
 		queryObj.select(produit);
+		
+		List<Predicate> predicateList = new ArrayList<>();
+		if(valeurNomProduit != null || nomProduit != null) {
+			
+			if(nomProduit != null) {
 
-		if(nomProduit != null) {
+				predicateList.add(criteriaBuilderObj.equal(produit.get("nom"), nomProduit));
+			}
 
-			predicateList.add(criteriaBuilderObj.equal(produit.get("nom"), nomProduit));
+			if( valeurNomProduit != null) {
+
+				predicateList.add(criteriaBuilderObj.like(produit.get("nom"), "%"+valeurNomProduit+"%"));
+			}		
 		}
 
-		if( valeurNomProduit != null) {
-
-			predicateList.add(criteriaBuilderObj.like(produit.get("nom"), "%"+valeurNomProduit+"%"));
+		if(categorie != null) {	
+			Join<Produit, Categorie> jointureCategorie = produit.join("categories");
+			predicateList.add(criteriaBuilderObj.equal(jointureCategorie.get("idCategorie"),categorie.getIdCategorie()));
 		}
 		
-		    
-
-		queryObj.where(criteriaBuilderObj.and(predicateList.toArray(new Predicate[predicateList.size()])));
-
-
+		List<Predicate> predicateList2 = new ArrayList<>();		
+		if(noteMoyenneMin >= 0 || noteMoyenneMax >= 0) {
+			
+			Join<Produit, AvisClient> jointureAvisClient = produit.join("avisClients");
+			
+			if(noteMoyenneMin >= 0) {
+				
+				predicateList2.add(criteriaBuilderObj.greaterThan(criteriaBuilderObj.avg(jointureAvisClient.get("note")),noteMoyenneMin));
+			}
+			
+			if(noteMoyenneMax >= 0) {
+				
+				predicateList2.add(criteriaBuilderObj.lessThan(criteriaBuilderObj.avg(jointureAvisClient.get("note")), noteMoyenneMax));
+			}	
+		}
+		
+		if(!predicateList2.isEmpty()) {
+			queryObj.groupBy(produit.get("referenceProduit"));	
+			queryObj.having(criteriaBuilderObj.and(predicateList2.toArray(new Predicate[predicateList2.size()])));
+		}
+		
+		if(!predicateList.isEmpty()) {
+			queryObj.where(predicateList.toArray(new Predicate[predicateList.size()]));
+		}
+				
 		TypedQuery<Produit> typedQuery = entityManager.createQuery(queryObj);
 		List<Produit> produitList = typedQuery.getResultList();
 
