@@ -126,4 +126,8 @@ public class CategorieMutationTests {
         // Test avec nb appel add avec mauvais param
         Mockito.verify(categorieBusiness, Mockito.times(0)).updateCategorie(7, "Test");
     }
+
+    public void restoreCategorie() {
+        // FIXME à faire
+    }
 }

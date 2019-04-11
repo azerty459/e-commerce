@@ -1,7 +1,5 @@
 package com.projet.ecommerce.persistance.repository;
 
-import com.projet.ecommerce.business.impl.CategorieBusiness;
-import com.projet.ecommerce.business.impl.CategorieSupprimeBusiness;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import org.junit.After;
 import org.junit.Assert;
@@ -13,7 +11,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -50,14 +47,6 @@ public class CategorieRepositoryTests {
 
     @Autowired
     private CategorieRepository categorieRepository;
-    @Autowired
-    private CategorieSupprimeRepository categorieSupprimeRepository;
-    @Autowired
-    private CategorieBusiness categorieBusiness;
-    @Autowired
-    private CategorieSupprimeBusiness categorieSupprimeBusiness;
-    @Autowired
-    private EntityManager entityManager;
 
     @Test
     public void testEcarterBornes() {
@@ -85,8 +74,8 @@ public class CategorieRepositoryTests {
         Categorie save = categorieRepository.save(TEMP_INSERT);
         Assert.assertNotNull(save);
 
-        Categorie temp = categorieRepository.findById(save.getIdCategorie()).get();
-        Assert.assertNotNull(temp);
+        Optional<Categorie> temp = categorieRepository.findById(save.getIdCategorie());
+        Assert.assertTrue(temp.isPresent());
     }
 
     @Test
