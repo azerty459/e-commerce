@@ -29,7 +29,6 @@ public class ProduitRepositoryCustomTests {
     private static final Produit TEMP_INSERT3;
     
     private static final Categorie TEMP_CATEGORIE;
-//    private static final Categorie TEMP_CATEGORIE2;
     
     private static final AvisClient TEMP_AVIS;
     private static final AvisClient TEMP_AVIS2;
@@ -54,13 +53,6 @@ public class ProduitRepositoryCustomTests {
         TEMP_CATEGORIE.setBorneDroit(2);
         TEMP_CATEGORIE.setLevel(1);
         TEMP_CATEGORIE.setProduits(new ArrayList<>());
-        
-//        TEMP_CATEGORIE2 = new Categorie();
-//        TEMP_CATEGORIE2.setNomCategorie("Film");
-//        TEMP_CATEGORIE2.setBorneGauche(1);
-//        TEMP_CATEGORIE2.setBorneDroit(2);
-//        TEMP_CATEGORIE2.setLevel(1);
-//        TEMP_CATEGORIE2.setProduits(new ArrayList<>());
         
         TEMP_INSERT2 = new Produit();
         TEMP_INSERT2.setNom("Store");
@@ -102,13 +94,7 @@ public class ProduitRepositoryCustomTests {
         Collection<Categorie> categorieCollection = TEMP_INSERT.getCategories();
         categorieCollection.add(TEMP_CATEGORIE);
         TEMP_INSERT.setCategories(new ArrayList<>(categorieCollection));
-        //TEMP_INSERT2.setCategories(new ArrayList<>(categorieCollection));
-        
-//        Collection<Categorie> categorieCollection2 = TEMP_INSERT2.getCategories();
-//        categorieCollection2.add(TEMP_CATEGORIE2);
-//        TEMP_INSERT.setCategories(new ArrayList<>(categorieCollection2));
-//        
-//        
+      
         Collection<AvisClient> avisClientCollectionProd1 = TEMP_INSERT.getAvisClients();
         avisClientCollectionProd1.add(TEMP_AVIS);
         avisClientCollectionProd1.add(TEMP_AVIS2);
@@ -201,5 +187,12 @@ public class ProduitRepositoryCustomTests {
     	Collection<Produit> lesProduits = produitRepository.findAllWithCriteriaRequeteComplexe(null, null, null, null, TEMP_CATEGORIE);
     	Assert.assertEquals(1, lesProduits.size());
     	Assert.assertEquals(0, produitRepository.findAllWithCriteriaRequeteComplexe(null, null, null, null, new Categorie()).size());
+    }
+    
+    @Test
+    public void findAllWithCriteriaRequeteComplexeByNomPlusPartieNom() {
+    	Collection<Produit> lesProduits = produitRepository.findAllWithCriteriaRequeteComplexe("Test", "st", null, null, null);
+    	Assert.assertEquals(2, lesProduits.size());
+    	//Assert.assertEquals(0, produitRepository.findAllWithCriteriaRequeteComplexe("FalseTest", null, null, null, null).size());
     }
 }

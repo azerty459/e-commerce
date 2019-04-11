@@ -78,23 +78,24 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
 
 		}
 		
-		else if(partieNom !=null) {
+		if(partieNom !=null) {
 			queryObj.where(criteriaBuilderObj.like(criteriaBuilderObj.upper(fromProduit.get("nom")), "%"+partieNom.toUpperCase()+"%"));
 
 		}
 		
-		else if(moyenneAvisInferieurA != null) {
+		if(moyenneAvisInferieurA != null) {
 			Join<Produit, AvisClient> avisClient = fromProduit.join("avisClients");
 			queryObj.groupBy(fromProduit.get("referenceProduit"));
 			queryObj.having(criteriaBuilderObj.lt(criteriaBuilderObj.avg(avisClient.get("note")),moyenneAvisInferieurA));
 		}
-		else if(moyenneAvisSuperieurA != null) {
+		
+		if(moyenneAvisSuperieurA != null) {
 			Join<Produit, AvisClient> avisClient = fromProduit.join("avisClients");
 			queryObj.groupBy(fromProduit.get("referenceProduit"));
 			queryObj.having(criteriaBuilderObj.gt(criteriaBuilderObj.avg(avisClient.get("note")),moyenneAvisSuperieurA));
 		}
 
-		else if (categorie != null) {
+		if (categorie != null) {
 			Join<Produit, Categorie> categorieJoin = fromProduit.join("categories");
 			//Ne fonctionne pas avec les id de la catégorie
 			queryObj.where(criteriaBuilderObj.equal(categorieJoin.get("nomCategorie"), categorie.getNomCategorie()));

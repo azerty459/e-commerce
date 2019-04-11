@@ -3,6 +3,7 @@ package com.projet.ecommerce.business.impl;
 import com.projet.ecommerce.business.IProduitBusiness;
 import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
 import com.projet.ecommerce.business.dto.ProduitDTO;
+import com.projet.ecommerce.business.dto.transformer.CaracteristiqueTransformer;
 import com.projet.ecommerce.business.dto.transformer.ProduitTransformer;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.*;
@@ -91,14 +92,13 @@ public class ProduitBusiness implements IProduitBusiness {
             if (caracteristiqueProduit.size() > compteurTypeCaracteristique) {
                 throw new GraphQLCustomException("PB un produit ne peut avoir deux fois le même type de caractéristique");
             }
-            
-            for (CaracteristiqueDTO caracteristique : caracteristiqueProduit) {
-                Optional<Caracteristique> caracteristiqueOptional = caracteristiqueRepository.findById(caracteristique.getIdCaracteristique());
-                caracteristiqueOptional.map(caracteristiqueList::add);
-            }
+            caracteristiqueList = (List<Caracteristique>) CaracteristiqueTransformer.listeDtoToEntity(caracteristiqueProduit);
+            produit.setCaracteristiques(caracteristiqueList);
         }
         produit.setCategories(categorieList);
-        return ProduitTransformer.entityToDto(produitRepository.save(produit));
+        
+        Produit prod = produitRepository.save(produit);
+        return ProduitTransformer.entityToDto(prod);
     }
 
     private TypeCaracteristique tousLesTypesCaracteristique(CaracteristiqueDTO carac) {

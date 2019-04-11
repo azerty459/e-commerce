@@ -1,13 +1,9 @@
 package com.projet.ecommerce.business.impl;
 
-import com.projet.ecommerce.business.dto.ProduitDTO;
-import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
-import com.projet.ecommerce.persistance.entity.Categorie;
-import com.projet.ecommerce.persistance.entity.Photo;
-import com.projet.ecommerce.persistance.entity.Produit;
-import com.projet.ecommerce.persistance.repository.CategorieRepository;
-import com.projet.ecommerce.persistance.repository.PhotoRepository;
-import com.projet.ecommerce.persistance.repository.ProduitRepository;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
@@ -15,6 +11,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+import org.mockito.AdditionalAnswers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -24,9 +21,18 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
+import com.projet.ecommerce.business.dto.ProduitDTO;
+import com.projet.ecommerce.business.dto.transformer.CaracteristiqueTransformer;
+import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
+import com.projet.ecommerce.persistance.entity.Categorie;
+import com.projet.ecommerce.persistance.entity.Photo;
+import com.projet.ecommerce.persistance.entity.Produit;
+import com.projet.ecommerce.persistance.entity.TypeCaracteristique;
+import com.projet.ecommerce.persistance.repository.CaracteristiqueRepository;
+import com.projet.ecommerce.persistance.repository.CategorieRepository;
+import com.projet.ecommerce.persistance.repository.PhotoRepository;
+import com.projet.ecommerce.persistance.repository.ProduitRepository;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
@@ -43,6 +49,9 @@ public class ProduitBusinessTests {
 
     @Mock
     private Page page;
+    
+    @Mock
+    private CaracteristiqueRepository caracteristiqueRepository;
 
     @InjectMocks
     private ProduitBusiness produitBusiness;
@@ -109,6 +118,32 @@ public class ProduitBusinessTests {
         Assert.assertNotNull(retour);
         Assert.assertEquals(retour.getClass(), ProduitDTO.class);
         Assert.assertEquals(retour.getCategories().get(0).getNom(), "Transport");
+    }
+    
+    @Test
+    public void addProductWithCaracteristique() {
+    	Produit produit = buildProduit();
+    	
+    	TypeCaracteristique typeCaracteristique = new TypeCaracteristique();
+    	typeCaracteristique.setTypeCaracteristique("Longueur");
+    	
+    	CaracteristiqueDTO caracteristique = new CaracteristiqueDTO();
+    	caracteristique.setIdCaracteristique(1);
+    	caracteristique.setProduit(produit);
+    	caracteristique.setTypeCaracteristique(typeCaracteristique);
+    	caracteristique.setValeur("10 cm");
+    	
+    	List<CaracteristiqueDTO> listeCaracteristique = new ArrayList<>();
+    	listeCaracteristique.add(caracteristique);
+    	
+    	Mockito.when(produitRepository.save(Mockito.any())).then(AdditionalAnswers.returnsFirstArg());
+    	
+    	ProduitDTO retour = produitBusiness.add("A05A01", "Test", "Test", 4.7f, null, listeCaracteristique);
+    	
+    	Assert.assertNotNull(retour);
+        Assert.assertEquals(retour.getClass(), ProduitDTO.class);
+        
+        Assert.assertEquals(retour.getCaracteristiques().get(0).getValeur(), "10 cm");
     }
 
     @Test
