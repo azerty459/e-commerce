@@ -149,6 +149,8 @@ public class UtilisateurRepositoryTests {
         Assert.assertEquals(utilisateurRetour.getEmail(), utilisateur.getEmail());
         Assert.assertEquals(utilisateurRetour.getPrenom(), utilisateur.getPrenom());
         Assert.assertEquals(utilisateurRetour.getNom(), utilisateur.getNom());
+        Assert.assertNotNull(utilisateurRetour.getRole());
+        Assert.assertEquals("Fondateur", utilisateurRetour.getRole().getNom());
     }
 
     @Test
