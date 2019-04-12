@@ -110,7 +110,7 @@ public class UtilisateurBusinessTests {
         utilisateurEntity.setRole(role);
 
         Mockito.when(utilisateurRepository.findByEmail(Mockito.anyString())).thenReturn(Optional.of(utilisateurEntity));
-        Mockito.when(roleRepository.findByNom(Mockito.anyString())).thenReturn(Optional.empty());
+        //Mockito.when(roleRepository.findByNom(Mockito.anyString())).thenReturn(Optional.empty());
 
         thrown.expect(GraphQLCustomException.class);
         utilisateurBusiness.add(addUtilisateurDTO);

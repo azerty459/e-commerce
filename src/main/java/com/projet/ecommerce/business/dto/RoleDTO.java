@@ -1,5 +1,7 @@
 package com.projet.ecommerce.business.dto;
 
+import java.util.Objects;
+
 /**
  * Entité qui permet d'assurer le découplage entre la couche de présentation et les objets métier stockés sur le serveur (Role).
  */
@@ -40,6 +42,19 @@ public class RoleDTO {
      */
     public String getNom() {
         return nom;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RoleDTO roleDTO = (RoleDTO) o;
+        return id == roleDTO.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     /**

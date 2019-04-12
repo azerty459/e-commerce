@@ -21,6 +21,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.jpa.repository.Query;
 
 import javax.persistence.EntityManager;
+import javax.validation.constraints.AssertTrue;
 import java.util.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -410,10 +411,18 @@ public class CategorieBusinessTests {
         resultat = categorieBusiness.construireAssociationEnfantsChemins(categories);
 
         // Tests
-        Assert.assertEquals(resultat.get(cat1), "");
-        Assert.assertEquals(resultat.get(cat2), "Transport");
-        Assert.assertEquals(resultat.get(cat3), "Transport > Aérien");
 
+        //Assert.assertEquals(resultat.get(cat1), "");
+        //Assert.assertEquals(resultat.get(cat2), "Transport");
+        //Assert.assertEquals(resultat.get(cat3), "Transport > Aérien");
+
+        Assert.assertTrue(resultat.get(cat1).isEmpty());
+        Assert.assertTrue(resultat.get(cat2).contains(cat1));
+
+        Assert.assertTrue(resultat.get(cat2).contains(cat1));
+
+        Assert.assertTrue(resultat.get(cat3).contains(cat1));
+        Assert.assertTrue(resultat.get(cat3).contains(cat2));
     }
 
 

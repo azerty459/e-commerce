@@ -33,11 +33,14 @@ public class PhotoTransformer {
      * @return un objet Photo
      */
     public static Photo dtoToEntity(PhotoDTO photoDTO) {
-        Photo photo = new Photo();
-        photo.setUrl(photoDTO.getUrl());
-        photo.setIdPhoto(photoDTO.getId());
-        photo.setNom(photoDTO.getNom());
-        return photo;
+        if(photoDTO != null) {
+            Photo photo = new Photo();
+            photo.setUrl(photoDTO.getUrl());
+            photo.setIdPhoto(photoDTO.getId());
+            photo.setNom(photoDTO.getNom());
+            return photo;
+        }
+        return null;
     }
 
     /**
@@ -63,10 +66,13 @@ public class PhotoTransformer {
      * @return un objet PhotoDTO
      */
     public static PhotoDTO entityToDto(Photo photo) {
-        PhotoDTO photoDTO = new PhotoDTO();
-        photoDTO.setIdPhoto(photo.getIdPhoto());
-        photoDTO.setUrl(photo.getUrl());
-        photoDTO.setNom(photo.getNom());
-        return photoDTO;
+        if(photo != null) {
+            PhotoDTO photoDTO = new PhotoDTO();
+            photoDTO.setIdPhoto(photo.getIdPhoto());
+            photoDTO.setUrl(photo.getUrl());
+            photoDTO.setNom(photo.getNom());
+            return photoDTO;
+        }
+        return null;
     }
 }

@@ -2,6 +2,7 @@ package com.projet.ecommerce.persistance.entity;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Entité représentant la table rôle sous forme de classe.
@@ -75,6 +76,19 @@ public class Role {
      */
     public void setUtilisateurs(List<Utilisateur> utilisateurs) {
         this.utilisateurs = utilisateurs;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Role role = (Role) o;
+        return id == role.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
 

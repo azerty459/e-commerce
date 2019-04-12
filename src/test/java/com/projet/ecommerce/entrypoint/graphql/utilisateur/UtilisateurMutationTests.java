@@ -48,7 +48,7 @@ public class UtilisateurMutationTests {
     public void testNbDataFetcher() {
         Map<String, DataFetcher> retourMap = utilisateurMutation.produitWiring().getFieldDataFetchers();
         Assert.assertNotNull(retourMap);
-        Assert.assertEquals(3, retourMap.size());
+        Assert.assertEquals(5, retourMap.size()); // 5 data fetecher dispo
     }
 
     @Test

@@ -33,7 +33,7 @@ public class CategorieTransformer {
      * @param categorieDTO Un objet CategorieDTO
      * @return un objet Categorie
      */
-    private static Categorie dtoToEntity(CategorieDTO categorieDTO) {
+    public static Categorie dtoToEntity(CategorieDTO categorieDTO) {
         Categorie categorie = new Categorie();
         categorie.setNomCategorie(categorieDTO.getNom());
         categorie.setIdCategorie(categorieDTO.getId());

@@ -5,6 +5,8 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -61,6 +63,7 @@ public class CategorieRepositoryTests {
 
         categorieRepository.save(test);
         categorieRepository.ecarterBornes(1, 4);
+
         Optional<Categorie> res = categorieRepository.findById(idCategorie);
 
         Assert.assertTrue(res.isPresent());

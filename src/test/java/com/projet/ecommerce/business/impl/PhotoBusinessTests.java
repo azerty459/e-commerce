@@ -91,6 +91,12 @@ public class PhotoBusinessTests {
         String contentType = "image/jpeg";
         MultipartFile mpf = new MockMultipartFile(name, originalFileName, contentType, content);
 
+        Produit produit = new Produit();
+        produit.setDateAjout(LocalDateTime.now());
+        produit.setPhotos(new ArrayList<>());
+        produit.setReferenceProduit("hello");
+
+        Mockito.when(produitRepository.findById(Mockito.any())).thenReturn(Optional.of(produit));
         // Test du 1ier if
         try {
             Assert.assertTrue(photoBusiness.upload(mpf, "hello"));

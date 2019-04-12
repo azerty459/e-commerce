@@ -222,7 +222,7 @@ public class ProduitBusinessTests {
 
         produit.setPhotos(photoList);
 
-        Mockito.when(produitRepository.findById(Mockito.anyString())).thenReturn(Optional.of(produit));
+        //Mockito.when(produitRepository.findById(Mockito.anyString())).thenReturn(Optional.of(produit));
 
         thrown.expect(GraphQLCustomException.class);
         produitBusiness.update(produit);
@@ -231,6 +231,7 @@ public class ProduitBusinessTests {
     @Test
     public void updatePictureFound() {
         Photo photo = new Photo();
+        photo.setIdPhoto(1);
 
         Produit produit = new Produit();
         produit.setReferenceProduit("A05A01");
@@ -242,7 +243,7 @@ public class ProduitBusinessTests {
         produit.setPhotos(photoList);
 
         Mockito.when(produitRepository.findById(Mockito.anyString())).thenReturn(Optional.of(produit));
-        Mockito.when(photoRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(photo));
+        //Mockito.when(photoRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(photo));
         Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
 
         ProduitDTO retour = produitBusiness.update(produit);
@@ -301,9 +302,9 @@ public class ProduitBusinessTests {
         produitList.add(produit);
 
         // Permets de tester si la méthode retourne une List avec une référence
-        Mockito.when(produitRepositoryCustom.findAllWithCriteria(Mockito.any(), Mockito.any())).thenReturn(produitList);
+        Mockito.when(produitRepository.findAllWithCriteria(Mockito.any(), Mockito.any())).thenReturn(produitList);
         Mockito.verify(produitRepositoryCustom, Mockito.times(1)).findAllWithCriteria(Mockito.any(), Mockito.any());
-        List<ProduitDTO> produitDTOList = produitBusiness.getAll("ref", null, null);
+        List<ProduitDTO> produitDTOList = produitBusiness.getAll("A05A01", null, null);
         Assert.assertEquals(produitDTOList.size(), 1);
 
         // Permets de tester si la méthode retourne une Liste avec un nom de catégorie
