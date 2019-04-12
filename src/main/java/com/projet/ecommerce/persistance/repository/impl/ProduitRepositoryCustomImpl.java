@@ -1,14 +1,12 @@
 package com.projet.ecommerce.persistance.repository.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -62,24 +60,47 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
         System.out.println(query.getResultList().size());
         return query.getResultList();
     }
-    
-    public Collection<Produit> exerice3(Integer valeurMin, Integer valeurMax, String nomProduit, String valeurContenue, Categorie categorie){
-		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Produit> cq = cb.createQuery(Produit.class);
-		Root<Produit> table = cq.from(Produit.class);
-		Join<Produit, AvisClient> collision = table.join("AvisClient");
-		CriteriaQuery<Produit> select = cq.select(table);
-		
-		//Predicate predicate = cb.equal(table.get(""), );
-		
-		//if(valeurMin != null)
-			//cq.groupBy(cq.get(""));
-		
-		
-		
-		Query q = entityManager.createQuery(select);
-		List<Produit> listeProduits = q.getResultList();
-		
-    	return listeProduits;
+
+    public Collection<Produit> exerice3(Double valeurMin, Double valeurMax, String nomProduit, String valeurContenue, Categorie categorie){
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Produit> q = criteriaBuilder.createQuery(Produit.class);
+        Root<Produit> root = q.from(Produit.class);
+        List<Predicate> predicates = new ArrayList<>();
+        List<Predicate> avisPredicate = new ArrayList<>();
+
+        if (valeurMin != null || valeurMax != null) {
+            Join<Produit,AvisClient> avisClientsJoin = root.join("avisClients");
+            Expression<Double> noteMoy = criteriaBuilder.avg(avisClientsJoin.<Number>get("note"));
+            if (valeurMin != null) {
+                Predicate pInf = criteriaBuilder.greaterThan(noteMoy, valeurMin);
+                avisPredicate.add(pInf);
+            }
+            if (valeurMax != null){
+                Predicate pMax = criteriaBuilder.lessThan(noteMoy, valeurMax);
+                avisPredicate.add(pMax);
+            }
+            q.groupBy(root.get("referenceProduit"));
+            q.having(avisPredicate.toArray(new Predicate[predicates.size()]));
+        }
+
+        if (nomProduit != null) {
+            predicates.add(criteriaBuilder.equal(root.get("nom"), nomProduit));
+        }
+
+        if (valeurContenue != null) {
+            predicates.add(criteriaBuilder.like(root.get("nom"), "%" + valeurContenue + "%"));
+        }
+
+        if (categorie.getNomCategorie() != null) {
+            Join categoriesJoin = root.join("categories");
+            predicates.add(criteriaBuilder.equal(categoriesJoin.get("nomCategorie"), categorie.getNomCategorie()));
+        }
+
+        q.where(predicates.toArray(new Predicate[predicates.size()]));
+
+        List<Produit> result = entityManager.createQuery(q).getResultList();
+
+        return result;
+
     }
 }
