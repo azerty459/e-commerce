@@ -3,7 +3,6 @@ package com.projet.ecommerce.persistance.repository;
 import com.projet.ecommerce.persistance.entity.AvisClient;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-
 import java.util.Collection;
 
 /**
@@ -11,10 +10,11 @@ import java.util.Collection;
  */
 
 @Repository
-public interface AvisClientRepository extends CrudRepository<AvisClient, Integer> {
+public interface AvisClientRepository extends CrudRepository<AvisClient, Integer>, AvisClientRepositoryCustom{
 
     @Override
     Collection<AvisClient> findAll();
 
     Collection<AvisClient> findByProduit_ReferenceProduit(String refProduit);
+    
 }

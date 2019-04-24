@@ -1,4 +1,4 @@
-package com.projet.ecommerce.persistance.entity;
+ package com.projet.ecommerce.persistance.entity;
 
 import com.projet.ecommerce.business.dto.AvisClientDTO;
 

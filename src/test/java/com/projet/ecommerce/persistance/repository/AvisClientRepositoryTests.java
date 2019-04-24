@@ -53,5 +53,6 @@ public class AvisClientRepositoryTests {
         Assert.assertNotNull(avisClientTrouve.getProduit());
         Assert.assertEquals(avisClientTrouve.getProduit().getReferenceProduit(), avisClient.getProduit().getReferenceProduit());
     }
+    
 
 }
