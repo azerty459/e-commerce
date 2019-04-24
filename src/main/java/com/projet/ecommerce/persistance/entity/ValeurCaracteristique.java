@@ -9,7 +9,7 @@ import javax.persistence.Table;
 public class ValeurCaracteristique {
 	
 	@EmbeddedId
-	ValeurCaracteristiquePK valeurCaracteristiquePK;
+	private ValeurCaracteristiquePK valeurCaracteristiquePK;
 	
 	private String valeur;
 
