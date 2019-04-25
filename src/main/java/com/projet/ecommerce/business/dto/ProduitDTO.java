@@ -26,8 +26,13 @@ public class ProduitDTO {
      * le prix hors taxes du produit
      */
     private float prixHT;
-
+    
     /**
+     * La note moyenne des avis clients sur ce produit
+     */
+    private float noteMoyenne;
+
+	/**
      * la liste des catégories auxquelles appartient le produit
      */
     private List<CategorieDTO> categories;
@@ -168,4 +173,21 @@ public class ProduitDTO {
     public void setPhotoPrincipale(PhotoDTO photoPrincipale) {
         this.photoPrincipale = photoPrincipale;
     }
+    
+    /**
+     * Permet d'obtenir la note moyenne du produit
+     * @return moyenne
+     */
+	public float getNoteMoyenne() {
+		return noteMoyenne;
+	}
+
+    /**
+     * Permet de définir la note moyenne du produit
+     * @param d
+     */
+	public void setNoteMoyenne(float noteMoyenne) {
+		this.noteMoyenne = noteMoyenne;
+	}
+ 	
 }

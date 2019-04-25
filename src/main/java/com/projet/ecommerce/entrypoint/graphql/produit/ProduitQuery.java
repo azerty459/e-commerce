@@ -9,17 +9,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProduitQuery {
 
-    @Autowired
-    private IProduitBusiness produitBusiness;
+	@Autowired
+	private IProduitBusiness produitBusiness;
 
-    public TypeRuntimeWiring produitWiring() {
+	public TypeRuntimeWiring produitWiring() {
 
-        TypeRuntimeWiring.Builder builder = new TypeRuntimeWiring.Builder();
-        builder.typeName("Query");
-        builder.dataFetcher("produits", (DataFetchingEnvironment env) ->
-                produitBusiness.getAll(env.getArgument("ref"), env.getArgument("cat"), env.getArgument("nom")
-                ));
+		TypeRuntimeWiring.Builder builder = new TypeRuntimeWiring.Builder();
+		builder.typeName("Query");
+		builder.dataFetcher("produits", (DataFetchingEnvironment env) ->
 
-        return builder.build();
-    }
+		produitBusiness.getAll(env.getArgument("ref"), env.getArgument("cat"), env.getArgument("nom")
+				));
+
+		return builder.build();
+	}
 }

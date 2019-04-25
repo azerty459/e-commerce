@@ -26,9 +26,6 @@ public class AvisClientBusiness implements IAvisClientBusiness {
 
     @Autowired
     private ProduitRepository produitRepository;
-    
-    @Autowired
-    private AvisClientRepositoryCustom avisClientRepositoryCustom;
 
     /**
      * Retourne la liste des avis clients d'un produit
@@ -114,7 +111,7 @@ public class AvisClientBusiness implements IAvisClientBusiness {
 	@Override
 	public double getAverageByReference(String ref) {
 		
-		return avisClientRepositoryCustom.averageByReferenceProduit(ref);
+		return avisClientRepository.averageByReferenceProduit(ref);
 	}
 
 }
