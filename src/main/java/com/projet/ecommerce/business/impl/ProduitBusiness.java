@@ -231,16 +231,16 @@ public class ProduitBusiness implements IProduitBusiness {
      */
     @Override
     public Page<Produit> getPage(int numeroPage, int nombreProduit, String nom, int IDcategorie) {
-
-
         PageRequest page = (numeroPage == 0) ? PageRequest.of(numeroPage, nombreProduit) : PageRequest.of(numeroPage - 1, nombreProduit);
-        if (nom != null && !nom.isEmpty() && IDcategorie != 0 || IDcategorie != 0) {
+        if (nom != null && !nom.isEmpty() && IDcategorie != 0) {
             Optional<Categorie> categorieOptional = categorieRepository.findById(IDcategorie);
             if (!categorieOptional.isPresent()) {
                 return Page.empty();
             }
             Categorie categorie = categorieOptional.get();
             return produitRepository.findByNomContainingIgnoreCaseAndCategories_borneGaucheGreaterThanEqualAndCategories_borneDroitLessThanEqual(page, nom, categorie.getBorneGauche(), categorie.getBorneDroit());
+        } else if (IDcategorie != 0) {
+            return produitRepository.findByCategories_IdCategorie(page, IDcategorie);
         } else if (nom != null && !nom.isEmpty()) {
             return produitRepository.findByNomContainingIgnoreCase(page, nom);
         }
