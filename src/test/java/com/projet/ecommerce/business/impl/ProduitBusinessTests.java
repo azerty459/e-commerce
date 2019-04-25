@@ -265,18 +265,6 @@ public class ProduitBusinessTests {
         Assert.assertEquals(produit.getReferenceProduit(), retour.getRef());
     }
 
-    @NotNull
-    private Produit buildProduit() {
-        Produit produit = new Produit();
-        produit.setReferenceProduit("A05A01");
-        produit.setPrixHT(2.1f);
-        produit.setDescription("Un livre");
-        produit.setNom("Livre1");
-        produit.setPhotos(new ArrayList<>());
-        produit.setCategories(new ArrayList<>());
-        return produit;
-    }
-
     @Test
     public void getAllByRefAndCatEmpty() {
         thrown.expect(GraphQLCustomException.class);
@@ -295,5 +283,39 @@ public class ProduitBusinessTests {
         Assert.assertNotNull(produitBusiness.getPage(1, 5, "Toto", 0));
     }
 
-    //TODO Faire le teste avec id catégorie
+    @Test
+    public void getPageWithCat() {
+        Mockito.when(produitRepository.findByCategories_IdCategorie(Mockito.any(Pageable.class), Mockito.anyInt())).thenReturn(page);
+        Assert.assertNotNull(produitBusiness.getPage(1,5, "", 1));
+    }
+
+    @Test
+    public void getPageWithCatAndName() {
+        Mockito.when(categorieRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(new Categorie()));
+        Mockito.when(produitRepository.findByNomContainingIgnoreCaseAndCategories_borneGaucheGreaterThanEqualAndCategories_borneDroitLessThanEqual(
+                Mockito.any(Pageable.class),
+                Mockito.anyString(),
+                Mockito.anyInt(),
+                Mockito.anyInt())
+        ).thenReturn(page);
+        Assert.assertNotNull(produitBusiness.getPage(1,5, "Toto", 1));
+    }
+
+    @Test
+    public void getPageWithUnknowCatAndName() {
+        Mockito.when(categorieRepository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
+        Assert.assertEquals(Page.empty(), produitBusiness.getPage(1,5, "Toto", 1));
+    }
+
+    @NotNull
+    private Produit buildProduit() {
+        Produit produit = new Produit();
+        produit.setReferenceProduit("A05A01");
+        produit.setPrixHT(2.1f);
+        produit.setDescription("Un livre");
+        produit.setNom("Livre1");
+        produit.setPhotos(new ArrayList<>());
+        produit.setCategories(new ArrayList<>());
+        return produit;
+    }
 }
