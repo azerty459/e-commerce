@@ -12,6 +12,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigInteger;
 import java.util.Collection;
 
 @RunWith(SpringRunner.class)
@@ -157,5 +158,14 @@ public class UtilisateurRepositoryTests {
         Assert.assertNotNull(utilisateur);
         utilisateurRepository.delete(TEMP_DELETE);
         Assert.assertFalse(utilisateurRepository.findById(utilisateur.getId()).isPresent());
+    }
+
+    @Test
+    public void countUtilisateur() {
+        int bi = utilisateurRepository.countUtilisateurs();
+        Assert.assertEquals(1, bi);
+        utilisateurRepository.save(TEMP_INSERT);
+        bi = utilisateurRepository.countUtilisateurs();
+        Assert.assertEquals(2, bi);
     }
 }
