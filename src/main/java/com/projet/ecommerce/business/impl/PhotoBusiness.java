@@ -10,6 +10,8 @@ import com.projet.ecommerce.persistance.entity.Produit;
 import com.projet.ecommerce.persistance.repository.PhotoRepository;
 import com.projet.ecommerce.persistance.repository.ProduitRepository;
 import com.projet.ecommerce.utilitaire.ImageUtilitaire;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -30,6 +32,8 @@ import java.util.Optional;
 
 @Service
 public class PhotoBusiness implements IPhotoBusiness {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(PhotoBusiness.class);
 
     private ImageUtilitaire imageUtilitaire = new ImageUtilitaire();
 
@@ -91,7 +95,7 @@ public class PhotoBusiness implements IPhotoBusiness {
             if (!repertoire.mkdirs()) {
                 throw new GraphQLCustomException("Le dossier image pour le produit n'a pas pu être créé");
             } else {
-                System.out.println("Le dossier " + repertoire.getPath() + " a bien été créé.");
+                LOGGER.info("Le dossier " + repertoire.getPath() + " a bien été créé.");
             }
         }
 
