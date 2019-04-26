@@ -183,7 +183,6 @@ public class PhotoBusiness implements IPhotoBusiness {
     @Override
     public List<PhotoDTO> getAll(String ref) {
 
-        System.out.println("getAll pour les photos");
         Collection<Photo> photoCollection = new ArrayList<>();
         if (ref == null) {
             photoCollection.addAll(photoRepository.findAll());
