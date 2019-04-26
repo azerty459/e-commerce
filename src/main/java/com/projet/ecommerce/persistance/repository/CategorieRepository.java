@@ -1,6 +1,7 @@
 package com.projet.ecommerce.persistance.repository;
 
 import com.projet.ecommerce.persistance.entity.Categorie;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
@@ -15,6 +16,7 @@ import java.util.Collection;
 @Repository
 public interface CategorieRepository extends PagingAndSortingRepository<Categorie, Integer>, CategorieRepositoryCustom {
 
+    @NotNull
     @Override
     Collection<Categorie> findAll();
 
@@ -35,4 +37,7 @@ public interface CategorieRepository extends PagingAndSortingRepository<Categori
     Collection<Categorie> findByNomCategorieWithSousCat(@Param("nom") String nom);
 
     Collection<Categorie> findByNomCategorieContainingIgnoreCase(String nom);
+
+    @Query("Select count(c) From Categorie c")
+    Long countCategories();
 }

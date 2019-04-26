@@ -162,8 +162,19 @@ public class CategorieRepositoryTests {
         Assert.assertFalse(categorieRepository.findById(TEMP_DELETE.getIdCategorie()).isPresent());
     }
 
+    @Test
+    public void countCategories() {
+        long resultat = categorieRepository.countCategories();
+        Assert.assertEquals(0, resultat);
+        categorieRepository.save(TEMP_GET);
+        categorieRepository.save(TEMP_INSERT);
+        resultat = categorieRepository.countCategories();
+        Assert.assertEquals(2, resultat);
+    }
+
     @After
     public void end() {
         categorieRepository.deleteAll();
     }
+
 }
