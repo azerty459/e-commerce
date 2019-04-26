@@ -162,10 +162,10 @@ public class UtilisateurRepositoryTests {
 
     @Test
     public void countUtilisateur() {
-        int bi = utilisateurRepository.countUtilisateurs();
-        Assert.assertEquals(1, bi);
+        long resultat = utilisateurRepository.countUtilisateurs();
+        Assert.assertEquals(1, resultat);
         utilisateurRepository.save(TEMP_INSERT);
-        bi = utilisateurRepository.countUtilisateurs();
-        Assert.assertEquals(2, bi);
+        resultat = utilisateurRepository.countUtilisateurs();
+        Assert.assertEquals(2, resultat);
     }
 }

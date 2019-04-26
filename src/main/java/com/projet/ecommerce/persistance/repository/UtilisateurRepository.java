@@ -35,5 +35,5 @@ public interface UtilisateurRepository extends PagingAndSortingRepository<Utilis
     Page<Utilisateur> findAllByOrderByEmail(Pageable pageable);
 
     @Query("Select count(u) From Utilisateur u")
-    int countUtilisateurs();
+    Long countUtilisateurs();
 }
