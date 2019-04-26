@@ -99,4 +99,14 @@ public class ProduitRepositoryTests {
         produitRepository.delete(TEMP_DELETE);
         Assert.assertFalse(produitRepository.findById(TEMP_DELETE.getReferenceProduit()).isPresent());
     }
+
+    @Test
+    public void countProduits() {
+        long resultat = produitRepository.countProduits();
+        Assert.assertEquals(0, resultat);
+        produitRepository.save(TEMP_GET);
+        produitRepository.save(TEMP_INSERT);
+        resultat = produitRepository.countProduits();
+        Assert.assertEquals(2, resultat);
+    }
 }
