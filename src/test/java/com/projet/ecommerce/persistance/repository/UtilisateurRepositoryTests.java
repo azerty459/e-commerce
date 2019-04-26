@@ -161,7 +161,7 @@ public class UtilisateurRepositoryTests {
     }
 
     @Test
-    public void countUtilisateur() {
+    public void countUtilisateurs() {
         long resultat = utilisateurRepository.countUtilisateurs();
         Assert.assertEquals(1, resultat);
         utilisateurRepository.save(TEMP_INSERT);
