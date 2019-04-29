@@ -144,4 +144,32 @@ public class Categorie {
     public void setIdCategorie(int idCategorie) {
         this.idCategorie = idCategorie;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this) {
+            return true;
+        } else if(obj == null || !(obj instanceof Categorie)) {
+            return false;
+        }
+        Categorie other = (Categorie) obj;
+        boolean result = this.idCategorie == other.idCategorie
+                && this.borneGauche == other.borneGauche
+                && this.borneDroit == other.borneDroit
+                && this.level == other.level;
+        result &= (this.nomCategorie != null) ? this.nomCategorie.equals(other.nomCategorie) : other.nomCategorie == null ;
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        //return Objects.hash(this.borneDroit, this.borneGauche, this.idCategorie, this.level, this.nomCategorie);
+        int prime = 31;
+        int result = 1;
+        result = prime * result + borneDroit;
+        result = prime * result + borneGauche;
+        result = prime * result + level;
+        result = prime * result + ((nomCategorie == null) ? 0 : nomCategorie.hashCode());
+        return result;
+    }
 }

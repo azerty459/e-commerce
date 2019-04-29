@@ -1,5 +1,6 @@
 package com.projet.ecommerce.persistance.repository.impl;
 
+import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Produit;
 import com.projet.ecommerce.persistance.repository.ProduitRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,9 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 @Repository
@@ -51,5 +55,17 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
         }
         System.out.println(query.getResultList().size());
         return query.getResultList();
+    }
+
+    @Override
+    public Map<Categorie, Long> countProduitsByCategories() {
+        Query query = entityManager.createQuery("Select c, count(p) From Categorie c left join c.produits p Group by c.idCategorie");
+        List<Object[]> resultat = query.getResultList();
+        Map<Categorie, Long> retour = new HashMap<>();
+        resultat.stream().forEach(elt -> {
+            Categorie c = (Categorie) elt[0];
+            retour.put(c, (Long) elt[1]);
+        });
+        return retour;
     }
 }
