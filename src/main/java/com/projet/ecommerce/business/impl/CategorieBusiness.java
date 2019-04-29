@@ -553,5 +553,8 @@ public class CategorieBusiness implements ICategorieBusiness {
         return categorieRepository.findAll(page);
     }
 
-
+    @Override
+    public Long countCategories() {
+        return categorieRepository.countCategories();
+    }
 }

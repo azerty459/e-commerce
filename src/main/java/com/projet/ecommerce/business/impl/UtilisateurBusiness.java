@@ -182,4 +182,9 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
         return true;
 
     }
+
+    @Override
+    public Long countUtilisateurs() {
+        return utilisateurRepository.countUtilisateurs();
+    }
 }

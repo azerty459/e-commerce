@@ -85,4 +85,11 @@ public interface ICategorieBusiness {
      */
     Page<Categorie> getPage(int pageNumber, int nb);
 
+    /**
+     * Retourne le nombre de categories
+     *
+     * @return le nombre de categories
+     */
+    Long countCategories();
+
 }

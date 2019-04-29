@@ -168,4 +168,30 @@ public class CategorieDTO {
     public void setProfondeur(int profondeur) {
         this.profondeur = profondeur;
     }
+
+    @Override
+    public int hashCode() {
+        int prime = 17;
+        int result = 1;
+        result = prime * result + id;
+        result = prime * result + profondeur;
+        result = prime * result + level;
+        result = prime * result + ((nom == null) ? 0 : nom.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj) {
+            return true;
+        } else if(obj == null || !(obj instanceof CategorieDTO)) {
+            return false;
+        }
+        CategorieDTO other = (CategorieDTO) obj;
+        boolean result = this.id == other.id
+                && this.profondeur == other.profondeur
+                && this.level == other.level;
+        result &= (this.nom != null) ? this.nom.equals(other.nom) : other.nom == null;
+        return result;
+    }
 }

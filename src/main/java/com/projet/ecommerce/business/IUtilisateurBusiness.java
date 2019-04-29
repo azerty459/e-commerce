@@ -71,4 +71,11 @@ public interface IUtilisateurBusiness {
      * @return SigninPayload contenant les informations necessaire à l'authentification
      */
     SigninPayload signinUser(AuthData auth) throws IllegalAccessException;
+
+    /**
+     * Compte le nombre d'utilisateur
+     *
+     * @return le nombre d'utilisateur
+     */
+    Long countUtilisateurs();
 }

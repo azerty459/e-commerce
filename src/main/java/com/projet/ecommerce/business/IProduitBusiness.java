@@ -1,10 +1,12 @@
 package com.projet.ecommerce.business;
 
+import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.persistance.entity.Produit;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Interface du service ProduitBusiness.
@@ -67,5 +69,13 @@ public interface IProduitBusiness {
      */
     Page<Produit> getPage(int pageNumber, int nb, String nom, int IDcategorie);
 
+    /**
+     * Compte le nombre de produit
+     *
+     * @return le nombre de produit
+     */
+    Long countProduits();
+
+    Map<CategorieDTO, Long> countProduitsByCategorie();
 
 }

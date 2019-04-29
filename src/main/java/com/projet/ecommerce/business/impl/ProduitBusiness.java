@@ -1,7 +1,9 @@
 package com.projet.ecommerce.business.impl;
 
 import com.projet.ecommerce.business.IProduitBusiness;
+import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.business.dto.ProduitDTO;
+import com.projet.ecommerce.business.dto.transformer.CategorieTransformer;
 import com.projet.ecommerce.business.dto.transformer.ProduitTransformer;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Categorie;
@@ -15,10 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static com.projet.ecommerce.utilitaire.Utilitaire.mergeObjects;
 
@@ -245,5 +244,17 @@ public class ProduitBusiness implements IProduitBusiness {
             return produitRepository.findByNomContainingIgnoreCase(page, nom);
         }
         return produitRepository.findAll(page);
+    }
+
+    public Long countProduits() {
+        return produitRepository.countProduits();
+    }
+
+    @Override
+    public Map<CategorieDTO, Long> countProduitsByCategorie() {
+        Map<Categorie, Long> countProduitCategorie = produitRepository.countProduitsByCategories();
+        Map<CategorieDTO, Long> countProduitCategorieDTO = new HashMap<>();
+        countProduitCategorie.entrySet().stream().forEach((entry -> countProduitCategorieDTO.put(CategorieTransformer.entityToDto(entry.getKey()), entry.getValue())));
+        return countProduitCategorieDTO;
     }
 }
