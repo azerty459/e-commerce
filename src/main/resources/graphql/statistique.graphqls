@@ -1,0 +1,11 @@
+type ProduitCategorie {
+    categorie: String!
+    nb: Int,
+}
+
+extend type Query {
+    nbProduit: Int
+    nbCategorie: Int
+    nbUtilisateur: Int
+    nbProduitCategorie: [ProduitCategorie]
+}
