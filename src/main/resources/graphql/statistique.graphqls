@@ -1,6 +1,6 @@
 type ProduitCategorie {
     categorie: String!
-    nb: Int,
+    nb: Int!,
 }
 
 extend type Query {
