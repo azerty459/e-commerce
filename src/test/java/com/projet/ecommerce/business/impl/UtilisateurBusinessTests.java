@@ -259,4 +259,11 @@ public class UtilisateurBusinessTests {
         Mockito.when(utilisateurRepository.findAllByOrderByEmail(Mockito.any(Pageable.class))).thenReturn(page);
         Assert.assertNotNull(utilisateurBusiness.getPage(1, 5));
     }
+
+    @Test
+    public void countUtilisateurs() {
+        Long expected = 8L;
+        Mockito.when(utilisateurRepository.countUtilisateurs()).thenReturn(expected);
+        Assert.assertEquals(expected, utilisateurBusiness.countUtilisateurs());
+    }
 }
