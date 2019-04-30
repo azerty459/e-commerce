@@ -29,16 +29,16 @@ public class StatistiqueQuery {
     public TypeRuntimeWiring produitWiring() {
         TypeRuntimeWiring.Builder builder = new TypeRuntimeWiring.Builder();
         builder.typeName("Query");
-        builder.dataFetcher("nbProduit", (DataFetchingEnvironment environment) -> produitBusiness.countProduits().intValue());
-        builder.dataFetcher("nbCategorie", (DataFetchingEnvironment environment) -> categorieBusiness.countCategories().intValue());
-        builder.dataFetcher("nbUtilisateur", (DataFetchingEnvironment environment) -> utilisateurBusiness.countUtilisateurs().intValue());
+        builder.dataFetcher("nbProduit", (DataFetchingEnvironment environment) -> produitBusiness.countProduits());
+        builder.dataFetcher("nbCategorie", (DataFetchingEnvironment environment) -> categorieBusiness.countCategories());
+        builder.dataFetcher("nbUtilisateur", (DataFetchingEnvironment environment) -> utilisateurBusiness.countUtilisateurs());
         builder.dataFetcher("nbProduitCategorie", (DataFetchingEnvironment environment) -> {
             Map<CategorieDTO, Long> nbProduitCategorie = produitBusiness.countProduitsByCategorie();
             List<Map> data = new ArrayList<>();
             nbProduitCategorie.entrySet().stream().forEach(entry -> {
                 Map<String, Object> objectMap = new HashMap<>();
                 objectMap.put("categorie", entry.getKey().getNom());
-                objectMap.put("nb", entry.getValue().intValue());
+                objectMap.put("nb", entry.getValue());
                 data.add(objectMap);
             });
             return data;
