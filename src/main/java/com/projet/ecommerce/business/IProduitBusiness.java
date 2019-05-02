@@ -76,6 +76,11 @@ public interface IProduitBusiness {
      */
     Long countProduits();
 
+    /**
+     * Compte le nombre de produit par categorie
+     *
+     * @return La map qui associe une categorie au nombre de produit qu'elle contienr
+     */
     Map<CategorieDTO, Long> countProduitsByCategorie();
 
 }

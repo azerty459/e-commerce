@@ -246,6 +246,7 @@ public class ProduitBusiness implements IProduitBusiness {
         return produitRepository.findAll(page);
     }
 
+    @Override
     public Long countProduits() {
         return produitRepository.countProduits();
     }
