@@ -4,8 +4,6 @@ import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.business.impl.CategorieBusiness;
 import com.projet.ecommerce.business.impl.ProduitBusiness;
 import com.projet.ecommerce.business.impl.UtilisateurBusiness;
-import com.projet.ecommerce.persistance.entity.Categorie;
-import com.sun.org.apache.xerces.internal.xs.datatypes.ObjectList;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.idl.TypeRuntimeWiring;
