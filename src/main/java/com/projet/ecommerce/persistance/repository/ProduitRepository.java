@@ -25,6 +25,8 @@ public interface ProduitRepository extends PagingAndSortingRepository<Produit, S
 
     Page<Produit> findByNomContainingIgnoreCaseAndCategories_borneGaucheGreaterThanEqualAndCategories_borneDroitLessThanEqual(Pageable pageable, String nom, int borneGauche, int borneDroite);
 
+    Page<Produit> findByCategories_borneGaucheGreaterThanEqualAndCategories_borneDroitLessThanEqual(Pageable pageable, int borneGauche, int borneDroite);
+
     Page<Produit> findByCategories_IdCategorie(Pageable pageable, @Param("id") int idCategorie);
 
     Page<Produit> findAllByCategories_borneGaucheGreaterThanEqualAndCategories_borneDroitLessThanEqual(Pageable pageable, int borneGauche, int borneDroite);
