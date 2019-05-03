@@ -96,7 +96,7 @@ public class AvisClientRepositoryCustomTests {
 	}
 	
 	@Autowired
-	private AvisClientRepositoryCustomImpl avisClientRepositoryCustomImpl;
+	private AvisClientRepository avisClientRepository;
 	
 	@Autowired
 	private ProduitRepository produitRepository;
@@ -109,21 +109,33 @@ public class AvisClientRepositoryCustomTests {
 	
 	@Test
 	public void averageAvisClientByReferenceProduit1() {
-		double res = avisClientRepositoryCustomImpl.averageByReferenceProduit("A05A01");
+		double res = avisClientRepository.averageByReferenceProduit("A05A01");
 		Assert.assertNotNull(res);
 		Assert.assertEquals(4.0, res, 0.1);
 	}
 	
 	@Test
 	public void averageAvisClientByReferenceProduit2() {
-		double res = avisClientRepositoryCustomImpl.averageByReferenceProduit("A05A02");
+		double res = avisClientRepository.averageByReferenceProduit("A05A02");
 		Assert.assertNotNull(res);
 		Assert.assertEquals(2.0, res, 0.1);
 	}
 	
 	@Test
 	public void averageAvisClientByEmptyReference() {
-		double res = avisClientRepositoryCustomImpl.averageByReferenceProduit("");
+		double res = avisClientRepository.averageByReferenceProduit("");
+		Assert.assertEquals(0.0, res, 0.1);
+	}
+	
+	@Test
+	public void averageAvisClientByEmptyReference2() {
+		double res = avisClientRepository.averageByReferenceProduit(" ");
+		Assert.assertEquals(0.0, res, 0.1);
+	}
+	
+	@Test
+	public void averageAvisClientByNullReference() {
+		double res = avisClientRepository.averageByReferenceProduit(null);
 		Assert.assertEquals(0.0, res, 0.1);
 	}
 

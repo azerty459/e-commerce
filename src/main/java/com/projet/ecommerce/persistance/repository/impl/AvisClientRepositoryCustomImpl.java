@@ -18,13 +18,11 @@ public class AvisClientRepositoryCustomImpl implements AvisClientRepositoryCusto
 	@Override
 	public float averageByReferenceProduit(String reference) {
 		
-		TypedQuery<Double> query = null;
-		
-		if (reference == null) {
+		if (reference == null || reference.trim().isEmpty()) {
 			return 0;
 		}
 		
-		query = entityManager.createQuery(SQL_AVERAGE_BY_REFERENCE,Double.class);
+		TypedQuery<Double> query = entityManager.createQuery(SQL_AVERAGE_BY_REFERENCE,Double.class);
 		query.setParameter("reference", reference);
 		
 		return query.getSingleResult().floatValue();

@@ -5,6 +5,7 @@ import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Photo;
 import com.projet.ecommerce.persistance.entity.Produit;
+import com.projet.ecommerce.persistance.repository.AvisClientRepository;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import com.projet.ecommerce.persistance.repository.PhotoRepository;
 import com.projet.ecommerce.persistance.repository.ProduitRepository;
@@ -40,6 +41,9 @@ public class ProduitBusinessTests {
 
     @Mock
     private PhotoRepository photoRepository;
+    
+    @Mock
+    private AvisClientRepository avisClientRepository;
 
     @Mock
     private Page page;
@@ -238,23 +242,24 @@ public class ProduitBusinessTests {
 
         Mockito.when(produitRepository.findAllWithCriteria(Mockito.any(), Mockito.any())).thenReturn(produitList);
         Mockito.when(produitRepository.findByNomContainingIgnoreCase(Mockito.any())).thenReturn(produitList);
+        Mockito.when(produitRepository.findById(Mockito.anyString())).thenReturn(Optional.of(produit));
 
         // Permets de tester si la méthode retourne une List avec une référence
         produitDTOList = produitBusiness.getAll(produit.getReferenceProduit(), null, null);
         Assert.assertEquals(produitDTOList.size(), 1);
-        Mockito.verify(produitRepository, Mockito.times(1)).findAllWithCriteria(Mockito.any(), Mockito.any());
+        Mockito.verify(produitRepository, Mockito.times(1)).findById(Mockito.anyString());
         Mockito.verify(produitRepository, Mockito.times(0)).findByNomContainingIgnoreCase(Mockito.any());
 
         // Permets de tester si la méthode retourne une Liste avec un nom de catégorie
         produitDTOList = produitBusiness.getAll(null, "cat", null);
         Assert.assertEquals(produitDTOList.size(), 1);
-        Mockito.verify(produitRepository, Mockito.times(2)).findAllWithCriteria(Mockito.any(), Mockito.any());
+        Mockito.verify(produitRepository, Mockito.times(1)).findAllWithCriteria(Mockito.any(), Mockito.any());
         Mockito.verify(produitRepository, Mockito.times(0)).findByNomContainingIgnoreCase(Mockito.any());
 
         // Permets de tester si la méthode retourne une Liste avec un nom de produit
         produitDTOList = produitBusiness.getAll(null, null, produit.getNom());
         Assert.assertEquals(produitDTOList.size(), 1);
-        Mockito.verify(produitRepository, Mockito.times(2)).findAllWithCriteria(Mockito.any(), Mockito.any());
+        Mockito.verify(produitRepository, Mockito.times(1)).findAllWithCriteria(Mockito.any(), Mockito.any());
         Mockito.verify(produitRepository, Mockito.times(1)).findByNomContainingIgnoreCase(Mockito.any());
 
         // Teste si les valeurs sont cohérentes avec le produit retournées

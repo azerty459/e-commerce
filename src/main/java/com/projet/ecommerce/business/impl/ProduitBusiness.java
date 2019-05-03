@@ -232,13 +232,12 @@ public class ProduitBusiness implements IProduitBusiness {
 
 	/**
 	 * Permet la récuperation d'un produit par sa référence
-	 * @param reference du produit recherché
+	 * @param ref du produit recherché
 	 * @return le produit recherché
 	 */
 	public ProduitDTO getByRef(String ref){
 
 		Optional<Produit> produit = produitRepository.findById(ref);
-		System.out.println("tata");
 		if(produit.isPresent()) {
 			ProduitDTO produitDTO = ProduitTransformer.entityToDto(produit.get());
 			produitDTO.setNoteMoyenne(avisClientRepository.averageByReferenceProduit(ref));
