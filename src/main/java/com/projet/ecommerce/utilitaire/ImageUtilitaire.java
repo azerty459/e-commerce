@@ -1,12 +1,8 @@
 package com.projet.ecommerce.utilitaire;
 
-import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
-import com.projet.ecommerce.entrypoint.image.DimensionImage;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.AlphaComposite;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -16,6 +12,14 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import javax.imageio.ImageIO;
+
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+
+import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
+import com.projet.ecommerce.entrypoint.image.DimensionImage;
 
 
 public class ImageUtilitaire {

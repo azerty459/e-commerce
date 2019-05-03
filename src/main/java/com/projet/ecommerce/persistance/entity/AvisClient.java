@@ -1,9 +1,16 @@
 package com.projet.ecommerce.persistance.entity;
 
-import com.projet.ecommerce.business.dto.AvisClientDTO;
-
-import javax.persistence.*;
 import java.time.LocalDateTime;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  * Entité représentant la table avis_client sous forme de classe.

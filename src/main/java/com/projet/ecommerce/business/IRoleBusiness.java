@@ -1,10 +1,11 @@
 package com.projet.ecommerce.business;
 
-import com.projet.ecommerce.business.dto.RoleDTO;
-import com.projet.ecommerce.business.dto.UtilisateurDTO;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 
-import java.util.List;
+import com.projet.ecommerce.business.dto.RoleDTO;
+import com.projet.ecommerce.business.dto.UtilisateurDTO;
 
 /**
  * Interface du service CategorieBusiness.

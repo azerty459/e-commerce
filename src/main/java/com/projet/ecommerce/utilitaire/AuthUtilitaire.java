@@ -1,15 +1,17 @@
 package com.projet.ecommerce.utilitaire;
 
+import java.security.Key;
+import java.util.Date;
+
+import javax.crypto.spec.SecretKeySpec;
+import javax.xml.bind.DatatypeConverter;
+
 import com.projet.ecommerce.entrypoint.authentification.Token;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-
-import javax.crypto.spec.SecretKeySpec;
-import javax.xml.bind.DatatypeConverter;
-import java.security.Key;
-import java.util.Date;
 
 public class AuthUtilitaire {
     private static final String API_KEY = "kyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI0IiwiaWF0IjoxNTMwNjA0NjkxLCJzdWIiOiJhZG1pbiIsImlzcyI6ImEiLCJleHAiOjE1MzA2MDQ3OTF9.QzkzBu2kQG8bBpRejuLluPWNH-Yzm6Xe83zCTn-ioSM";

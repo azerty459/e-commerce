@@ -1,11 +1,11 @@
 package com.projet.ecommerce.business.dto.transformer;
 
-import com.projet.ecommerce.business.dto.UtilisateurDTO;
-import com.projet.ecommerce.persistance.entity.Utilisateur;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import com.projet.ecommerce.business.dto.UtilisateurDTO;
+import com.projet.ecommerce.persistance.entity.Utilisateur;
 
 public class UtilisateurTransformer {
 

@@ -1,10 +1,10 @@
 package com.projet.ecommerce.persistance.repository;
 
-import com.projet.ecommerce.persistance.entity.Categorie;
-import com.projet.ecommerce.persistance.entity.Produit;
-
 import java.util.Collection;
 import java.util.Map;
+
+import com.projet.ecommerce.persistance.entity.Categorie;
+import com.projet.ecommerce.persistance.entity.Produit;
 
 public interface ProduitRepositoryCustom {
 

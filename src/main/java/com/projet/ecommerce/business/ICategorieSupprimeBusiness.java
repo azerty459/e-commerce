@@ -1,9 +1,9 @@
 package com.projet.ecommerce.business;
 
+import java.util.List;
+
 import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.persistance.entity.Categorie;
-
-import java.util.List;
 
 /**
  * Interface du service CategorieBusiness.

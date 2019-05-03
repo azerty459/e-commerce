@@ -1,8 +1,8 @@
 package com.projet.ecommerce.entrypoint.authentification;
 
-import com.projet.ecommerce.persistance.entity.Utilisateur;
-
 import java.util.Date;
+
+import com.projet.ecommerce.persistance.entity.Utilisateur;
 
 
 public class Token {

@@ -1,12 +1,12 @@
 package com.projet.ecommerce.entrypoint.graphql;
 
-import graphql.ErrorType;
-import graphql.GraphQLError;
-import graphql.language.SourceLocation;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import graphql.ErrorType;
+import graphql.GraphQLError;
+import graphql.language.SourceLocation;
 
 /**
  * Classe permettante de créer des érreur GraphQL personnalisée.

@@ -1,12 +1,13 @@
 package com.projet.ecommerce.business;
 
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.data.domain.Page;
+
 import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.persistance.entity.Produit;
-import org.springframework.data.domain.Page;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * Interface du service ProduitBusiness.

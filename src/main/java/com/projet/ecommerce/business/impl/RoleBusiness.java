@@ -1,5 +1,14 @@
 package com.projet.ecommerce.business.impl;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Service;
+
 import com.projet.ecommerce.business.IRoleBusiness;
 import com.projet.ecommerce.business.dto.RoleDTO;
 import com.projet.ecommerce.business.dto.UtilisateurDTO;
@@ -7,14 +16,6 @@ import com.projet.ecommerce.business.dto.transformer.RoleTransformer;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Role;
 import com.projet.ecommerce.persistance.repository.RoleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * Service permettant de gérer les actions effectuées pour les produits.

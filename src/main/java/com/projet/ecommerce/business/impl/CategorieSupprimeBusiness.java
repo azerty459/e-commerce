@@ -1,5 +1,13 @@
 package com.projet.ecommerce.business.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.projet.ecommerce.business.ICategorieSupprimeBusiness;
 import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.persistance.entity.Categorie;
@@ -7,13 +15,6 @@ import com.projet.ecommerce.persistance.entity.CategorieSupprime;
 import com.projet.ecommerce.persistance.entity.Produit;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import com.projet.ecommerce.persistance.repository.CategorieSupprimeRepository;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Service permettant de gérer les actions effectuées pour les catégories.

@@ -1,5 +1,16 @@
 package com.projet.ecommerce.entrypoint.graphql;
 
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.annotation.PostConstruct;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+
 import com.projet.ecommerce.entrypoint.graphql.avisclient.AvisClientMutation;
 import com.projet.ecommerce.entrypoint.graphql.avisclient.AvisClientQuery;
 import com.projet.ecommerce.entrypoint.graphql.categorie.CategorieMutation;
@@ -14,6 +25,7 @@ import com.projet.ecommerce.entrypoint.graphql.role.RoleQuery;
 import com.projet.ecommerce.entrypoint.graphql.statistique.StatistiqueQuery;
 import com.projet.ecommerce.entrypoint.graphql.utilisateur.UtilisateurMutation;
 import com.projet.ecommerce.entrypoint.graphql.utilisateur.UtilisateurQuery;
+
 import graphql.ExceptionWhileDataFetching;
 import graphql.GraphQL;
 import graphql.GraphQLError;
@@ -22,15 +34,6 @@ import graphql.schema.idl.RuntimeWiring;
 import graphql.schema.idl.SchemaGenerator;
 import graphql.schema.idl.SchemaParser;
 import graphql.schema.idl.TypeDefinitionRegistry;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
-
-import javax.annotation.PostConstruct;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Configuration de graphql.

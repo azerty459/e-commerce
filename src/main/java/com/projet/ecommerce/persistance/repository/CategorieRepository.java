@@ -1,13 +1,14 @@
 package com.projet.ecommerce.persistance.repository;
 
-import com.projet.ecommerce.persistance.entity.Categorie;
+import java.util.Collection;
+
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.Collection;
+import com.projet.ecommerce.persistance.entity.Categorie;
 
 /**
  * Interface permettante de communiquer avec la base de données pour la table Catégorie.

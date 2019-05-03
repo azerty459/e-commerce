@@ -1,8 +1,19 @@
 package com.projet.ecommerce.business.impl;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.projet.ecommerce.business.IUtilisateurBusiness;
 import com.projet.ecommerce.business.dto.UtilisateurDTO;
-import com.projet.ecommerce.business.dto.transformer.RoleTransformer;
 import com.projet.ecommerce.business.dto.transformer.UtilisateurTransformer;
 import com.projet.ecommerce.entrypoint.authentification.AuthData;
 import com.projet.ecommerce.entrypoint.authentification.SigninPayload;
@@ -13,17 +24,6 @@ import com.projet.ecommerce.persistance.entity.Utilisateur;
 import com.projet.ecommerce.persistance.repository.RoleRepository;
 import com.projet.ecommerce.persistance.repository.UtilisateurRepository;
 import com.projet.ecommerce.utilitaire.AuthUtilitaire;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * Service permettant de gérer les actions effectuées pour les utilisateurs.

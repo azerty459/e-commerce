@@ -1,10 +1,10 @@
 package com.projet.ecommerce.persistance.repository;
 
-import com.projet.ecommerce.persistance.entity.CategorieSupprime;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+
+import com.projet.ecommerce.persistance.entity.CategorieSupprime;
 
 public interface CategorieSupprimeRepositoryCustom {
 

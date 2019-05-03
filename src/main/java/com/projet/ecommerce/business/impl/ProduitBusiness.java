@@ -1,5 +1,19 @@
 package com.projet.ecommerce.business.impl;
 
+import static com.projet.ecommerce.utilitaire.Utilitaire.mergeObjects;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+
 import com.projet.ecommerce.business.IProduitBusiness;
 import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.business.dto.ProduitDTO;
@@ -12,14 +26,6 @@ import com.projet.ecommerce.persistance.entity.Produit;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import com.projet.ecommerce.persistance.repository.PhotoRepository;
 import com.projet.ecommerce.persistance.repository.ProduitRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Service;
-
-import java.util.*;
-
-import static com.projet.ecommerce.utilitaire.Utilitaire.mergeObjects;
 
 /**
  * Service permettant de gérer les actions effectuées pour les produits.
@@ -45,13 +51,16 @@ public class ProduitBusiness implements IProduitBusiness {
      * @param description       Sa description
      * @param prixHT            Son prix hors taxe
      * @param categoriesProduit Liste d'id de catégorie à associer au produit
-     * @return l'objet produit crée ou null, s'il il manque une referenceProduit, un nom et un prixHT.
+     * @return l'objet produit crée ou null, s'il il manque une referenceProduit, un
+     *         nom et un prixHT.
      */
     @Override
     // FIXME à remplacer par un DTO
-    public ProduitDTO add(String referenceProduit, String nom, String description, float prixHT, List<Integer> categoriesProduit) {
+    public ProduitDTO add(String referenceProduit, String nom, String description, float prixHT,
+            List<Integer> categoriesProduit) {
         if (referenceProduit.isEmpty() && nom.isEmpty()) {
-            GraphQLCustomException graphQLCustomException = new GraphQLCustomException("Erreur dans l'ajout du produit (la référence, le nom et le prixHT ne peut être null)");
+            GraphQLCustomException graphQLCustomException = new GraphQLCustomException(
+                    "Erreur dans l'ajout du produit (la référence, le nom et le prixHT ne peut être null)");
             graphQLCustomException.ajouterExtension("Référence", referenceProduit);
             graphQLCustomException.ajouterExtension("Nom", nom);
             graphQLCustomException.ajouterExtension("PrixHT", prixHT + "");
@@ -71,8 +80,7 @@ public class ProduitBusiness implements IProduitBusiness {
         if (categoriesProduit != null) {
             for (int idCategorie : categoriesProduit) {
                 Optional<Categorie> categorieOptional = categorieRepository.findById(idCategorie);
-                categorieOptional
-                        .map(categorieList::add);
+                categorieOptional.map(categorieList::add);
             }
         }
         produit.setCategories(categorieList);
@@ -85,7 +93,7 @@ public class ProduitBusiness implements IProduitBusiness {
      * @param produit L'objet produit modifié à sauvegarder
      * @return l'objet produit modifié
      */
-    //Todo changer parametre par ProduitDTO
+    // Todo changer parametre par ProduitDTO
     @Override
     public ProduitDTO update(Produit produit) {
         if (produit == null) {
@@ -119,7 +127,8 @@ public class ProduitBusiness implements IProduitBusiness {
     }
 
     /**
-     * Remplace la liste de photo par une nouvelle liste contenant l'ensemble des données des photos.
+     * Remplace la liste de photo par une nouvelle liste contenant l'ensemble des
+     * données des photos.
      *
      * @param photoList Une array list contenant des id de photo
      * @return une collection de Photo
@@ -138,7 +147,8 @@ public class ProduitBusiness implements IProduitBusiness {
     }
 
     /**
-     * Remplace la liste de photo par une nouvelle liste contenant l'ensemble des données des photos.
+     * Remplace la liste de photo par une nouvelle liste contenant l'ensemble des
+     * données des photos.
      *
      * @param photoPrincipale La photo principale
      * @return une collection de Photo
@@ -153,7 +163,8 @@ public class ProduitBusiness implements IProduitBusiness {
     }
 
     /**
-     * Remplace la liste de caractéristique par une nouvelle liste contenant l'ensemble des données des caractéristiques.
+     * Remplace la liste de caractéristique par une nouvelle liste contenant
+     * l'ensemble des données des caractéristiques.
      *
      * @param categorieList Une array list contenant des id de catégorie
      * @return une collection de catégorie
@@ -231,21 +242,24 @@ public class ProduitBusiness implements IProduitBusiness {
     @Override
     public Page<Produit> getPage(int numeroPage, int nombreProduit, String nom, int IDcategorie) {
 
-
-        PageRequest page = (numeroPage == 0) ? PageRequest.of(numeroPage, nombreProduit) : PageRequest.of(numeroPage - 1, nombreProduit);
+        PageRequest page = (numeroPage == 0) ? PageRequest.of(numeroPage, nombreProduit)
+                : PageRequest.of(numeroPage - 1, nombreProduit);
         if (nom != null && !nom.isEmpty() && IDcategorie != 0 || IDcategorie != 0) {
             Optional<Categorie> categorieOptional = categorieRepository.findById(IDcategorie);
             if (!categorieOptional.isPresent()) {
                 return Page.empty();
             }
             Categorie categorie = categorieOptional.get();
-            return produitRepository.findByNomContainingIgnoreCaseAndCategories_borneGaucheGreaterThanEqualAndCategories_borneDroitLessThanEqual(page, nom, categorie.getBorneGauche(), categorie.getBorneDroit());
+            return produitRepository
+                    .findByNomContainingIgnoreCaseAndCategories_borneGaucheGreaterThanEqualAndCategories_borneDroitLessThanEqual(
+                            page, nom, categorie.getBorneGauche(), categorie.getBorneDroit());
         } else if (nom != null && !nom.isEmpty()) {
             return produitRepository.findByNomContainingIgnoreCase(page, nom);
         }
         return produitRepository.findAll(page);
     }
 
+    @Override
     public Long countProduits() {
         return produitRepository.countProduits();
     }
@@ -254,7 +268,8 @@ public class ProduitBusiness implements IProduitBusiness {
     public Map<CategorieDTO, Long> countProduitsByCategorie() {
         Map<Categorie, Long> countProduitCategorie = produitRepository.countProduitsByCategories();
         Map<CategorieDTO, Long> countProduitCategorieDTO = new HashMap<>();
-        countProduitCategorie.entrySet().stream().forEach((entry -> countProduitCategorieDTO.put(CategorieTransformer.entityToDto(entry.getKey()), entry.getValue())));
+        countProduitCategorie.entrySet().stream().forEach((entry -> countProduitCategorieDTO
+                .put(CategorieTransformer.entityToDto(entry.getKey()), entry.getValue())));
         return countProduitCategorieDTO;
     }
 }

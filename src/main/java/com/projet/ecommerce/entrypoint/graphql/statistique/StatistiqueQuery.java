@@ -1,18 +1,20 @@
 package com.projet.ecommerce.entrypoint.graphql.statistique;
 
-import com.projet.ecommerce.business.ICategorieBusiness;
-import com.projet.ecommerce.business.IProduitBusiness;
-import com.projet.ecommerce.business.IUtilisateurBusiness;
-import com.projet.ecommerce.business.dto.CategorieDTO;
-import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.idl.TypeRuntimeWiring;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.projet.ecommerce.business.ICategorieBusiness;
+import com.projet.ecommerce.business.IProduitBusiness;
+import com.projet.ecommerce.business.IUtilisateurBusiness;
+import com.projet.ecommerce.business.dto.CategorieDTO;
+
+import graphql.schema.DataFetchingEnvironment;
+import graphql.schema.idl.TypeRuntimeWiring;
 
 @Component
 public class StatistiqueQuery {
