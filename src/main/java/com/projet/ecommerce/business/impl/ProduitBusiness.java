@@ -262,23 +262,26 @@ public class ProduitBusiness implements IProduitBusiness {
      * @param numeroPage    la page souhaitée
      * @param nombreProduit le nombre de produit à afficher dans la
      * @param nom           le nom du produit à rechercher
-     * @param IDcategorie   l'id de la catégorie recherchée
+     * @param idCategorie   l'id de la catégorie recherchée
      * @return une page paginée
      */
     @Override
-    public Page<Produit> getPage(int numeroPage, int nombreProduit, String nom, int IDcategorie) {
-
-        PageRequest page = (numeroPage == 0) ? PageRequest.of(numeroPage, nombreProduit)
-                : PageRequest.of(numeroPage - 1, nombreProduit);
-        if (nom != null && !nom.isEmpty() && IDcategorie != 0 || IDcategorie != 0) {
-            Optional<Categorie> categorieOptional = categorieRepository.findById(IDcategorie);
+    public Page<Produit> getPage(int numeroPage, int nombreProduit, String nom, int idCategorie) {
+        PageRequest page = (numeroPage == 0) ? PageRequest.of(numeroPage, nombreProduit) : PageRequest.of(numeroPage - 1, nombreProduit);
+        if (nom != null && !nom.isEmpty() && idCategorie != 0) {
+            Optional<Categorie> categorieOptional = categorieRepository.findById(idCategorie);
             if (!categorieOptional.isPresent()) {
                 return Page.empty();
             }
             Categorie categorie = categorieOptional.get();
-            return produitRepository
-                    .findByNomContainingIgnoreCaseAndCategories_borneGaucheGreaterThanEqualAndCategories_borneDroitLessThanEqual(
-                            page, nom, categorie.getBorneGauche(), categorie.getBorneDroit());
+            return produitRepository.findByNomContainingIgnoreCaseAndCategories_borneGaucheGreaterThanEqualAndCategories_borneDroitLessThanEqual(page, nom, categorie.getBorneGauche(), categorie.getBorneDroit());
+        } else if (idCategorie != 0) {
+            Optional<Categorie> categorieOptional = categorieRepository.findById(idCategorie);
+            if (!categorieOptional.isPresent()) {
+                return Page.empty();
+            }
+            Categorie categorie = categorieOptional.get();
+            return produitRepository.findByCategories(page, categorie);
         } else if (nom != null && !nom.isEmpty()) {
             return produitRepository.findByNomContainingIgnoreCase(page, nom);
         }
