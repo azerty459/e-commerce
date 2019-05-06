@@ -1,5 +1,7 @@
 package com.projet.ecommerce.entrypoint.graphql.produit;
 
+import java.util.Collections;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +22,7 @@ public class ProduitQuery {
         builder.typeName("Query");
         builder.dataFetcher("produits", (DataFetchingEnvironment env) -> {
             if (env.getArgument("ref") != null) {
-                return produitBusiness.getByRef("ref");
+                return Collections.singletonList(produitBusiness.getByRef(env.getArgument("ref")));
             } else {
                 return produitBusiness.getAll(env.getArgument("ref"), env.getArgument("cat"), env.getArgument("nom"));
             }
