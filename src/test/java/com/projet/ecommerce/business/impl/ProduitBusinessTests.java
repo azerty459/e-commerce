@@ -289,18 +289,6 @@ public class ProduitBusinessTests {
         Mockito.verify(avisClientRepository, Mockito.times(1)).averageByReferenceProduit(Mockito.anyString());
     }
 
-    @NotNull
-    private Produit buildProduit() {
-        Produit produit = new Produit();
-        produit.setReferenceProduit("A05A01");
-        produit.setPrixHT(2.1f);
-        produit.setDescription("Un livre");
-        produit.setNom("Livre1");
-        produit.setPhotos(new ArrayList<>());
-        produit.setCategories(new ArrayList<>());
-        return produit;
-    }
-
     @Test
     public void getAllByRefAndCatEmpty() {
         thrown.expect(GraphQLCustomException.class);
