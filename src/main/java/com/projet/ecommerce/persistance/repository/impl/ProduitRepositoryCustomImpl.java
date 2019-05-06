@@ -66,6 +66,10 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
 
     @Override
     public Page<Produit> findByCategories(Pageable pageable, Categorie categorie) {
+        if(pageable == null || categorie == null) {
+            return Page.empty();
+        }
+
         //Recupere les produits à retourner
         TypedQuery<Produit> queryProduits = entityManager.createQuery(SQL_PRODUCTS_BY_CATEGORY, Produit.class);
         queryProduits.setFirstResult(pageable.getPageNumber() * pageable.getPageSize());
