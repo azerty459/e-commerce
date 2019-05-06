@@ -1,13 +1,9 @@
 package com.projet.ecommerce.business.impl;
 
-import com.projet.ecommerce.business.dto.ProduitDTO;
-import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
-import com.projet.ecommerce.persistance.entity.Categorie;
-import com.projet.ecommerce.persistance.entity.Photo;
-import com.projet.ecommerce.persistance.entity.Produit;
-import com.projet.ecommerce.persistance.repository.CategorieRepository;
-import com.projet.ecommerce.persistance.repository.PhotoRepository;
-import com.projet.ecommerce.persistance.repository.ProduitRepository;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
@@ -24,9 +20,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import com.projet.ecommerce.business.dto.ProduitDTO;
+import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
+import com.projet.ecommerce.persistance.entity.Categorie;
+import com.projet.ecommerce.persistance.entity.Photo;
+import com.projet.ecommerce.persistance.entity.Produit;
+import com.projet.ecommerce.persistance.repository.AvisClientRepository;
+import com.projet.ecommerce.persistance.repository.CategorieRepository;
+import com.projet.ecommerce.persistance.repository.PhotoRepository;
+import com.projet.ecommerce.persistance.repository.ProduitRepository;
 
 import static org.mockito.Matchers.eq;
 
@@ -42,6 +44,9 @@ public class ProduitBusinessTests {
 
     @Mock
     private PhotoRepository photoRepository;
+
+    @Mock
+    private AvisClientRepository avisClientRepository;
 
     @Mock
     private Page page;
@@ -69,7 +74,8 @@ public class ProduitBusinessTests {
         Assert.assertEquals(produit.getPrixHT(), retour1.getPrixHT(), 0);
         Assert.assertEquals(produit.getReferenceProduit(), retour1.getRef());
 
-        // Je teste si le produit business m'envoie bien une GraphQLCustomException, si le produit existe déjà
+        // Je teste si le produit business m'envoie bien une GraphQLCustomException, si
+        // le produit existe déjà
         thrown.expect(GraphQLCustomException.class);
         ProduitDTO retour2 = produitBusiness.add("", "", "dfdfdf", 0, null);
         Assert.assertNull(retour2);
@@ -79,7 +85,8 @@ public class ProduitBusinessTests {
     public void addProductAlreadyExist() {
         Produit produit = buildProduit();
 
-        // Je teste si le produit business m'envoie bien une GraphQLCustomException, si le produit existe déjà
+        // Je teste si le produit business m'envoie bien une GraphQLCustomException, si
+        // le produit existe déjà
         thrown.expect(GraphQLCustomException.class);
         Mockito.when(produitRepository.findById(Mockito.anyString())).thenReturn(Optional.of(produit));
         ProduitDTO retour = produitBusiness.add("A05A01", "Test", "Test", 4.7f, null);
@@ -244,7 +251,6 @@ public class ProduitBusinessTests {
         // Permets de tester si la méthode retourne une List avec une référence
         produitDTOList = produitBusiness.getAll(produit.getReferenceProduit(), null, null);
         Assert.assertEquals(produitDTOList.size(), 1);
-        Mockito.verify(produitRepository, Mockito.times(1)).findAllWithCriteria(Mockito.any(), Mockito.any());
         Mockito.verify(produitRepository, Mockito.times(0)).findByNomContainingIgnoreCase(Mockito.any());
 
         // Permets de tester si la méthode retourne une Liste avec un nom de catégorie
@@ -268,6 +274,22 @@ public class ProduitBusinessTests {
     }
 
     @Test
+    public void getByRef() {
+
+        Produit produit = buildProduit();
+        Float average = 0f;
+
+        Mockito.when(produitRepository.findById(Mockito.anyString())).thenReturn(Optional.of(produit));
+        Mockito.when(avisClientRepository.averageByReferenceProduit(Mockito.anyString())).thenReturn(average);
+
+        ProduitDTO produitDTO = produitBusiness.getByRef(produit.getReferenceProduit());
+
+        Assert.assertNotNull(produitDTO);
+        Mockito.verify(produitRepository, Mockito.times(1)).findById(Mockito.anyString());
+        Mockito.verify(avisClientRepository, Mockito.times(1)).averageByReferenceProduit(Mockito.anyString());
+    }
+
+    @Test
     public void getAllByRefAndCatEmpty() {
         thrown.expect(GraphQLCustomException.class);
         produitBusiness.getAll(null, null, null);
@@ -281,7 +303,8 @@ public class ProduitBusinessTests {
 
     @Test
     public void getPageWithName() {
-        Mockito.when(produitRepository.findByNomContainingIgnoreCase(Mockito.any(Pageable.class), Mockito.anyString())).thenReturn(page);
+        Mockito.when(produitRepository.findByNomContainingIgnoreCase(Mockito.any(Pageable.class), Mockito.anyString()))
+                .thenReturn(page);
         Assert.assertNotNull(produitBusiness.getPage(1, 5, "Toto", 0));
     }
 

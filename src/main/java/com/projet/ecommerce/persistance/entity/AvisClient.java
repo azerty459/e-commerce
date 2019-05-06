@@ -1,9 +1,16 @@
 package com.projet.ecommerce.persistance.entity;
 
-import com.projet.ecommerce.business.dto.AvisClientDTO;
-
-import javax.persistence.*;
 import java.time.LocalDateTime;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  * Entité représentant la table avis_client sous forme de classe.
@@ -20,7 +27,7 @@ public class AvisClient {
     /**
      * Date de l'avis du client
      */
-    @Column(name="date_avis", updatable = false, insertable = false)
+    @Column(name = "date_avis", updatable = false, insertable = false)
     private LocalDateTime date;
 
     /**
@@ -38,7 +45,6 @@ public class AvisClient {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reference_produit")
     private Produit produit;
-
 
     public int getId() {
         return id;

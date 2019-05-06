@@ -1,6 +1,7 @@
 package com.projet.ecommerce.persistance.repository;
 
 import com.projet.ecommerce.persistance.entity.Categorie;
+
 import com.projet.ecommerce.persistance.entity.Produit;
 import org.junit.Assert;
 import org.junit.Before;

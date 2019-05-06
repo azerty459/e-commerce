@@ -19,6 +19,14 @@ public interface IAvisClientBusiness {
      * @return la liste des avis clients trouvés
      */
     Collection<AvisClientDTO> getAll(String ref);
+    
+    /**
+     * Méthode permettant d'obtenir la moyenne des avis clients sur un produit
+     * 
+     * @param ref la référence du produit recherché
+     * @return la moyenne des avis clients sur ce produit
+     */
+    double getAverageByReference(String ref);
 
     /**
      * Méthode définissant la modification d'un avis client.
