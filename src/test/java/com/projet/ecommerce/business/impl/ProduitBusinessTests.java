@@ -286,27 +286,27 @@ public class ProduitBusinessTests {
     }
 
     @Test
-    public void getPageWithCat() {
-        int idCat = 1;
+    public void getPageWithCategorie() {
+        int idCategorie = 1;
 
-        Mockito.when(categorieRepository.findById(idCat)).thenReturn(Optional.of(new Categorie()));
+        Mockito.when(categorieRepository.findById(idCategorie)).thenReturn(Optional.of(new Categorie()));
         Mockito.when(produitRepository.findByCategories_borneGaucheGreaterThanEqualAndCategories_borneDroitLessThanEqual(
                 Mockito.any(Pageable.class),
                 Mockito.anyInt(),
                 Mockito.anyInt()
         )).thenReturn(page);
 
-        Page<Produit> resultat = produitBusiness.getPage(1,5, "", idCat);
+        Page<Produit> resultat = produitBusiness.getPage(1,5, "", idCategorie);
         Assert.assertNotNull(resultat);
         Assert.assertEquals(page, resultat);
     }
 
     @Test
-    public void getPageWithCatAndName() {
+    public void getPageWithCategorieAndName() {
         String nom = "Toto";
-        int idCat = 1;
+        int idCategorie = 1;
 
-        Mockito.when(categorieRepository.findById(idCat)).thenReturn(Optional.of(new Categorie()));
+        Mockito.when(categorieRepository.findById(idCategorie)).thenReturn(Optional.of(new Categorie()));
         Mockito.when(produitRepository.findByNomContainingIgnoreCaseAndCategories_borneGaucheGreaterThanEqualAndCategories_borneDroitLessThanEqual(
                 Mockito.any(Pageable.class),
                 eq(nom),
@@ -314,17 +314,17 @@ public class ProduitBusinessTests {
                 Mockito.anyInt())
         ).thenReturn(page);
 
-        Page<Produit> resultat = produitBusiness.getPage(1,5, nom, idCat);
+        Page<Produit> resultat = produitBusiness.getPage(1,5, nom, idCategorie);
         Assert.assertNotNull(resultat);
         Assert.assertEquals(page, resultat);
     }
 
     @Test
-    public void getPageWithUnknowCatAndName() {
-        int idCat = 1;
+    public void getPageWithUnknowCategorieAndName() {
+        int idCategorie = 1;
 
-        Mockito.when(categorieRepository.findById(idCat)).thenReturn(Optional.empty());
-        Page<Produit> resultat =  produitBusiness.getPage(1,5, "Toto", idCat);
+        Mockito.when(categorieRepository.findById(idCategorie)).thenReturn(Optional.empty());
+        Page<Produit> resultat =  produitBusiness.getPage(1,5, "Toto", idCategorie);
         Assert.assertNotNull(resultat);
         Assert.assertEquals(Page.empty(), resultat);
     }
