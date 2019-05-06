@@ -217,11 +217,11 @@ public class ProduitBusiness implements IProduitBusiness {
 
         Collection<Produit> produitCollection = null;
 
-        if (ref != null) {
-            List<ProduitDTO> res = new ArrayList<>();
-            res.add(getByRef(ref));
-            return res;
-        }
+//        if (ref != null) {
+//            List<ProduitDTO> res = new ArrayList<>();
+//            res.add(getByRef(ref));
+//            return res;
+//        }
 
         if (nom == null) {
             produitCollection = produitRepository.findAllWithCriteria(ref, cat);
@@ -242,16 +242,18 @@ public class ProduitBusiness implements IProduitBusiness {
      * @param ref du produit recherché
      * @return le produit recherché
      */
+    @Override
     public ProduitDTO getByRef(String ref) {
 
         Optional<Produit> produit = produitRepository.findById(ref);
-        if (produit.isPresent()) {
-            ProduitDTO produitDTO = ProduitTransformer.entityToDto(produit.get());
-            produitDTO.setNoteMoyenne(avisClientRepository.averageByReferenceProduit(ref));
-            return produitDTO;
+
+        if (!produit.isPresent()) {
+            throw new GraphQLCustomException("Aucun produit trouvé.");
         }
 
-        throw new GraphQLCustomException("Aucun produit trouvé.");
+        ProduitDTO produitDTO = ProduitTransformer.entityToDto(produit.get());
+        produitDTO.setNoteMoyenne(avisClientRepository.averageByReferenceProduit(ref));
+        return produitDTO;
     }
 
     /**

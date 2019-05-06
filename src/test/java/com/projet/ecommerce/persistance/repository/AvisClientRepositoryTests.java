@@ -1,7 +1,8 @@
 package com.projet.ecommerce.persistance.repository;
 
-import com.projet.ecommerce.persistance.entity.AvisClient;
-import com.projet.ecommerce.persistance.entity.Produit;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,8 +12,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.projet.ecommerce.persistance.entity.AvisClient;
+import com.projet.ecommerce.persistance.entity.Produit;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -35,15 +36,14 @@ public class AvisClientRepositoryTests {
         p.setPrixHT(5);
         produitRepository.save(p);
 
-
         AvisClient avisClient = new AvisClient();
         avisClient.setNote(3);
         avisClient.setDescription("Bla bla bla");
         avisClient.setProduit(p);
         avisClientRepository.save(avisClient);
 
-
-        List<AvisClient> lesAvisClientDuProduit = new ArrayList<>(avisClientRepository.findByProduit_ReferenceProduit(p.getReferenceProduit()));
+        List<AvisClient> lesAvisClientDuProduit = new ArrayList<>(
+                avisClientRepository.findByProduit_ReferenceProduit(p.getReferenceProduit()));
         Assert.assertNotNull(lesAvisClientDuProduit);
         Assert.assertFalse(lesAvisClientDuProduit.isEmpty());
         Assert.assertNotNull(lesAvisClientDuProduit.get(0));
@@ -51,8 +51,7 @@ public class AvisClientRepositoryTests {
         Assert.assertEquals(avisClientTrouve.getDescription(), avisClient.getDescription());
         Assert.assertEquals(avisClientTrouve.getNote(), avisClient.getNote());
         Assert.assertNotNull(avisClientTrouve.getProduit());
-        Assert.assertEquals(avisClientTrouve.getProduit().getReferenceProduit(), avisClient.getProduit().getReferenceProduit());
+        Assert.assertEquals(avisClientTrouve.getProduit().getReferenceProduit(),
+                avisClient.getProduit().getReferenceProduit());
     }
-    
-
 }
