@@ -290,10 +290,9 @@ public class ProduitBusinessTests {
         int idCategorie = 1;
 
         Mockito.when(categorieRepository.findById(idCategorie)).thenReturn(Optional.of(new Categorie()));
-        Mockito.when(produitRepository.findByCategories_borneGaucheGreaterThanEqualAndCategories_borneDroitLessThanEqual(
+        Mockito.when(produitRepository.findByCategories(
                 Mockito.any(Pageable.class),
-                Mockito.anyInt(),
-                Mockito.anyInt()
+                Mockito.any(Categorie.class)
         )).thenReturn(page);
 
         Page<Produit> resultat = produitBusiness.getPage(1,5, "", idCategorie);

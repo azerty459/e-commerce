@@ -240,13 +240,12 @@ public class ProduitBusiness implements IProduitBusiness {
             Categorie categorie = categorieOptional.get();
             return produitRepository.findByNomContainingIgnoreCaseAndCategories_borneGaucheGreaterThanEqualAndCategories_borneDroitLessThanEqual(page, nom, categorie.getBorneGauche(), categorie.getBorneDroit());
         } else if (idCategorie != 0) {
-            //return produitRepository.findByCategories_IdCategorie(page, idCategorie);
             Optional<Categorie> categorieOptional = categorieRepository.findById(idCategorie);
             if (!categorieOptional.isPresent()) {
                 return Page.empty();
             }
             Categorie categorie = categorieOptional.get();
-            return produitRepository.findByCategories_borneGaucheGreaterThanEqualAndCategories_borneDroitLessThanEqual(page, categorie.getBorneGauche(), categorie.getBorneDroit());
+            return produitRepository.findByCategories(page, categorie);
         } else if (nom != null && !nom.isEmpty()) {
             return produitRepository.findByNomContainingIgnoreCase(page, nom);
         }
