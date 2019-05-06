@@ -12,8 +12,13 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AuthUtilitaire {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthUtilitaire.class);
+
     private static final String API_KEY = "kyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI0IiwiaWF0IjoxNTMwNjA0NjkxLCJzdWIiOiJhZG1pbiIsImlzcyI6ImEiLCJleHAiOjE1MzA2MDQ3OTF9.QzkzBu2kQG8bBpRejuLluPWNH-Yzm6Xe83zCTn-ioSM";
 
     /**
@@ -73,10 +78,10 @@ public class AuthUtilitaire {
         token.setToken(jwt);
         token.setExpiration(claims.getExpiration());
         token.setIssuer(claims.getIssuer());
-        System.out.println("ID: " + claims.getId());
-        System.out.println("Subject: " + claims.getSubject());
-        System.out.println("Issuer: " + claims.getIssuer());
-        System.out.println("Expiration: " + claims.getExpiration());
+        LOGGER.info("ID: " + claims.getId());
+        LOGGER.info("Subject: " + claims.getSubject());
+        LOGGER.info("Issuer: " + claims.getIssuer());
+        LOGGER.info("Expiration: " + claims.getExpiration());
         return token;
     }
 }

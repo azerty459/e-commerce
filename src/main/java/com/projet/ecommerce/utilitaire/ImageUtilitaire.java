@@ -15,6 +15,8 @@ import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 
@@ -23,6 +25,8 @@ import com.projet.ecommerce.entrypoint.image.DimensionImage;
 
 
 public class ImageUtilitaire {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ImageUtilitaire.class);
 
     private int IMG_WIDTH = 0;
     private int IMG_HEIGHT = 0;
@@ -125,7 +129,7 @@ public class ImageUtilitaire {
             ImageIO.write(resizeImagePng, "png", new File(chemin + dimensionImage.width + 'x' + dimensionImage.height + '_' + nomFichier));
 
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
 
     }

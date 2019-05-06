@@ -32,6 +32,8 @@ import com.projet.ecommerce.utilitaire.ImageUtilitaire;
 @Service
 public class PhotoBusiness implements IPhotoBusiness {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(PhotoBusiness.class);
+
     private ImageUtilitaire imageUtilitaire = new ImageUtilitaire();
 
     @Autowired
@@ -92,7 +94,7 @@ public class PhotoBusiness implements IPhotoBusiness {
             if (!repertoire.mkdirs()) {
                 throw new GraphQLCustomException("Le dossier image pour le produit n'a pas pu être créé");
             } else {
-                System.out.println("Le dossier " + repertoire.getPath() + " a bien été créé.");
+                LOGGER.info("Le dossier " + repertoire.getPath() + " a bien été créé.");
             }
         }
 
@@ -184,7 +186,6 @@ public class PhotoBusiness implements IPhotoBusiness {
     @Override
     public List<PhotoDTO> getAll(String ref) {
 
-        System.out.println("getAll pour les photos");
         Collection<Photo> photoCollection = new ArrayList<>();
         if (ref == null) {
             photoCollection.addAll(photoRepository.findAll());
