@@ -86,7 +86,6 @@ public class CategorieSupprimeRepositoryCustomImpl implements CategorieSupprimeR
         query = entityManager.createQuery(SQL_BORNE_MAX);
 
         Integer a = (Integer) query.getSingleResult();
-        System.out.println(a);
 
         return a;
     }

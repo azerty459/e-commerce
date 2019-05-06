@@ -63,7 +63,6 @@ public class PaginationBusiness implements IPaginationBusiness {
                 paginationDTO.setProduits(new ArrayList<>());
                 break;
             case "utilisateur":
-                System.out.println("test");
                 Page utilisateurPage = utilisateurBusiness.getPage(pageActuelle, npp);
                 if (pageActuelle > utilisateurPage.getTotalPages()) {
                     utilisateurPage = utilisateurBusiness.getPage(utilisateurPage.getTotalPages(), npp);
