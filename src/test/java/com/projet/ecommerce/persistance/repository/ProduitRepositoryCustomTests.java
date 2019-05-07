@@ -139,28 +139,28 @@ public class ProduitRepositoryCustomTests {
 
     @Test
     public void countProduitsByCategories() {
-        Categorie[] categories = buildCategories();
-        categories[0] = categorieRepository.save(categories[0]);
-        categories[1] = categorieRepository.save(categories[1]);
-        categories[2] = categorieRepository.save(categories[2]);
-        categories[3] = categorieRepository.save(categories[3]);
+        List<Categorie> categories = buildCategories();
+        Categorie categorie1 = categorieRepository.save(categories.get(0));
+        Categorie categorie2 = categorieRepository.save(categories.get(1));
+        Categorie categorie3 = categorieRepository.save(categories.get(2));
+        Categorie categorie4 = categorieRepository.save(categories.get(3));
 
         Produit produit1 = buildProduit(1);
         Produit produit2 = buildProduit(2);
         Produit produit3 = buildProduit(3);
-        produit1.getCategories().add(categories[0]);
-        produit2.getCategories().add(categories[0]);
-        produit3.getCategories().add(categories[3]);
+        produit1.getCategories().add(categorie1);
+        produit2.getCategories().add(categorie1);
+        produit3.getCategories().add(categorie4);
         produitRepository.save(produit1);
         produitRepository.save(produit2);
         produitRepository.save(produit3);
 
         Map<Categorie, Long> resultat = produitRepository.countProduitsByCategories();
         Assert.assertEquals(4, resultat.size());
-        Assert.assertEquals(2, resultat.get(categories[0]).longValue());
-        Assert.assertEquals(0, resultat.get(categories[1]).longValue());
-        Assert.assertEquals(0, resultat.get(categories[2]).longValue());
-        Assert.assertEquals(1, resultat.get(categories[3]).longValue());
+        Assert.assertEquals(2, resultat.get(categorie1).longValue());
+        Assert.assertEquals(0, resultat.get(categorie2).longValue());
+        Assert.assertEquals(0, resultat.get(categorie3).longValue());
+        Assert.assertEquals(1, resultat.get(categorie4).longValue());
     }
 
     @NotNull
@@ -192,36 +192,36 @@ public class ProduitRepositoryCustomTests {
     }
 
     @NotNull
-    public Categorie[] buildCategories() {
-        Categorie[] retour = new Categorie[4];
+    public List<Categorie> buildCategories() {
+        List<Categorie> retour = new ArrayList<>(4);
         //Top
-        retour[0] = new Categorie();
-        retour[0].setIdCategorie(1);
-        retour[0].setNomCategorie("Top");
-        retour[0].setLevel(1);
-        retour[0].setBorneDroit(1);
-        retour[0].setBorneGauche(8);
+        Categorie categorie = new Categorie();
+        categorie.setNomCategorie("Top");
+        categorie.setLevel(1);
+        categorie.setBorneDroit(1);
+        categorie.setBorneGauche(8);
+        retour.add(0, categorie);
         //Top > Mid 1
-        retour[1] = new Categorie();
-        retour[1].setIdCategorie(2);
-        retour[1].setNomCategorie("Mid 1");
-        retour[1].setLevel(2);
-        retour[1].setBorneDroit(2);
-        retour[1].setBorneGauche(3);
+        categorie = new Categorie();
+        categorie.setNomCategorie("Mid 1");
+        categorie.setLevel(2);
+        categorie.setBorneDroit(2);
+        categorie.setBorneGauche(3);
+        retour.add(1, categorie);
         //Top > Mid 2
-        retour[2] = new Categorie();
-        retour[2].setIdCategorie(3);
-        retour[2].setNomCategorie("Mid 2");
-        retour[2].setLevel(2);
-        retour[2].setBorneDroit(4);
-        retour[2].setBorneGauche(7);
+        categorie = new Categorie();
+        categorie.setNomCategorie("Mid 2");
+        categorie.setLevel(2);
+        categorie.setBorneDroit(4);
+        categorie.setBorneGauche(7);
+        retour.add(2, categorie);
         //Top > Mid 2 > Bot
-        retour[3] = new Categorie();
-        retour[3].setIdCategorie(4);
-        retour[3].setNomCategorie("Bot");
-        retour[3].setLevel(3);
-        retour[3].setBorneDroit(5);
-        retour[3].setBorneGauche(6);
+        categorie = new Categorie();
+        categorie.setNomCategorie("Bot");
+        categorie.setLevel(3);
+        categorie.setBorneDroit(5);
+        categorie.setBorneGauche(6);
+        retour.add(3, categorie);
         return retour;
     }
 }
