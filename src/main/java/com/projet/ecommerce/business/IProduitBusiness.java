@@ -60,6 +60,14 @@ public interface IProduitBusiness {
     List<ProduitDTO> getAll(String ref, String nom, String cat);
 
     /**
+     * Méthode définissant la recherche des produits selon une référence donnée
+     *
+     * @param ref
+     * @return la liste des produits trouvés
+     */
+    ProduitDTO getByRef(String ref);
+
+    /**
      * Méthode définissant la pagination
      *
      * @param pageNumber  la page souhaitée

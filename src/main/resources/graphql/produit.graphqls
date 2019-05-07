@@ -12,6 +12,7 @@ type Produit {
     nom: String!
     description: String!
     prixHT: Float!
+    noteMoyenne: Float!
     categories: [Categorie]!
     photos: [Photo]!
     photoPrincipale: Photo

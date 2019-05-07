@@ -27,7 +27,7 @@ public class AvisClient {
     /**
      * Date de l'avis du client
      */
-    @Column(name="date_avis", updatable = false, insertable = false)
+    @Column(name = "date_avis", updatable = false, insertable = false)
     private LocalDateTime date;
 
     /**
@@ -45,7 +45,6 @@ public class AvisClient {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reference_produit")
     private Produit produit;
-
 
     public int getId() {
         return id;

@@ -1,15 +1,7 @@
 package com.projet.ecommerce.business.impl;
 
-import com.projet.ecommerce.business.dto.CategorieDTO;
-import com.projet.ecommerce.business.dto.ProduitDTO;
-import com.projet.ecommerce.business.dto.transformer.CategorieTransformer;
-import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
-import com.projet.ecommerce.persistance.entity.Categorie;
-import com.projet.ecommerce.persistance.entity.Photo;
-import com.projet.ecommerce.persistance.entity.Produit;
-import com.projet.ecommerce.persistance.repository.CategorieRepository;
-import com.projet.ecommerce.persistance.repository.PhotoRepository;
-import com.projet.ecommerce.persistance.repository.ProduitRepository;
+import java.util.*;
+
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
@@ -26,7 +18,19 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.*;
+import com.projet.ecommerce.business.dto.CategorieDTO;
+import com.projet.ecommerce.business.dto.ProduitDTO;
+import com.projet.ecommerce.business.dto.transformer.CategorieTransformer;
+import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
+import com.projet.ecommerce.persistance.entity.Categorie;
+import com.projet.ecommerce.persistance.entity.Photo;
+import com.projet.ecommerce.persistance.entity.Produit;
+import com.projet.ecommerce.persistance.repository.AvisClientRepository;
+import com.projet.ecommerce.persistance.repository.CategorieRepository;
+import com.projet.ecommerce.persistance.repository.PhotoRepository;
+import com.projet.ecommerce.persistance.repository.ProduitRepository;
+
+import static org.mockito.Matchers.eq;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
@@ -40,6 +44,9 @@ public class ProduitBusinessTests {
 
     @Mock
     private PhotoRepository photoRepository;
+
+    @Mock
+    private AvisClientRepository avisClientRepository;
 
     @Mock
     private Page page;
@@ -242,7 +249,6 @@ public class ProduitBusinessTests {
         // Permets de tester si la méthode retourne une List avec une référence
         produitDTOList = produitBusiness.getAll(produit.getReferenceProduit(), null, null);
         Assert.assertEquals(produitDTOList.size(), 1);
-        Mockito.verify(produitRepository, Mockito.times(1)).findAllWithCriteria(Mockito.any(), Mockito.any());
         Mockito.verify(produitRepository, Mockito.times(0)).findByNomContainingIgnoreCase(Mockito.any());
 
         // Permets de tester si la méthode retourne une Liste avec un nom de catégorie
@@ -265,16 +271,20 @@ public class ProduitBusinessTests {
         Assert.assertEquals(produit.getReferenceProduit(), retour.getRef());
     }
 
-    @NotNull
-    private Produit buildProduit() {
-        Produit produit = new Produit();
-        produit.setReferenceProduit("A05A01");
-        produit.setPrixHT(2.1f);
-        produit.setDescription("Un livre");
-        produit.setNom("Livre1");
-        produit.setPhotos(new ArrayList<>());
-        produit.setCategories(new ArrayList<>());
-        return produit;
+    @Test
+    public void getByRef() {
+
+        Produit produit = buildProduit();
+        Float average = 0f;
+
+        Mockito.when(produitRepository.findById(Mockito.anyString())).thenReturn(Optional.of(produit));
+        Mockito.when(avisClientRepository.averageByReferenceProduit(Mockito.anyString())).thenReturn(average);
+
+        ProduitDTO produitDTO = produitBusiness.getByRef(produit.getReferenceProduit());
+
+        Assert.assertNotNull(produitDTO);
+        Mockito.verify(produitRepository, Mockito.times(1)).findById(Mockito.anyString());
+        Mockito.verify(avisClientRepository, Mockito.times(1)).averageByReferenceProduit(Mockito.anyString());
     }
 
     @Test
@@ -295,7 +305,48 @@ public class ProduitBusinessTests {
         Assert.assertNotNull(produitBusiness.getPage(1, 5, "Toto", 0));
     }
 
-    //TODO Faire le teste avec id catégorie
+    @Test
+    public void getPageWithCategorie() {
+        int idCategorie = 1;
+
+        Mockito.when(categorieRepository.findById(idCategorie)).thenReturn(Optional.of(new Categorie()));
+        Mockito.when(produitRepository.findByCategories(
+                Mockito.any(Pageable.class),
+                Mockito.any(Categorie.class)
+        )).thenReturn(page);
+
+        Page<Produit> resultat = produitBusiness.getPage(1,5, "", idCategorie);
+        Assert.assertNotNull(resultat);
+        Assert.assertEquals(page, resultat);
+    }
+
+    @Test
+    public void getPageWithCategorieAndName() {
+        String nom = "Toto";
+        int idCategorie = 1;
+
+        Mockito.when(categorieRepository.findById(idCategorie)).thenReturn(Optional.of(new Categorie()));
+        Mockito.when(produitRepository.findByNomContainingIgnoreCaseAndCategories_borneGaucheGreaterThanEqualAndCategories_borneDroitLessThanEqual(
+                Mockito.any(Pageable.class),
+                eq(nom),
+                Mockito.anyInt(),
+                Mockito.anyInt())
+        ).thenReturn(page);
+
+        Page<Produit> resultat = produitBusiness.getPage(1,5, nom, idCategorie);
+        Assert.assertNotNull(resultat);
+        Assert.assertEquals(page, resultat);
+    }
+
+    @Test
+    public void getPageWithUnknowCategorieAndName() {
+        int idCategorie = 1;
+
+        Mockito.when(categorieRepository.findById(idCategorie)).thenReturn(Optional.empty());
+        Page<Produit> resultat =  produitBusiness.getPage(1,5, "Toto", idCategorie);
+        Assert.assertNotNull(resultat);
+        Assert.assertEquals(Page.empty(), resultat);
+    }
 
     @Test
     public void countProduits() {
@@ -331,4 +382,17 @@ public class ProduitBusinessTests {
         Assert.assertEquals((Long) 8L, resultat.get(categorieDTO1));
         Assert.assertEquals((Long) 42L, resultat.get(categorieDTO2));
     }
+
+    @NotNull
+    private Produit buildProduit() {
+        Produit produit = new Produit();
+        produit.setReferenceProduit("A05A01");
+        produit.setPrixHT(2.1f);
+        produit.setDescription("Un livre");
+        produit.setNom("Livre1");
+        produit.setPhotos(new ArrayList<>());
+        produit.setCategories(new ArrayList<>());
+        return produit;
+    }
+
 }

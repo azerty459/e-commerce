@@ -16,6 +16,7 @@ import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.AvisClient;
 import com.projet.ecommerce.persistance.entity.Produit;
 import com.projet.ecommerce.persistance.repository.AvisClientRepository;
+import com.projet.ecommerce.persistance.repository.AvisClientRepositoryCustom;
 import com.projet.ecommerce.persistance.repository.ProduitRepository;
 
 @Service
@@ -107,6 +108,12 @@ public class AvisClientBusiness implements IAvisClientBusiness {
     public Collection<AvisClientDTO> getAll() {
         return getAll(null);
     }
+
+	@Override
+	public double getAverageByReference(String ref) {
+		
+		return avisClientRepository.averageByReferenceProduit(ref);
+	}
 
 }
 
