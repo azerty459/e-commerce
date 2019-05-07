@@ -20,7 +20,7 @@ public class AvisClientRepositoryCustomImpl implements AvisClientRepositoryCusto
     @Override
     public float averageByReferenceProduit(String reference) {
 
-        if (reference == null || StringUtils.isBlank(reference)) {
+        if (StringUtils.isBlank(reference)) {
             return 0;
         }
 
