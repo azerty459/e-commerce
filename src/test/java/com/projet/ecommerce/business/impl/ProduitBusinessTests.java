@@ -30,6 +30,8 @@ import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import com.projet.ecommerce.persistance.repository.PhotoRepository;
 import com.projet.ecommerce.persistance.repository.ProduitRepository;
 
+import static org.mockito.Matchers.eq;
+
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
 public class ProduitBusinessTests {
@@ -287,18 +289,6 @@ public class ProduitBusinessTests {
         Mockito.verify(avisClientRepository, Mockito.times(1)).averageByReferenceProduit(Mockito.anyString());
     }
 
-    @NotNull
-    private Produit buildProduit() {
-        Produit produit = new Produit();
-        produit.setReferenceProduit("A05A01");
-        produit.setPrixHT(2.1f);
-        produit.setDescription("Un livre");
-        produit.setNom("Livre1");
-        produit.setPhotos(new ArrayList<>());
-        produit.setCategories(new ArrayList<>());
-        return produit;
-    }
-
     @Test
     public void getAllByRefAndCatEmpty() {
         thrown.expect(GraphQLCustomException.class);
@@ -318,5 +308,58 @@ public class ProduitBusinessTests {
         Assert.assertNotNull(produitBusiness.getPage(1, 5, "Toto", 0));
     }
 
-    // TODO Faire le teste avec id catégorie
+    @Test
+    public void getPageWithCategorie() {
+        int idCategorie = 1;
+
+        Mockito.when(categorieRepository.findById(idCategorie)).thenReturn(Optional.of(new Categorie()));
+        Mockito.when(produitRepository.findByCategories(
+                Mockito.any(Pageable.class),
+                Mockito.any(Categorie.class)
+        )).thenReturn(page);
+
+        Page<Produit> resultat = produitBusiness.getPage(1,5, "", idCategorie);
+        Assert.assertNotNull(resultat);
+        Assert.assertEquals(page, resultat);
+    }
+
+    @Test
+    public void getPageWithCategorieAndName() {
+        String nom = "Toto";
+        int idCategorie = 1;
+
+        Mockito.when(categorieRepository.findById(idCategorie)).thenReturn(Optional.of(new Categorie()));
+        Mockito.when(produitRepository.findByNomContainingIgnoreCaseAndCategories_borneGaucheGreaterThanEqualAndCategories_borneDroitLessThanEqual(
+                Mockito.any(Pageable.class),
+                eq(nom),
+                Mockito.anyInt(),
+                Mockito.anyInt())
+        ).thenReturn(page);
+
+        Page<Produit> resultat = produitBusiness.getPage(1,5, nom, idCategorie);
+        Assert.assertNotNull(resultat);
+        Assert.assertEquals(page, resultat);
+    }
+
+    @Test
+    public void getPageWithUnknowCategorieAndName() {
+        int idCategorie = 1;
+
+        Mockito.when(categorieRepository.findById(idCategorie)).thenReturn(Optional.empty());
+        Page<Produit> resultat =  produitBusiness.getPage(1,5, "Toto", idCategorie);
+        Assert.assertNotNull(resultat);
+        Assert.assertEquals(Page.empty(), resultat);
+    }
+
+    @NotNull
+    private Produit buildProduit() {
+        Produit produit = new Produit();
+        produit.setReferenceProduit("A05A01");
+        produit.setPrixHT(2.1f);
+        produit.setDescription("Un livre");
+        produit.setNom("Livre1");
+        produit.setPhotos(new ArrayList<>());
+        produit.setCategories(new ArrayList<>());
+        return produit;
+    }
 }
