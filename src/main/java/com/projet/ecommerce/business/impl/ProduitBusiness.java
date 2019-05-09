@@ -27,6 +27,7 @@ import static com.projet.ecommerce.utilitaire.Utilitaire.mergeObjects;
 
 @Service
 public class ProduitBusiness implements IProduitBusiness {
+
 	@Autowired
 	private ProduitRepository produitRepository;
 
@@ -282,7 +283,6 @@ public class ProduitBusiness implements IProduitBusiness {
 	public Long countProduits() {
 		return produitRepository.countProduits();
 	}
-
 	@Override
 	public List<StatistiqueProduitCategorieDTO> countProduitsByCategorie() {
 		Map<Categorie, Long> countProduitCategorie = produitRepository.countProduitsByCategories();
@@ -292,5 +292,4 @@ public class ProduitBusiness implements IProduitBusiness {
 		);
 		return statistique;
 	}
-
 }
