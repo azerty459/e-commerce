@@ -44,6 +44,7 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
     private static final String SQL_COUNT_PRODUCTS_BY_CATEGORY = "SELECT count(p) FROM Produit p Join p.categories c " +
             "Where c.borneGauche >= :borneGauche " +
             "And c.borneDroit <= :borneDroite";
+    private static final String SQL_STATISTIC_PRODUCT_BY_CATEOGORY = "Select c, count(p) From Categorie c left join c.produits p Group by c.idCategorie";
 
     @Autowired
     private EntityManager entityManager;
@@ -93,7 +94,7 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
 
     @Override
     public Map<Categorie, Long> countProduitsByCategories() {
-        Query query = entityManager.createQuery("Select c, count(p) From Categorie c left join c.produits p Group by c.idCategorie");
+        Query query = entityManager.createQuery(SQL_STATISTIC_PRODUCT_BY_CATEOGORY);
         List<Object[]> resultat = query.getResultList();
         Map<Categorie, Long> retour = new HashMap<>();
         resultat.stream().forEach(elt -> {
