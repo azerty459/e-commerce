@@ -27,7 +27,6 @@ import static com.projet.ecommerce.utilitaire.Utilitaire.mergeObjects;
 
 @Service
 public class ProduitBusiness implements IProduitBusiness {
-
 	@Autowired
 	private ProduitRepository produitRepository;
 
