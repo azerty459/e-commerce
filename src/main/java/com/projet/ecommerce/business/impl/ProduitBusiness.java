@@ -1,24 +1,8 @@
 package com.projet.ecommerce.business.impl;
 
-import static com.projet.ecommerce.utilitaire.Utilitaire.mergeObjects;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import com.projet.ecommerce.business.dto.StatistiqueProduitCategorieDTO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Service;
-
 import com.projet.ecommerce.business.IProduitBusiness;
-import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.business.dto.ProduitDTO;
-import com.projet.ecommerce.business.dto.transformer.CategorieTransformer;
+import com.projet.ecommerce.business.dto.StatistiqueProduitCategorieDTO;
 import com.projet.ecommerce.business.dto.transformer.ProduitTransformer;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Categorie;
@@ -28,6 +12,14 @@ import com.projet.ecommerce.persistance.repository.AvisClientRepository;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import com.projet.ecommerce.persistance.repository.PhotoRepository;
 import com.projet.ecommerce.persistance.repository.ProduitRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
+
+import static com.projet.ecommerce.utilitaire.Utilitaire.mergeObjects;
 
 /**
  * Service permettant de gérer les actions effectuées pour les produits.
@@ -57,12 +49,12 @@ public class ProduitBusiness implements IProduitBusiness {
      * @param prixHT            Son prix hors taxe
      * @param categoriesProduit Liste d'id de catégorie à associer au produit
      * @return l'objet produit crée ou null, s'il il manque une referenceProduit, un
-     *         nom et un prixHT.
+     * nom et un prixHT.
      */
     @Override
     // FIXME à remplacer par un DTO
     public ProduitDTO add(String referenceProduit, String nom, String description, float prixHT,
-            List<Integer> categoriesProduit) {
+                          List<Integer> categoriesProduit) {
         if (referenceProduit.isEmpty() && nom.isEmpty()) {
             GraphQLCustomException graphQLCustomException = new GraphQLCustomException(
                     "Erreur dans l'ajout du produit (la référence, le nom et le prixHT ne peut être null)");
@@ -306,10 +298,5 @@ public class ProduitBusiness implements IProduitBusiness {
                 entry -> statistique.add(new StatistiqueProduitCategorieDTO(entry.getKey().getNomCategorie(), entry.getValue()))
         );
         return statistique;
-
-        /*Map<CategorieDTO, Long> countProduitCategorieDTO = new HashMap<>();
-        countProduitCategorie.entrySet().stream().forEach((entry -> countProduitCategorieDTO
-                .put(CategorieTransformer.entityToDto(entry.getKey()), entry.getValue())));
-        return countProduitCategorieDTO;*/
     }
 }

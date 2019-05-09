@@ -35,15 +35,6 @@ public class StatistiqueQuery {
         builder.dataFetcher("nbCategorie", (DataFetchingEnvironment environment) -> categorieBusiness.countCategories());
         builder.dataFetcher("nbUtilisateur", (DataFetchingEnvironment environment) -> utilisateurBusiness.countUtilisateurs());
         builder.dataFetcher("nbProduitCategorie", (DataFetchingEnvironment environment) -> {
-            /*Map<CategorieDTO, Long> nbProduitCategorie = produitBusiness.countProduitsByCategorie();
-            List<Map> data = new ArrayList<>();
-            nbProduitCategorie.entrySet().stream().forEach(entry -> {
-                Map<String, Object> objectMap = new HashMap<>();
-                objectMap.put("categorie", entry.getKey().getNom());
-                objectMap.put("nb", entry.getValue());
-                data.add(objectMap);
-            });
-            return data;*/
             return produitBusiness.countProduitsByCategorie();
         });
 
