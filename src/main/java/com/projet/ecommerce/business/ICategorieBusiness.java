@@ -1,12 +1,13 @@
 package com.projet.ecommerce.business;
 
-import com.projet.ecommerce.business.dto.CategorieDTO;
-import com.projet.ecommerce.persistance.entity.Categorie;
-import org.springframework.data.domain.Page;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+
+import org.springframework.data.domain.Page;
+
+import com.projet.ecommerce.business.dto.CategorieDTO;
+import com.projet.ecommerce.persistance.entity.Categorie;
 
 /**
  * Interface du service CategorieBusiness.
@@ -84,5 +85,12 @@ public interface ICategorieBusiness {
      * @return une page de categorie
      */
     Page<Categorie> getPage(int pageNumber, int nb);
+
+    /**
+     * Retourne le nombre de categories
+     *
+     * @return le nombre de categories
+     */
+    Long countCategories();
 
 }

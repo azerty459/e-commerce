@@ -1,7 +1,18 @@
 package com.projet.ecommerce.persistance.entity;
 
-import javax.persistence.*;
 import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 
 /**
  * Entité représentant la table categorie sous forme de classe.
@@ -143,5 +154,32 @@ public class Categorie {
      */
     public void setIdCategorie(int idCategorie) {
         this.idCategorie = idCategorie;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this) {
+            return true;
+        } else if(obj == null || !(obj instanceof Categorie)) {
+            return false;
+        }
+        Categorie other = (Categorie) obj;
+        boolean result = this.idCategorie == other.idCategorie
+                && this.borneGauche == other.borneGauche
+                && this.borneDroit == other.borneDroit
+                && this.level == other.level;
+        result &= (this.nomCategorie != null) ? this.nomCategorie.equals(other.nomCategorie) : other.nomCategorie == null ;
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        int prime = 31;
+        int result = 1;
+        result = prime * result + borneDroit;
+        result = prime * result + borneGauche;
+        result = prime * result + level;
+        result = prime * result + ((nomCategorie == null) ? 0 : nomCategorie.hashCode());
+        return result;
     }
 }

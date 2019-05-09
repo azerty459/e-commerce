@@ -1,12 +1,12 @@
 package com.projet.ecommerce.entrypoint.graphql;
 
+import java.util.List;
+import java.util.Map;
+
 import graphql.ErrorType;
 import graphql.ExceptionWhileDataFetching;
 import graphql.GraphQLError;
 import graphql.language.SourceLocation;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * Classe permettante de récrire l'extension de l'erreur.

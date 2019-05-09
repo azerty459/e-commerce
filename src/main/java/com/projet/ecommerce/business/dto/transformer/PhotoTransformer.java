@@ -1,11 +1,11 @@
 package com.projet.ecommerce.business.dto.transformer;
 
-import com.projet.ecommerce.business.dto.PhotoDTO;
-import com.projet.ecommerce.persistance.entity.Photo;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import com.projet.ecommerce.business.dto.PhotoDTO;
+import com.projet.ecommerce.persistance.entity.Photo;
 
 public class PhotoTransformer {
 

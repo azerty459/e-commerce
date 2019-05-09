@@ -1,5 +1,16 @@
 package com.projet.ecommerce.entrypoint.graphql;
 
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.annotation.PostConstruct;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+
 import com.projet.ecommerce.entrypoint.graphql.avisclient.AvisClientMutation;
 import com.projet.ecommerce.entrypoint.graphql.avisclient.AvisClientQuery;
 import com.projet.ecommerce.entrypoint.graphql.categorie.CategorieMutation;
@@ -11,8 +22,10 @@ import com.projet.ecommerce.entrypoint.graphql.produit.ProduitMutation;
 import com.projet.ecommerce.entrypoint.graphql.produit.ProduitQuery;
 import com.projet.ecommerce.entrypoint.graphql.role.RoleMutation;
 import com.projet.ecommerce.entrypoint.graphql.role.RoleQuery;
+import com.projet.ecommerce.entrypoint.graphql.statistique.StatistiqueQuery;
 import com.projet.ecommerce.entrypoint.graphql.utilisateur.UtilisateurMutation;
 import com.projet.ecommerce.entrypoint.graphql.utilisateur.UtilisateurQuery;
+
 import graphql.ExceptionWhileDataFetching;
 import graphql.GraphQL;
 import graphql.GraphQLError;
@@ -21,15 +34,6 @@ import graphql.schema.idl.RuntimeWiring;
 import graphql.schema.idl.SchemaGenerator;
 import graphql.schema.idl.SchemaParser;
 import graphql.schema.idl.TypeDefinitionRegistry;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
-
-import javax.annotation.PostConstruct;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Configuration de graphql.
@@ -77,6 +81,9 @@ public class GraphQlUtility {
     @Autowired
     private AvisClientMutation avisClientMutation;
 
+    @Autowired
+    private StatistiqueQuery statistiqueQuery;
+
     @PostConstruct
     public GraphQL createGraphQlObject() {
         return GraphQL.newGraphQL(graphQLSchema())
@@ -118,6 +125,7 @@ public class GraphQlUtility {
                 .type(paginationQuery.produitWiring())
                 .type(avisClientQuery.produitWiring())
                 .type(avisClientMutation.produitWiring())
+                .type(statistiqueQuery.produitWiring())
                 .build();
     }
 
@@ -130,6 +138,7 @@ public class GraphQlUtility {
         Reader roleSchemaFile = new InputStreamReader(classloader.getResourceAsStream("graphql/role.graphqls"));
         Reader paginationSchemaFile = new InputStreamReader(classloader.getResourceAsStream("graphql/pagination.graphqls"));
         Reader avisClientSchemaFile = new InputStreamReader(classloader.getResourceAsStream("graphql/avisclient.graphqls"));
+        Reader statistiqueSchemaFile = new InputStreamReader(classloader.getResourceAsStream("graphql/statistique.graphqls"));
 
         SchemaParser schemaParser = new SchemaParser();
         TypeDefinitionRegistry typeRegistry = new TypeDefinitionRegistry();
@@ -141,6 +150,7 @@ public class GraphQlUtility {
         typeRegistry.merge(schemaParser.parse(utilisateurSchemaFile));
         typeRegistry.merge(schemaParser.parse(paginationSchemaFile));
         typeRegistry.merge(schemaParser.parse(avisClientSchemaFile));
+        typeRegistry.merge(schemaParser.parse(statistiqueSchemaFile));
 
         RuntimeWiring wiring = buildRuntimeWiring();
 

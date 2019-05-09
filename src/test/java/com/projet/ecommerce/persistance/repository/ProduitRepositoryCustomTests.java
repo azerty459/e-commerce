@@ -1,10 +1,9 @@
 package com.projet.ecommerce.persistance.repository;
 
 import com.projet.ecommerce.persistance.entity.Categorie;
-
 import com.projet.ecommerce.persistance.entity.Produit;
+
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +14,12 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+
+import javax.validation.constraints.NotNull;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -136,11 +137,36 @@ public class ProduitRepositoryCustomTests {
         Assert.assertEquals(Page.empty(), resultat);
     }
 
+    @Test
+    public void countProduitsByCategories() {
+        List<Categorie> categories = buildCategories();
+        Categorie categorie1 = categorieRepository.save(categories.get(0));
+        Categorie categorie2 = categorieRepository.save(categories.get(1));
+        Categorie categorie3 = categorieRepository.save(categories.get(2));
+        Categorie categorie4 = categorieRepository.save(categories.get(3));
+
+        Produit produit1 = buildProduit(1);
+        Produit produit2 = buildProduit(2);
+        Produit produit3 = buildProduit(3);
+        produit1.getCategories().add(categorie1);
+        produit2.getCategories().add(categorie1);
+        produit3.getCategories().add(categorie4);
+        produitRepository.save(produit1);
+        produitRepository.save(produit2);
+        produitRepository.save(produit3);
+
+        Map<Categorie, Long> resultat = produitRepository.countProduitsByCategories();
+        Assert.assertEquals(4, resultat.size());
+        Assert.assertEquals(2, resultat.get(categorie1).longValue());
+        Assert.assertEquals(0, resultat.get(categorie2).longValue());
+        Assert.assertEquals(0, resultat.get(categorie3).longValue());
+        Assert.assertEquals(1, resultat.get(categorie4).longValue());
+    }
+
     @NotNull
     public Produit buildProduit(int id){
         return buildProduit(id, "Description test");
     }
-
 
     @NotNull
     public Produit buildProduit(int id, String desc){
@@ -165,4 +191,37 @@ public class ProduitRepositoryCustomTests {
         return categorie;
     }
 
+    @NotNull
+    public List<Categorie> buildCategories() {
+        List<Categorie> retour = new ArrayList<>(4);
+        //Top
+        Categorie categorie = new Categorie();
+        categorie.setNomCategorie("Top");
+        categorie.setLevel(1);
+        categorie.setBorneDroit(1);
+        categorie.setBorneGauche(8);
+        retour.add(0, categorie);
+        //Top > Mid 1
+        categorie = new Categorie();
+        categorie.setNomCategorie("Mid 1");
+        categorie.setLevel(2);
+        categorie.setBorneDroit(2);
+        categorie.setBorneGauche(3);
+        retour.add(1, categorie);
+        //Top > Mid 2
+        categorie = new Categorie();
+        categorie.setNomCategorie("Mid 2");
+        categorie.setLevel(2);
+        categorie.setBorneDroit(4);
+        categorie.setBorneGauche(7);
+        retour.add(2, categorie);
+        //Top > Mid 2 > Bot
+        categorie = new Categorie();
+        categorie.setNomCategorie("Bot");
+        categorie.setLevel(3);
+        categorie.setBorneDroit(5);
+        categorie.setBorneGauche(6);
+        retour.add(3, categorie);
+        return retour;
+    }
 }

@@ -1,9 +1,11 @@
 package com.projet.ecommerce.persistance.repository;
 
-import com.projet.ecommerce.persistance.entity.AvisClient;
+import java.util.Collection;
+
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import java.util.Collection;
+
+import com.projet.ecommerce.persistance.entity.AvisClient;
 
 /**
  * Interface permettant de communiquer avec la base de données pour la table AvisClient.
@@ -16,5 +18,5 @@ public interface AvisClientRepository extends CrudRepository<AvisClient, Integer
     Collection<AvisClient> findAll();
 
     Collection<AvisClient> findByProduit_ReferenceProduit(String refProduit);
-    
+
 }

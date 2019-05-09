@@ -1,10 +1,11 @@
 package com.projet.ecommerce.persistance.repository;
 
-import com.projet.ecommerce.persistance.entity.CategorieSupprime;
+import java.util.Collection;
+
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Collection;
+import com.projet.ecommerce.persistance.entity.CategorieSupprime;
 
 /**
  * Interface permettante de communiquer avec la base de données pour la table categorie_supprime.

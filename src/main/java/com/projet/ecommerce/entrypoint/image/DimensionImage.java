@@ -1,6 +1,6 @@
 package com.projet.ecommerce.entrypoint.image;
 
-import java.awt.*;
+import java.awt.Dimension;
 
 public class DimensionImage extends Dimension {
 

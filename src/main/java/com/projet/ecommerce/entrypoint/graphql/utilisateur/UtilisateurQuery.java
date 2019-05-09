@@ -1,10 +1,12 @@
 package com.projet.ecommerce.entrypoint.graphql.utilisateur;
 
-import com.projet.ecommerce.business.IUtilisateurBusiness;
-import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.idl.TypeRuntimeWiring;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.projet.ecommerce.business.IUtilisateurBusiness;
+
+import graphql.schema.DataFetchingEnvironment;
+import graphql.schema.idl.TypeRuntimeWiring;
 
 @Component
 public class UtilisateurQuery {

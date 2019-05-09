@@ -434,4 +434,11 @@ public class CategorieBusinessTests {
             }
         }
     }
+
+    @Test
+    public void countCategories() {
+        Long expected = 8L;
+        Mockito.when(categorieRepository.countCategories()).thenReturn(expected);
+        Assert.assertEquals(expected, categorieBusiness.countCategories());
+    }
 }

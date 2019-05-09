@@ -1,12 +1,12 @@
 package com.projet.ecommerce.business.dto.transformer;
 
-import com.projet.ecommerce.business.dto.CategorieDTO;
-import com.projet.ecommerce.persistance.entity.Categorie;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+
+import com.projet.ecommerce.business.dto.CategorieDTO;
+import com.projet.ecommerce.persistance.entity.Categorie;
 
 public class CategorieTransformer {
 

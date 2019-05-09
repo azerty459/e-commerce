@@ -1,17 +1,19 @@
 package com.projet.ecommerce.utilitaire;
 
+import java.security.Key;
+import java.util.Date;
+
+import javax.crypto.spec.SecretKeySpec;
+import javax.xml.bind.DatatypeConverter;
+
 import com.projet.ecommerce.entrypoint.authentification.Token;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.crypto.spec.SecretKeySpec;
-import javax.xml.bind.DatatypeConverter;
-import java.security.Key;
-import java.util.Date;
 
 public class AuthUtilitaire {
 

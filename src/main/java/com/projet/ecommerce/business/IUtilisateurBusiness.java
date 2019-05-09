@@ -1,13 +1,14 @@
 package com.projet.ecommerce.business;
 
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+
 import com.projet.ecommerce.business.dto.UtilisateurDTO;
 import com.projet.ecommerce.entrypoint.authentification.AuthData;
 import com.projet.ecommerce.entrypoint.authentification.SigninPayload;
 import com.projet.ecommerce.entrypoint.authentification.Token;
 import com.projet.ecommerce.persistance.entity.Utilisateur;
-import org.springframework.data.domain.Page;
-
-import java.util.List;
 
 /**
  * Interface du service ProduitBusiness.
@@ -71,4 +72,11 @@ public interface IUtilisateurBusiness {
      * @return SigninPayload contenant les informations necessaire à l'authentification
      */
     SigninPayload signinUser(AuthData auth) throws IllegalAccessException;
+
+    /**
+     * Compte le nombre d'utilisateur
+     *
+     * @return le nombre d'utilisateur
+     */
+    Long countUtilisateurs();
 }

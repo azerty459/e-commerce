@@ -1,5 +1,11 @@
 package com.projet.ecommerce.business.impl;
 
+import java.util.ArrayList;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Service;
+
 import com.projet.ecommerce.business.ICategorieBusiness;
 import com.projet.ecommerce.business.IPaginationBusiness;
 import com.projet.ecommerce.business.IProduitBusiness;
@@ -11,11 +17,6 @@ import com.projet.ecommerce.business.dto.UtilisateurDTO;
 import com.projet.ecommerce.business.dto.transformer.CategorieTransformer;
 import com.projet.ecommerce.business.dto.transformer.ProduitTransformer;
 import com.projet.ecommerce.business.dto.transformer.UtilisateurTransformer;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 
 /**
  * Service permettant de gérer les actions effectuées pour la pagination.

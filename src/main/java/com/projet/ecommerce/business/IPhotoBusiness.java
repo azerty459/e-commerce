@@ -1,12 +1,13 @@
 package com.projet.ecommerce.business;
 
-import com.projet.ecommerce.business.dto.PhotoDTO;
-import com.projet.ecommerce.business.impl.PhotoException;
-import com.projet.ecommerce.entrypoint.image.DimensionImage;
+import java.util.List;
+
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import com.projet.ecommerce.business.dto.PhotoDTO;
+import com.projet.ecommerce.business.impl.PhotoException;
+import com.projet.ecommerce.entrypoint.image.DimensionImage;
 
 /**
  * Interface du service PhotoBusiness.

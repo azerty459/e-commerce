@@ -1,5 +1,18 @@
 package com.projet.ecommerce.business.impl;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.projet.ecommerce.business.ICategorieBusiness;
 import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.business.dto.transformer.CategorieTransformer;
@@ -7,13 +20,6 @@ import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import com.projet.ecommerce.persistance.repository.CategorieSupprimeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.*;
 
 /**
  * Service permettant de gérer les actions effectuées pour les catégories.
@@ -553,5 +559,8 @@ public class CategorieBusiness implements ICategorieBusiness {
         return categorieRepository.findAll(page);
     }
 
-
+    @Override
+    public Long countCategories() {
+        return categorieRepository.countCategories();
+    }
 }

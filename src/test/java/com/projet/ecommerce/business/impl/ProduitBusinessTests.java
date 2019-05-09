@@ -1,9 +1,8 @@
 package com.projet.ecommerce.business.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
+import com.projet.ecommerce.business.dto.StatistiqueProduitCategorieDTO;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
@@ -20,7 +19,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.business.dto.ProduitDTO;
+import com.projet.ecommerce.business.dto.transformer.CategorieTransformer;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Photo;
@@ -74,8 +75,7 @@ public class ProduitBusinessTests {
         Assert.assertEquals(produit.getPrixHT(), retour1.getPrixHT(), 0);
         Assert.assertEquals(produit.getReferenceProduit(), retour1.getRef());
 
-        // Je teste si le produit business m'envoie bien une GraphQLCustomException, si
-        // le produit existe déjà
+        // Je teste si le produit business m'envoie bien une GraphQLCustomException, si le produit existe déjà
         thrown.expect(GraphQLCustomException.class);
         ProduitDTO retour2 = produitBusiness.add("", "", "dfdfdf", 0, null);
         Assert.assertNull(retour2);
@@ -85,8 +85,7 @@ public class ProduitBusinessTests {
     public void addProductAlreadyExist() {
         Produit produit = buildProduit();
 
-        // Je teste si le produit business m'envoie bien une GraphQLCustomException, si
-        // le produit existe déjà
+        // Je teste si le produit business m'envoie bien une GraphQLCustomException, si le produit existe déjà
         thrown.expect(GraphQLCustomException.class);
         Mockito.when(produitRepository.findById(Mockito.anyString())).thenReturn(Optional.of(produit));
         ProduitDTO retour = produitBusiness.add("A05A01", "Test", "Test", 4.7f, null);
@@ -137,7 +136,7 @@ public class ProduitBusinessTests {
 
     @Test
     public void updateNull() {
-        produitBusiness.update(null);
+        Assert.assertNull(produitBusiness.update(null));
     }
 
     @Test
@@ -303,8 +302,7 @@ public class ProduitBusinessTests {
 
     @Test
     public void getPageWithName() {
-        Mockito.when(produitRepository.findByNomContainingIgnoreCase(Mockito.any(Pageable.class), Mockito.anyString()))
-                .thenReturn(page);
+        Mockito.when(produitRepository.findByNomContainingIgnoreCase(Mockito.any(Pageable.class), Mockito.anyString())).thenReturn(page);
         Assert.assertNotNull(produitBusiness.getPage(1, 5, "Toto", 0));
     }
 
@@ -351,6 +349,40 @@ public class ProduitBusinessTests {
         Assert.assertEquals(Page.empty(), resultat);
     }
 
+    @Test
+    public void countProduits() {
+        Long expected = 8L;
+        Mockito.when(produitRepository.countProduits()).thenReturn(expected);
+        Assert.assertEquals(expected, produitBusiness.countProduits());
+    }
+
+    @Test
+    public void countProduitsByCategorie() {
+        Categorie categorie1 = new Categorie();
+        categorie1.setIdCategorie(1);
+        categorie1.setNomCategorie("Test 1");
+        categorie1.setLevel(1);
+        categorie1.setBorneGauche(1);
+        categorie1.setBorneDroit(4);
+        Categorie categorie2 = new Categorie();
+        categorie2.setIdCategorie(2);
+        categorie2.setNomCategorie("Test 2");
+        categorie2.setLevel(2);
+        categorie2.setBorneGauche(2);
+        categorie2.setBorneDroit(3);
+        Map<Categorie, Long> retour = new LinkedHashMap<>();
+        retour.put(categorie1, 8L);
+        retour.put(categorie2, 42L);
+        Mockito.when(produitRepository.countProduitsByCategories()).thenReturn(retour);
+
+        List<StatistiqueProduitCategorieDTO> resultat = produitBusiness.countProduitsByCategorie();
+        Assert.assertEquals(2, resultat.size());
+        Assert.assertEquals("Test 1", resultat.get(0).getCategorie());
+        Assert.assertEquals(8L, resultat.get(0).getNb());
+        Assert.assertEquals("Test 2", resultat.get(1).getCategorie());
+        Assert.assertEquals(42L, resultat.get(1).getNb());
+    }
+
     @NotNull
     private Produit buildProduit() {
         Produit produit = new Produit();
@@ -362,4 +394,5 @@ public class ProduitBusinessTests {
         produit.setCategories(new ArrayList<>());
         return produit;
     }
+
 }

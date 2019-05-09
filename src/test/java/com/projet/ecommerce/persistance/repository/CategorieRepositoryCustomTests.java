@@ -191,7 +191,7 @@ public class CategorieRepositoryCustomTests {
 //        Assert.assertEquals(3, b.getBorneDroit());
 
 
-    }
+    } 
 
     //TODO Refaire le test
     // CategorieRepositoryCustomTests.rearrangerBornesAvecSuppressionsMultiples:197 expected null, but was:<com.projet.ecommerce.persistance.entity.Categorie@3fc024c6>

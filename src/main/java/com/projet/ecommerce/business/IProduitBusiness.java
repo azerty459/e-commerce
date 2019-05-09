@@ -1,9 +1,12 @@
 package com.projet.ecommerce.business;
 
 import java.util.List;
+import java.util.Map;
 
+import com.projet.ecommerce.business.dto.StatistiqueProduitCategorieDTO;
 import org.springframework.data.domain.Page;
 
+import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.persistance.entity.Produit;
 
@@ -59,7 +62,7 @@ public interface IProduitBusiness {
 
     /**
      * Méthode définissant la recherche des produits selon une référence donnée
-     * 
+     *
      * @param ref
      * @return la liste des produits trouvés
      */
@@ -75,5 +78,19 @@ public interface IProduitBusiness {
      * @return une page de produit
      */
     Page<Produit> getPage(int pageNumber, int nb, String nom, int IDcategorie);
+
+    /**
+     * Compte le nombre de produit
+     *
+     * @return le nombre de produit
+     */
+    Long countProduits();
+
+    /**
+     * Compte le nombre de produit par categorie
+     *
+     * @return La map qui associe une categorie au nombre de produit qu'elle contient
+     */
+    List<StatistiqueProduitCategorieDTO> countProduitsByCategorie();
 
 }
