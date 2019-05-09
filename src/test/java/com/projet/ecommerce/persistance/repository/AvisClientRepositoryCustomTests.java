@@ -1,7 +1,6 @@
 package com.projet.ecommerce.persistance.repository;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 import javax.transaction.Transactional;
 
@@ -48,9 +47,6 @@ public class AvisClientRepositoryCustomTests {
 
     @Test
     public void averageAvisClientByReferenceProduit1() {
-        Collection<AvisClient> maListe = avisClientRepository.findAll();
-        maListe.stream().forEach(elt -> System.out.println(elt.getId()));
-
         double res = avisClientRepository.averageByReferenceProduit("A05A01");
         Assert.assertNotNull(res);
         Assert.assertEquals(2.0, res, 0.1);

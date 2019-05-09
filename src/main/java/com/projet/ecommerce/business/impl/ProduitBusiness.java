@@ -214,12 +214,6 @@ public class ProduitBusiness implements IProduitBusiness {
 
         Collection<Produit> produitCollection = null;
 
-//        if (ref != null) {
-//            List<ProduitDTO> res = new ArrayList<>();
-//            res.add(getByRef(ref));
-//            return res;
-//        }
-
         if (nom == null) {
             produitCollection = produitRepository.findAllWithCriteria(ref, cat);
 
