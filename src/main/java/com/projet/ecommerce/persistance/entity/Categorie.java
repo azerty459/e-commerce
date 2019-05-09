@@ -174,7 +174,6 @@ public class Categorie {
 
     @Override
     public int hashCode() {
-        //return Objects.hash(this.borneDroit, this.borneGauche, this.idCategorie, this.level, this.nomCategorie);
         int prime = 31;
         int result = 1;
         result = prime * result + borneDroit;
