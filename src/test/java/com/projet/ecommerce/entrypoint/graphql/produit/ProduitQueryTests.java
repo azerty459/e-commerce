@@ -19,34 +19,35 @@ import java.util.Map;
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
 public class ProduitQueryTests {
-    @Mock
-    private ProduitBusiness produitBusiness;
 
-    @Mock
-    private DataFetchingEnvironment dataFetchingEnvironment;
+	@Mock
+	private ProduitBusiness produitBusiness;
 
-    @InjectMocks
-    private ProduitQuery produitQuery;
+	@Mock
+	private DataFetchingEnvironment dataFetchingEnvironment;
 
-    @Before
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-    }
+	@InjectMocks
+	private ProduitQuery produitQuery;
 
-    @Test
-    public void produitWiring() {
-        TypeRuntimeWiring typeRuntimeWiring = produitQuery.produitWiring();
-        Assert.assertEquals(typeRuntimeWiring.getTypeName(), "Query");
-        Assert.assertEquals(typeRuntimeWiring.getTypeResolver(), null);
-        Assert.assertNotNull(typeRuntimeWiring);
-    }
+	@Before
+	public void setUp() {
+		MockitoAnnotations.initMocks(this);
+	}
 
-    @Test
-    public void testNbDataFetcher() {
-        Map<String, DataFetcher> retourMap = produitQuery.produitWiring().getFieldDataFetchers();
-        Assert.assertNotNull(retourMap);
-        Assert.assertEquals(1, retourMap.size());
-    }
+	@Test
+	public void produitWiring() {
+		TypeRuntimeWiring typeRuntimeWiring = produitQuery.produitWiring();
+		Assert.assertEquals(typeRuntimeWiring.getTypeName(), "Query");
+		Assert.assertEquals(typeRuntimeWiring.getTypeResolver(), null);
+		Assert.assertNotNull(typeRuntimeWiring);
+	}
+
+	@Test
+	public void testNbDataFetcher() {
+		Map<String, DataFetcher> retourMap = produitQuery.produitWiring().getFieldDataFetchers();
+		Assert.assertNotNull(retourMap);
+		Assert.assertEquals(1, retourMap.size());
+	}
 
 //    @Test
 //    public void produitsWithParamRef(){

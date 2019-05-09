@@ -1,11 +1,10 @@
 package com.projet.ecommerce.persistance.repository;
 
-import java.util.Collection;
-
+import com.projet.ecommerce.persistance.entity.Photo;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import com.projet.ecommerce.persistance.entity.Photo;
+import java.util.Collection;
 
 /**
  * Interface permettant de communiquer avec la base de données pour la table Photo.
@@ -14,8 +13,9 @@ import com.projet.ecommerce.persistance.entity.Photo;
 @Repository
 public interface PhotoRepository extends CrudRepository<Photo, Integer> {
 
-    @Override
-    Collection<Photo> findAll();
+	@Override
+	Collection<Photo> findAll();
 
-    Collection<Photo> findByProduit_ReferenceProduit(String ref);
+	Collection<Photo> findByProduit_ReferenceProduit(String ref);
+
 }

@@ -20,50 +20,52 @@ import java.util.Map;
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
 public class PaginationQueryTests {
-    @Mock
-    private PaginationBusiness paginationBusiness;
 
-    @Mock
-    private DataFetchingEnvironment dataFetchingEnvironment;
+	@Mock
+	private PaginationBusiness paginationBusiness;
 
-    @InjectMocks
-    private PaginationQuery paginationQuery;
+	@Mock
+	private DataFetchingEnvironment dataFetchingEnvironment;
 
-    @Before
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-    }
+	@InjectMocks
+	private PaginationQuery paginationQuery;
 
-    @Test
-    public void produitWiring() {
-        TypeRuntimeWiring typeRuntimeWiring = paginationQuery.produitWiring();
-        Assert.assertEquals(1, typeRuntimeWiring.getFieldDataFetchers().size());
-        Assert.assertEquals(typeRuntimeWiring.getTypeName(), "Query");
-        Assert.assertEquals(typeRuntimeWiring.getTypeResolver(), null);
-        Assert.assertNotNull(typeRuntimeWiring);
-    }
+	@Before
+	public void setUp() {
+		MockitoAnnotations.initMocks(this);
+	}
 
-    @Test
-    public void testNbDataFetcher() {
-        Map<String, DataFetcher> retourMap = paginationQuery.produitWiring().getFieldDataFetchers();
-        Assert.assertNotNull(retourMap);
-        Assert.assertEquals(1, retourMap.size());
-    }
+	@Test
+	public void produitWiring() {
+		TypeRuntimeWiring typeRuntimeWiring = paginationQuery.produitWiring();
+		Assert.assertEquals(1, typeRuntimeWiring.getFieldDataFetchers().size());
+		Assert.assertEquals(typeRuntimeWiring.getTypeName(), "Query");
+		Assert.assertEquals(typeRuntimeWiring.getTypeResolver(), null);
+		Assert.assertNotNull(typeRuntimeWiring);
+	}
 
-    @Test
-    public void pagination() {
-        Map<String, DataFetcher> retourMap = paginationQuery.produitWiring().getFieldDataFetchers();
+	@Test
+	public void testNbDataFetcher() {
+		Map<String, DataFetcher> retourMap = paginationQuery.produitWiring().getFieldDataFetchers();
+		Assert.assertNotNull(retourMap);
+		Assert.assertEquals(1, retourMap.size());
+	}
 
-        // On imite le comportement des getArgument
-        Mockito.when(dataFetchingEnvironment.getArgument("type")).thenReturn("produit");
-        Mockito.when(dataFetchingEnvironment.getArgument("page")).thenReturn(1);
-        Mockito.when(dataFetchingEnvironment.getArgument("npp")).thenReturn(5);
+	@Test
+	public void pagination() {
+		Map<String, DataFetcher> retourMap = paginationQuery.produitWiring().getFieldDataFetchers();
 
-        Assert.assertNotNull(retourMap.get("pagination"));
-        retourMap.get("pagination").get(dataFetchingEnvironment);
-        // Test avec nb appel add avec bon param
-        Mockito.verify(paginationBusiness, Mockito.times(1)).getPagination("produit", 1, 5, null, 0);
-        // Test avec nb appel add avec mauvais param
-        Mockito.verify(paginationBusiness, Mockito.times(0)).getPagination(null, 0, 0, null, 0);
-    }
+		// On imite le comportement des getArgument
+		Mockito.when(dataFetchingEnvironment.getArgument("type")).thenReturn("produit");
+		Mockito.when(dataFetchingEnvironment.getArgument("page")).thenReturn(1);
+		Mockito.when(dataFetchingEnvironment.getArgument("npp")).thenReturn(5);
+
+		Assert.assertNotNull(retourMap.get("pagination"));
+		retourMap.get("pagination").get(dataFetchingEnvironment);
+		// Test avec nb appel add avec bon param
+		Mockito.verify(paginationBusiness, Mockito.times(1)).getPagination("produit", 1, 5, null, 0);
+		// Test avec nb appel add avec mauvais param
+		Mockito.verify(paginationBusiness, Mockito.times(0)).getPagination(null, 0, 0, null, 0);
+	}
+
 }

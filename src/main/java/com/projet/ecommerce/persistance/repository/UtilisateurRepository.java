@@ -1,15 +1,14 @@
 package com.projet.ecommerce.persistance.repository;
 
-import java.util.Collection;
-import java.util.Optional;
-
+import com.projet.ecommerce.persistance.entity.Utilisateur;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
-import com.projet.ecommerce.persistance.entity.Utilisateur;
+import java.util.Collection;
+import java.util.Optional;
 
 /**
  * Interface permettante de communiquer avec la base de données pour la table Catégorie.
@@ -18,22 +17,23 @@ import com.projet.ecommerce.persistance.entity.Utilisateur;
 @Repository
 public interface UtilisateurRepository extends PagingAndSortingRepository<Utilisateur, Integer> {
 
-    Collection<Utilisateur> findAllByOrderByEmail();
+	Collection<Utilisateur> findAllByOrderByEmail();
 
-    Optional<Utilisateur> findByEmail(String email);
+	Optional<Utilisateur> findByEmail(String email);
 
-    void deleteByEmail(String email);
+	void deleteByEmail(String email);
 
-    Collection<Utilisateur> findByEmailContainingIgnoreCaseOrderByEmail(String email);
+	Collection<Utilisateur> findByEmailContainingIgnoreCaseOrderByEmail(String email);
 
-    Collection<Utilisateur> findByNomContainingIgnoreCaseOrderByNom(String nom);
+	Collection<Utilisateur> findByNomContainingIgnoreCaseOrderByNom(String nom);
 
-    Collection<Utilisateur> findByPrenomContainingIgnoreCaseOrderByPrenom(String prenom);
+	Collection<Utilisateur> findByPrenomContainingIgnoreCaseOrderByPrenom(String prenom);
 
-    Collection<Utilisateur> findByRole_NomContainingIgnoreCase(String nom);
+	Collection<Utilisateur> findByRole_NomContainingIgnoreCase(String nom);
 
-    Page<Utilisateur> findAllByOrderByEmail(Pageable pageable);
+	Page<Utilisateur> findAllByOrderByEmail(Pageable pageable);
 
-    @Query("Select count(u) From Utilisateur u")
-    Long countUtilisateurs();
+	@Query("Select count(u) From Utilisateur u")
+	Long countUtilisateurs();
+
 }

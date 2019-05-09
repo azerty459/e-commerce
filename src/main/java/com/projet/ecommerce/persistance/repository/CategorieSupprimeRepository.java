@@ -1,11 +1,10 @@
 package com.projet.ecommerce.persistance.repository;
 
-import java.util.Collection;
-
+import com.projet.ecommerce.persistance.entity.CategorieSupprime;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
-import com.projet.ecommerce.persistance.entity.CategorieSupprime;
+import java.util.Collection;
 
 /**
  * Interface permettante de communiquer avec la base de données pour la table categorie_supprime.
@@ -14,7 +13,7 @@ import com.projet.ecommerce.persistance.entity.CategorieSupprime;
 @Repository
 public interface CategorieSupprimeRepository extends PagingAndSortingRepository<CategorieSupprime, Integer>, CategorieSupprimeRepositoryCustom {
 
-    @Override
-    Collection<CategorieSupprime> findAll();
+	@Override
+	Collection<CategorieSupprime> findAll();
 
 }

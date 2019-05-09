@@ -1,66 +1,67 @@
 package com.projet.ecommerce.entrypoint.authentification;
 
-import java.util.Date;
-
 import com.projet.ecommerce.persistance.entity.Utilisateur;
+
+import java.util.Date;
 
 
 public class Token {
 
-    private String token;
-    private Utilisateur utilisateur; // FIXME dto
-    private String id;
-    private String subject;
-    private String issuer;
-    private Date expiration;
+	private String token;
+	private Utilisateur utilisateur; // FIXME dto
+	private String id;
+	private String subject;
+	private String issuer;
+	private Date expiration;
 
-    public Utilisateur getUtilisateur() {
-        return utilisateur;
-    }
+	public Utilisateur getUtilisateur() {
+		return utilisateur;
+	}
 
-    public void setUtilisateur(Utilisateur utilisateur) {
-        this.utilisateur = utilisateur;
-    }
+	public void setUtilisateur(Utilisateur utilisateur) {
+		this.utilisateur = utilisateur;
+	}
 
-    public String getToken() {
-        return token;
-    }
+	public String getToken() {
+		return token;
+	}
 
-    public String getId() {
-        return id;
-    }
+	public void setToken(String token) {
+		this.token = token;
+	}
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public String getSubject() {
-        return subject;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
+	public String getSubject() {
+		return subject;
+	}
 
-    public String getIssuer() {
-        return issuer;
-    }
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
 
-    public void setIssuer(String issuer) {
-        this.issuer = issuer;
-    }
+	public String getIssuer() {
+		return issuer;
+	}
 
-    public Date getExpiration() {
-        return expiration;
-    }
+	public void setIssuer(String issuer) {
+		this.issuer = issuer;
+	}
 
-    public void setExpiration(Date expiration) {
-        this.expiration = expiration;
-    }
+	public Date getExpiration() {
+		return expiration;
+	}
 
-    public void setToken(String token) {
-        this.token = token;
-    }
+	public void setExpiration(Date expiration) {
+		this.expiration = expiration;
+	}
+
 }
 
 

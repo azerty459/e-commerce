@@ -17,7 +17,7 @@ stages:
 maven-tests:
   image: maven:3-jdk-8
   stage: tests
-  script: 
+  script:
     - mvn -B -Dmaven.repo.local=/cache clean test
   except:
     - dev
@@ -43,9 +43,9 @@ maven-tests:
   script:
     - echo "create docker on $ENVIRONMENT"
     - echo "$ENVIRONMENT"
-#  - docker build -t registry.gitlab.com/marcolenzo/actuator-sample .
-#  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
-#  - docker push registry.gitlab.com/marcolenzo/actuator-sample
+  #  - docker build -t registry.gitlab.com/marcolenzo/actuator-sample .
+  #  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+  #  - docker push registry.gitlab.com/marcolenzo/actuator-sample
   only:
     - dev
     - master
@@ -57,8 +57,8 @@ maven-tests:
   script:
     - echo "deploy docker with ${ENVIRONMENT}"
     - echo "${ENVIRONMENT}"
-#     - ssh -o StrictHostKeyChecking=no -t -t go@"$DEPLOY_SERVER" 'go-destroydockerimage.sh '$CONTAINER_GROUP'/'$CONTAINER_ID' && sudo docker pull '$REGISTRY'/'$CONTAINER_GROUP'/'$CONTAINER_ID':'$CONTAINER_VERSION''
-#     - ssh -o StrictHostKeyChecking=no -t -t go@"$DEPLOY_SERVER" 'sudo docker run --restart=on-failure:10 -d -p 8080:8080 -v /etc/norauto:/etc/norauto -v /etc/localtime:/etc/localtime -v /home/nextoo/portailPro-Back/conf:/conf -v /home/nextoo/norauto/portailpro:/partage -e SKIP_CONSUL=true -e HEAP_SIZE=1g -e JAVA_OPTS="-Dfile.encoding=UTF8 -Xmx2g -Duser.timezone=Europe/Paris" --name '$APPLICATION_NAME' '$REGISTRY'/'$CONTAINER_GROUP'/'$CONTAINER_ID':'$CONTAINER_VERSION' --spring.profiles.active=dev'
+  #     - ssh -o StrictHostKeyChecking=no -t -t go@"$DEPLOY_SERVER" 'go-destroydockerimage.sh '$CONTAINER_GROUP'/'$CONTAINER_ID' && sudo docker pull '$REGISTRY'/'$CONTAINER_GROUP'/'$CONTAINER_ID':'$CONTAINER_VERSION''
+  #     - ssh -o StrictHostKeyChecking=no -t -t go@"$DEPLOY_SERVER" 'sudo docker run --restart=on-failure:10 -d -p 8080:8080 -v /etc/norauto:/etc/norauto -v /etc/localtime:/etc/localtime -v /home/nextoo/portailPro-Back/conf:/conf -v /home/nextoo/norauto/portailpro:/partage -e SKIP_CONSUL=true -e HEAP_SIZE=1g -e JAVA_OPTS="-Dfile.encoding=UTF8 -Xmx2g -Duser.timezone=Europe/Paris" --name '$APPLICATION_NAME' '$REGISTRY'/'$CONTAINER_GROUP'/'$CONTAINER_ID':'$CONTAINER_VERSION' --spring.profiles.active=dev'
   only:
     - dev
     - master
