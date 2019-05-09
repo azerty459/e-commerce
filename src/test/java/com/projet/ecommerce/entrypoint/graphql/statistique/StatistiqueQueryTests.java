@@ -1,6 +1,7 @@
 package com.projet.ecommerce.entrypoint.graphql.statistique;
 
 import com.projet.ecommerce.business.dto.CategorieDTO;
+import com.projet.ecommerce.business.dto.StatistiqueProduitCategorieDTO;
 import com.projet.ecommerce.business.impl.CategorieBusiness;
 import com.projet.ecommerce.business.impl.ProduitBusiness;
 import com.projet.ecommerce.business.impl.UtilisateurBusiness;
@@ -18,6 +19,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,34 +86,18 @@ public class StatistiqueQueryTests {
 
     @Test
     public void nbProduitCategorie() {
-        CategorieDTO categorieDTO1 = new CategorieDTO();
-        categorieDTO1.setId(1);
-        categorieDTO1.setNom("Un");
-        CategorieDTO categorieDTO2 = new CategorieDTO();
-        categorieDTO2.setId(2);
-        categorieDTO2.setNom("Deux");
-        Map<CategorieDTO, Long> retour = new HashMap<>();
-        retour.put(categorieDTO1, 1L);
-        retour.put(categorieDTO2, 2L);
+        List<StatistiqueProduitCategorieDTO> retour = new ArrayList<>();
+        retour.add(new StatistiqueProduitCategorieDTO("Un", 1L));
+        retour.add(new StatistiqueProduitCategorieDTO("Deux", 2L));
         Mockito.when(produitBusiness.countProduitsByCategorie()).thenReturn(retour);
 
         Map<String, DataFetcher> champs = statistiqueQuery.produitWiring().getFieldDataFetchers();
-        List<Map<String, Object>> resultat = (List<Map<String, Object>>) champs.get("nbProduitCategorie").get(dataFetchingEnvironment);
+        List<StatistiqueProduitCategorieDTO> resultat = (List<StatistiqueProduitCategorieDTO>) champs.get("nbProduitCategorie").get(dataFetchingEnvironment);
         Assert.assertEquals(2, resultat.size());
-        for(Map<String, Object> donnees : resultat) {
-            String nomCategorie = (String) donnees.get("categorie");
-            long nb = (Long) donnees.get("nb");
-            switch (nomCategorie) {
-                case "Un":
-                    Assert.assertEquals(1L, nb);
-                    break;
-                case "Deux":
-                    Assert.assertEquals(2L, nb);
-                    break;
-                default:
-                    Assert.fail();
-            }
-        }
+        Assert.assertEquals("Un", resultat.get(0).getCategorie());
+        Assert.assertEquals(1L, resultat.get(0).getNb());
+        Assert.assertEquals("Deux", resultat.get(1).getCategorie());
+        Assert.assertEquals(2L, resultat.get(1).getNb());
     }
 
 }

@@ -2,6 +2,7 @@ package com.projet.ecommerce.business.impl;
 
 import java.util.*;
 
+import com.projet.ecommerce.business.dto.StatistiqueProduitCategorieDTO;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
@@ -369,18 +370,17 @@ public class ProduitBusinessTests {
         categorie2.setLevel(2);
         categorie2.setBorneGauche(2);
         categorie2.setBorneDroit(3);
-        Map<Categorie, Long> retour = new HashMap<>();
+        Map<Categorie, Long> retour = new LinkedHashMap<>();
         retour.put(categorie1, 8L);
         retour.put(categorie2, 42L);
         Mockito.when(produitRepository.countProduitsByCategories()).thenReturn(retour);
 
-        CategorieDTO categorieDTO1 = CategorieTransformer.entityToDto(categorie1);
-        CategorieDTO categorieDTO2 = CategorieTransformer.entityToDto(categorie2);
-
-        Map<CategorieDTO, Long> resultat = produitBusiness.countProduitsByCategorie();
+        List<StatistiqueProduitCategorieDTO> resultat = produitBusiness.countProduitsByCategorie();
         Assert.assertEquals(2, resultat.size());
-        Assert.assertEquals((Long) 8L, resultat.get(categorieDTO1));
-        Assert.assertEquals((Long) 42L, resultat.get(categorieDTO2));
+        Assert.assertEquals("Test 1", resultat.get(0).getCategorie());
+        Assert.assertEquals(8L, resultat.get(0).getNb());
+        Assert.assertEquals("Test 2", resultat.get(1).getCategorie());
+        Assert.assertEquals(42L, resultat.get(1).getNb());
     }
 
     @NotNull

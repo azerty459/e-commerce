@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.projet.ecommerce.business.dto.StatistiqueProduitCategorieDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -298,11 +299,17 @@ public class ProduitBusiness implements IProduitBusiness {
     }
 
     @Override
-    public Map<CategorieDTO, Long> countProduitsByCategorie() {
+    public List<StatistiqueProduitCategorieDTO> countProduitsByCategorie() {
         Map<Categorie, Long> countProduitCategorie = produitRepository.countProduitsByCategories();
-        Map<CategorieDTO, Long> countProduitCategorieDTO = new HashMap<>();
+        List<StatistiqueProduitCategorieDTO> statistique = new ArrayList<>();
+        countProduitCategorie.entrySet().stream().forEach(
+                entry -> statistique.add(new StatistiqueProduitCategorieDTO(entry.getKey().getNomCategorie(), entry.getValue()))
+        );
+        return statistique;
+
+        /*Map<CategorieDTO, Long> countProduitCategorieDTO = new HashMap<>();
         countProduitCategorie.entrySet().stream().forEach((entry -> countProduitCategorieDTO
                 .put(CategorieTransformer.entityToDto(entry.getKey()), entry.getValue())));
-        return countProduitCategorieDTO;
+        return countProduitCategorieDTO;*/
     }
 }

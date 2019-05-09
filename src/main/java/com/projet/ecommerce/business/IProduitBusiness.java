@@ -3,6 +3,7 @@ package com.projet.ecommerce.business;
 import java.util.List;
 import java.util.Map;
 
+import com.projet.ecommerce.business.dto.StatistiqueProduitCategorieDTO;
 import org.springframework.data.domain.Page;
 
 import com.projet.ecommerce.business.dto.CategorieDTO;
@@ -90,6 +91,6 @@ public interface IProduitBusiness {
      *
      * @return La map qui associe une categorie au nombre de produit qu'elle contient
      */
-    Map<CategorieDTO, Long> countProduitsByCategorie();
+    List<StatistiqueProduitCategorieDTO> countProduitsByCategorie();
 
 }
