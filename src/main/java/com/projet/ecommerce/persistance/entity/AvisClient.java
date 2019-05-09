@@ -1,16 +1,7 @@
 package com.projet.ecommerce.persistance.entity;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 
 /**
  * Entité représentant la table avis_client sous forme de classe.
@@ -19,70 +10,72 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "avis_client")
 public class AvisClient {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_avis")
-    private int id;
 
-    /**
-     * Date de l'avis du client
-     */
-    @Column(name = "date_avis", updatable = false, insertable = false)
-    private LocalDateTime date;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id_avis")
+	private int id;
 
-    /**
-     * Description de l'avis du client
-     */
-    @Column
-    private String description;
+	/**
+	 * Date de l'avis du client
+	 */
+	@Column(name = "date_avis", updatable = false, insertable = false)
+	private LocalDateTime date;
 
-    /**
-     * Note de l'avis du client
-     */
-    @Column
-    private Integer note;
+	/**
+	 * Description de l'avis du client
+	 */
+	@Column
+	private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reference_produit")
-    private Produit produit;
+	/**
+	 * Note de l'avis du client
+	 */
+	@Column
+	private Integer note;
 
-    public int getId() {
-        return id;
-    }
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "reference_produit")
+	private Produit produit;
 
-    public LocalDateTime getDate() {
-        return date;
-    }
+	public int getId() {
+		return id;
+	}
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public LocalDateTime getDate() {
+		return date;
+	}
 
-    public Integer getNote() {
-        return note;
-    }
+	public void setDate(LocalDateTime date) {
+		this.date = date;
+	}
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public void setNote(Integer note) {
-        this.note = note;
-    }
+	public Integer getNote() {
+		return note;
+	}
 
-    public void setProduit(Produit produit) {
-        this.produit = produit;
-    }
+	public void setNote(Integer note) {
+		this.note = note;
+	}
 
-    public Produit getProduit() {
-        return produit;
-    }
+	public Produit getProduit() {
+		return produit;
+	}
+
+	public void setProduit(Produit produit) {
+		this.produit = produit;
+	}
+
 }

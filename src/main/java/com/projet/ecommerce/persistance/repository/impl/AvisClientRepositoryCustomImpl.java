@@ -1,33 +1,32 @@
 package com.projet.ecommerce.persistance.repository.impl;
 
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-
+import com.projet.ecommerce.persistance.repository.AvisClientRepositoryCustom;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.projet.ecommerce.persistance.repository.AvisClientRepositoryCustom;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 
 @Repository
 public class AvisClientRepositoryCustomImpl implements AvisClientRepositoryCustom {
 
-    private static final String SQL_AVERAGE_BY_REFERENCE = "SELECT avg(note) FROM AvisClient AS a WHERE a.produit.referenceProduit = :reference GROUP BY a.produit";
+	private static final String SQL_AVERAGE_BY_REFERENCE = "SELECT avg(note) FROM AvisClient AS a WHERE a.produit.referenceProduit = :reference GROUP BY a.produit";
 
-    @Autowired
-    private EntityManager entityManager;
+	@Autowired
+	private EntityManager entityManager;
 
-    @Override
-    public float averageByReferenceProduit(String reference) {
+	@Override
+	public float averageByReferenceProduit(String reference) {
 
-        if (StringUtils.isBlank(reference)) {
-            return 0;
-        }
+		if (StringUtils.isBlank(reference)) {
+			return 0;
+		}
 
-        TypedQuery<Double> query = entityManager.createQuery(SQL_AVERAGE_BY_REFERENCE, Double.class);
-        query.setParameter("reference", reference);
+		TypedQuery<Double> query = entityManager.createQuery(SQL_AVERAGE_BY_REFERENCE, Double.class);
+		query.setParameter("reference", reference);
 
-        return query.getSingleResult().floatValue();
-    }
+		return query.getSingleResult().floatValue();
+	}
 
 }

@@ -13,8 +13,8 @@ input UtilisateurUpdateInput {
 }
 
 input AuthData {
-      email: String!
-      password: String!
+    email: String!
+    password: String!
 }
 
 type Utilisateur {

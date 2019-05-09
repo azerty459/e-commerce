@@ -1,33 +1,23 @@
 package com.projet.ecommerce.entrypoint;
 
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.projet.ecommerce.business.IPhotoBusiness;
 import com.projet.ecommerce.business.impl.PhotoException;
 import com.projet.ecommerce.business.impl.UtilisateurBusiness;
 import com.projet.ecommerce.entrypoint.authentification.Token;
 import com.projet.ecommerce.entrypoint.graphql.GraphQlUtility;
 import com.projet.ecommerce.entrypoint.image.DimensionImage;
-
 import graphql.ExecutionResult;
 import graphql.GraphQL;
 import graphql.GraphQLError;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -37,84 +27,84 @@ import graphql.GraphQLError;
 @RestController
 public class GraphQLController {
 
-    private GraphQL graphQL;
+	private GraphQL graphQL;
 
-    @Autowired
-    private UtilisateurBusiness utilisateurBusiness;
-    @Autowired
-    private IPhotoBusiness photoBusiness;
+	@Autowired
+	private UtilisateurBusiness utilisateurBusiness;
+	@Autowired
+	private IPhotoBusiness photoBusiness;
 
-    @Autowired
-    private GraphQlUtility graphQlUtility;
+	@Autowired
+	private GraphQlUtility graphQlUtility;
 
-    GraphQLController(GraphQlUtility graphQlUtility) {
-        graphQL = graphQlUtility.createGraphQlObject();
-    }
+	GraphQLController(GraphQlUtility graphQlUtility) {
+		graphQL = graphQlUtility.createGraphQlObject();
+	}
 
-    @RequestMapping(value = "/graphql/admin", method = RequestMethod.POST)
-    public Object handleAdmin(@RequestHeader("Authorization") String authData,
-                              @RequestBody Map<String, String> query) {
-        Token supposedToken = new Token();
-        supposedToken.setToken(authData);
-        if (!utilisateurBusiness.isLogged(supposedToken)) {
-            return null;
-        }
-        ExecutionResult result = graphQL.execute(query.get("query"));
-        if (result.getErrors().isEmpty()) {
-            return result.getData();
-        } else {
-            List<GraphQLError> graphQLErrors = result.getErrors();
-            return graphQlUtility.graphQLErrorHandler(graphQLErrors);
-        }
-    }
+	@RequestMapping(value = "/graphql/admin", method = RequestMethod.POST)
+	public Object handleAdmin(@RequestHeader("Authorization") String authData,
+							  @RequestBody Map<String, String> query) {
+		Token supposedToken = new Token();
+		supposedToken.setToken(authData);
+		if (!utilisateurBusiness.isLogged(supposedToken)) {
+			return null;
+		}
+		ExecutionResult result = graphQL.execute(query.get("query"));
+		if (result.getErrors().isEmpty()) {
+			return result.getData();
+		} else {
+			List<GraphQLError> graphQLErrors = result.getErrors();
+			return graphQlUtility.graphQLErrorHandler(graphQLErrors);
+		}
+	}
 
-    @RequestMapping(value = "/graphql", method = RequestMethod.POST)
-    public Object handleClient(@RequestBody Map<String, String> query) {
-        ExecutionResult result = graphQL.execute(query.get("query"));
-        if (result.getErrors().isEmpty()) {
-            return result.getData();
-        } else {
-            List<GraphQLError> graphQLErrors = result.getErrors();
-            return graphQlUtility.graphQLErrorHandler(graphQLErrors);
-        }
-    }
+	@RequestMapping(value = "/graphql", method = RequestMethod.POST)
+	public Object handleClient(@RequestBody Map<String, String> query) {
+		ExecutionResult result = graphQL.execute(query.get("query"));
+		if (result.getErrors().isEmpty()) {
+			return result.getData();
+		} else {
+			List<GraphQLError> graphQLErrors = result.getErrors();
+			return graphQlUtility.graphQLErrorHandler(graphQLErrors);
+		}
+	}
 
-    @RequestMapping(value = "/graphql/login", method = RequestMethod.POST)
-    public Object handle(@RequestBody Map<String, String> query) {
-        // TODO bloquer les requéte qui ne sont pas une mutation utilisateur "signinUtilisateur"
-        ExecutionResult result = graphQL.execute(query.get("query"));
-        if (result.getErrors().isEmpty()) {
-            return result.getData();
-        } else {
-            List<GraphQLError> graphQLErrors = result.getErrors();
-            return graphQlUtility.graphQLErrorHandler(graphQLErrors);
-        }
-    }
+	@RequestMapping(value = "/graphql/login", method = RequestMethod.POST)
+	public Object handle(@RequestBody Map<String, String> query) {
+		// TODO bloquer les requéte qui ne sont pas une mutation utilisateur "signinUtilisateur"
+		ExecutionResult result = graphQL.execute(query.get("query"));
+		if (result.getErrors().isEmpty()) {
+			return result.getData();
+		} else {
+			List<GraphQLError> graphQLErrors = result.getErrors();
+			return graphQlUtility.graphQLErrorHandler(graphQLErrors);
+		}
+	}
 
-    @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public @ResponseBody
-    Boolean handleFileUpload(
-            @RequestParam("fichier") MultipartFile file,
-            @RequestParam("ref") String refProduit
-    ) {
-        try {
-            photoBusiness.upload(file, refProduit);
-        } catch (PhotoException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
+	@RequestMapping(value = "/upload", method = RequestMethod.POST)
+	public @ResponseBody
+	Boolean handleFileUpload(
+			@RequestParam("fichier") MultipartFile file,
+			@RequestParam("ref") String refProduit
+	) {
+		try {
+			photoBusiness.upload(file, refProduit);
+		} catch (PhotoException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
 
-    @GetMapping("/fichier/{refProduit}/{nomFichier:.+}_{width}x{height}")
-    @ResponseBody
-    public ResponseEntity<Resource> getFile(@PathVariable String nomFichier, @PathVariable String refProduit, @PathVariable int height, @PathVariable int width) {
-        DimensionImage dimension = new DimensionImage();
-        dimension.setSize(width, height);
-        Resource fichier = photoBusiness.loadPhotos(nomFichier, refProduit, dimension);
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fichier.getFilename() + "\"")// "attachment; filename=" est une norme http
-                .body(fichier);
-    }
+	@GetMapping("/fichier/{refProduit}/{nomFichier:.+}_{width}x{height}")
+	@ResponseBody
+	public ResponseEntity<Resource> getFile(@PathVariable String nomFichier, @PathVariable String refProduit, @PathVariable int height, @PathVariable int width) {
+		DimensionImage dimension = new DimensionImage();
+		dimension.setSize(width, height);
+		Resource fichier = photoBusiness.loadPhotos(nomFichier, refProduit, dimension);
+		return ResponseEntity.ok()
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fichier.getFilename() + "\"")// "attachment; filename=" est une norme http
+				.body(fichier);
+	}
 
 }

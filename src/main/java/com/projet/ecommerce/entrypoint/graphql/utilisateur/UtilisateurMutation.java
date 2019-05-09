@@ -1,67 +1,66 @@
 package com.projet.ecommerce.entrypoint.graphql.utilisateur;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.projet.ecommerce.business.IUtilisateurBusiness;
 import com.projet.ecommerce.business.dto.UtilisateurDTO;
 import com.projet.ecommerce.entrypoint.authentification.AuthData;
 import com.projet.ecommerce.entrypoint.authentification.Token;
-
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.idl.TypeRuntimeWiring;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class UtilisateurMutation {
 
-    @Autowired
-    private IUtilisateurBusiness utilisateurBusiness;
+	@Autowired
+	private IUtilisateurBusiness utilisateurBusiness;
 
-    public TypeRuntimeWiring produitWiring() {
+	public TypeRuntimeWiring produitWiring() {
 
-        TypeRuntimeWiring.Builder builder = new TypeRuntimeWiring.Builder();
-        builder.typeName("Mutation");
+		TypeRuntimeWiring.Builder builder = new TypeRuntimeWiring.Builder();
+		builder.typeName("Mutation");
 
-        builder.dataFetcher("addUtilisateur", (DataFetchingEnvironment environment) -> {
-                    ObjectMapper mapper = new ObjectMapper();
-                    Object rawInput = environment.getArgument("utilisateur");
-                    UtilisateurDTO utilisateurDTO = mapper.convertValue(rawInput, UtilisateurDTO.class);
-                    return utilisateurBusiness.add(utilisateurDTO);
-                }
-        );
+		builder.dataFetcher("addUtilisateur", (DataFetchingEnvironment environment) -> {
+					ObjectMapper mapper = new ObjectMapper();
+					Object rawInput = environment.getArgument("utilisateur");
+					UtilisateurDTO utilisateurDTO = mapper.convertValue(rawInput, UtilisateurDTO.class);
+					return utilisateurBusiness.add(utilisateurDTO);
+				}
+		);
 
-        builder.dataFetcher("updateUtilisateur", (DataFetchingEnvironment environment) -> {
-                    ObjectMapper mapper = new ObjectMapper();
-                    Object rawInput = environment.getArgument("utilisateur");
-                    UtilisateurDTO utilisateurDTO = mapper.convertValue(rawInput, UtilisateurDTO.class);
-                    return utilisateurBusiness.update(utilisateurDTO);
-                }
-        );
-        builder.dataFetcher("isLogged", (DataFetchingEnvironment env) -> {
-            Token token = new Token();
-            token.setToken(env.getArgument("token"));
-            return utilisateurBusiness.isLogged(token);
-        });
+		builder.dataFetcher("updateUtilisateur", (DataFetchingEnvironment environment) -> {
+					ObjectMapper mapper = new ObjectMapper();
+					Object rawInput = environment.getArgument("utilisateur");
+					UtilisateurDTO utilisateurDTO = mapper.convertValue(rawInput, UtilisateurDTO.class);
+					return utilisateurBusiness.update(utilisateurDTO);
+				}
+		);
+		builder.dataFetcher("isLogged", (DataFetchingEnvironment env) -> {
+			Token token = new Token();
+			token.setToken(env.getArgument("token"));
+			return utilisateurBusiness.isLogged(token);
+		});
 
 
-        builder.dataFetcher("deleteUtilisateur", (DataFetchingEnvironment environment) ->
-                utilisateurBusiness.delete(environment.getArgument("email"), (environment.getArgument("id") != null) ? environment.getArgument("id") : 0)
-        );
-        builder.dataFetcher("signinUtilisateur", (DataFetchingEnvironment environment) -> {
-                    ObjectMapper mapper = new ObjectMapper();
-                    Object rawInput = environment.getArgument("auth");
-                    AuthData authData = mapper.convertValue(rawInput, AuthData.class);
-                    try {
-                        return utilisateurBusiness.signinUser(authData);
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    }
-                    return null;
-                }
+		builder.dataFetcher("deleteUtilisateur", (DataFetchingEnvironment environment) ->
+				utilisateurBusiness.delete(environment.getArgument("email"), (environment.getArgument("id") != null) ? environment.getArgument("id") : 0)
+		);
+		builder.dataFetcher("signinUtilisateur", (DataFetchingEnvironment environment) -> {
+					ObjectMapper mapper = new ObjectMapper();
+					Object rawInput = environment.getArgument("auth");
+					AuthData authData = mapper.convertValue(rawInput, AuthData.class);
+					try {
+						return utilisateurBusiness.signinUser(authData);
+					} catch (IllegalAccessException e) {
+						e.printStackTrace();
+					}
+					return null;
+				}
 
-        );
-        return builder.build();
+		);
+		return builder.build();
 
-    }
+	}
+
 }

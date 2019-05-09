@@ -19,136 +19,137 @@ import java.util.List;
 @SpringBootTest
 public class ProduitTransformerTests {
 
-    @Test
-    public void singleDtoToEntity() {
-        ProduitDTO produitDTO = buildProduitDTO(1);
+	@NotNull
+	private static Produit buildProduit(int number) {
+		Produit produit = new Produit();
+		produit.setReferenceProduit("A4224" + number);
+		produit.setDescription("ceci est un test" + number);
+		produit.setNom("test" + number);
+		produit.setPrixHT(number);
+		produit.setCategories(Collections.singletonList(buildCategorie()));
 
-        Produit produit = ProduitTransformer.dtoToEntity(produitDTO);
+		Photo photo = buildPhoto();
+		produit.setPhotoPrincipale(photo);
+		produit.setPhotos(Collections.singletonList(photo));
 
-        assertEquals(produit, produitDTO);
-    }
+		return produit;
+	}
 
-    @Test
-    public void singleEntityToDto() {
-        Produit produit = buildProduit(1);
+	@NotNull
+	private static Categorie buildCategorie() {
+		Categorie categorieDTO = new Categorie();
+		categorieDTO.setNomCategorie("sous catégorie");
+		return categorieDTO;
+	}
 
-        ProduitDTO produitDTO = ProduitTransformer.entityToDto(produit);
+	@NotNull
+	private static Photo buildPhoto() {
+		Photo photo = new Photo();
+		photo.setIdPhoto(1);
+		photo.setUrl("test");
+		return photo;
+	}
 
-        assertEquals(produit, produitDTO);
-    }
+	@NotNull
+	private static ProduitDTO buildProduitDTO(int number) {
+		ProduitDTO produitDto = new ProduitDTO();
+		produitDto.setRef("A4224" + number);
+		produitDto.setDescription("ceci est un test" + number);
+		produitDto.setNom("test" + number);
+		produitDto.setPrixHT(number);
+		produitDto.setCategories(Collections.singletonList(buildCategorieDTOAvecSousCagorie()));
 
-    @Test
-    public void severalDtoToEntity() {
-        List<ProduitDTO> listeProduitDTO = Arrays.asList(buildProduitDTO(1), buildProduitDTO(2));
-        List<Produit> listeProduit = new ArrayList<>(ProduitTransformer.dtoToEntity(listeProduitDTO));
+		PhotoDTO photoDTO = buildPhotoDTO();
+		produitDto.setPhotoPrincipale(photoDTO);
+		produitDto.setPhotos(Collections.singletonList(photoDTO));
 
-        Assert.assertNotNull(listeProduit);
-        Assert.assertEquals(listeProduitDTO.size(), listeProduit.size());
+		return produitDto;
+	}
 
-        assertEquals(listeProduit.get(0), listeProduitDTO.get(0));
-    }
+	@NotNull
+	private static CategorieDTO buildCategorieDTOAvecSousCagorie() {
+		CategorieDTO sousCategorieDTO = new CategorieDTO();
+		sousCategorieDTO.setNom("sous catégorie");
 
-    @Test
-    public void severalEntityToDto() {
-        List<Produit> listeProduit = Arrays.asList(buildProduit(1), buildProduit(2));
-        List<ProduitDTO> listeProduitDTO = new ArrayList<>(ProduitTransformer.entityToDto(listeProduit));
+		CategorieDTO categorieDTO = new CategorieDTO();
+		categorieDTO.setNom("catégorie");
+		categorieDTO.setSousCategories(Collections.singletonList(sousCategorieDTO));
 
-        Assert.assertNotNull(listeProduitDTO);
-        Assert.assertEquals(listeProduit.size(), listeProduitDTO.size());
+		return categorieDTO;
+	}
 
-        assertEquals(listeProduit.get(0), listeProduitDTO.get(0));
-    }
+	// ------------------------- ENTITE -------------------------
 
-    private void assertEquals(Produit produit, ProduitDTO produitDTO) {
-        Assert.assertNotNull(produit);
-        Assert.assertNotNull(produitDTO);
+	@NotNull
+	private static PhotoDTO buildPhotoDTO() {
+		PhotoDTO photoDTO = new PhotoDTO();
+		photoDTO.setIdPhoto(1);
+		photoDTO.setUrl("test");
+		return photoDTO;
+	}
 
-        Assert.assertEquals(produit.getReferenceProduit(), produitDTO.getRef());
-        Assert.assertEquals(produit.getDescription(), produitDTO.getDescription());
-        Assert.assertEquals(produit.getNom(), produitDTO.getNom());
-        Assert.assertEquals(produit.getPrixHT(), produitDTO.getPrixHT(), 0);
+	@Test
+	public void singleDtoToEntity() {
+		ProduitDTO produitDTO = buildProduitDTO(1);
 
-        Assert.assertNotNull(produit.getCategories());
-        Assert.assertNotNull(produitDTO.getCategories());
-        Assert.assertEquals(produit.getCategories().size(), produitDTO.getCategories().size());
-        Assert.assertEquals(produit.getCategories().get(0).getNomCategorie(), produitDTO.getCategories().get(0).getNom());
+		Produit produit = ProduitTransformer.dtoToEntity(produitDTO);
 
-        Assert.assertEquals(produit.getPhotoPrincipale().getIdPhoto(), produitDTO.getPhotoPrincipale().getId());
-        Assert.assertEquals(produit.getPhotoPrincipale().getUrl(), produitDTO.getPhotoPrincipale().getUrl());
+		assertEquals(produit, produitDTO);
+	}
 
-        Assert.assertNotNull(produit.getPhotos());
-        Assert.assertNotNull(produitDTO.getPhotos());
-        Assert.assertEquals(produit.getPhotos().size(), produitDTO.getPhotos().size());
-    }
+	@Test
+	public void singleEntityToDto() {
+		Produit produit = buildProduit(1);
 
-    // ------------------------- ENTITE -------------------------
+		ProduitDTO produitDTO = ProduitTransformer.entityToDto(produit);
 
-    @NotNull
-    private static Produit buildProduit(int number) {
-        Produit produit = new Produit();
-        produit.setReferenceProduit("A4224" + number);
-        produit.setDescription("ceci est un test" + number);
-        produit.setNom("test" + number);
-        produit.setPrixHT(number);
-        produit.setCategories(Collections.singletonList(buildCategorie()));
+		assertEquals(produit, produitDTO);
+	}
 
-        Photo photo = buildPhoto();
-        produit.setPhotoPrincipale(photo);
-        produit.setPhotos(Collections.singletonList(photo));
+	// ------------------------- DTO -------------------------
 
-        return produit;
-    }
+	@Test
+	public void severalDtoToEntity() {
+		List<ProduitDTO> listeProduitDTO = Arrays.asList(buildProduitDTO(1), buildProduitDTO(2));
+		List<Produit> listeProduit = new ArrayList<>(ProduitTransformer.dtoToEntity(listeProduitDTO));
 
-    @NotNull
-    private static Categorie buildCategorie() {
-        Categorie categorieDTO = new Categorie();
-        categorieDTO.setNomCategorie("sous catégorie");
-        return categorieDTO;
-    }
+		Assert.assertNotNull(listeProduit);
+		Assert.assertEquals(listeProduitDTO.size(), listeProduit.size());
 
-    @NotNull
-    private static Photo buildPhoto() {
-        Photo photo = new Photo();
-        photo.setIdPhoto(1);
-        photo.setUrl("test");
-        return photo;
-    }
+		assertEquals(listeProduit.get(0), listeProduitDTO.get(0));
+	}
 
-    // ------------------------- DTO -------------------------
+	@Test
+	public void severalEntityToDto() {
+		List<Produit> listeProduit = Arrays.asList(buildProduit(1), buildProduit(2));
+		List<ProduitDTO> listeProduitDTO = new ArrayList<>(ProduitTransformer.entityToDto(listeProduit));
 
-    @NotNull
-    private static ProduitDTO buildProduitDTO(int number) {
-        ProduitDTO produitDto = new ProduitDTO();
-        produitDto.setRef("A4224" + number);
-        produitDto.setDescription("ceci est un test" + number);
-        produitDto.setNom("test" + number);
-        produitDto.setPrixHT(number);
-        produitDto.setCategories(Collections.singletonList(buildCategorieDTOAvecSousCagorie()));
+		Assert.assertNotNull(listeProduitDTO);
+		Assert.assertEquals(listeProduit.size(), listeProduitDTO.size());
 
-        PhotoDTO photoDTO = buildPhotoDTO();
-        produitDto.setPhotoPrincipale(photoDTO);
-        produitDto.setPhotos(Collections.singletonList(photoDTO));
+		assertEquals(listeProduit.get(0), listeProduitDTO.get(0));
+	}
 
-        return produitDto;
-    }
+	private void assertEquals(Produit produit, ProduitDTO produitDTO) {
+		Assert.assertNotNull(produit);
+		Assert.assertNotNull(produitDTO);
 
-    @NotNull
-    private static CategorieDTO buildCategorieDTOAvecSousCagorie() {
-        CategorieDTO sousCategorieDTO = new CategorieDTO();
-        sousCategorieDTO.setNom("sous catégorie");
+		Assert.assertEquals(produit.getReferenceProduit(), produitDTO.getRef());
+		Assert.assertEquals(produit.getDescription(), produitDTO.getDescription());
+		Assert.assertEquals(produit.getNom(), produitDTO.getNom());
+		Assert.assertEquals(produit.getPrixHT(), produitDTO.getPrixHT(), 0);
 
-        CategorieDTO categorieDTO = new CategorieDTO();
-        categorieDTO.setNom("catégorie");
-        categorieDTO.setSousCategories(Collections.singletonList(sousCategorieDTO));
+		Assert.assertNotNull(produit.getCategories());
+		Assert.assertNotNull(produitDTO.getCategories());
+		Assert.assertEquals(produit.getCategories().size(), produitDTO.getCategories().size());
+		Assert.assertEquals(produit.getCategories().get(0).getNomCategorie(), produitDTO.getCategories().get(0).getNom());
 
-        return categorieDTO;
-    }
+		Assert.assertEquals(produit.getPhotoPrincipale().getIdPhoto(), produitDTO.getPhotoPrincipale().getId());
+		Assert.assertEquals(produit.getPhotoPrincipale().getUrl(), produitDTO.getPhotoPrincipale().getUrl());
 
-    @NotNull
-    private static PhotoDTO buildPhotoDTO() {
-        PhotoDTO photoDTO = new PhotoDTO();
-        photoDTO.setIdPhoto(1);
-        photoDTO.setUrl("test");
-        return photoDTO;
-    }
+		Assert.assertNotNull(produit.getPhotos());
+		Assert.assertNotNull(produitDTO.getPhotos());
+		Assert.assertEquals(produit.getPhotos().size(), produitDTO.getPhotos().size());
+	}
+
 }
