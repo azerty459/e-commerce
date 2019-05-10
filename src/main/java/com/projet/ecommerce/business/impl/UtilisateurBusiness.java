@@ -12,6 +12,7 @@ import com.projet.ecommerce.persistance.entity.Utilisateur;
 import com.projet.ecommerce.persistance.repository.RoleRepository;
 import com.projet.ecommerce.persistance.repository.UtilisateurRepository;
 import com.projet.ecommerce.utilitaire.AuthUtilitaire;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+
+import static com.projet.ecommerce.utilitaire.Utilitaire.mergeObjects;
 
 /**
  * Service permettant de gérer les actions effectuées pour les utilisateurs.
@@ -78,7 +81,32 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
 	 */
 	@Override
 	public UtilisateurDTO update(UtilisateurDTO utilisateurDTO) {
-		return null;
+		if (utilisateurDTO == null) {
+			return null;
+		}
+		if (StringUtils.isBlank(utilisateurDTO.getEmail()) || StringUtils.isBlank(utilisateurDTO.getMdp())) {
+			GraphQLCustomException graphQLCustomException = new GraphQLCustomException("Erreur dans l'ajout de l'utilisateur (l'adresse email ou le mot de passe est vide)");
+			graphQLCustomException.ajouterExtension("Email", utilisateurDTO.getEmail());
+			graphQLCustomException.ajouterExtension("Mdp", utilisateurDTO.getMdp());
+			throw graphQLCustomException;
+		}
+		Optional<Utilisateur> optionalUtilisateur = utilisateurRepository.findById(utilisateurDTO.getId());
+		optionalUtilisateur.orElseThrow(() -> new GraphQLCustomException("Impossible de trouver l'utilisateur"));
+		Utilisateur utilisateurBDD = optionalUtilisateur.get();
+		Utilisateur utilisateur = UtilisateurTransformer.dtoToEntity(utilisateurDTO);
+		if (utilisateur.getRole() != null) {
+			Optional<Role> optionalRole = roleRepository.findByNom(utilisateur.getRole().getNom());
+			optionalRole.ifPresent(utilisateur::setRole);
+		}
+		utilisateur.setMdp(passwordEncoder.encode(utilisateurDTO.getMdp()));
+		utilisateur.setId(utilisateurBDD.getId());
+		try {
+			Utilisateur utilisateurFusion = mergeObjects(utilisateur, utilisateurBDD);
+			return UtilisateurTransformer.entityToDto(utilisateurRepository.save(utilisateurFusion));
+		} catch (IllegalAccessException | InstantiationException ex) {
+			throw new GraphQLCustomException("L'utilisateur ne peut pas être mis à jour");
+		}
+
 	}
 
 	@Override

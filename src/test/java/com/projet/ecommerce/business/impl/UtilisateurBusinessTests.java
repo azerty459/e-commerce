@@ -2,10 +2,13 @@ package com.projet.ecommerce.business.impl;
 
 import com.projet.ecommerce.business.dto.RoleDTO;
 import com.projet.ecommerce.business.dto.UtilisateurDTO;
+import com.projet.ecommerce.business.dto.transformer.UtilisateurTransformer;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Role;
 import com.projet.ecommerce.persistance.entity.Utilisateur;
+import com.projet.ecommerce.persistance.repository.RoleRepository;
 import com.projet.ecommerce.persistance.repository.UtilisateurRepository;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -20,6 +23,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,10 +36,19 @@ public class UtilisateurBusinessTests {
 
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
+
 	@Mock
 	private UtilisateurRepository utilisateurRepository;
+
+	@Mock
+	private RoleRepository roleRepository;
+
+	@Mock
+	private PasswordEncoder passwordEncoder;
+
 	@Mock
 	private Page page;
+
 	@InjectMocks
 	private UtilisateurBusiness utilisateurBusiness;
 
@@ -106,7 +119,27 @@ public class UtilisateurBusinessTests {
 
 	@Test
 	public void update() {
-		Assert.assertNull(utilisateurBusiness.update(new UtilisateurDTO()));
+		String prenom = "John";
+		String email = "john.shepard@normandy-sr2.space";
+		Utilisateur retour = buildUtilisateur();
+		Utilisateur nouveau = buildUtilisateur();
+		nouveau.setPrenom(prenom);
+		nouveau.setEmail(email);
+		UtilisateurDTO param = UtilisateurTransformer.entityToDto(nouveau);
+
+		Mockito.when(utilisateurRepository.findById(retour.getId())).thenReturn(Optional.of(retour));
+		Mockito.when(roleRepository.findByNom(retour.getRole().getNom())).thenReturn(Optional.of(retour.getRole()));
+		Mockito.when(passwordEncoder.encode(retour.getMdp())).thenReturn(retour.getMdp());
+		Mockito.when(utilisateurRepository.save(Mockito.any(Utilisateur.class))).thenReturn(nouveau);
+
+		UtilisateurDTO resultat = utilisateurBusiness.update(param);
+		Assert.assertNotNull(resultat);
+		Assert.assertEquals(retour.getId(), resultat.getId());
+		Assert.assertEquals(retour.getNom(), resultat.getNom());
+		Assert.assertEquals(nouveau.getPrenom(), resultat.getPrenom());
+		Assert.assertEquals(nouveau.getEmail(), resultat.getEmail());
+		Assert.assertEquals(retour.getMdp(), resultat.getMdp());
+		Assert.assertEquals(retour.getRole().getNom(), resultat.getRole().getNom());
 	}
 
 	@Test
@@ -262,6 +295,26 @@ public class UtilisateurBusinessTests {
 		Long expected = 8L;
 		Mockito.when(utilisateurRepository.countUtilisateurs()).thenReturn(expected);
 		Assert.assertEquals(expected, utilisateurBusiness.countUtilisateurs());
+	}
+
+	@NotNull
+	public Utilisateur buildUtilisateur() {
+		Utilisateur utilisateur = new Utilisateur();
+		utilisateur.setId(1);
+		utilisateur.setPrenom("Jane");
+		utilisateur.setNom("Shepard");
+		utilisateur.setMdp("Password");
+		utilisateur.setEmail("jane.shepard@normandy-sr2.earth");
+		utilisateur.setRole(buildRole());
+		return utilisateur;
+	}
+
+	@NotNull
+	public Role buildRole() {
+		Role role = new Role();
+		role.setId(1);
+		role.setNom("Role test");
+		return role;
 	}
 
 }
