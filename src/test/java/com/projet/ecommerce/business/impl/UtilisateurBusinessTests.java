@@ -57,35 +57,30 @@ public class UtilisateurBusinessTests {
 		MockitoAnnotations.initMocks(this);
 	}
 
+	//TODO Faire un test pour add
+
 	@Test
 	public void addNull() {
 		Assert.assertNull(utilisateurBusiness.add(null));
 	}
 
-	@Test
+	@Test(expected = GraphQLCustomException.class)
 	public void addWithEmailEmpty() {
-		UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
-		utilisateurDTO.setPrenom("Toto");
-		utilisateurDTO.setNom("Test");
-		utilisateurDTO.setMdp("azerty");
+		UtilisateurDTO utilisateurDTO = buildUtilisateurDTO();
 		utilisateurDTO.setEmail("");
 
-		thrown.expect(GraphQLCustomException.class);
 		utilisateurBusiness.add(utilisateurDTO);
 	}
 
-	@Test
+	@Test(expected = GraphQLCustomException.class)
 	public void addWithMdpEmpty() {
-		UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
-		utilisateurDTO.setPrenom("Toto");
-		utilisateurDTO.setNom("Test");
+		UtilisateurDTO utilisateurDTO = buildUtilisateurDTO();
 		utilisateurDTO.setMdp("");
-		utilisateurDTO.setEmail("test@gmail.com");
 
-		thrown.expect(GraphQLCustomException.class);
 		utilisateurBusiness.add(utilisateurDTO);
 	}
 
+	//TODO refaire le test il passe car il trouve un email (donc doublon et erreur) ne test absolument pas le role
 	@Test
 	public void addRoleNotExist() {
 		//création de l'objet add utilisateur dto
@@ -132,6 +127,7 @@ public class UtilisateurBusinessTests {
 		Mockito.when(passwordEncoder.encode(retour.getMdp())).thenReturn(retour.getMdp());
 		Mockito.when(utilisateurRepository.save(Mockito.any(Utilisateur.class))).thenReturn(nouveau);
 
+		//Test update normal
 		UtilisateurDTO resultat = utilisateurBusiness.update(param);
 		Assert.assertNotNull(resultat);
 		Assert.assertEquals(retour.getId(), resultat.getId());
@@ -140,6 +136,77 @@ public class UtilisateurBusinessTests {
 		Assert.assertEquals(nouveau.getEmail(), resultat.getEmail());
 		Assert.assertEquals(retour.getMdp(), resultat.getMdp());
 		Assert.assertEquals(retour.getRole().getNom(), resultat.getRole().getNom());
+		//Test update sans role
+		retour.setRole(null);
+		nouveau.setRole(null);
+		param.setRole(null);
+		resultat = utilisateurBusiness.update(param);
+		Assert.assertNotNull(resultat);
+		Assert.assertEquals(retour.getId(), resultat.getId());
+		Assert.assertEquals(retour.getNom(), resultat.getNom());
+		Assert.assertEquals(nouveau.getPrenom(), resultat.getPrenom());
+		Assert.assertEquals(nouveau.getEmail(), resultat.getEmail());
+		Assert.assertEquals(retour.getMdp(), resultat.getMdp());
+		Assert.assertNull(resultat.getRole());
+		//Test DTO Null
+		resultat = utilisateurBusiness.update(null);
+		Assert.assertNull(resultat);
+	}
+
+	@Test(expected = GraphQLCustomException.class)
+	public void updateWithoutId() {
+		UtilisateurDTO utilisateurDTO = buildUtilisateurDTO();
+		utilisateurDTO.setId(0);
+		utilisateurBusiness.update(utilisateurDTO);
+	}
+
+	@Test(expected = GraphQLCustomException.class)
+	public void updateWithBadId() {
+		UtilisateurDTO utilisateurDTO = buildUtilisateurDTO();
+		utilisateurDTO.setId(-8);
+		utilisateurBusiness.update(utilisateurDTO);
+	}
+
+	@Test(expected = GraphQLCustomException.class)
+	public void updateWithIdNotFound() {
+		UtilisateurDTO utilisateurDTO = buildUtilisateurDTO();
+		utilisateurDTO.setId(8);
+
+		Mockito.when(utilisateurRepository.findById(utilisateurDTO.getId())).thenReturn(Optional.empty());
+
+		utilisateurBusiness.update(utilisateurDTO);
+	}
+
+	@Test(expected = GraphQLCustomException.class)
+	public void updateWithoutEmail() {
+		UtilisateurDTO utilisateurDTO = buildUtilisateurDTO();
+		utilisateurDTO.setEmail(null);
+
+		utilisateurBusiness.update(utilisateurDTO);
+	}
+
+	@Test(expected = GraphQLCustomException.class)
+	public void updateWithBlankEmail() {
+		UtilisateurDTO utilisateurDTO = buildUtilisateurDTO();
+		utilisateurDTO.setEmail(" \t");
+
+		utilisateurBusiness.update(utilisateurDTO);
+	}
+
+	@Test(expected = GraphQLCustomException.class)
+	public void updateWithoutPassword() {
+		UtilisateurDTO utilisateurDTO = buildUtilisateurDTO();
+		utilisateurDTO.setMdp(null);
+
+		utilisateurBusiness.update(utilisateurDTO);
+	}
+
+	@Test(expected = GraphQLCustomException.class)
+	public void updateWithBlankPassword() {
+		UtilisateurDTO utilisateurDTO = buildUtilisateurDTO();
+		utilisateurDTO.setMdp(" \t");
+
+		utilisateurBusiness.update(utilisateurDTO);
 	}
 
 	@Test
@@ -310,11 +377,31 @@ public class UtilisateurBusinessTests {
 	}
 
 	@NotNull
+	public UtilisateurDTO buildUtilisateurDTO() {
+		UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
+		utilisateurDTO.setId(1);
+		utilisateurDTO.setPrenom("Jane");
+		utilisateurDTO.setNom("Shepard");
+		utilisateurDTO.setMdp("Password");
+		utilisateurDTO.setEmail("jane.shepard@normandy-sr2.earth");
+		utilisateurDTO.setRole(buildRoleDTO());
+		return utilisateurDTO;
+	}
+
+	@NotNull
 	public Role buildRole() {
 		Role role = new Role();
 		role.setId(1);
 		role.setNom("Role test");
 		return role;
+	}
+
+	@NotNull
+	public RoleDTO buildRoleDTO() {
+		RoleDTO roleDTO = new RoleDTO();
+		roleDTO.setId(1);
+		roleDTO.setNom("Role test");
+		return roleDTO;
 	}
 
 }
