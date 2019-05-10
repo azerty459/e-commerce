@@ -52,6 +52,13 @@ public interface IUtilisateurBusiness {
 	 */
 	List<UtilisateurDTO> getUtilisateur(int id, String email, String nom, String prenom, String role);
 
+	/**
+	 * Méthode définissant la recherche d'un utilisateur par son id
+	 *
+	 * @param id l'id de l'utilisateur
+	 * @return l'utilisateur correspondant à l'id
+	 */
+	UtilisateurDTO getUtilisateurById(int id);
 
 	/**
 	 * Méthode définissant la pagination

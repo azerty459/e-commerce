@@ -128,6 +128,29 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
 		return new ArrayList<>(UtilisateurTransformer.entityToDto(utilisateurCollection));
 	}
 
+	/**
+	 * Retourne un utilisateur selon son id
+	 *
+	 * @param id
+	 * @return un utilisateur
+	 */
+	public UtilisateurDTO getUtilisateurById(int id) {
+
+		Utilisateur utilisateur = new Utilisateur();
+
+		if (id != 0) {
+			Optional<Utilisateur> utilisateurOptional = utilisateurRepository.findById(id);
+			if (utilisateurOptional.isPresent()) {
+				utilisateur = utilisateurOptional.get();
+			} else {
+				throw new GraphQLCustomException("L'utilisateur avec l'id recherché, n'a pas été trouvé");
+			}
+		} else {
+			throw new GraphQLCustomException("l'id recherché est invalide");
+		}
+		return UtilisateurTransformer.entityToDto(utilisateur);
+	}
+
 
 	@Override
 	public SigninPayload signinUser(AuthData auth) {
