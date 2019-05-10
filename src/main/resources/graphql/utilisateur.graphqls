@@ -5,6 +5,7 @@ input UtilisateurAddInput {
 }
 
 input UtilisateurUpdateInput {
+    id: Int!
     email: String!
     mdp: String!
     nom: String
