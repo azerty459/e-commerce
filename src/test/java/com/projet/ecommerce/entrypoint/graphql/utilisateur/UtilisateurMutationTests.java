@@ -71,6 +71,7 @@ public class UtilisateurMutationTests {
 		Mockito.verify(utilisateurBusiness, Mockito.times(1)).add(Mockito.any(UtilisateurDTO.class));
 	}
 
+	@Test
 	public void updateUtilisateur() {
 		Map<String, DataFetcher> retourMap = utilisateurMutation.produitWiring().getFieldDataFetchers();
 
