@@ -18,12 +18,12 @@ public class ControllerUtilisateur {
 	private UtilisateurBusiness utilisateurBusiness;
 
 	@GetMapping("/{id}")
-	public List<UtilisateurDTO> getUserById(@PathVariable @NotNull int id) {
+	public List<UtilisateurDTO> getUser(@PathVariable @NotNull int id) {
 
 		return utilisateurBusiness.getUtilisateur(id, null, null, null, null);
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping("delete/{id}")
 	public void deleteUser(@PathVariable @NotNull int id) {
 
 		utilisateurBusiness.delete(null, id);
