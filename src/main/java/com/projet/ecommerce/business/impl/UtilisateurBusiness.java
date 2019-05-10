@@ -84,8 +84,9 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
 		if (utilisateurDTO == null) {
 			return null;
 		}
-		if (StringUtils.isBlank(utilisateurDTO.getEmail()) || StringUtils.isBlank(utilisateurDTO.getMdp())) {
-			GraphQLCustomException graphQLCustomException = new GraphQLCustomException("Erreur dans l'ajout de l'utilisateur (l'adresse email ou le mot de passe est vide)");
+		if (utilisateurDTO.getId() <= 0 || StringUtils.isBlank(utilisateurDTO.getEmail()) || StringUtils.isBlank(utilisateurDTO.getMdp())) {
+			GraphQLCustomException graphQLCustomException = new GraphQLCustomException("Erreur dans l'ajout de l'utilisateur (l'id, l'adresse email ou le mot de passe sont vide)");
+			graphQLCustomException.ajouterExtension("Id", "" + utilisateurDTO.getId());
 			graphQLCustomException.ajouterExtension("Email", utilisateurDTO.getEmail());
 			graphQLCustomException.ajouterExtension("Mdp", utilisateurDTO.getMdp());
 			throw graphQLCustomException;
