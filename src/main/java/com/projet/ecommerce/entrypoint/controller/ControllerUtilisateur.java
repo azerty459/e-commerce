@@ -18,23 +18,27 @@ public class ControllerUtilisateur {
 	private UtilisateurBusiness utilisateurBusiness;
 
 	@GetMapping("/{id}")
-	public List<UtilisateurDTO> getUser(@PathVariable @NotNull int id) {
+	public List<UtilisateurDTO> getUserById(@PathVariable @NotNull int id) {
+
 		return utilisateurBusiness.getUtilisateur(id, null, null, null, null);
 	}
 
 	@DeleteMapping("/{id}")
 	public void deleteUser(@PathVariable @NotNull int id) {
+
 		utilisateurBusiness.delete(null, id);
 	}
 
 	@PostMapping()
-	public void createUser(@PathVariable UtilisateurDTO utilisateurDTO) {
-		utilisateurBusiness.add(utilisateurDTO);
+	public UtilisateurDTO createUser(@PathVariable UtilisateurDTO utilisateurDTO) {
+
+		return utilisateurBusiness.add(utilisateurDTO);
 	}
 
 	@PutMapping()
-	public void updateUser(@PathVariable UtilisateurDTO utilisateurDTO) {
-		utilisateurBusiness.update(utilisateurDTO);
+	public UtilisateurDTO updateUser(@PathVariable UtilisateurDTO utilisateurDTO) {
+
+		return utilisateurBusiness.update(utilisateurDTO);
 	}
 
 }
