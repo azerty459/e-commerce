@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 
 @RestController
@@ -18,9 +17,9 @@ public class ControllerUtilisateur {
 	private UtilisateurBusiness utilisateurBusiness;
 
 	@GetMapping("/{id}")
-	public List<UtilisateurDTO> getUser(@PathVariable @NotNull int id) {
+	public UtilisateurDTO getUser(@PathVariable @NotNull int id) {
 
-		return utilisateurBusiness.getUtilisateur(id, null, null, null, null);
+		return utilisateurBusiness.getUtilisateurById(id);
 	}
 
 	@DeleteMapping("delete/{id}")

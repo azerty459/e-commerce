@@ -14,9 +14,6 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -55,17 +52,15 @@ public class ControllerUtilisateurTests {
 	@Test
 	public void getUserById() {
 
-		List<UtilisateurDTO> utilisateursDTO = new ArrayList<>();
 		UtilisateurDTO utilisateurDTO = buildUtilisateurDTO(1, "utilisateur", 1, "ludo@gmail.com", "lah", "ludo", "azerty");
-		utilisateursDTO.add(utilisateurDTO);
 
-		when(utilisateurBusiness.getUtilisateur(anyInt(), any(), any(), any(), any())).thenReturn(utilisateursDTO);
+		when(utilisateurBusiness.getUtilisateurById(anyInt())).thenReturn(utilisateurDTO);
 
-		List<UtilisateurDTO> listUtilisateursDTO = controllerUtilisateur.getUser(1);
+		UtilisateurDTO UtilisateurDTO = controllerUtilisateur.getUser(1);
 
-		Assert.assertNotNull(listUtilisateursDTO);
-		Assert.assertEquals(1, listUtilisateursDTO.get(0).getId());
-		Assert.assertEquals("lah", listUtilisateursDTO.get(0).getNom());
+		Assert.assertNotNull(utilisateurDTO);
+		Assert.assertEquals(1, utilisateurDTO.getId());
+		Assert.assertEquals("lah", utilisateurDTO.getNom());
 	}
 
 	@Test
