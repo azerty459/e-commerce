@@ -22,20 +22,20 @@ public class ControllerUtilisateur {
 		return utilisateurBusiness.getUtilisateurById(id);
 	}
 
-	@DeleteMapping("delete/{id}")
+	@DeleteMapping("/{id}")
 	public void deleteUser(@PathVariable @NotNull int id) {
 
 		utilisateurBusiness.delete(null, id);
 	}
 
-	@PostMapping()
-	public UtilisateurDTO createUser(@PathVariable UtilisateurDTO utilisateurDTO) {
+	@PostMapping("")
+	public UtilisateurDTO createUser(@RequestBody UtilisateurDTO utilisateurDTO) {
 
 		return utilisateurBusiness.add(utilisateurDTO);
 	}
 
-	@PutMapping()
-	public UtilisateurDTO updateUser(@PathVariable UtilisateurDTO utilisateurDTO) {
+	@PutMapping("")
+	public UtilisateurDTO updateUser(@RequestBody UtilisateurDTO utilisateurDTO) {
 
 		return utilisateurBusiness.update(utilisateurDTO);
 	}
