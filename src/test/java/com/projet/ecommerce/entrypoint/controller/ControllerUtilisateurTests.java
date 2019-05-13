@@ -35,17 +35,17 @@ public class ControllerUtilisateurTests {
 	}
 
 	@NotNull
-	private UtilisateurDTO buildUtilisateurDTO() {
+	private UtilisateurDTO buildUtilisateurDTO(int idRole, String nomRole, int id, String email, String nomUtilisateur, String prenomUtilisateur, String mdp) {
 		RoleDTO role1 = new RoleDTO();
-		role1.setId(1);
-		role1.setNom("utilisateur");
+		role1.setId(idRole);
+		role1.setNom(nomRole);
 
 		UtilisateurDTO firstDTO = new UtilisateurDTO();
-		firstDTO.setId(1);
-		firstDTO.setEmail("ludo@gmail.com");
-		firstDTO.setNom("ludo");
-		firstDTO.setPrenom("ludo");
-		firstDTO.setMdp("azerty");
+		firstDTO.setId(id);
+		firstDTO.setEmail(email);
+		firstDTO.setNom(nomUtilisateur);
+		firstDTO.setPrenom(prenomUtilisateur);
+		firstDTO.setMdp(mdp);
 		firstDTO.setRole(role1);
 
 		return firstDTO;
@@ -56,43 +56,43 @@ public class ControllerUtilisateurTests {
 	public void getUserById() {
 
 		List<UtilisateurDTO> utilisateursDTO = new ArrayList<>();
-		utilisateursDTO.add(buildUtilisateurDTO());
+		UtilisateurDTO utilisateurDTO = buildUtilisateurDTO(1, "utilisateur", 1, "ludo@gmail.com", "lah", "ludo", "azerty");
+		utilisateursDTO.add(utilisateurDTO);
 
 		when(utilisateurBusiness.getUtilisateur(anyInt(), any(), any(), any(), any())).thenReturn(utilisateursDTO);
 
-		List<UtilisateurDTO> listUtilisateursDTO = controllerUtilisateur.getUserById(1);
+		List<UtilisateurDTO> listUtilisateursDTO = controllerUtilisateur.getUser(1);
 
 		Assert.assertNotNull(listUtilisateursDTO);
 		Assert.assertEquals(1, listUtilisateursDTO.get(0).getId());
-		Assert.assertEquals("ludo", listUtilisateursDTO.get(0).getNom());
+		Assert.assertEquals("lah", listUtilisateursDTO.get(0).getNom());
 	}
 
 	@Test
 	public void addUser() {
 
-		UtilisateurDTO utilisateurDTO = buildUtilisateurDTO();
+		UtilisateurDTO utilisateurDTO = buildUtilisateurDTO(2, "administrateur", 2, "admin@gmail.com", "brand", "arthur", "querty");
 
 		when(utilisateurBusiness.add(any())).thenReturn(utilisateurDTO);
 
 		UtilisateurDTO retour = controllerUtilisateur.createUser(utilisateurDTO);
 
 		Assert.assertNotNull(retour);
-		Assert.assertEquals(1, retour.getId());
-		Assert.assertEquals("ludo", retour.getNom());
+		Assert.assertEquals(2, retour.getId());
+		Assert.assertEquals("administrateur", retour.getRole().getNom());
 	}
 
 	@Test
 	public void updateUser() {
 
-		UtilisateurDTO utilisateurDTO = buildUtilisateurDTO();
+		UtilisateurDTO utilisateurDTO = buildUtilisateurDTO(3, "administrateur", 3, "admin@gmail.com", "brand", "arthur", "querty");
 
 		when(utilisateurBusiness.update(any())).thenReturn(utilisateurDTO);
 
 		UtilisateurDTO retour = controllerUtilisateur.updateUser(utilisateurDTO);
 
 		Assert.assertNotNull(retour);
-		Assert.assertEquals(1, retour.getId());
-		Assert.assertEquals("ludo", retour.getNom());
+		Assert.assertEquals(3, retour.getId());
 	}
 
 }
