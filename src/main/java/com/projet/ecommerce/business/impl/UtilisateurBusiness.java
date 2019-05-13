@@ -56,7 +56,7 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
 			return null;
 		}
 		Utilisateur utilisateur = UtilisateurTransformer.dtoToEntity(utilisateurDTO);
-		if (utilisateur.getEmail().isEmpty() || utilisateur.getMdp().isEmpty()) {
+		if (StringUtils.isBlank(utilisateur.getEmail()) || StringUtils.isBlank(utilisateur.getMdp())) {
 			GraphQLCustomException graphQLCustomException = new GraphQLCustomException("Erreur dans l'ajout de l'utilisateur (l'adresse email ou le mot de passe est vide)");
 			graphQLCustomException.ajouterExtension("Email", utilisateur.getEmail());
 			graphQLCustomException.ajouterExtension("Mdp", utilisateur.getMdp());
@@ -65,8 +65,12 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
 		if (utilisateurRepository.findByEmail(utilisateur.getEmail()).isPresent()) {
 			throw new GraphQLCustomException("L'adresse email déjà utilisée");
 		}
-		Optional<Role> roleOptional = roleRepository.findById(utilisateur.getRole().getId());
-		utilisateur.setRole(roleOptional.get());
+		if (utilisateur.getRole() == null) {
+			throw new GraphQLCustomException("L'utilisateur n'a aucun role");
+		}
+		Optional<Role> optionalRole = roleRepository.findById(utilisateur.getRole().getId());
+		optionalRole.orElseThrow(() -> new GraphQLCustomException("Le role n'existe pas"));
+		utilisateur.setRole(optionalRole.get());
 		utilisateur.setMdp(passwordEncoder.encode(utilisateurDTO.getMdp()));
 
 		return UtilisateurTransformer.entityToDto(utilisateurRepository.save(utilisateur));
