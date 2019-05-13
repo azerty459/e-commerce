@@ -65,7 +65,7 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
 		if (utilisateurRepository.findByEmail(utilisateur.getEmail()).isPresent()) {
 			throw new GraphQLCustomException("L'adresse email déjà utilisée");
 		}
-		Optional<Role> roleOptional = roleRepository.findByNom(utilisateur.getRole().getNom());
+		Optional<Role> roleOptional = roleRepository.findById(utilisateur.getRole().getId());
 		utilisateur.setRole(roleOptional.get());
 		utilisateur.setMdp(passwordEncoder.encode(utilisateurDTO.getMdp()));
 
@@ -96,7 +96,7 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
 		Utilisateur utilisateurBDD = optionalUtilisateur.get();
 		Utilisateur utilisateur = UtilisateurTransformer.dtoToEntity(utilisateurDTO);
 		if (utilisateur.getRole() != null) {
-			Optional<Role> optionalRole = roleRepository.findByNom(utilisateur.getRole().getNom());
+			Optional<Role> optionalRole = roleRepository.findById(utilisateur.getRole().getId());
 			optionalRole.ifPresent(utilisateur::setRole);
 		}
 		utilisateur.setMdp(passwordEncoder.encode(utilisateurDTO.getMdp()));

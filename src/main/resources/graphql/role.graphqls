@@ -1,10 +1,9 @@
 input RoleAddInput {
-    nom: String!
+    id: Int!
 }
 
 input RoleUpdateInput {
     id: Int!
-    nom: String!
 }
 
 type Role {
