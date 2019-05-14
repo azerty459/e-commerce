@@ -17,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Map;
 
+
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
 public class UtilisateurQueryTests {

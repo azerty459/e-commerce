@@ -124,6 +124,34 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
 	}
 
 	/**
+	 * Retourn un utilisateur selon son id
+	 *
+	 * @param id l'id de l'utilisateur recherché
+	 * @return L'utilisateur recherché
+	 */
+	@Override
+	public UtilisateurDTO getUtilisateurById(int id) {
+
+		Utilisateur utilisateur;
+
+		if (id > 0) {
+			Optional<Utilisateur> utilisateurOptional = utilisateurRepository.findById(id);
+			if (utilisateurOptional.isPresent()) {
+				utilisateur = utilisateurOptional.get();
+			} else {
+				throw new GraphQLCustomException("L'utilisateur avec l'id recherché, n'a pas été trouvé");
+			}
+		} else {
+			throw new GraphQLCustomException("L'id est invalide!!");
+		}
+
+		UtilisateurDTO utilisateurDTO = UtilisateurTransformer.entityToDto(utilisateur);
+		utilisateurDTO.setMdp("");
+
+		return utilisateurDTO;
+	}
+
+	/**
 	 * Retoune une liste d'utilisateur selon les pramètres ci-dessous.
 	 *
 	 * @param id     l'id de l'utilisateur à rechercher
@@ -136,7 +164,7 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
 	@Override
 	public List<UtilisateurDTO> getUtilisateur(int id, String email, String nom, String prenom, String role) {
 
-		Collection<Utilisateur> utilisateurCollection = new ArrayList<>();
+		Collection<Utilisateur> utilisateurCollection;
 
 		// On va chercher les catégories
 		if (email != null) {
@@ -150,6 +178,7 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
 		} else if (id != 0) {
 			Optional<Utilisateur> utilisateurOptional = utilisateurRepository.findById(id);
 			if (utilisateurOptional.isPresent()) {
+				utilisateurCollection = new ArrayList<>();
 				utilisateurCollection.add(utilisateurOptional.get());
 			} else {
 				throw new GraphQLCustomException("L'utilisateur avec l'id recherché, n'a pas été trouvé");
@@ -159,7 +188,6 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
 		}
 		return new ArrayList<>(UtilisateurTransformer.entityToDto(utilisateurCollection));
 	}
-
 
 	@Override
 	public SigninPayload signinUser(AuthData auth) {
