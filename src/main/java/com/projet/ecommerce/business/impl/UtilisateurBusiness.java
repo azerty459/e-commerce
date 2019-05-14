@@ -97,6 +97,7 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
 	 * @param id l'id de l'utilisateur recherché
 	 * @return L'utilisateur recherché
 	 */
+	@Override
 	public UtilisateurDTO getUtilisateurById(int id) {
 
 		Utilisateur utilisateur;
