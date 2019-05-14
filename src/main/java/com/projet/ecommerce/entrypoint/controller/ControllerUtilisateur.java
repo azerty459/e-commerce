@@ -19,7 +19,9 @@ public class ControllerUtilisateur {
 	@GetMapping("/{id}")
 	public UtilisateurDTO getUser(@PathVariable @NotNull int id) {
 
-		return utilisateurBusiness.getUtilisateurById(id);
+		UtilisateurDTO retour = utilisateurBusiness.getUtilisateurById(id);
+		retour.setMdp("");
+		return retour;
 	}
 
 	@DeleteMapping("/{id}")
@@ -31,13 +33,17 @@ public class ControllerUtilisateur {
 	@PostMapping("")
 	public UtilisateurDTO createUser(@RequestBody UtilisateurDTO utilisateurDTO) {
 
-		return utilisateurBusiness.add(utilisateurDTO);
+		UtilisateurDTO retour = utilisateurBusiness.add(utilisateurDTO);
+		retour.setMdp("");
+		return retour;
 	}
 
 	@PutMapping("")
 	public UtilisateurDTO updateUser(@RequestBody UtilisateurDTO utilisateurDTO) {
 
-		return utilisateurBusiness.update(utilisateurDTO);
+		UtilisateurDTO retour = utilisateurBusiness.update(utilisateurDTO);
+		retour.setMdp("");
+		return retour;
 	}
 
 }

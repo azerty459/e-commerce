@@ -146,7 +146,6 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
 		}
 
 		UtilisateurDTO utilisateurDTO = UtilisateurTransformer.entityToDto(utilisateur);
-		utilisateurDTO.setMdp("");
 
 		return utilisateurDTO;
 	}
