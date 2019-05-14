@@ -104,7 +104,6 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
 			optionalRole.ifPresent(utilisateur::setRole);
 		}
 		utilisateur.setMdp(passwordEncoder.encode(utilisateurDTO.getMdp()));
-		utilisateur.setId(utilisateurBDD.getId());
 		try {
 			Utilisateur utilisateurFusion = mergeObjects(utilisateur, utilisateurBDD);
 			return UtilisateurTransformer.entityToDto(utilisateurRepository.save(utilisateurFusion));
