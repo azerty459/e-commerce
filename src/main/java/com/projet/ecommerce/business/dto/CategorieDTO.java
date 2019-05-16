@@ -1,5 +1,8 @@
 package com.projet.ecommerce.business.dto;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -170,17 +173,6 @@ public class CategorieDTO {
 	}
 
 	@Override
-	public int hashCode() {
-		int prime = 17;
-		int result = 1;
-		result = prime * result + id;
-		result = prime * result + profondeur;
-		result = prime * result + level;
-		result = prime * result + ((nom == null) ? 0 : nom.hashCode());
-		return result;
-	}
-
-	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
@@ -188,11 +180,22 @@ public class CategorieDTO {
 			return false;
 		}
 		CategorieDTO other = (CategorieDTO) obj;
-		boolean result = this.id == other.id
-				&& this.profondeur == other.profondeur
-				&& this.level == other.level;
-		result &= (this.nom != null) ? this.nom.equals(other.nom) : other.nom == null;
-		return result;
+		EqualsBuilder builder = new EqualsBuilder();
+		builder.append(this.id, other.id);
+		builder.append(this.profondeur, other.profondeur);
+		builder.append(this.level, other.level);
+		builder.append(this.nom, other.nom);
+		return builder.build();
+	}
+
+	@Override
+	public int hashCode() {
+		HashCodeBuilder builder = new HashCodeBuilder();
+		builder.append(id);
+		builder.append(profondeur);
+		builder.append(level);
+		builder.append(nom);
+		return builder.build();
 	}
 
 }
