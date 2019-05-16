@@ -1,5 +1,6 @@
 package com.projet.ecommerce.persistance.repository.impl;
 
+import com.projet.ecommerce.business.dto.StatistiqueProduitCategorieDTO;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Produit;
 import com.projet.ecommerce.persistance.repository.ProduitRepositoryCustom;
@@ -13,9 +14,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 @Repository
@@ -40,7 +39,7 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
 	private static final String SQL_COUNT_PRODUCTS_BY_CATEGORY = "SELECT count(p) FROM Produit p Join p.categories c " +
 			"Where c.borneGauche >= :borneGauche " +
 			"And c.borneDroit <= :borneDroite";
-	private static final String SQL_STATISTIC_PRODUCT_BY_CATEOGORY = "Select c, count(p) From Categorie c left join c.produits p Group by c.idCategorie";
+	private static final String SQL_STATISTIC_PRODUCT_BY_CATEOGORY = "Select new com.projet.ecommerce.business.dto.StatistiqueProduitCategorieDTO(c.nomCategorie, count(p)) From Categorie c left join c.produits p Group by c.idCategorie";
 
 	@Autowired
 	private EntityManager entityManager;
@@ -89,15 +88,9 @@ public class ProduitRepositoryCustomImpl implements ProduitRepositoryCustom {
 	}
 
 	@Override
-	public Map<Categorie, Long> countProduitsByCategories() {
-		Query query = entityManager.createQuery(SQL_STATISTIC_PRODUCT_BY_CATEOGORY);
-		List<Object[]> resultat = query.getResultList();
-		Map<Categorie, Long> retour = new HashMap<>();
-		resultat.stream().forEach(elt -> {
-			Categorie c = (Categorie) elt[0];
-			retour.put(c, (Long) elt[1]);
-		});
-		return retour;
+	public Collection<StatistiqueProduitCategorieDTO> countProduitsByCategories() {
+		TypedQuery<StatistiqueProduitCategorieDTO> query = entityManager.createQuery(SQL_STATISTIC_PRODUCT_BY_CATEOGORY, StatistiqueProduitCategorieDTO.class);
+		return query.getResultList();
 	}
 
 }

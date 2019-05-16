@@ -5,6 +5,7 @@ import com.projet.ecommerce.business.dto.StatistiqueProduitCategorieDTO;
 import com.projet.ecommerce.persistance.entity.Produit;
 import org.springframework.data.domain.Page;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -88,6 +89,6 @@ public interface IProduitBusiness {
 	 *
 	 * @return La map qui associe une categorie au nombre de produit qu'elle contient
 	 */
-	List<StatistiqueProduitCategorieDTO> countProduitsByCategorie();
+	Collection<StatistiqueProduitCategorieDTO> countProduitsByCategorie();
 
 }

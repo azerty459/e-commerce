@@ -1,12 +1,12 @@
 package com.projet.ecommerce.persistance.repository;
 
+import com.projet.ecommerce.business.dto.StatistiqueProduitCategorieDTO;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Produit;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Collection;
-import java.util.Map;
 
 public interface ProduitRepositoryCustom {
 
@@ -21,6 +21,6 @@ public interface ProduitRepositoryCustom {
 	 */
 	Page<Produit> findByCategories(Pageable pageable, Categorie categorie);
 
-	Map<Categorie, Long> countProduitsByCategories();
+	Collection<StatistiqueProduitCategorieDTO> countProduitsByCategories();
 
 }
