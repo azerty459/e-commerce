@@ -362,13 +362,15 @@ public class ProduitBusinessTests {
 		categorie2.setBorneGauche(2);
 		categorie2.setBorneDroit(3);
 		List<StatistiqueProduitCategorieDTO> retour = new ArrayList<>();
-		retour.add(new StatistiqueProduitCategorieDTO(categorie1.getNomCategorie(), 8L));
-		retour.add(new StatistiqueProduitCategorieDTO(categorie2.getNomCategorie(), 42L));
+		StatistiqueProduitCategorieDTO statistique1 = new StatistiqueProduitCategorieDTO(categorie1.getNomCategorie(), 8L);
+		StatistiqueProduitCategorieDTO statistique2 = new StatistiqueProduitCategorieDTO(categorie2.getNomCategorie(), 42L);
+		retour.add(statistique1);
+		retour.add(statistique2);
 		Mockito.when(produitRepository.countProduitsByCategories()).thenReturn(retour);
 
 		Map<String, Long> expected = new HashMap<>();
-		expected.put(categorie1.getNomCategorie(), 8L);
-		expected.put(categorie2.getNomCategorie(), 42L);
+		expected.put(categorie1.getNomCategorie(), statistique1.getNb());
+		expected.put(categorie2.getNomCategorie(), statistique2.getNb());
 
 		Collection<StatistiqueProduitCategorieDTO> resultat = produitBusiness.countProduitsByCategorie();
 		Assert.assertEquals(2, resultat.size());
