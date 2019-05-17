@@ -1,5 +1,6 @@
 package com.projet.ecommerce.persistance.repository;
 
+import com.projet.ecommerce.business.dto.StatistiqueProduitCategorieDTO;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Produit;
 import org.junit.Assert;
@@ -14,10 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -153,12 +151,18 @@ public class ProduitRepositoryCustomTests {
 		produitRepository.save(produit2);
 		produitRepository.save(produit3);
 
-		Map<Categorie, Long> resultat = produitRepository.countProduitsByCategories();
+		Map<String, Long> expected = new HashMap<>();
+		expected.put(categorie1.getNomCategorie(), 2L);
+		expected.put(categorie2.getNomCategorie(), 0L);
+		expected.put(categorie3.getNomCategorie(), 0L);
+		expected.put(categorie4.getNomCategorie(), 1L);
+
+		Collection<StatistiqueProduitCategorieDTO> resultat = produitRepository.countProduitsByCategories();
 		Assert.assertEquals(4, resultat.size());
-		Assert.assertEquals(2, resultat.get(categorie1).longValue());
-		Assert.assertEquals(0, resultat.get(categorie2).longValue());
-		Assert.assertEquals(0, resultat.get(categorie3).longValue());
-		Assert.assertEquals(1, resultat.get(categorie4).longValue());
+		resultat.forEach(elt -> {
+			Assert.assertNotNull(expected.get(elt.getCategorie()));
+			Assert.assertEquals(expected.get(elt.getCategorie()).longValue(), elt.getNb());
+		});
 	}
 
 	@NotNull

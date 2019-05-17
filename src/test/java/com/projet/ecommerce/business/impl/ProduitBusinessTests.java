@@ -361,17 +361,23 @@ public class ProduitBusinessTests {
 		categorie2.setLevel(2);
 		categorie2.setBorneGauche(2);
 		categorie2.setBorneDroit(3);
-		Map<Categorie, Long> retour = new LinkedHashMap<>();
-		retour.put(categorie1, 8L);
-		retour.put(categorie2, 42L);
+		List<StatistiqueProduitCategorieDTO> retour = new ArrayList<>();
+		StatistiqueProduitCategorieDTO statistique1 = new StatistiqueProduitCategorieDTO(categorie1.getNomCategorie(), 8L);
+		StatistiqueProduitCategorieDTO statistique2 = new StatistiqueProduitCategorieDTO(categorie2.getNomCategorie(), 42L);
+		retour.add(statistique1);
+		retour.add(statistique2);
 		Mockito.when(produitRepository.countProduitsByCategories()).thenReturn(retour);
 
-		List<StatistiqueProduitCategorieDTO> resultat = produitBusiness.countProduitsByCategorie();
+		Map<String, Long> expected = new HashMap<>();
+		expected.put(categorie1.getNomCategorie(), statistique1.getNb());
+		expected.put(categorie2.getNomCategorie(), statistique2.getNb());
+
+		Collection<StatistiqueProduitCategorieDTO> resultat = produitBusiness.countProduitsByCategorie();
 		Assert.assertEquals(2, resultat.size());
-		Assert.assertEquals("Test 1", resultat.get(0).getCategorie());
-		Assert.assertEquals(8L, resultat.get(0).getNb());
-		Assert.assertEquals("Test 2", resultat.get(1).getCategorie());
-		Assert.assertEquals(42L, resultat.get(1).getNb());
+		resultat.forEach(elt -> {
+			Assert.assertNotNull(expected.get(elt.getCategorie()));
+			Assert.assertEquals(expected.get(elt.getCategorie()).longValue(), elt.getNb());
+		});
 	}
 
 	@NotNull

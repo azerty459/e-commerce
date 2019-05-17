@@ -1,5 +1,8 @@
 package com.projet.ecommerce.persistance.entity;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -153,23 +156,24 @@ public class Categorie {
 			return false;
 		}
 		Categorie other = (Categorie) obj;
-		boolean result = this.idCategorie == other.idCategorie
-				&& this.borneGauche == other.borneGauche
-				&& this.borneDroit == other.borneDroit
-				&& this.level == other.level;
-		result &= (this.nomCategorie != null) ? this.nomCategorie.equals(other.nomCategorie) : other.nomCategorie == null;
-		return result;
+		EqualsBuilder builder = new EqualsBuilder();
+		builder.append(this.idCategorie, other.idCategorie);
+		builder.append(this.borneGauche, other.borneGauche);
+		builder.append(this.borneDroit, other.borneDroit);
+		builder.append(this.level, other.level);
+		builder.append(this.nomCategorie, other.nomCategorie);
+		return builder.build();
 	}
 
 	@Override
 	public int hashCode() {
-		int prime = 31;
-		int result = 1;
-		result = prime * result + borneDroit;
-		result = prime * result + borneGauche;
-		result = prime * result + level;
-		result = prime * result + ((nomCategorie == null) ? 0 : nomCategorie.hashCode());
-		return result;
+		HashCodeBuilder builder = new HashCodeBuilder();
+		builder.append(idCategorie);
+		builder.append(borneDroit);
+		builder.append(borneGauche);
+		builder.append(level);
+		builder.append(nomCategorie);
+		return builder.build();
 	}
 
 }

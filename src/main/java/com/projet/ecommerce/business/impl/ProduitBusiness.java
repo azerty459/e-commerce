@@ -17,7 +17,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
 import static com.projet.ecommerce.utilitaire.Utilitaire.mergeObjects;
 
@@ -283,13 +286,10 @@ public class ProduitBusiness implements IProduitBusiness {
 	public Long countProduits() {
 		return produitRepository.countProduits();
 	}
+
 	@Override
-	public List<StatistiqueProduitCategorieDTO> countProduitsByCategorie() {
-		Map<Categorie, Long> countProduitCategorie = produitRepository.countProduitsByCategories();
-		List<StatistiqueProduitCategorieDTO> statistique = new ArrayList<>();
-		countProduitCategorie.entrySet().stream().forEach(
-				entry -> statistique.add(new StatistiqueProduitCategorieDTO(entry.getKey().getNomCategorie(), entry.getValue()))
-		);
-		return statistique;
+	public Collection<StatistiqueProduitCategorieDTO> countProduitsByCategorie() {
+		return produitRepository.countProduitsByCategories();
 	}
+
 }
