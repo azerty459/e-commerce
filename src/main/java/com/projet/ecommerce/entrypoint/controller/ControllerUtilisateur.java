@@ -12,7 +12,6 @@ import javax.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping("/utilisateur")
-@CrossOrigin
 public class ControllerUtilisateur {
 
 	@Autowired
@@ -38,7 +37,7 @@ public class ControllerUtilisateur {
 		utilisateurBusiness.delete(null, id);
 	}
 
-	@PostMapping("")
+	@PostMapping
 	public UtilisateurDTO createUser(@RequestBody UtilisateurDTO utilisateurDTO) throws AuthException {
 		/*
 		if (!authentification(authData)) {
@@ -49,7 +48,7 @@ public class ControllerUtilisateur {
 		return retour;
 	}
 
-	@PutMapping("")
+	@PutMapping
 	public UtilisateurDTO updateUser(@RequestBody UtilisateurDTO utilisateurDTO) throws AuthException {
 		/*
 		if (!authentification(authData)) {
