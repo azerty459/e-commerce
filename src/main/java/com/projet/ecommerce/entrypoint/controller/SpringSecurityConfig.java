@@ -26,8 +26,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 				// Let Spring manage OPTION requests, so they won't be check for authentication
 				.cors()
 				.and()
-				// Only REST services for now
-				.antMatcher("/utilisateur")
+				// Only new utilisateur REST
 				.antMatcher("/utilisateur/**")
 				.authorizeRequests()
 				// All requests need to be connected
