@@ -4,7 +4,6 @@ import com.projet.ecommerce.persistance.entity.AvisClient;
 import com.projet.ecommerce.persistance.entity.Produit;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,16 +32,6 @@ public class AvisClientRepositoryCustomTests {
 
 	@Autowired
 	private ProduitRepository produitRepository;
-
-	@Before
-	public void save() {
-
-		Produit produit1 = buildProduit("A05A01", 1, 2, 3);
-		Produit produit2 = buildProduit("A05A02", 5, 4, 3);
-		Produit produit3 = buildProduit("");
-		produitRepository.save(produit1);
-		produitRepository.save(produit2);
-	}
 
 	@Test
 	public void averageAvisClientByReferenceProduit() {
