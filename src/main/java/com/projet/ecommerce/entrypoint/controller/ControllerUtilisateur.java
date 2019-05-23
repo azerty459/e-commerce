@@ -2,9 +2,9 @@ package com.projet.ecommerce.entrypoint.controller;
 
 import com.projet.ecommerce.business.dto.UtilisateurDTO;
 import com.projet.ecommerce.business.impl.UtilisateurBusiness;
-import com.projet.ecommerce.entrypoint.authentification.Token;
 import com.projet.ecommerce.exception.AuthException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
@@ -20,50 +20,31 @@ public class ControllerUtilisateur {
 
 	@GetMapping("/{id}")
 	public UtilisateurDTO getUser(@PathVariable @NotNull int id) throws AuthException {
-		/*
-		if (!authentification(authData)) {
-			throw new AuthException("Authentification non reconnu");
-		}*/
 		UtilisateurDTO retour = utilisateurBusiness.getUtilisateurById(id);
 		retour.setMdp("");
 		return retour;
 	}
 
 	@DeleteMapping("/{id}")
+	@PreAuthorize("hasRole('Administrateur')")
 	public void deleteUser(@PathVariable @NotNull int id) throws AuthException {
-		/*
-		if (!authentification(authData)) {
-			throw new AuthException("Authentification non reconnu");
-		}*/
 		utilisateurBusiness.delete(null, id);
 	}
 
 	@PostMapping("")
+	@PreAuthorize("hasRole('Administrateur')")
 	public UtilisateurDTO createUser(@RequestBody UtilisateurDTO utilisateurDTO) throws AuthException {
-		/*
-		if (!authentification(authData)) {
-			throw new AuthException("Authentification non reconnu");
-		}*/
 		UtilisateurDTO retour = utilisateurBusiness.add(utilisateurDTO);
 		retour.setMdp("");
 		return retour;
 	}
 
 	@PutMapping("")
+	@PreAuthorize("hasRole('Administrateur')")
 	public UtilisateurDTO updateUser(@RequestBody UtilisateurDTO utilisateurDTO) throws AuthException {
-		/*
-		if (!authentification(authData)) {
-			throw new AuthException("Authentification non reconnu");
-		}*/
 		UtilisateurDTO retour = utilisateurBusiness.update(utilisateurDTO);
 		retour.setMdp("");
 		return retour;
-	}
-
-	private boolean authentification(String authData) {
-		Token supposedToken = new Token();
-		supposedToken.setToken(authData);
-		return utilisateurBusiness.isLogged(supposedToken);
 	}
 
 }

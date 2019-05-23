@@ -1,5 +1,8 @@
 package com.projet.ecommerce.persistance.entity;
 
+import com.projet.ecommerce.entrypoint.controller.CurrentUserDetails;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
@@ -140,6 +143,11 @@ public class Utilisateur {
 	 */
 	public void setPrenom(String prenom) {
 		this.prenom = prenom;
+	}
+
+	public UserDetails toCurrentUserDetails() {
+
+		return CurrentUserDetails.create(this);
 	}
 
 }
