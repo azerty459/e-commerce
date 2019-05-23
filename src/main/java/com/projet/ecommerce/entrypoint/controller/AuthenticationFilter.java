@@ -24,7 +24,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
 		String auth = request.getHeader("Authorization");
-		auth = "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI5IiwiaWF0IjoxNTU4NTM3Nzc1LCJzdWIiOiJzaW1wbGUgYXV0aCIsImlzcyI6ImIiLCJleHAiOjE1NTg1NDEzNzV9.oiSL3yWzOz2Vt97dkzbLvr1Z7uNKgeZXj_j-zRXDiAY";
+		//auth = "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI5IiwiaWF0IjoxNTU4NTM3Nzc1LCJzdWIiOiJzaW1wbGUgYXV0aCIsImlzcyI6ImIiLCJleHAiOjE1NTg1NDEzNzV9.oiSL3yWzOz2Vt97dkzbLvr1Z7uNKgeZXj_j-zRXDiAY";
 		if (StringUtils.isBlank(auth)) {
 			throw new AuthException("No authorization");
 		}
@@ -35,6 +35,8 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 		if (!utilisateurBusiness.isLogged(supposedToken)) {
 			throw new AuthException("Bad authorization");
 		}
+		filterChain.doFilter(request, response);
+
 	}
 
 }
