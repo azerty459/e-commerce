@@ -16,6 +16,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,13 +38,16 @@ import static com.projet.ecommerce.utilitaire.Utilitaire.mergeObjects;
 public class UtilisateurBusiness implements IUtilisateurBusiness {
 
 	public static final String MESSAGE_ERREUR_SIGNIN = "Votre mot de passe  ou votre identifiant est incorrect.";
+
 	@Autowired
 	private UtilisateurRepository utilisateurRepository;
-
 	@Autowired
 	private RoleRepository roleRepository;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+
+	@Autowired
+	private JavaMailSender emailSender;
 
 	/**
 	 * Permets d'ajouter un utilisateur dans la base de données
@@ -73,9 +78,20 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
 		utilisateur.setRole(optionalRole.get());
 		utilisateur.setMdp(passwordEncoder.encode(utilisateurDTO.getMdp()));
 
+		sendSimpleMessage();
 		return UtilisateurTransformer.entityToDto(utilisateurRepository.save(utilisateur));
 	}
 
+	private void sendSimpleMessage() {
+
+		SimpleMailMessage message = new SimpleMailMessage();
+
+		message.setTo("lahousseludovic@gmail.com");
+		message.setSubject("Félicitations");
+		message.setText("");
+
+		this.emailSender.send(message);
+	}
 
 	/**
 	 * Modifie l'utilisateur dans la base de données selon l'id de l'utilisateur
