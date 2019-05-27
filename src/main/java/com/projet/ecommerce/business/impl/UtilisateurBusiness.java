@@ -12,6 +12,7 @@ import com.projet.ecommerce.persistance.entity.Utilisateur;
 import com.projet.ecommerce.persistance.repository.RoleRepository;
 import com.projet.ecommerce.persistance.repository.UtilisateurRepository;
 import com.projet.ecommerce.utilitaire.AuthUtilitaire;
+import com.projet.ecommerce.utilitaire.SendEmailUtilitaire;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -36,13 +37,16 @@ import static com.projet.ecommerce.utilitaire.Utilitaire.mergeObjects;
 public class UtilisateurBusiness implements IUtilisateurBusiness {
 
 	public static final String MESSAGE_ERREUR_SIGNIN = "Votre mot de passe  ou votre identifiant est incorrect.";
+
 	@Autowired
 	private UtilisateurRepository utilisateurRepository;
-
 	@Autowired
 	private RoleRepository roleRepository;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	@Autowired
+	private SendEmailUtilitaire sendEmailUtilitaire;
+
 
 	/**
 	 * Permets d'ajouter un utilisateur dans la base de données
@@ -73,9 +77,9 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
 		utilisateur.setRole(optionalRole.get());
 		utilisateur.setMdp(passwordEncoder.encode(utilisateurDTO.getMdp()));
 
+		this.sendEmailUtilitaire.sendWelcomeEmail(utilisateur.getEmail(), "Ludovic");
 		return UtilisateurTransformer.entityToDto(utilisateurRepository.save(utilisateur));
 	}
-
 
 	/**
 	 * Modifie l'utilisateur dans la base de données selon l'id de l'utilisateur
