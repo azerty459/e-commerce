@@ -44,7 +44,6 @@ public class ControllerUtilisateur {
 		}
 
 		UtilisateurDTO retour = utilisateurBusiness.add(utilisateurDTO);
-		//UtilisateurDTO retour = utilisateurDTO;
 		retour.setMdp("");
 		return retour;
 	}
@@ -56,7 +55,6 @@ public class ControllerUtilisateur {
 		}
 
 		UtilisateurDTO retour = utilisateurBusiness.update(utilisateurDTO);
-		//UtilisateurDTO retour = utilisateurDTO;
 		retour.setMdp("");
 		return retour;
 	}
