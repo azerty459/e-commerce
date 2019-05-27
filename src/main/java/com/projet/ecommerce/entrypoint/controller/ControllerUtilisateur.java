@@ -35,7 +35,7 @@ public class ControllerUtilisateur {
 	}
 
 	@PostMapping("")
-	public UtilisateurDTO createUser(@RequestBody UtilisateurDTO utilisateurDTO, BindingResult bindingResult) throws InvalidDataException {
+	public UtilisateurDTO createUser(@RequestBody @Valid UtilisateurDTO utilisateurDTO, BindingResult bindingResult) throws InvalidDataException {
 		if (bindingResult.hasErrors()) {
 			throw new InvalidDataException("Les données du formulaire sont invalides");
 		}
