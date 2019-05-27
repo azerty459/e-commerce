@@ -8,6 +8,7 @@ import com.projet.ecommerce.persistance.entity.Role;
 import com.projet.ecommerce.persistance.entity.Utilisateur;
 import com.projet.ecommerce.persistance.repository.RoleRepository;
 import com.projet.ecommerce.persistance.repository.UtilisateurRepository;
+import com.projet.ecommerce.utilitaire.SendEmailUtilitaire;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
@@ -45,6 +46,9 @@ public class UtilisateurBusinessTests {
 
 	@Mock
 	private PasswordEncoder passwordEncoder;
+
+	@Mock
+	private SendEmailUtilitaire sendEmailUtilitaire;
 
 	@Mock
 	private Page page;
