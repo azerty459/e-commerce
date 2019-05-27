@@ -12,12 +12,11 @@ import com.projet.ecommerce.persistance.entity.Utilisateur;
 import com.projet.ecommerce.persistance.repository.RoleRepository;
 import com.projet.ecommerce.persistance.repository.UtilisateurRepository;
 import com.projet.ecommerce.utilitaire.AuthUtilitaire;
+import com.projet.ecommerce.utilitaire.SendEmailUtilitaire;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,9 +44,9 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
 	private RoleRepository roleRepository;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-
 	@Autowired
-	private JavaMailSender emailSender;
+	private SendEmailUtilitaire sendEmailUtilitaire;
+
 
 	/**
 	 * Permets d'ajouter un utilisateur dans la base de données
@@ -78,19 +77,8 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
 		utilisateur.setRole(optionalRole.get());
 		utilisateur.setMdp(passwordEncoder.encode(utilisateurDTO.getMdp()));
 
-		sendSimpleMessage();
+		this.sendEmailUtilitaire.sendWelcomeEmail(utilisateur.getEmail(), "Ludovic");
 		return UtilisateurTransformer.entityToDto(utilisateurRepository.save(utilisateur));
-	}
-
-	private void sendSimpleMessage() {
-
-		SimpleMailMessage message = new SimpleMailMessage();
-
-		message.setTo("lahousseludovic@gmail.com");
-		message.setSubject("Félicitations");
-		message.setText("");
-
-		this.emailSender.send(message);
 	}
 
 	/**
