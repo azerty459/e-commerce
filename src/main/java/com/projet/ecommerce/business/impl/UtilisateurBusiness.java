@@ -88,11 +88,10 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
 		if (utilisateurDTO == null) {
 			return null;
 		}
-		if (utilisateurDTO.getId() <= 0 || StringUtils.isBlank(utilisateurDTO.getEmail()) || StringUtils.isBlank(utilisateurDTO.getMdp())) {
-			GraphQLCustomException graphQLCustomException = new GraphQLCustomException("Erreur dans l'ajout de l'utilisateur (l'id, l'adresse email ou le mot de passe sont vide)");
+		if (utilisateurDTO.getId() <= 0 || StringUtils.isBlank(utilisateurDTO.getEmail())) {
+			GraphQLCustomException graphQLCustomException = new GraphQLCustomException("Erreur dans l'ajout de l'utilisateur, les informations sont incomplètes");
 			graphQLCustomException.ajouterExtension("Id", "" + utilisateurDTO.getId());
 			graphQLCustomException.ajouterExtension("Email", utilisateurDTO.getEmail());
-			graphQLCustomException.ajouterExtension("Mdp", utilisateurDTO.getMdp());
 			throw graphQLCustomException;
 		}
 		Optional<Utilisateur> optionalUtilisateur = utilisateurRepository.findById(utilisateurDTO.getId());
@@ -103,7 +102,11 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
 			Optional<Role> optionalRole = roleRepository.findById(utilisateur.getRole().getId());
 			optionalRole.ifPresent(utilisateur::setRole);
 		}
-		utilisateur.setMdp(passwordEncoder.encode(utilisateurDTO.getMdp()));
+		if (!StringUtils.isBlank(utilisateurDTO.getMdp())) {
+			utilisateur.setMdp(passwordEncoder.encode(utilisateurDTO.getMdp()));
+		} else {
+			utilisateur.setMdp(null);
+		}
 		try {
 			Utilisateur utilisateurFusion = mergeObjects(utilisateur, utilisateurBDD);
 			return UtilisateurTransformer.entityToDto(utilisateurRepository.save(utilisateurFusion));
