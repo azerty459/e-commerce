@@ -1,5 +1,7 @@
 package com.projet.ecommerce.business.dto;
 
+import com.projet.ecommerce.entrypoint.controller.validator.Password;
+
 /**
  * Entité qui permet d'assurer le découplage entre la couche de présentation et les objets métier stockés sur le serveur (Categorie).
  */
@@ -18,6 +20,8 @@ public class UtilisateurDTO {
 	/**
 	 * Le mot de passe de l'utilisateur
 	 */
+
+	@Password
 	private String mdp;
 
 	/**
