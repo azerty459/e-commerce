@@ -2,6 +2,10 @@ package com.projet.ecommerce.business.dto;
 
 import com.projet.ecommerce.entrypoint.controller.validator.Password;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+
 /**
  * Entité qui permet d'assurer le découplage entre la couche de présentation et les objets métier stockés sur le serveur (Categorie).
  */
@@ -15,23 +19,28 @@ public class UtilisateurDTO {
 	/**
 	 * L'adresse email de l'utilisateur
 	 */
+	@Email
+	@NotBlank
 	private String email;
 
 	/**
 	 * Le mot de passe de l'utilisateur
 	 */
-
 	@Password
 	private String mdp;
 
 	/**
 	 * Le nom de l'utilisateur
 	 */
+	@Pattern(regexp = "^[a-zA-Z\\s'_-]+$", flags = Pattern.Flag.UNICODE_CASE)
+	@NotBlank
 	private String nom = "";
 
 	/**
 	 * Le prénom de l'utilisateur
 	 */
+	@Pattern(regexp = "^[a-zA-Z\\s'_-]+$", flags = Pattern.Flag.UNICODE_CASE)
+	@NotBlank
 	private String prenom = "";
 
 
