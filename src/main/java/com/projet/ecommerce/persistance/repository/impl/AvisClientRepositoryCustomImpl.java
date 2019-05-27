@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 @Repository
@@ -20,13 +21,17 @@ public class AvisClientRepositoryCustomImpl implements AvisClientRepositoryCusto
 	public float averageByReferenceProduit(String reference) {
 
 		if (StringUtils.isBlank(reference)) {
-			return 0;
+			return 0F;
 		}
 
 		TypedQuery<Double> query = entityManager.createQuery(SQL_AVERAGE_BY_REFERENCE, Double.class);
 		query.setParameter("reference", reference);
 
-		return query.getSingleResult().floatValue();
+		try {
+			return query.getSingleResult().floatValue();
+		} catch (NoResultException ex) {
+			return 0F;
+		}
 	}
 
 }
