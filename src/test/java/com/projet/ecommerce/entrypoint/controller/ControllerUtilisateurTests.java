@@ -3,6 +3,7 @@ package com.projet.ecommerce.entrypoint.controller;
 import com.projet.ecommerce.business.dto.RoleDTO;
 import com.projet.ecommerce.business.dto.UtilisateurDTO;
 import com.projet.ecommerce.business.impl.UtilisateurBusiness;
+import com.projet.ecommerce.exception.InvalidDataException;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
@@ -13,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.validation.BindingResult;
 
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
@@ -23,6 +25,9 @@ public class ControllerUtilisateurTests {
 
 	@Mock
 	private UtilisateurBusiness utilisateurBusiness;
+
+	@Mock
+	private BindingResult bindingResult;
 
 	@InjectMocks
 	private ControllerUtilisateur controllerUtilisateur;
@@ -70,13 +75,13 @@ public class ControllerUtilisateurTests {
 	}
 
 	@Test
-	public void addUser() {
+	public void addUser() throws InvalidDataException {
 
 		UtilisateurDTO utilisateurDTO = buildUtilisateurDTO(2, "administrateur", 2, "admin@gmail.com", "brand", "arthur", "querty");
-
+		when(bindingResult.hasErrors()).thenReturn(false);
 		when(utilisateurBusiness.add(any(UtilisateurDTO.class))).thenReturn(utilisateurDTO);
 
-		UtilisateurDTO retour = controllerUtilisateur.createUser(utilisateurDTO);
+		UtilisateurDTO retour = controllerUtilisateur.createUser(utilisateurDTO, bindingResult);
 
 		Assert.assertNotNull(retour);
 		Assert.assertEquals(utilisateurDTO.getId(), retour.getId());
@@ -88,14 +93,30 @@ public class ControllerUtilisateurTests {
 		Assert.assertEquals(utilisateurDTO.getRole().getNom(), retour.getRole().getNom());
 	}
 
+	@Test(expected = InvalidDataException.class)
+	public void addUserWithInvalidData() throws InvalidDataException {
+		UtilisateurDTO utilisateurDTO = buildUtilisateurDTO(2, "administrateur", 2, "admin@gmail.com", "brand", "arthur", "");
+		when(bindingResult.hasErrors()).thenReturn(true);
+
+		controllerUtilisateur.createUser(utilisateurDTO, bindingResult);
+	}
+
+	@Test(expected = InvalidDataException.class)
+	public void addUserWithBlankPassword() throws InvalidDataException {
+		UtilisateurDTO utilisateurDTO = buildUtilisateurDTO(2, "administrateur", 2, "admin@gmail.com", "brand", "arthur", "\t");
+		when(bindingResult.hasErrors()).thenReturn(false);
+
+		controllerUtilisateur.createUser(utilisateurDTO, bindingResult);
+	}
+
 	@Test
-	public void updateUser() {
+	public void updateUser() throws InvalidDataException {
 
-		UtilisateurDTO utilisateurDTO = buildUtilisateurDTO(3, "administrateur", 3, "admin@gmail.com", "brand", "arthur", "querty");
-
+		UtilisateurDTO utilisateurDTO = buildUtilisateurDTO(2, "administrateur", 2, "admin@gmail.com", "brand", "arthur", "querty");
+		when(bindingResult.hasErrors()).thenReturn(false);
 		when(utilisateurBusiness.update(any(UtilisateurDTO.class))).thenReturn(utilisateurDTO);
 
-		UtilisateurDTO retour = controllerUtilisateur.updateUser(utilisateurDTO);
+		UtilisateurDTO retour = controllerUtilisateur.updateUser(utilisateurDTO, bindingResult);
 
 		Assert.assertNotNull(retour);
 		Assert.assertEquals(utilisateurDTO.getId(), retour.getId());
@@ -105,6 +126,15 @@ public class ControllerUtilisateurTests {
 		Assert.assertEquals(utilisateurDTO.getMdp(), retour.getMdp());
 		Assert.assertEquals(utilisateurDTO.getRole().getId(), retour.getRole().getId());
 		Assert.assertEquals(utilisateurDTO.getRole().getNom(), retour.getRole().getNom());
+	}
+
+	@Test(expected = InvalidDataException.class)
+	public void updateUserWithInvalidData() throws InvalidDataException {
+
+		UtilisateurDTO utilisateurDTO = buildUtilisateurDTO(3, "administrateur", 3, "admin@gmail.com", "brand", "arthur", "querty");
+		when(bindingResult.hasErrors()).thenReturn(true);
+
+		controllerUtilisateur.updateUser(utilisateurDTO, bindingResult);
 	}
 
 }
