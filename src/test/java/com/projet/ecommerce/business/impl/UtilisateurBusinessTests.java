@@ -2,7 +2,6 @@ package com.projet.ecommerce.business.impl;
 
 import com.projet.ecommerce.business.dto.RoleDTO;
 import com.projet.ecommerce.business.dto.UtilisateurDTO;
-import com.projet.ecommerce.business.dto.transformer.UtilisateurTransformer;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Role;
 import com.projet.ecommerce.persistance.entity.Utilisateur;
@@ -160,41 +159,54 @@ public class UtilisateurBusinessTests {
 
 	@Test
 	public void update() {
-		String prenom = "John";
-		String email = "john.shepard@normandy-sr2.space";
+		String passwordHash = "jesuisunhashdemotdepasse";
 		Utilisateur retour = buildUtilisateur();
-		Utilisateur nouveau = buildUtilisateur();
-		nouveau.setPrenom(prenom);
-		nouveau.setEmail(email);
-		UtilisateurDTO param = UtilisateurTransformer.entityToDto(nouveau);
+		UtilisateurDTO param = buildUtilisateurDTO();
 
-		Mockito.when(utilisateurRepository.findById(retour.getId())).thenReturn(Optional.of(retour));
-		Mockito.when(roleRepository.findById(retour.getRole().getId())).thenReturn(Optional.of(retour.getRole()));
-		Mockito.when(passwordEncoder.encode(retour.getMdp())).thenReturn(retour.getMdp());
-		Mockito.when(utilisateurRepository.save(Mockito.any(Utilisateur.class))).thenReturn(nouveau);
+		Mockito.when(utilisateurRepository.findById(param.getId())).thenReturn(Optional.of(retour));
+		Mockito.when(roleRepository.findById(param.getRole().getId())).thenReturn(Optional.of(retour.getRole()));
+		Mockito.when(passwordEncoder.encode(param.getMdp())).thenReturn(passwordHash);
+		Mockito.when(utilisateurRepository.save(Mockito.any(Utilisateur.class))).then(i -> i.getArgument(0));
 
 		//Test update normal
 		UtilisateurDTO resultat = utilisateurBusiness.update(param);
 		Assert.assertNotNull(resultat);
 		Assert.assertEquals(retour.getId(), resultat.getId());
-		Assert.assertEquals(retour.getNom(), resultat.getNom());
-		Assert.assertEquals(nouveau.getPrenom(), resultat.getPrenom());
-		Assert.assertEquals(nouveau.getEmail(), resultat.getEmail());
-		Assert.assertEquals(retour.getMdp(), resultat.getMdp());
-		Assert.assertEquals(retour.getRole().getId(), resultat.getRole().getId());
-		Assert.assertEquals(retour.getRole().getNom(), resultat.getRole().getNom());
+		Assert.assertEquals(param.getNom(), resultat.getNom());
+		Assert.assertEquals(param.getPrenom(), resultat.getPrenom());
+		Assert.assertEquals(param.getEmail(), resultat.getEmail());
+		Assert.assertEquals(passwordHash, resultat.getMdp());
+		Assert.assertEquals(param.getRole().getId(), resultat.getRole().getId());
+		Assert.assertEquals(param.getRole().getNom(), resultat.getRole().getNom());
 		//Test update sans role
 		retour.setRole(null);
-		nouveau.setRole(null);
 		param.setRole(null);
 		resultat = utilisateurBusiness.update(param);
 		Assert.assertNotNull(resultat);
 		Assert.assertEquals(retour.getId(), resultat.getId());
-		Assert.assertEquals(retour.getNom(), resultat.getNom());
-		Assert.assertEquals(nouveau.getPrenom(), resultat.getPrenom());
-		Assert.assertEquals(nouveau.getEmail(), resultat.getEmail());
+		Assert.assertEquals(param.getNom(), resultat.getNom());
+		Assert.assertEquals(param.getPrenom(), resultat.getPrenom());
+		Assert.assertEquals(param.getEmail(), resultat.getEmail());
+		Assert.assertEquals(passwordHash, resultat.getMdp());
+		Assert.assertNull(resultat.getRole());
+		//Test sans mot de passe
+		param.setMdp("");
+		resultat = utilisateurBusiness.update(param);
+		Assert.assertNotNull(resultat);
+		Assert.assertEquals(retour.getId(), resultat.getId());
+		Assert.assertEquals(param.getNom(), resultat.getNom());
+		Assert.assertEquals(param.getPrenom(), resultat.getPrenom());
+		Assert.assertEquals(param.getEmail(), resultat.getEmail());
 		Assert.assertEquals(retour.getMdp(), resultat.getMdp());
 		Assert.assertNull(resultat.getRole());
+		param.setMdp(null);
+		resultat = utilisateurBusiness.update(param);
+		Assert.assertNotNull(resultat);
+		Assert.assertEquals(retour.getMdp(), resultat.getMdp());
+		param.setMdp("\t");
+		resultat = utilisateurBusiness.update(param);
+		Assert.assertNotNull(resultat);
+		Assert.assertEquals(retour.getMdp(), resultat.getMdp());
 		//Test DTO Null
 		resultat = utilisateurBusiness.update(null);
 		Assert.assertNull(resultat);
@@ -244,30 +256,6 @@ public class UtilisateurBusinessTests {
 	public void updateWithBlankEmail() {
 		UtilisateurDTO utilisateurDTO = buildUtilisateurDTO();
 		utilisateurDTO.setEmail(" \t");
-
-		utilisateurBusiness.update(utilisateurDTO);
-	}
-
-	@Test(expected = GraphQLCustomException.class)
-	public void updateWithoutPassword() {
-		UtilisateurDTO utilisateurDTO = buildUtilisateurDTO();
-		utilisateurDTO.setMdp(null);
-
-		utilisateurBusiness.update(utilisateurDTO);
-	}
-
-	@Test(expected = GraphQLCustomException.class)
-	public void updateWithEmptyPassword() {
-		UtilisateurDTO utilisateurDTO = buildUtilisateurDTO();
-		utilisateurDTO.setMdp("");
-
-		utilisateurBusiness.update(utilisateurDTO);
-	}
-
-	@Test(expected = GraphQLCustomException.class)
-	public void updateWithBlankPassword() {
-		UtilisateurDTO utilisateurDTO = buildUtilisateurDTO();
-		utilisateurDTO.setMdp(" \t");
 
 		utilisateurBusiness.update(utilisateurDTO);
 	}
@@ -443,10 +431,10 @@ public class UtilisateurBusinessTests {
 	public UtilisateurDTO buildUtilisateurDTO() {
 		UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
 		utilisateurDTO.setId(1);
-		utilisateurDTO.setPrenom("Jane");
-		utilisateurDTO.setNom("Shepard");
-		utilisateurDTO.setMdp("Password");
-		utilisateurDTO.setEmail("jane.shepard@normandy-sr2.earth");
+		utilisateurDTO.setPrenom("JaneDTO");
+		utilisateurDTO.setNom("ShepardDTO");
+		utilisateurDTO.setMdp("PasswordDTO");
+		utilisateurDTO.setEmail("jane.shepard@normandy-sr2.earth.dto");
 		utilisateurDTO.setRole(buildRoleDTO());
 		return utilisateurDTO;
 	}
