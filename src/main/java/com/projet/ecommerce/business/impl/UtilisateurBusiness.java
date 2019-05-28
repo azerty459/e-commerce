@@ -77,7 +77,7 @@ public class UtilisateurBusiness implements IUtilisateurBusiness {
 		utilisateur.setRole(optionalRole.get());
 		utilisateur.setMdp(passwordEncoder.encode(utilisateurDTO.getMdp()));
 
-		this.sendEmailUtilitaire.sendWelcomeEmail(utilisateur.getEmail(), "Ludovic");
+		this.sendEmailUtilitaire.sendWelcomeEmail(utilisateur.getEmail(), utilisateur.getPrenom());
 		return UtilisateurTransformer.entityToDto(utilisateurRepository.save(utilisateur));
 	}
 
