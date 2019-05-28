@@ -17,9 +17,9 @@ public class SendEmailUtilitaire {
 			prenom = "Anonyme";
 		} else {
 			prenom = prenom.toLowerCase();
-			char[] chaine = prenom.toCharArray();
-			chaine[0] = Character.toUpperCase(chaine[0]);
-			prenom = new String(chaine);
+			char[] temp = prenom.toCharArray();
+			temp[0] = Character.toUpperCase(temp[0]);
+			prenom = new String(temp);
 		}
 
 		String message = "Bonjour " + prenom + ",\n" +
