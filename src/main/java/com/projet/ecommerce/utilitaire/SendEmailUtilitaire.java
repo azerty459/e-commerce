@@ -1,5 +1,6 @@
 package com.projet.ecommerce.utilitaire;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -12,6 +13,14 @@ public class SendEmailUtilitaire {
 	private JavaMailSender emailSender;
 
 	public void sendWelcomeEmail(String destinataire, String prenom) {
+		if (StringUtils.isBlank(prenom)) {
+			prenom = "Anonyme";
+		} else {
+			prenom = prenom.toLowerCase();
+			char[] temp = prenom.toCharArray();
+			temp[0] = Character.toUpperCase(temp[0]);
+			prenom = new String(temp);
+		}
 
 		String message = "Bonjour " + prenom + ",\n" +
 				"\n" +
