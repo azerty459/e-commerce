@@ -19,6 +19,9 @@ public class PhotoTransformer {
 	 * @return une collection d'objets Photo
 	 */
 	public static Collection<Photo> dtoToEntity(Collection<PhotoDTO> photoDTOCollection) {
+		if (photoDTOCollection == null) {
+			return null;
+		}
 		List<Photo> photoList = new ArrayList<>();
 		for (PhotoDTO photoDTO : photoDTOCollection) {
 			photoList.add(dtoToEntity(photoDTO));
@@ -33,6 +36,9 @@ public class PhotoTransformer {
 	 * @return un objet Photo
 	 */
 	public static Photo dtoToEntity(PhotoDTO photoDTO) {
+		if (photoDTO == null) {
+			return null;
+		}
 		Photo photo = new Photo();
 		photo.setUrl(photoDTO.getUrl());
 		photo.setIdPhoto(photoDTO.getId());
@@ -47,6 +53,9 @@ public class PhotoTransformer {
 	 * @return une collection d'objets PhotoDTO
 	 */
 	public static Collection<PhotoDTO> entityToDto(Collection<Photo> photoCollection) {
+		if (photoCollection == null) {
+			return null;
+		}
 		List<PhotoDTO> photoDTOList = new ArrayList<>();
 		for (Photo photo : photoCollection) {
 			if (photo.getIdPhoto() != 0) {
@@ -63,6 +72,9 @@ public class PhotoTransformer {
 	 * @return un objet PhotoDTO
 	 */
 	public static PhotoDTO entityToDto(Photo photo) {
+		if (photo == null) {
+			return null;
+		}
 		PhotoDTO photoDTO = new PhotoDTO();
 		photoDTO.setIdPhoto(photo.getIdPhoto());
 		photoDTO.setUrl(photo.getUrl());

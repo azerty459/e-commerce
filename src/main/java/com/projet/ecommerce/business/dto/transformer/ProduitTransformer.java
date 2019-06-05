@@ -89,9 +89,18 @@ public class ProduitTransformer {
 		produit.setNom(produitDTO.getNom());
 		produit.setDescription(produitDTO.getDescription());
 		produit.setPrixHT(produitDTO.getPrixHT());
-		produit.setPhotos(new ArrayList<>(PhotoTransformer.dtoToEntity(produitDTO.getPhotos())));
-		produit.setCategories(new ArrayList<>(CategorieTransformer.dtoToEntity(produitDTO.getCategories())));
+		if (produitDTO.getPhotos() == null) {
+			produit.setPhotos(new ArrayList<>());
+		} else {
+			produit.setPhotos(new ArrayList<>(PhotoTransformer.dtoToEntity(produitDTO.getPhotos())));
+		}
+		if (produitDTO.getCategories() == null) {
+			produit.setCategories(new ArrayList<>());
+		} else {
+			produit.setCategories(new ArrayList<>(CategorieTransformer.dtoToEntity(produitDTO.getCategories())));
+		}
 		produit.setPhotoPrincipale(PhotoTransformer.dtoToEntity(produitDTO.getPhotoPrincipale()));
+
 		return produit;
 	}
 
