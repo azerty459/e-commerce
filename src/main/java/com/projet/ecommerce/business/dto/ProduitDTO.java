@@ -1,5 +1,7 @@
 package com.projet.ecommerce.business.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
 /**
@@ -117,6 +119,7 @@ public class ProduitDTO {
 	 *
 	 * @return la liste des catégories auxquelles appartient le produit
 	 */
+	@JsonProperty("categories")
 	public List<CategorieDTO> getCategories() {
 		return categories;
 	}
@@ -126,20 +129,18 @@ public class ProduitDTO {
 	 *
 	 * @param categories la liste des catégories auxquelles appartient le produit
 	 */
+	@JsonProperty("arrayCategorie")
 	public void setCategories(List<CategorieDTO> categories) {
 		this.categories = categories;
 	}
 
-
-	public void setArrayCategorie(List<CategorieDTO> categories) {
-		this.categories = categories;
-	}
 
 	/**
 	 * Obtenir les photos du produit
 	 *
 	 * @return la liste des photos du produit
 	 */
+	@JsonProperty("photos")
 	public List<PhotoDTO> getPhotos() {
 		return photos;
 	}
@@ -149,11 +150,8 @@ public class ProduitDTO {
 	 *
 	 * @param photos la liste des photos du produit
 	 */
+	@JsonProperty("arrayPhoto")
 	public void setPhotos(List<PhotoDTO> photos) {
-		this.photos = photos;
-	}
-
-	public void setArrayPhotoList(List<PhotoDTO> photos) {
 		this.photos = photos;
 	}
 
