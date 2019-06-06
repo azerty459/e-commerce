@@ -11,38 +11,30 @@ public class ProduitDTO {
 	 * la référence du produit
 	 */
 	private String ref;
-
 	/**
 	 * le nom du produit
 	 */
 	private String nom;
-
 	/**
 	 * description du produit
 	 */
 	private String description;
-
 	/**
 	 * le prix hors taxes du produit
 	 */
 	private float prixHT;
-
 	/**
 	 * La note moyenne des avis clients sur ce produit
 	 */
 	private float noteMoyenne;
-
 	/**
 	 * la liste des catégories auxquelles appartient le produit
 	 */
 	private List<CategorieDTO> categories;
-
 	/**
 	 * la liste des photos du produit
 	 */
 	private List<PhotoDTO> photos;
-
-
 	/**
 	 * La photo pricnipale
 	 */
@@ -138,6 +130,11 @@ public class ProduitDTO {
 		this.categories = categories;
 	}
 
+
+	public void setArrayCategorie(List<CategorieDTO> categories) {
+		this.categories = categories;
+	}
+
 	/**
 	 * Obtenir les photos du produit
 	 *
@@ -153,6 +150,10 @@ public class ProduitDTO {
 	 * @param photos la liste des photos du produit
 	 */
 	public void setPhotos(List<PhotoDTO> photos) {
+		this.photos = photos;
+	}
+
+	public void setArrayPhotoList(List<PhotoDTO> photos) {
 		this.photos = photos;
 	}
 
