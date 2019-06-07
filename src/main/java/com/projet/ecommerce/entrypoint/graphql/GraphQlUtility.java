@@ -7,13 +7,9 @@ import com.projet.ecommerce.entrypoint.graphql.categorie.CategorieQuery;
 import com.projet.ecommerce.entrypoint.graphql.pagination.PaginationQuery;
 import com.projet.ecommerce.entrypoint.graphql.photo.PhotoMutation;
 import com.projet.ecommerce.entrypoint.graphql.photo.PhotoQuery;
-import com.projet.ecommerce.entrypoint.graphql.produit.ProduitMutation;
-import com.projet.ecommerce.entrypoint.graphql.produit.ProduitQuery;
 import com.projet.ecommerce.entrypoint.graphql.role.RoleMutation;
 import com.projet.ecommerce.entrypoint.graphql.role.RoleQuery;
 import com.projet.ecommerce.entrypoint.graphql.statistique.StatistiqueQuery;
-import com.projet.ecommerce.entrypoint.graphql.utilisateur.UtilisateurMutation;
-import com.projet.ecommerce.entrypoint.graphql.utilisateur.UtilisateurQuery;
 import graphql.ExceptionWhileDataFetching;
 import graphql.GraphQL;
 import graphql.GraphQLError;
@@ -39,11 +35,6 @@ import java.util.stream.Collectors;
 @Configuration
 public class GraphQlUtility {
 
-	@Autowired
-	private ProduitQuery produitQuery;
-
-	@Autowired
-	private ProduitMutation produitMutation;
 
 	@Autowired
 	private CategorieQuery categorieQuery;
@@ -56,12 +47,6 @@ public class GraphQlUtility {
 
 	@Autowired
 	private RoleMutation roleMutation;
-
-	@Autowired
-	private UtilisateurQuery utilisateurQuery;
-
-	@Autowired
-	private UtilisateurMutation utilisateurMutation;
 
 	@Autowired
 	private PhotoQuery photoQuery;
@@ -109,16 +94,12 @@ public class GraphQlUtility {
 
 	private RuntimeWiring buildRuntimeWiring() {
 		return RuntimeWiring.newRuntimeWiring()
-				.type(produitQuery.produitWiring())
-				.type(produitMutation.produitWiring())
 				.type(photoQuery.produitWiring())
 				.type(photoMutation.produitWiring())
 				.type(categorieQuery.produitWiring())
 				.type(categorieMutation.produitWiring())
 				.type(roleQuery.produitWiring())
 				.type(roleMutation.produitWiring())
-				.type(utilisateurQuery.produitWiring())
-				.type(utilisateurMutation.produitWiring())
 				.type(paginationQuery.produitWiring())
 				.type(avisClientQuery.produitWiring())
 				.type(avisClientMutation.produitWiring())

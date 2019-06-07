@@ -20,6 +20,9 @@ public class CategorieTransformer {
 	 * @return une collection d'objets Categorie
 	 */
 	public static Collection<Categorie> dtoToEntity(Collection<CategorieDTO> categorieDTOCollection) {
+		if (categorieDTOCollection == null) {
+			return null;
+		}
 		List<Categorie> categorieList = new ArrayList<>();
 		for (CategorieDTO categorieDTO : categorieDTOCollection) {
 			categorieList.add(dtoToEntity(categorieDTO));
@@ -34,6 +37,9 @@ public class CategorieTransformer {
 	 * @return un objet Categorie
 	 */
 	private static Categorie dtoToEntity(CategorieDTO categorieDTO) {
+		if (categorieDTO == null) {
+			return null;
+		}
 		Categorie categorie = new Categorie();
 		categorie.setNomCategorie(categorieDTO.getNom());
 		categorie.setIdCategorie(categorieDTO.getId());
@@ -48,6 +54,9 @@ public class CategorieTransformer {
 	 * @return un objet CategorieDTO
 	 */
 	public static CategorieDTO entityToDto(Categorie categorie) {
+		if (categorie == null) {
+			return null;
+		}
 		CategorieDTO categorieDTO = new CategorieDTO();
 		categorieDTO.setNom(categorie.getNomCategorie());
 		categorieDTO.setSousCategories(new ArrayList<>());
@@ -66,6 +75,7 @@ public class CategorieTransformer {
 	 * @return un objet CategorieDTO
 	 */
 	public static CategorieDTO entityToDto(Categorie categorie, Collection<Categorie> categorieCollection, HashMap<Categorie, Collection<Categorie>> chemins, Boolean parent, Categorie parentDirect) {
+
 		CategorieDTO categorieDTO = entityToDto(categorie);
 
 		categorieDTO.getSousCategories().clear();
