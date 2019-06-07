@@ -24,7 +24,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
-public class ControlllerPaginationTests {
+public class ControllerPaginationTests {
 
 	@Mock
 	private PaginationBusiness paginationBusiness;
