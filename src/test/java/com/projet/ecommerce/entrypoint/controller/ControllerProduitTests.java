@@ -79,7 +79,6 @@ public class ControllerProduitTests {
 		Assert.assertEquals(produitDTO_1.getPhotos().size(), listRetour.get(0).getPhotos().size());
 		Assert.assertEquals(produitDTO_1.getPhotoPrincipale(), listRetour.get(0).getPhotoPrincipale());
 
-		Assert.assertEquals(2, listRetour.size());
 		Assert.assertEquals(produitDTO_2.getRef(), listRetour.get(1).getRef());
 		Assert.assertEquals(produitDTO_2.getNom(), listRetour.get(1).getNom());
 		Assert.assertEquals(produitDTO_2.getDescription(), listRetour.get(1).getDescription());
