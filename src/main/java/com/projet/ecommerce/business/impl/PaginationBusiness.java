@@ -16,6 +16,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Service permettant de gérer les actions effectuées pour la pagination.
@@ -42,7 +45,7 @@ public class PaginationBusiness implements IPaginationBusiness {
 	 * @return une objet PaginationDTO
 	 */
 	@Override
-	public PaginationDTO getPagination(String type, int pageActuelle, int npp, String nom, int categorie) {
+	public PaginationDTO getPagination(String type, int pageActuelle, int npp, String nom, int categorie, String nameOfTri) {
 
 		if (pageActuelle <= 0) {
 			pageActuelle = 1;
@@ -51,7 +54,7 @@ public class PaginationBusiness implements IPaginationBusiness {
 
 		switch (type) {
 			case "produit":
-				paginationDTO = produit(pageActuelle, npp, nom, categorie);
+				paginationDTO = produit(pageActuelle, npp, nom, categorie, nameOfTri);
 				break;
 			case "categorie":
 				Page pageCategorie = categorieBusiness.getPage(pageActuelle, npp);
@@ -79,7 +82,7 @@ public class PaginationBusiness implements IPaginationBusiness {
 		return paginationDTO;
 	}
 
-	private PaginationDTO produit(int pageActuelle, int npp, String nom, int categorie) {
+	private PaginationDTO produit(int pageActuelle, int npp, String nom, int categorie, String nameOfTri) {
 		PaginationDTO paginationDTO;
 		Page pageProduit = produitBusiness.getPage(pageActuelle, npp, nom, categorie);
 		if (pageActuelle > pageProduit.getTotalPages()) {
@@ -87,8 +90,23 @@ public class PaginationBusiness implements IPaginationBusiness {
 		}
 		paginationDTO = getPaginationDTO(pageProduit, pageActuelle);
 		paginationDTO.setCategories(new ArrayList<>());
-		paginationDTO.setProduits(new ArrayList<ProduitDTO>(ProduitTransformer.entityToDto(pageProduit.getContent())));
+		paginationDTO.setProduits(getProductOrderBy(new ArrayList<ProduitDTO>(ProduitTransformer.entityToDto(pageProduit.getContent())), nameOfTri));
 		return paginationDTO;
+	}
+
+	private List<ProduitDTO> getProductOrderBy(List<ProduitDTO> produitDTOList, String nameOfTri) {
+		List<ProduitDTO> orderedListProduitDTO;
+		switch (nameOfTri) {
+			case "Nom":
+				orderedListProduitDTO = produitDTOList.stream().sorted(Comparator.comparing(ProduitDTO::getNom)).collect(Collectors.toList());
+				break;
+			case "Prix croissant":
+				orderedListProduitDTO = produitDTOList.stream().sorted(Comparator.comparing(ProduitDTO::getPrixHT)).collect(Collectors.toList());
+				break;
+			default:
+				orderedListProduitDTO = produitDTOList.stream().sorted(Comparator.comparing(ProduitDTO::getPrixHT).reversed()).collect(Collectors.toList());
+		}
+		return orderedListProduitDTO;
 	}
 
 	/**

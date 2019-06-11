@@ -44,7 +44,7 @@ public class PaginationBusinessTests {
 
 	@Test
 	public void getPaginationEmpty() {
-		PaginationDTO paginationDTO = paginationBusiness.getPagination("toto", 1, 5, "toto", 0);
+		PaginationDTO paginationDTO = paginationBusiness.getPagination("toto", 1, 5, "toto", 0, " ");
 		Assert.assertNull(paginationDTO);
 	}
 
@@ -65,7 +65,7 @@ public class PaginationBusinessTests {
 		Mockito.when(page.getContent()).thenReturn(produitArrayList);
 		Mockito.when(produitBusiness.getPage(Mockito.anyInt(), Mockito.anyInt(), Mockito.anyString(), Mockito.anyInt())).thenReturn(page);
 
-		PaginationDTO paginationDTO = paginationBusiness.getPagination("produit", 2, 5, "toto", 0);
+		PaginationDTO paginationDTO = paginationBusiness.getPagination("produit", 2, 5, "toto", 0, " ");
 		Mockito.verify(produitBusiness, Mockito.times(1)).getPage(Mockito.anyInt(), Mockito.anyInt(), Mockito.anyString(), Mockito.anyInt());
 		Assert.assertNotNull(paginationDTO);
 
@@ -93,7 +93,7 @@ public class PaginationBusinessTests {
 		Mockito.when(page.getContent()).thenReturn(categorieArrayList);
 		Mockito.when(categorieBusiness.getPage(Mockito.anyInt(), Mockito.anyInt())).thenReturn(page);
 
-		PaginationDTO paginationDTO = paginationBusiness.getPagination("categorie", 5, 50, "toto", 0);
+		PaginationDTO paginationDTO = paginationBusiness.getPagination("categorie", 5, 50, "toto", 0, " ");
 		Mockito.verify(categorieBusiness, Mockito.times(1)).getPage(Mockito.anyInt(), Mockito.anyInt());
 		Assert.assertNotNull(paginationDTO);
 

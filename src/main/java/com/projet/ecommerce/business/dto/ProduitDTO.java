@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Entité qui permet d'assurer le découplage entre la couche de présentation et les objets métier stockés sur le serveur (Produit).
  */
-public class ProduitDTO {
+public class ProduitDTO implements Comparable {
 
 	/**
 	 * la référence du produit
@@ -189,6 +189,15 @@ public class ProduitDTO {
 	 */
 	public void setNoteMoyenne(float noteMoyenne) {
 		this.noteMoyenne = noteMoyenne;
+	}
+
+	@Override
+	public int compareTo(Object o) {
+		if (this.getClass() == o.getClass()) {
+			ProduitDTO produitDTO = (ProduitDTO) o;
+			return this.getRef().compareTo(produitDTO.getRef());
+		}
+		return -1;
 	}
 
 }
