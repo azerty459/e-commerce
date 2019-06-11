@@ -60,7 +60,7 @@ public class ControllerPaginationTests {
 
 		PaginationDTO paginationDTO = buildPaginationDTO(3, 1, 10, 20);
 
-		when(paginationBusiness.getPagination(Mockito.anyString(), Mockito.anyInt(), Mockito.anyInt(), Mockito.anyString(), Mockito.anyInt())).thenReturn(paginationDTO);
+		when(paginationBusiness.getPagination(Mockito.anyString(), Mockito.anyInt(), Mockito.anyInt(), Mockito.anyString(), Mockito.anyInt(), Mockito.anyString())).thenReturn(paginationDTO);
 
 		PaginationDTO paginationDTORetour = controllerPagination.getPaginationProduct("produit", paginationDTO.getPageActuelle(), paginationDTO.getPageMax(), "livre", 1, "");
 
@@ -79,7 +79,7 @@ public class ControllerPaginationTests {
 
 		PaginationDTO paginationDTO = buildPaginationDTO(3, 1, 10, 20);
 
-		when(paginationBusiness.getPagination(Mockito.anyString(), Mockito.anyInt(), Mockito.anyInt(), Mockito.anyString(), Mockito.anyInt())).thenReturn(paginationDTO);
+		when(paginationBusiness.getPagination(Mockito.anyString(), Mockito.anyInt(), Mockito.anyInt(), Mockito.anyString(), Mockito.anyInt(), Mockito.anyString())).thenReturn(paginationDTO);
 
 		PaginationDTO paginationDTORetour = controllerPagination.getPaginationProduct("utilisateur", paginationDTO.getPageActuelle(), paginationDTO.getPageMax(), "");
 

@@ -18,6 +18,6 @@ public interface IPaginationBusiness {
 	 * @param IDcategorie l'id de la catégorie recherché
 	 * @return une objet PaginationDTO
 	 */
-	PaginationDTO getPagination(String type, int page, int npp, String nom, int IDcategorie);
+	PaginationDTO getPagination(String type, int page, int npp, String nom, int IDcategorie, String nameOfTri);
 
 }
