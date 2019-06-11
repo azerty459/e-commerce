@@ -16,6 +16,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Service permettant de gérer les actions effectuées pour la pagination.
@@ -89,6 +92,21 @@ public class PaginationBusiness implements IPaginationBusiness {
 		paginationDTO.setCategories(new ArrayList<>());
 		paginationDTO.setProduits(new ArrayList<ProduitDTO>(ProduitTransformer.entityToDto(pageProduit.getContent())));
 		return paginationDTO;
+	}
+
+	public List<ProduitDTO> getProduitOrderBy(List<ProduitDTO> produitDTOList, String nameOfTri) {
+		List<ProduitDTO> orderedListProduitDTO;
+		switch (nameOfTri) {
+			case "Nom":
+				orderedListProduitDTO = produitDTOList.stream().sorted().collect(Collectors.toList());
+				break;
+			case "Prix croissant":
+				orderedListProduitDTO = produitDTOList.stream().sorted(Comparator.comparing(ProduitDTO::getPrixHT)).collect(Collectors.toList());
+				break;
+			default:
+				orderedListProduitDTO = produitDTOList.stream().sorted(Comparator.comparing(ProduitDTO::getPrixHT).reversed()).collect(Collectors.toList());
+		}
+		return orderedListProduitDTO;
 	}
 
 	/**

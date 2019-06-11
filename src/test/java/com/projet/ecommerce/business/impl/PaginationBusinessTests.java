@@ -3,8 +3,10 @@ package com.projet.ecommerce.business.impl;
 import com.projet.ecommerce.business.ICategorieBusiness;
 import com.projet.ecommerce.business.IProduitBusiness;
 import com.projet.ecommerce.business.dto.PaginationDTO;
+import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Produit;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
@@ -40,6 +43,18 @@ public class PaginationBusinessTests {
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
+	}
+
+	@NotNull
+	private ProduitDTO builProduitDTO(String ref, float prix, String nom, String description) {
+		ProduitDTO produitDTO = new ProduitDTO();
+		produitDTO.setPhotos(new ArrayList<>());
+		produitDTO.setCategories(new ArrayList<>());
+		produitDTO.setRef(ref);
+		produitDTO.setPrixHT(prix);
+		produitDTO.setNom(nom);
+		produitDTO.setDescription(description);
+		return produitDTO;
 	}
 
 	@Test
@@ -104,5 +119,25 @@ public class PaginationBusinessTests {
 		Assert.assertEquals(1, paginationDTO.getCategories().size());
 		Assert.assertEquals(new ArrayList<Produit>(), paginationDTO.getProduits());
 	}
+
+	@Test
+	public void getProductOrderByCriter() {
+		List<ProduitDTO> produitDTOList = new ArrayList<>();
+		ProduitDTO produitDTO_1 = builProduitDTO("A05A05", 14.5f, "BBBB", "ok");
+		ProduitDTO produitDTO_2 = builProduitDTO("A06A06", 7.2f, "AAAA", "okK");
+		produitDTOList.add(produitDTO_1);
+		produitDTOList.add(produitDTO_2);
+
+		List<ProduitDTO> retour;
+		retour = paginationBusiness.getProduitOrderBy(produitDTOList, "Nom");
+		Assert.assertEquals(produitDTO_2.getNom(), retour.get(0).getNom());
+
+		retour = paginationBusiness.getProduitOrderBy(produitDTOList, "Prix croissant");
+		Assert.assertEquals(produitDTO_2.getPrixHT(), retour.get(0).getPrixHT(), 0.1);
+
+		retour = paginationBusiness.getProduitOrderBy(produitDTOList, "Prix décroissant");
+		Assert.assertEquals(produitDTO_1.getPrixHT(), retour.get(0).getPrixHT(), 0.1);
+	}
+
 
 }
