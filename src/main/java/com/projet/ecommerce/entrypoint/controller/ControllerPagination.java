@@ -26,4 +26,9 @@ public class ControllerPagination {
 		return getPaginationProduct(type, numPage, npp, "", 0, name);
 	}
 
+	@GetMapping("/type/{type}/numPage/{numPage}/numberByPage/{npp}")
+	public PaginationDTO getPaginationCategorie(@PathVariable("type") @NotNull String type, @PathVariable("numPage") @NotNull int numPage, @PathVariable("npp") @NotNull int npp) {
+		return getPaginationProduct(type, numPage, npp, "", 0, "");
+	}
+
 }

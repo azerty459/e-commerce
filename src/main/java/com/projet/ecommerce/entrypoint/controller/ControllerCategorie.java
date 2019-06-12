@@ -32,7 +32,7 @@ public class ControllerCategorie {
 
 	}
 
-	@PutMapping("/idCategorie/{id}/nomCategorie/{nom}")
+	@PutMapping("/nom/{nom}/id/{id}")
 	public CategorieDTO updateCategorieDTO(@PathVariable("id") @NotNull int id, @PathVariable("nom") @NotNull String nom) {
 		return categorieBusiness.updateCategorie(id, nom);
 	}
@@ -42,12 +42,9 @@ public class ControllerCategorie {
 		return categorieBusiness.addParent(nom);
 	}
 
-	// à changer dans le front
-
-	@PostMapping("/nom/{nom}/enfant/{id}")
+	@PostMapping("/nom/{nom}/idEnfant/{id}")
 	public CategorieDTO addCategorieEnfant(@PathVariable @NotNull("nom") String nom, @PathVariable("id") @NotNull int id) {
 		return categorieBusiness.addEnfant(nom, id);
 	}
 
-	// à changer dans le front
 }
