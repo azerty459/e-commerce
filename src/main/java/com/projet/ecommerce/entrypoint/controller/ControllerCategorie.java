@@ -26,6 +26,11 @@ public class ControllerCategorie {
 		return categorieBusiness.getCategorie(id, null, false, false);
 	}
 
+	@GetMapping("/nom/{nom}")
+	public List<CategorieDTO> getSubCategory(@PathVariable @NotNull String nom) {
+		return categorieBusiness.getCategorie(0, nom, false, false);
+	}
+
 	@DeleteMapping("/{id}")
 	public boolean deleteCategorieById(@PathVariable @NotNull int id) {
 		return categorieBusiness.delete(id);
