@@ -2,6 +2,7 @@ package com.projet.ecommerce.entrypoint.controller;
 
 import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.business.impl.CategorieBusiness;
+import com.projet.ecommerce.business.impl.CategorieSupprimeBusiness;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,9 @@ public class ControllerCategorie {
 	@Autowired
 	private CategorieBusiness categorieBusiness;
 
+	@Autowired
+	private CategorieSupprimeBusiness categorieSupprimeBusiness;
+
 	@GetMapping("/all")
 	public List<CategorieDTO> getAllCategorie() {
 		return categorieBusiness.getCategorie(0, null, false, false);
@@ -23,7 +27,7 @@ public class ControllerCategorie {
 
 	@GetMapping("/{id}")
 	public List<CategorieDTO> getCategorieById(@PathVariable @NotNull int id) {
-		return categorieBusiness.getCategorie(id, null, false, false);
+		return categorieBusiness.getCategorie(id, null, true, false);
 	}
 
 	@GetMapping("/nom/{nom}")
@@ -40,6 +44,16 @@ public class ControllerCategorie {
 	@PutMapping("/nom/{nom}/id/{id}")
 	public CategorieDTO updateCategorieDTO(@PathVariable("id") @NotNull int id, @PathVariable("nom") @NotNull String nom) {
 		return categorieBusiness.updateCategorie(id, nom);
+	}
+
+	@PutMapping("idADeplacer/{idADeplacer}/idNouveauParent/{idNouveauParent}")
+	public boolean moveCategorie(@PathVariable("idADeplacer") @NotNull int idADeplacer, @PathVariable("idNouveauParent") @NotNull int idNouveauParent) {
+		return categorieBusiness.moveCategorie(idADeplacer, idNouveauParent);
+	}
+
+	@PutMapping("lastIdCategorieDeleted/{id}")
+	public List<CategorieDTO> restoreCategorie(@PathVariable @NotNull int id) {
+		return categorieSupprimeBusiness.restoreLastDeletedCategorie(id);
 	}
 
 	@PostMapping("/nom/{nom}")

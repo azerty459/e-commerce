@@ -177,7 +177,9 @@ public class CategorieBusiness implements ICategorieBusiness {
 		// Mise en forme des objets CategorieDTO
 		HashMap<Categorie, Collection<Categorie>> chemins = construireAssociationEnfantsChemins(categorieCollection);
 
-		return new ArrayList<>(CategorieTransformer.entityToDto(new ArrayList<>(categorieCollection), chemins, sousCategorie, parent, parentDirect));
+		ArrayList<CategorieDTO> categorieDTOArrayList = new ArrayList<>(CategorieTransformer.entityToDto(new ArrayList<>(categorieCollection), chemins, sousCategorie, parent, parentDirect));
+
+		return categorieDTOArrayList;
 
 	}
 
