@@ -61,7 +61,7 @@ public class ControllerCategorie {
 		return categorieBusiness.addParent(nom);
 	}
 
-	@PostMapping("/nom/{nom}/idEnfant/{id}")
+	@PostMapping("/nom/{nom}/idPere/{id}")
 	public CategorieDTO addCategorieEnfant(@PathVariable @NotNull("nom") String nom, @PathVariable("id") @NotNull int id) {
 		return categorieBusiness.addEnfant(nom, id);
 	}
