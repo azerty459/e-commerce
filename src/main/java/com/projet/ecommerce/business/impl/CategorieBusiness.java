@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Service permettant de gérer les actions effectuées pour les catégories.
@@ -137,6 +138,13 @@ public class CategorieBusiness implements ICategorieBusiness {
 		return result;
 	}
 
+
+	@Override
+	public List<CategorieDTO> getTree() {
+		List<CategorieDTO> categorieDTOList = getCategorie(0, null, false, false);
+		return categorieDTOList.stream().filter(elt -> elt.getLevel() == 1).collect(Collectors.toList());
+	}
+
 	/**
 	 * Va chercher toutes les catégories, ou la catégorie donnée en nom. Récupère aussi les sous-catégories si demandées.
 	 *
@@ -177,7 +185,9 @@ public class CategorieBusiness implements ICategorieBusiness {
 		// Mise en forme des objets CategorieDTO
 		HashMap<Categorie, Collection<Categorie>> chemins = construireAssociationEnfantsChemins(categorieCollection);
 
-		return new ArrayList<>(CategorieTransformer.entityToDto(new ArrayList<>(categorieCollection), chemins, sousCategorie, parent, parentDirect));
+		ArrayList<CategorieDTO> categorieDTOArrayList = new ArrayList<>(CategorieTransformer.entityToDto(new ArrayList<>(categorieCollection), chemins, sousCategorie, parent, parentDirect));
+
+		return categorieDTOArrayList;
 
 	}
 

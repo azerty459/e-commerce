@@ -41,7 +41,6 @@ public class CategorieMutation {
 				categorieSupprimeBusiness.restoreLastDeletedCategorie(env.getArgument("idNouveauParent"))
 		);
 
-
 		return builder.build();
 	}
 
