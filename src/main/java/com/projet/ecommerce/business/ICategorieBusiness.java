@@ -15,6 +15,13 @@ import java.util.List;
 public interface ICategorieBusiness {
 
 	/**
+	 * Méthode permettant d'aller chercher les catégories et de ne renvoyer que les niveaux 1
+	 *
+	 * @return liste de catégories de niveaux 1
+	 */
+	List<CategorieDTO> getTree();
+
+	/**
 	 * Méthode allant chercher les catégories
 	 *
 	 * @param id  l'id de la catégorie à rechercher

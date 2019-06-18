@@ -25,6 +25,11 @@ public class ControllerCategorie {
 		return categorieBusiness.getCategorie(0, null, false, false);
 	}
 
+	@GetMapping("/tree")
+	public List<CategorieDTO> getTree() {
+		return categorieBusiness.getTree();
+	}
+
 	@GetMapping("/{id}")
 	public List<CategorieDTO> getCategorieById(@PathVariable @NotNull int id) {
 		return categorieBusiness.getCategorie(id, null, true, false);
@@ -38,7 +43,6 @@ public class ControllerCategorie {
 	@DeleteMapping("/{id}")
 	public boolean deleteCategorieById(@PathVariable @NotNull int id) {
 		return categorieBusiness.delete(id);
-
 	}
 
 	@PutMapping("/nom/{nom}/id/{id}")
