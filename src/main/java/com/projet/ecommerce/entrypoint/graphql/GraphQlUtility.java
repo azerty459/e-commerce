@@ -1,9 +1,5 @@
 package com.projet.ecommerce.entrypoint.graphql;
 
-import com.projet.ecommerce.entrypoint.graphql.avisclient.AvisClientMutation;
-import com.projet.ecommerce.entrypoint.graphql.avisclient.AvisClientQuery;
-import com.projet.ecommerce.entrypoint.graphql.categorie.CategorieMutation;
-import com.projet.ecommerce.entrypoint.graphql.categorie.CategorieQuery;
 import com.projet.ecommerce.entrypoint.graphql.pagination.PaginationQuery;
 import com.projet.ecommerce.entrypoint.graphql.photo.PhotoMutation;
 import com.projet.ecommerce.entrypoint.graphql.photo.PhotoQuery;
@@ -39,12 +35,6 @@ public class GraphQlUtility {
 
 
 	@Autowired
-	private CategorieQuery categorieQuery;
-
-	@Autowired
-	private CategorieMutation categorieMutation;
-
-	@Autowired
 	private RoleQuery roleQuery;
 
 	@Autowired
@@ -64,12 +54,6 @@ public class GraphQlUtility {
 
 	@Autowired
 	private PaginationQuery paginationQuery;
-
-	@Autowired
-	private AvisClientQuery avisClientQuery;
-
-	@Autowired
-	private AvisClientMutation avisClientMutation;
 
 	@Autowired
 	private StatistiqueQuery statistiqueQuery;
@@ -105,15 +89,11 @@ public class GraphQlUtility {
 
 				.type(photoQuery.produitWiring())
 				.type(photoMutation.produitWiring())
-				.type(categorieQuery.produitWiring())
-				.type(categorieMutation.produitWiring())
 				.type(roleQuery.produitWiring())
 				.type(roleMutation.produitWiring())
 				.type(utilisateurQuery.produitWiring())
 				.type(utilisateurMutation.produitWiring())
 				.type(paginationQuery.produitWiring())
-				.type(avisClientQuery.produitWiring())
-				.type(avisClientMutation.produitWiring())
 				.type(statistiqueQuery.produitWiring())
 				.build();
 	}
