@@ -1,7 +1,5 @@
 package com.projet.ecommerce.entrypoint.graphql;
 
-import com.projet.ecommerce.entrypoint.graphql.avisclient.AvisClientMutation;
-import com.projet.ecommerce.entrypoint.graphql.avisclient.AvisClientQuery;
 import com.projet.ecommerce.entrypoint.graphql.categorie.CategorieMutation;
 import com.projet.ecommerce.entrypoint.graphql.categorie.CategorieQuery;
 import com.projet.ecommerce.entrypoint.graphql.pagination.PaginationQuery;
@@ -66,12 +64,6 @@ public class GraphQlUtility {
 	private PaginationQuery paginationQuery;
 
 	@Autowired
-	private AvisClientQuery avisClientQuery;
-
-	@Autowired
-	private AvisClientMutation avisClientMutation;
-
-	@Autowired
 	private StatistiqueQuery statistiqueQuery;
 
 	@PostConstruct
@@ -112,8 +104,6 @@ public class GraphQlUtility {
 				.type(utilisateurQuery.produitWiring())
 				.type(utilisateurMutation.produitWiring())
 				.type(paginationQuery.produitWiring())
-				.type(avisClientQuery.produitWiring())
-				.type(avisClientMutation.produitWiring())
 				.type(statistiqueQuery.produitWiring())
 				.build();
 	}
