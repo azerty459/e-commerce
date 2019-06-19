@@ -1,7 +1,5 @@
 package com.projet.ecommerce.entrypoint.graphql;
 
-import com.projet.ecommerce.entrypoint.graphql.categorie.CategorieMutation;
-import com.projet.ecommerce.entrypoint.graphql.categorie.CategorieQuery;
 import com.projet.ecommerce.entrypoint.graphql.pagination.PaginationQuery;
 import com.projet.ecommerce.entrypoint.graphql.photo.PhotoMutation;
 import com.projet.ecommerce.entrypoint.graphql.photo.PhotoQuery;
@@ -35,12 +33,6 @@ import java.util.stream.Collectors;
 @Configuration
 public class GraphQlUtility {
 
-
-	@Autowired
-	private CategorieQuery categorieQuery;
-
-	@Autowired
-	private CategorieMutation categorieMutation;
 
 	@Autowired
 	private RoleQuery roleQuery;
@@ -97,8 +89,6 @@ public class GraphQlUtility {
 
 				.type(photoQuery.produitWiring())
 				.type(photoMutation.produitWiring())
-				.type(categorieQuery.produitWiring())
-				.type(categorieMutation.produitWiring())
 				.type(roleQuery.produitWiring())
 				.type(roleMutation.produitWiring())
 				.type(utilisateurQuery.produitWiring())
