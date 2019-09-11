@@ -274,6 +274,7 @@ public class ProduitBusinessTests {
         produit.setNom("Livre1");
         produit.setPhotos(new ArrayList<>());
         produit.setCategories(new ArrayList<>());
+        produit.setCaracteristiques(new ArrayList<>());
         return produit;
     }
 

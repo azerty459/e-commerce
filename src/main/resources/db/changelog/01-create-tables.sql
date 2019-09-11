@@ -1,7 +1,6 @@
 --liquibase formatted sql
 --changeset Rémy Halipré:01
-CREATE TABLE produit
-(
+CREATE TABLE produit (
   reference_produit VARCHAR(255) NOT NULL,
   nom VARCHAR(255) NOT NULL,
   description TEXT DEFAULT '',
@@ -11,8 +10,7 @@ CREATE TABLE produit
   PRIMARY KEY (reference_produit)
 );
 
-CREATE TABLE categorie
-(
+CREATE TABLE categorie(
   id_categorie SERIAL,
   nom_categorie VARCHAR(255) NOT NULL,
   borne_gauche int NOT NULL,
@@ -21,8 +19,7 @@ CREATE TABLE categorie
   PRIMARY KEY (id_categorie)
 );
 
-CREATE TABLE produit_categorie
-(
+CREATE TABLE produit_categorie(
   reference_produit VARCHAR(255) NOT NULL,
   id_categorie int NOT NULL,
   PRIMARY KEY (reference_produit, id_categorie),
@@ -33,8 +30,7 @@ CREATE TABLE produit_categorie
 );
 
 
-CREATE TABLE photo
-(
+CREATE TABLE photo(
   id_photo SERIAL,
   url VARCHAR(255) NOT NULL UNIQUE,
   nom VARCHAR(255) NOT NULL,
@@ -44,3 +40,18 @@ CREATE TABLE photo
   REFERENCES produit(reference_produit)
 );
 
+CREATE TABLE CARACTERISTIQUE (
+reference_produit varchar(255) not null,
+TYPE VARCHAR(255) NOT NULL,
+VALEUR VARCHAR(255) NOT NULL,
+PRIMARY KEY (reference_produit, TYPE)
+CONSTRAINT FK_PRODUIT_CARACT FOREIGN KEY (reference_produit)
+references produit(reference_produit),
+constraint FK_TYPE_CARACTERISTIQUE foreign key (type_caracteristique)
+references  type_caracteristique(type_caracteristique)
+);
+
+CREATE TABLE TYPE_CARACTERISTIQUE (
+TYPE varchar(255) not null,
+PRIMARY KEY (TYPE)
+);
