@@ -1,0 +1,14 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <include file="changelog/01-create-tables.sql" relativeToChangelogFile="true"/>
+    <include file="changelog/02-insert-categorie.sql" relativeToChangelogFile="true"/>
+    <include file="changelog/03-insert-produit.sql" relativeToChangelogFile="true"/>
+    <include file="changelog/04-insert-produit_categorie.sql" relativeToChangelogFile="true"/>
+    <include file="changelog/07-insert-utilisateur-and-role.sql" relativeToChangelogFile="true"/>
+    <include file="changelog/08-insert-categorie-supprime.sql" relativeToChangelogFile="true"/>
+    <include file="changelog/09-insert-avis_client.sql" relativeToChangelogFile="true"/>
+</databaseChangeLog>

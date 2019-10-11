@@ -11,7 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -22,43 +22,40 @@ import javax.persistence.Table;
 @Table(name = "caracteristique")
 public class Caracteristique {
 	
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_caracteristique")
-    private int idCaracteristique;
+    @Id
+    @Column(name = "reference_produit")
+    private String referenceProduit;
 
+	@Id
     @Column(name = "type_caracteristique")
     private String typeCaracteristique;
 
     @Column(name = "valeur_caracteristique")
     private String valeurCaracteristique;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "produit_caracteristique",
-            inverseJoinColumns = {@JoinColumn(name = "reference_produit")},
-            joinColumns = {@JoinColumn(name = "id_caracteristique")}
-    )
-    private List<Produit> produits;
-    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reference_produit", insertable= false, updatable = false)
+    private Produit produit;
+
+
     /**
-     * Retourne l'id de la caractéristique.
+     * Retourne le reference produit de la caractéristique.
      *
-     * @return l'id de la caractéristique
+     * @return le reference produit de la caractéristique
      */
-    public int getIdCaracteristique() {
-        return idCaracteristique;
+    public String getReferenceProduit() {
+        return referenceProduit;
     }
 
     /**
-     * Remplace l'id de la caractéristique par celui-ci mit en paramètre.
+     * Remplace le referenceProduit de la caractéristique par celui-ci mit en paramètre.
      *
-     * @param idCaracteristique La nouvelle ID de la caractéristique
+     * @param referenceProduit Le nouveau referenceProduit de la caractéristique
      */
-    public void setIdCaracteristique(int idCaracteristique) {
-        this.idCaracteristique = idCaracteristique;
+    public void setReferenceProduit(String referenceProduit) {
+        this.referenceProduit = referenceProduit;
     }
-    
+
     /**
      * Retourne le type de la caractéristique.
      *
@@ -96,20 +93,20 @@ public class Caracteristique {
     }
     
     /**
-     * Retourne une liste de produits liés à la caractéristique.
+     * Retourne un produit lié à la caractéristique.
      *
      * @return
      */
-    public List<Produit> getProduits() {
-        return produits;
+    public Produit getProduit() {
+        return produit;
     }
     
     /**
-     * Remplace la liste produit par celle-ci mit en paramètre.
+     * Remplace le produit par celui-ci mit en paramètre.
      *
-     * @param produits Une liste de produit
+     * @param produit un produit
      */
-    public void setProduits(List<Produit> produits) {
-        this.produits = produits;
+    public void setProduit(Produit produit) {
+        this.produit = produit;
     }
 }

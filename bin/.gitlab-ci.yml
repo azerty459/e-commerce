@@ -1,0 +1,38 @@
+image: maven:3.5.3-jdk-8
+  
+stages:
+  - tests
+  - deploiement
+  
+tests:
+  stage: tests
+  script: 
+  - echo 'test'
+  only:
+  - branches
+  
+deploiement_dev:
+  stage: deploiement
+  script: 
+    - mvn package -DskipTests
+  artifacts:
+    paths:
+    - target/*.jar
+    - src/main/resources/application-dev.properties
+    - src/main/resources/graphql
+    expire_in: 1h
+  only:
+    - dev
+
+deploiement_master:
+  stage: deploiement
+  script: 
+    - mvn package -DskipTests
+  artifacts:
+    paths:
+    - target/*.jar
+    - src/main/resources/application-prod.properties
+    - src/main/resources/graphql
+    expire_in: 1h
+  only:
+    - master

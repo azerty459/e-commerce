@@ -57,13 +57,10 @@ public class Produit {
     )
     private List<Categorie> categoriesSupprime;
     
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "produit_caracteristique",
-            joinColumns = {@JoinColumn(name = "reference_produit")},
-            inverseJoinColumns = {@JoinColumn(name = "id_caracteristique")}
-    )
+    
+    @OneToMany(mappedBy = "produit", cascade = {CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<Caracteristique> caracteristiques;
+
 
     /**
      * Retourne la référence du produit.
