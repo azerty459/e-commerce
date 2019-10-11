@@ -56,6 +56,14 @@ public class Produit {
             inverseJoinColumns = {@JoinColumn(name = "id_categorie")}
     )
     private List<Categorie> categoriesSupprime;
+    
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "produit_caracteristique",
+            joinColumns = {@JoinColumn(name = "reference_produit")},
+            inverseJoinColumns = {@JoinColumn(name = "id_caracteristique")}
+    )
+    private List<Caracteristique> caracteristiques;
 
     /**
      * Retourne la référence du produit.
@@ -208,6 +216,24 @@ public class Produit {
      */
     public void setPhotoPrincipale(Photo photoPrincipale) {
         this.photoPrincipale = photoPrincipale;
+    }
+    
+    /**
+     * Retourne une liste de caractéristiques liées à ce produit.
+     *
+     * @return une liste de caractéristiques liées à ce produit
+     */
+    public List<Caracteristique> getCaracteristique() {
+        return caracteristiques;
+    }
+    
+    /**
+     * Remplace la liste de caractéristiques par celui-ci mit en paramètre
+     *
+     * @param caracteristiques
+     */
+    public void setCaracteristique(List<Caracteristique> caracteristiques) {
+        this.caracteristiques = caracteristiques;
     }
 
 }
