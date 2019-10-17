@@ -8,4 +8,6 @@ public interface ProduitRepositoryCustom {
 
     Collection<Produit> findAllWithCriteria(String ref, String cat);
 
+	//Collection<Produit> exerciceTrois(int paramA, int paramB, String paramC, String paramD, String paramE);
+
 }

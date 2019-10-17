@@ -69,7 +69,11 @@ public class CaracteristiqueBusiness implements ICaracteristiqueBusiness {
      */
     @Override
     public boolean deleteCaracteristique(String referenceProduit, String typeCaracteristique) {
-        CaracteristiqueId idCaracteristique = new CaracteristiqueId(referenceProduit, typeCaracteristique);
+        if (StringUtils.isEmpty(referenceProduit) || StringUtils.isEmpty(typeCaracteristique)) {
+            return false;
+        }
+    	
+    	CaracteristiqueId idCaracteristique = new CaracteristiqueId(referenceProduit, typeCaracteristique);
         caracteristiqueRepository.deleteById(idCaracteristique);
         return true;
     }
