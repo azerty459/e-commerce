@@ -57,6 +57,25 @@ public class Produit {
     )
     private List<Categorie> categoriesSupprime;
 
+    @OneToMany(mappedBy = "caracteristicPK.produit", fetch = FetchType.LAZY)
+    private List<CaracteristiqueValue> caracteristiqueValueList;
+
+    public List<Categorie> getCategoriesSupprime() {
+        return categoriesSupprime;
+    }
+
+    public void setCategoriesSupprime(List<Categorie> categoriesSupprime) {
+        this.categoriesSupprime = categoriesSupprime;
+    }
+
+    public List<CaracteristiqueValue> getCaracteristiqueValueList() {
+        return caracteristiqueValueList;
+    }
+
+    public void setCaracteristiqueValueList(List<CaracteristiqueValue> caracteristiqueValueList) {
+        this.caracteristiqueValueList = caracteristiqueValueList;
+    }
+
     /**
      * Retourne la référence du produit.
      *
