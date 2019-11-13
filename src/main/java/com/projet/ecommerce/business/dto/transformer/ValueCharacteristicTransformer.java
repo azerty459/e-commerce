@@ -1,61 +1,60 @@
 package com.projet.ecommerce.business.dto.transformer;
 
-import com.projet.ecommerce.persistance.entity.CharacteristicType;
-import com.projet.ecommerce.persistance.entity.CharacteristicValue.CharacteristicPK;
-import com.projet.ecommerce.business.dto.CharacteristicValueDTO;
-import com.projet.ecommerce.persistance.entity.CharacteristicValue;
+import com.projet.ecommerce.persistance.entity.ValueCharacteristic.CharacteristicPK;
+import com.projet.ecommerce.business.dto.ValueCharacteristicDTO;
+import com.projet.ecommerce.persistance.entity.ValueCharacteristic;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class CharacteristicValueTransformer {
+public class ValueCharacteristicTransformer {
 
-    private CharacteristicValueTransformer() {
+    private ValueCharacteristicTransformer() {
     }
 
-    public static Collection<CharacteristicValue> litDtoToEntity(Collection<CharacteristicValueDTO> characteristicValueDTOCollection) {
-        Collection<CharacteristicValue> characteristicValueCollection = new ArrayList<>();
-        if (characteristicValueDTOCollection != null) {
-            for (CharacteristicValueDTO characteristicValueDTO : characteristicValueDTOCollection) {
-                characteristicValueCollection.add(dtoToEntity(characteristicValueDTO));
+    public static Collection<ValueCharacteristic> litDtoToEntity(Collection<ValueCharacteristicDTO> valueCharacteristicDTOCollection) {
+        Collection<ValueCharacteristic> valueCharacteristicCollection = new ArrayList<>();
+        if (valueCharacteristicDTOCollection != null) {
+            for (ValueCharacteristicDTO valueCharacteristicDTO : valueCharacteristicDTOCollection) {
+                valueCharacteristicCollection.add(dtoToEntity(valueCharacteristicDTO));
             }
         }
-        return characteristicValueCollection;
+        return valueCharacteristicCollection;
     }
 
-    public static CharacteristicValue dtoToEntity(CharacteristicValueDTO characteristicValueDTO) {
-        CharacteristicValue characteristicValue = new CharacteristicValue();
+    public static ValueCharacteristic dtoToEntity(ValueCharacteristicDTO valueCharacteristicDTO) {
+        ValueCharacteristic valueCharacteristic = new ValueCharacteristic();
         CharacteristicPK characteristicPK = new CharacteristicPK();
         characteristicPK.setProduct(
-                ProduitTransformer.dtoToEntity(characteristicValueDTO.getProductDto())
+                ProduitTransformer.dtoToEntity(valueCharacteristicDTO.getProductDto())
         );
-        characteristicPK.setCharacteristicType(
-                CharacteristicTypeTransformer.dtoToEntity(characteristicValueDTO.getCharacteristicTypeDto())
+        characteristicPK.setTypeCharacteristic(
+                TypeCharacteristicTransformer.dtoToEntity(valueCharacteristicDTO.getTypeCharacteristicDto())
         );
-        characteristicValue.setValueCharacteristic(characteristicValueDTO.getValue());
-        characteristicValue.setCharacteristicPK(characteristicPK);
-        return characteristicValue;
+        valueCharacteristic.setValueCharacteristic(valueCharacteristicDTO.getValue());
+        valueCharacteristic.setCharacteristicPK(characteristicPK);
+        return valueCharacteristic;
     }
 
-    public static CharacteristicValueDTO entityToDto(CharacteristicValue characteristicValue) {
-        CharacteristicValueDTO characteristicValueDTO = new CharacteristicValueDTO();
-        characteristicValueDTO.setCharacteristicTypeDto(
-                CharacteristicTypeTransformer.entityToDto(characteristicValue.getCharacteristicPK().getCharacteristicType())
+    public static ValueCharacteristicDTO entityToDto(ValueCharacteristic valueCharacteristic) {
+        ValueCharacteristicDTO valueCharacteristicDTO = new ValueCharacteristicDTO();
+        valueCharacteristicDTO.setTypeCharacteristicDto(
+                TypeCharacteristicTransformer.entityToDto(valueCharacteristic.getCharacteristicPK().getTypeCharacteristic())
                 );
-        characteristicValueDTO.setProductDto(
-                ProduitTransformer.entityToDto(characteristicValue.getCharacteristicPK().getProduct())
+        valueCharacteristicDTO.setProductDto(
+                ProduitTransformer.entityToDto(valueCharacteristic.getCharacteristicPK().getProduct())
         );
-        characteristicValueDTO.setValue(characteristicValue.getValueCharacteristic());
-        return characteristicValueDTO;
+        valueCharacteristicDTO.setValue(valueCharacteristic.getValueCharacteristic());
+        return valueCharacteristicDTO;
     }
 
-    public static Collection<CharacteristicValueDTO> listEntityToDto(Collection<CharacteristicValue> characteristicValueCollection) {
-        Collection<CharacteristicValueDTO> characteristicValueDTOCollection = new ArrayList<>();
-        if (characteristicValueCollection != null) {
-            for (CharacteristicValue characteristicValue : characteristicValueCollection) {
-                characteristicValueDTOCollection.add(entityToDto(characteristicValue));
+    public static Collection<ValueCharacteristicDTO> listEntityToDto(Collection<ValueCharacteristic> valueCharacteristicCollection) {
+        Collection<ValueCharacteristicDTO> valueCharacteristicDTOCollection = new ArrayList<>();
+        if (valueCharacteristicCollection != null) {
+            for (ValueCharacteristic valueCharacteristic : valueCharacteristicCollection) {
+                valueCharacteristicDTOCollection.add(entityToDto(valueCharacteristic));
             }
         }
-        return characteristicValueDTOCollection;
+        return valueCharacteristicDTOCollection;
     }
 }

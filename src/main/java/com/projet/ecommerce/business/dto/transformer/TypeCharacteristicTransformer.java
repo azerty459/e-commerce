@@ -1,67 +1,67 @@
 package com.projet.ecommerce.business.dto.transformer;
 
-import com.projet.ecommerce.business.dto.CharacteristicTypeDTO;
-import com.projet.ecommerce.persistance.entity.CharacteristicType;
+import com.projet.ecommerce.business.dto.TypeCharacteristicDTO;
+import com.projet.ecommerce.persistance.entity.TypeCharacteristic;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class CharacteristicTypeTransformer {
+public class TypeCharacteristicTransformer {
 
-    private CharacteristicTypeTransformer() {
+    private TypeCharacteristicTransformer() {
     }
 
     /**
-     * Transform the object collection {@link CharacteristicTypeDTO} to another object collection {@link CharacteristicType}
-     * @param characteristicTypeDTOCollection
+     * Transform the object collection {@link TypeCharacteristicDTO} to another object collection {@link TypeCharacteristic}
+     * @param typeCharacteristicDTOCollection
      * @return
      */
-    public static Collection<CharacteristicType> listDtoToEntity (Collection<CharacteristicTypeDTO> characteristicTypeDTOCollection) {
-        Collection<CharacteristicType> characteristicTypeCollection = new ArrayList<>();
-        if (characteristicTypeDTOCollection != null) {
-            for (CharacteristicTypeDTO characteristicTypeDTO : characteristicTypeDTOCollection) {
-                characteristicTypeCollection.add(dtoToEntity(characteristicTypeDTO));
+    public static Collection<TypeCharacteristic> listDtoToEntity (Collection<TypeCharacteristicDTO> typeCharacteristicDTOCollection) {
+        Collection<TypeCharacteristic> typeCharacteristicCollection = new ArrayList<>();
+        if (typeCharacteristicDTOCollection != null) {
+            for (TypeCharacteristicDTO typeCharacteristicDTO : typeCharacteristicDTOCollection) {
+                typeCharacteristicCollection.add(dtoToEntity(typeCharacteristicDTO));
             }
         }
-        return characteristicTypeCollection;
+        return typeCharacteristicCollection;
     }
 
     /**
-     * Transform the object {@link CharacteristicTypeDTO} to another object {@link CharacteristicType}
-     * @param characteristicTypeDTO
+     * Transform the object {@link TypeCharacteristicDTO} to another object {@link TypeCharacteristic}
+     * @param typeCharacteristicDTO
      * @return
      */
-    public static CharacteristicType dtoToEntity(CharacteristicTypeDTO characteristicTypeDTO) {
-        CharacteristicType characteristicType = new CharacteristicType();
-        characteristicType.setIdCharacteristicType(characteristicTypeDTO.getId());
-        characteristicType.setTypeCharacteristic(characteristicTypeDTO.getType());
-        return characteristicType;
+    public static TypeCharacteristic dtoToEntity(TypeCharacteristicDTO typeCharacteristicDTO) {
+        TypeCharacteristic typeCharacteristic = new TypeCharacteristic();
+        typeCharacteristic.setIdCharacteristicType(typeCharacteristicDTO.getId());
+        typeCharacteristic.setTypeCharacteristic(typeCharacteristicDTO.getType());
+        return typeCharacteristic;
     }
 
     /**
-     * Transform the object collection {@link CharacteristicType} to another object collection {@link CharacteristicTypeDTO}
-     * @param characteristicTypeCollection
+     * Transform the object collection {@link TypeCharacteristic} to another object collection {@link TypeCharacteristicDTO}
+     * @param typeCharacteristicCollection
      * @return
      */
-    public static Collection<CharacteristicTypeDTO> listEntityToDto(Collection<CharacteristicType> characteristicTypeCollection) {
-        Collection<CharacteristicTypeDTO> characteristicTypeDTOCollection = new ArrayList<>();
-        if (characteristicTypeCollection != null) {
-            for (CharacteristicType characteristicType : characteristicTypeCollection) {
-                characteristicTypeDTOCollection.add(entityToDto(characteristicType));
+    public static Collection<TypeCharacteristicDTO> listEntityToDto(Collection<TypeCharacteristic> typeCharacteristicCollection) {
+        Collection<TypeCharacteristicDTO> typeCharacteristicDTOCollection = new ArrayList<>();
+        if (typeCharacteristicCollection != null) {
+            for (TypeCharacteristic typeCharacteristic : typeCharacteristicCollection) {
+                typeCharacteristicDTOCollection.add(entityToDto(typeCharacteristic));
             }
         }
-        return characteristicTypeDTOCollection;
+        return typeCharacteristicDTOCollection;
     }
 
     /**
-     * Transform the object {@link CharacteristicType} to another object {@link CharacteristicTypeDTO}
-     * @param characteristicType
+     * Transform the object {@link TypeCharacteristic} to another object {@link TypeCharacteristicDTO}
+     * @param typeCharacteristic
      * @return
      */
-    public static CharacteristicTypeDTO entityToDto(CharacteristicType characteristicType) {
-        CharacteristicTypeDTO characteristicTypeDTO = new CharacteristicTypeDTO();
-        characteristicTypeDTO.setId(characteristicType.getIdCharacteristicType());
-        characteristicTypeDTO.setType(characteristicType.getTypeCharacteristic());
-        return characteristicTypeDTO;
+    public static TypeCharacteristicDTO entityToDto(TypeCharacteristic typeCharacteristic) {
+        TypeCharacteristicDTO typeCharacteristicDTO = new TypeCharacteristicDTO();
+        typeCharacteristicDTO.setId(typeCharacteristic.getIdCharacteristicType());
+        typeCharacteristicDTO.setType(typeCharacteristic.getTypeCharacteristic());
+        return typeCharacteristicDTO;
     }
 }
