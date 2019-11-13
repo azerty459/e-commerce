@@ -1,10 +1,10 @@
 package com.projet.ecommerce.business.dto;
 
-public class CharacteristicValueDTO {
+public class ValueCharacteristicDTO {
 
     private String value;
     private ProduitDTO productDto;
-    private CharacteristicTypeDTO characteristicTypeDto;
+    private TypeCharacteristicDTO typeCharacteristicDto;
 
     public String getValue() {
         return value;
@@ -22,11 +22,11 @@ public class CharacteristicValueDTO {
         this.productDto = productDto;
     }
 
-    public CharacteristicTypeDTO getCharacteristicTypeDto() {
-        return characteristicTypeDto;
+    public TypeCharacteristicDTO getTypeCharacteristicDto() {
+        return typeCharacteristicDto;
     }
 
-    public void setCharacteristicTypeDto(CharacteristicTypeDTO characteristicTypeDto) {
-        this.characteristicTypeDto = characteristicTypeDto;
+    public void setTypeCharacteristicDto(TypeCharacteristicDTO typeCharacteristicDto) {
+        this.typeCharacteristicDto = typeCharacteristicDto;
     }
 }

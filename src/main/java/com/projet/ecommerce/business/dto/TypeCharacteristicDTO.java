@@ -1,6 +1,6 @@
 package com.projet.ecommerce.business.dto;
 
-public class CharacteristicTypeDTO {
+public class TypeCharacteristicDTO {
 
     /**
      * Id du type de characteristic

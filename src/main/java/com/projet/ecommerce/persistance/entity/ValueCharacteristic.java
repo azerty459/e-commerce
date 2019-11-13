@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "characteristic_value")
-public class CharacteristicValue implements Serializable {
+public class ValueCharacteristic implements Serializable {
 
     @Column(name = "value_characteristic")
     private String valueCharacteristic;
@@ -42,7 +42,7 @@ public class CharacteristicValue implements Serializable {
         @ManyToOne
         private Produit product;
         @ManyToOne
-        private CharacteristicType characteristicType;
+        private TypeCharacteristic typeCharacteristic;
 
         public CharacteristicPK() {
         }
@@ -55,12 +55,12 @@ public class CharacteristicValue implements Serializable {
             this.product = product;
         }
 
-        public CharacteristicType getCharacteristicType() {
-            return characteristicType;
+        public TypeCharacteristic getTypeCharacteristic() {
+            return typeCharacteristic;
         }
 
-        public void setCharacteristicType(CharacteristicType characteristicType) {
-            this.characteristicType = characteristicType;
+        public void setTypeCharacteristic(TypeCharacteristic typeCharacteristic) {
+            this.typeCharacteristic = typeCharacteristic;
         }
     }
 }

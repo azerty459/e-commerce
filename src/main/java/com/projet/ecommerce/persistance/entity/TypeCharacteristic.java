@@ -8,7 +8,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "characteristic_type")
-public class CharacteristicType {
+public class TypeCharacteristic {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
