@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "characteristic_value")
-public class CharacteristicValue {
+public class CharacteristicValue implements Serializable {
 
     @Column(name = "value_characteristic")
     private String valueCharacteristic;
@@ -37,7 +37,7 @@ public class CharacteristicValue {
      * Clé composite
      */
     @Embeddable
-    public class CharacteristicPK implements Serializable {
+    public static class CharacteristicPK implements Serializable {
 
         @ManyToOne
         private Produit product;
