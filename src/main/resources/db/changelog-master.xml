@@ -11,4 +11,7 @@
     <include file="changelog/07-insert-utilisateur-and-role.sql" relativeToChangelogFile="true"/>
     <include file="changelog/08-insert-categorie-supprime.sql" relativeToChangelogFile="true"/>
     <include file="changelog/09-insert-avis_client.sql" relativeToChangelogFile="true"/>
+    <include file="changelog/10-create-tables.sql" relativeToChangelogFile="true"/>
+    <include file="changelog/11-create-sequence-id-characteristic.sql" relativeToChangelogFile="true"/>
+    <include file="changelog/12-insert-characterstic-type.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>
