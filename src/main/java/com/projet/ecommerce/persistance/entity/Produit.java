@@ -57,8 +57,8 @@ public class Produit {
     )
     private List<Categorie> categoriesSupprime;
 
-    @OneToMany(mappedBy = "characteristicPK.product", fetch = FetchType.LAZY)
-    private List<ValueCharacteristic> valueCharacteristicList;
+    @OneToMany(mappedBy = "characteristicPK.product", fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+    private List<Characteristic> characteristicList;
 
     public List<Categorie> getCategoriesSupprime() {
         return categoriesSupprime;
@@ -68,12 +68,12 @@ public class Produit {
         this.categoriesSupprime = categoriesSupprime;
     }
 
-    public List<ValueCharacteristic> getValueCharacteristicList() {
-        return valueCharacteristicList;
+    public List<Characteristic> getCharacteristicList() {
+        return characteristicList;
     }
 
-    public void setValueCharacteristicList(List<ValueCharacteristic> valueCharacteristicList) {
-        this.valueCharacteristicList = valueCharacteristicList;
+    public void setCharacteristicList(List<Characteristic> characteristicList) {
+        this.characteristicList = characteristicList;
     }
 
     /**

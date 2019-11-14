@@ -12,5 +12,6 @@ CREATE TABLE characteristic_value
     id_characteristic_type INT NOT NULL,
     PRIMARY KEY (reference_product, id_characteristic_type),
     CONSTRAINT FK_reference_product FOREIGN KEY (reference_product) REFERENCES produit (reference_produit),
-    CONSTRAINT FK_id_characteristic_type FOREIGN KEY (id_characteristic_type) REFERENCES characteristic_type (id_characteristic_type)
+    CONSTRAINT FK_id_characteristic_type FOREIGN KEY (id_characteristic_type) REFERENCES characteristic_type (id_characteristic_type) ON DELETE CASCADE
+
 );

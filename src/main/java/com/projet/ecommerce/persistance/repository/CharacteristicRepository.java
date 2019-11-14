@@ -1,6 +1,6 @@
 package com.projet.ecommerce.persistance.repository;
 
-import com.projet.ecommerce.persistance.entity.ValueCharacteristic;
+import com.projet.ecommerce.persistance.entity.Characteristic;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
  */
 
 @Repository
-public interface ValueCharacteristicRepository extends CrudRepository<ValueCharacteristic, String> {
+public interface CharacteristicRepository extends CrudRepository<Characteristic, String> {
 
 }

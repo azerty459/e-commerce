@@ -9,20 +9,20 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "characteristic_value")
-public class ValueCharacteristic implements Serializable {
+public class Characteristic implements Serializable {
 
     @Column(name = "value_characteristic")
-    private String valueCharacteristic;
+    private String value;
 
     @EmbeddedId
     private CharacteristicPK characteristicPK;
 
-    public String getValueCharacteristic() {
-        return valueCharacteristic;
+    public String getValue() {
+        return value;
     }
 
-    public void setValueCharacteristic(String valueCharacteristic) {
-        this.valueCharacteristic = valueCharacteristic;
+    public void setValue(String value) {
+        this.value = value;
     }
 
     public CharacteristicPK getCharacteristicPK() {
