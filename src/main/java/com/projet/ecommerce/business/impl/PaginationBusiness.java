@@ -88,7 +88,7 @@ public class PaginationBusiness implements IPaginationBusiness {
         }
         paginationDTO = getPaginationDTO(pageProduit, pageActuelle);
         paginationDTO.setCategories(new ArrayList<>());
-        paginationDTO.setProduits(new ArrayList<ProduitDTO>(ProduitTransformer.entityToDto(pageProduit.getContent())));
+        paginationDTO.setProduits(new ArrayList<ProduitDTO>(ProduitTransformer.listEntityToDto(pageProduit.getContent())));
         return paginationDTO;
     }
 

@@ -40,7 +40,7 @@ public class ProduitTransformerTests {
     @Test
     public void severalDtoToEntity() {
         List<ProduitDTO> listeProduitDTO = Arrays.asList(buildProduitDTO(1), buildProduitDTO(2));
-        List<Produit> listeProduit = new ArrayList<>(ProduitTransformer.dtoToEntity(listeProduitDTO));
+        List<Produit> listeProduit = new ArrayList<>(ProduitTransformer.listDtoToEntity(listeProduitDTO));
 
         Assert.assertNotNull(listeProduit);
         Assert.assertEquals(listeProduitDTO.size(), listeProduit.size());
@@ -51,7 +51,7 @@ public class ProduitTransformerTests {
     @Test
     public void severalEntityToDto() {
         List<Produit> listeProduit = Arrays.asList(buildProduit(1), buildProduit(2));
-        List<ProduitDTO> listeProduitDTO = new ArrayList<>(ProduitTransformer.entityToDto(listeProduit));
+        List<ProduitDTO> listeProduitDTO = new ArrayList<>(ProduitTransformer.listEntityToDto(listeProduit));
 
         Assert.assertNotNull(listeProduitDTO);
         Assert.assertEquals(listeProduit.size(), listeProduitDTO.size());
