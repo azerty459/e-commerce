@@ -5,6 +5,7 @@ import com.projet.ecommerce.persistance.entity.TypeCharacteristic;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class TypeCharacteristicTransformer {
 
@@ -16,8 +17,8 @@ public class TypeCharacteristicTransformer {
      * @param typeCharacteristicDTOCollection
      * @return
      */
-    public static Collection<TypeCharacteristic> listDtoToEntity (Collection<TypeCharacteristicDTO> typeCharacteristicDTOCollection) {
-        Collection<TypeCharacteristic> typeCharacteristicCollection = new ArrayList<>();
+    public static List<TypeCharacteristic> listDtoToEntity (List<TypeCharacteristicDTO> typeCharacteristicDTOCollection) {
+        List<TypeCharacteristic> typeCharacteristicCollection = new ArrayList<>();
         if (typeCharacteristicDTOCollection != null) {
             for (TypeCharacteristicDTO typeCharacteristicDTO : typeCharacteristicDTOCollection) {
                 typeCharacteristicCollection.add(dtoToEntity(typeCharacteristicDTO));
@@ -43,8 +44,8 @@ public class TypeCharacteristicTransformer {
      * @param typeCharacteristicCollection
      * @return
      */
-    public static Collection<TypeCharacteristicDTO> listEntityToDto(Collection<TypeCharacteristic> typeCharacteristicCollection) {
-        Collection<TypeCharacteristicDTO> typeCharacteristicDTOCollection = new ArrayList<>();
+    public static List<TypeCharacteristicDTO> listEntityToDto(List<TypeCharacteristic> typeCharacteristicCollection) {
+        List<TypeCharacteristicDTO> typeCharacteristicDTOCollection = new ArrayList<>();
         if (typeCharacteristicCollection != null) {
             for (TypeCharacteristic typeCharacteristic : typeCharacteristicCollection) {
                 typeCharacteristicDTOCollection.add(entityToDto(typeCharacteristic));
