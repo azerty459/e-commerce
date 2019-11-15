@@ -1,12 +1,16 @@
 package com.projet.ecommerce.business.impl;
 
 import com.projet.ecommerce.business.IProduitBusiness;
+import com.projet.ecommerce.business.dto.CharacteristicDTO;
 import com.projet.ecommerce.business.dto.ProduitDTO;
+import com.projet.ecommerce.business.dto.TypeCharacteristicDTO;
+import com.projet.ecommerce.business.dto.transformer.CharacteristicTransformer;
 import com.projet.ecommerce.business.dto.transformer.ProduitTransformer;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Photo;
 import com.projet.ecommerce.persistance.entity.Produit;
+import com.projet.ecommerce.persistance.entity.TypeCharacteristic;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import com.projet.ecommerce.persistance.repository.PhotoRepository;
 import com.projet.ecommerce.persistance.repository.ProduitRepository;
@@ -50,7 +54,7 @@ public class ProduitBusiness implements IProduitBusiness {
      */
     @Override
     // FIXME à remplacer par un DTO
-    public ProduitDTO add(String referenceProduit, String nom, String description, float prixHT, List<Integer> categoriesProduit) {
+    public ProduitDTO add(String referenceProduit, String nom, String description, float prixHT, List<Integer> categoriesProduit, List<CharacteristicDTO> characteristicProduct) {
         if (referenceProduit.isEmpty() && nom.isEmpty()) {
             GraphQLCustomException graphQLCustomException = new GraphQLCustomException("Erreur dans l'ajout du produit (la référence, le nom et le prixHT ne peut être null)");
             graphQLCustomException.ajouterExtension("Référence", referenceProduit);
@@ -77,6 +81,12 @@ public class ProduitBusiness implements IProduitBusiness {
             }
         }
         produit.setCategories(categorieList);
+
+        //Add characteristic list
+        if (characteristicProduct != null) {
+            produit.setCharacteristicList(CharacteristicTransformer.listDtoToEntity(characteristicProduct));
+        }
+
         return ProduitTransformer.entityToDto(produitRepository.save(produit));
     }
 
@@ -191,7 +201,7 @@ public class ProduitBusiness implements IProduitBusiness {
      */
     @Override
     public List<ProduitDTO> getAll() {
-        return new ArrayList<>(ProduitTransformer.entityToDto(new ArrayList<>(produitRepository.findAll())));
+        return new ArrayList<>(ProduitTransformer.listEntityToDto(new ArrayList<>(produitRepository.findAll())));
     }
 
     /**
@@ -217,7 +227,7 @@ public class ProduitBusiness implements IProduitBusiness {
         if (produitCollection.size() == 0) {
             throw new GraphQLCustomException("Aucun produit(s) trouvé(s).");
         }
-        return new ArrayList<>(ProduitTransformer.entityToDto(new ArrayList<>(produitCollection)));
+        return new ArrayList<>(ProduitTransformer.listEntityToDto(new ArrayList<>(produitCollection)));
     }
 
     /**
