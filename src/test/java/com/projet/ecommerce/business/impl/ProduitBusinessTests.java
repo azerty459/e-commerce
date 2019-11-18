@@ -1,8 +1,10 @@
 package com.projet.ecommerce.business.impl;
 
+import com.projet.ecommerce.business.dto.CharacteristicDTO;
 import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
 import com.projet.ecommerce.persistance.entity.Categorie;
+import com.projet.ecommerce.persistance.entity.Characteristic;
 import com.projet.ecommerce.persistance.entity.Photo;
 import com.projet.ecommerce.persistance.entity.Produit;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
@@ -44,6 +46,9 @@ public class ProduitBusinessTests {
     @Mock
     private Page page;
 
+    @Mock
+    private CharacteristicDTO characteristicDTO;
+
     @InjectMocks
     private ProduitBusiness produitBusiness;
 
@@ -60,16 +65,20 @@ public class ProduitBusinessTests {
         Produit produit = buildProduit();
         Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
 
-        ProduitDTO retour1 = produitBusiness.add("A05A01", "Test", "Test", 4.7f, null);
+        List<CharacteristicDTO> characteristicDTOList = new ArrayList<>();
+        characteristicDTOList.add(characteristicDTO);
+
+        ProduitDTO retour1 = produitBusiness.add("A05A01", "Test", "Test", 4.7f, null, characteristicDTOList);
         Assert.assertNotNull(retour1);
         Assert.assertEquals(produit.getNom(), retour1.getNom());
         Assert.assertEquals(produit.getDescription(), retour1.getDescription());
         Assert.assertEquals(produit.getPrixHT(), retour1.getPrixHT(), 0);
         Assert.assertEquals(produit.getReferenceProduit(), retour1.getRef());
+        Assert.assertEquals(produit.getCharacteristicList(), retour1.getCharacteristicDTOList());
 
         // Je teste si le produit business m'envoie bien une GraphQLCustomException, si le produit existe déjà
         thrown.expect(GraphQLCustomException.class);
-        ProduitDTO retour2 = produitBusiness.add("", "", "dfdfdf", 0, null);
+        ProduitDTO retour2 = produitBusiness.add("", "", "dfdfdf", 0, null, null);
         Assert.assertNull(retour2);
     }
 
@@ -80,7 +89,7 @@ public class ProduitBusinessTests {
         // Je teste si le produit business m'envoie bien une GraphQLCustomException, si le produit existe déjà
         thrown.expect(GraphQLCustomException.class);
         Mockito.when(produitRepository.findById(Mockito.anyString())).thenReturn(Optional.of(produit));
-        ProduitDTO retour = produitBusiness.add("A05A01", "Test", "Test", 4.7f, null);
+        ProduitDTO retour = produitBusiness.add("A05A01", "Test", "Test", 4.7f, null, null);
         Assert.assertNull(retour);
     }
 
@@ -103,7 +112,7 @@ public class ProduitBusinessTests {
         Mockito.when(categorieRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(categorie));
         Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produit);
 
-        ProduitDTO retour = produitBusiness.add("A05A01", "Test", "Test", 4.7f, categoriesProduit);
+        ProduitDTO retour = produitBusiness.add("A05A01", "Test", "Test", 4.7f, categoriesProduit, null);
 
         Assert.assertNotNull(retour);
         Assert.assertEquals(retour.getClass(), ProduitDTO.class);
@@ -274,6 +283,7 @@ public class ProduitBusinessTests {
         produit.setNom("Livre1");
         produit.setPhotos(new ArrayList<>());
         produit.setCategories(new ArrayList<>());
+        produit.setCharacteristicList(new ArrayList<>());
         return produit;
     }
 

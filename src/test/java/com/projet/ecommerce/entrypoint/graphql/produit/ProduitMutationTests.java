@@ -1,5 +1,7 @@
 package com.projet.ecommerce.entrypoint.graphql.produit;
 
+import com.projet.ecommerce.business.dto.CharacteristicDTO;
+import com.projet.ecommerce.business.dto.TypeCharacteristicDTO;
 import com.projet.ecommerce.business.impl.ProduitBusiness;
 import com.projet.ecommerce.persistance.entity.Produit;
 import graphql.schema.DataFetcher;
@@ -16,8 +18,9 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
+
+import static org.apache.commons.lang.RandomStringUtils.randomAlphabetic;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
@@ -27,6 +30,15 @@ public class ProduitMutationTests {
 
     @Mock
     private DataFetchingEnvironment dataFetchingEnvironment;
+
+    @Mock
+    private List<CharacteristicDTO> characteristicDTOList;
+
+    @Mock
+    private CharacteristicDTO characteristicDTO;
+
+    @Mock
+    private TypeCharacteristicDTO typeCharacteristicDTO;
 
     @InjectMocks
     private ProduitMutation produitMutation;
@@ -55,18 +67,29 @@ public class ProduitMutationTests {
     public void addProduit() {
         Map<String, DataFetcher> retourMap = produitMutation.produitWiring().getFieldDataFetchers();
 
+        characteristicDTOList = new ArrayList<>();
+        typeCharacteristicDTO = new TypeCharacteristicDTO();
+        typeCharacteristicDTO.setId(1);
+        typeCharacteristicDTO.setType(randomAlphabetic(6));
+        characteristicDTO = new CharacteristicDTO();
+        characteristicDTO.setTypeCharacteristicDTO(typeCharacteristicDTO);
+        characteristicDTO.setValeur(randomAlphabetic(6));
+        characteristicDTO.setProductDto(null);
+        characteristicDTOList.add(characteristicDTO);
+
         // On imite le comportement des getArgument
         Mockito.when(dataFetchingEnvironment.getArgument("ref")).thenReturn("A09A87");
         Mockito.when(dataFetchingEnvironment.getArgument("nom")).thenReturn("test");
         Mockito.when(dataFetchingEnvironment.getArgument("description")).thenReturn("test");
         Mockito.when(dataFetchingEnvironment.getArgument("prixHT")).thenReturn(4.7);
+        Mockito.when(dataFetchingEnvironment.getArgument("newCharacteristic")).thenReturn(characteristicDTO);
 
         Assert.assertNotNull(retourMap.get("addProduit"));
         retourMap.get("addProduit").get(dataFetchingEnvironment);
         // Test avec nb appel add avec bon param
-        Mockito.verify(produitBusiness, Mockito.times(1)).add("A09A87", "test", "test", 4.7f, null);
+        Mockito.verify(produitBusiness, Mockito.times(1)).add("A09A87", "test", "test", 4.7f, null, characteristicDTOList);
         // Test avec nb appel add avec mauvais param
-        Mockito.verify(produitBusiness, Mockito.times(0)).add("A09A82", "test", "test", 4.7f, null);
+        Mockito.verify(produitBusiness, Mockito.times(0)).add("A09A82", "test", "test", 4.7f, null, characteristicDTOList);
     }
 
     @Test

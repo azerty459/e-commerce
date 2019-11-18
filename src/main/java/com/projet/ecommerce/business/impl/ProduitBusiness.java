@@ -54,7 +54,7 @@ public class ProduitBusiness implements IProduitBusiness {
      */
     @Override
     // FIXME à remplacer par un DTO
-    public ProduitDTO add(String referenceProduit, String nom, String description, float prixHT, List<Integer> categoriesProduit, List<CharacteristicDTO> characteristicProduct) {
+    public ProduitDTO add(String referenceProduit, String nom, String description, float prixHT, List<Integer> categoriesProduit, List<CharacteristicDTO> characteristicProductDTOList) {
         if (referenceProduit.isEmpty() && nom.isEmpty()) {
             GraphQLCustomException graphQLCustomException = new GraphQLCustomException("Erreur dans l'ajout du produit (la référence, le nom et le prixHT ne peut être null)");
             graphQLCustomException.ajouterExtension("Référence", referenceProduit);
@@ -83,8 +83,8 @@ public class ProduitBusiness implements IProduitBusiness {
         produit.setCategories(categorieList);
 
         //Add characteristic list
-        if (characteristicProduct != null) {
-            produit.setCharacteristicList(CharacteristicTransformer.listDtoToEntity(characteristicProduct));
+        if (characteristicProductDTOList != null) {
+            produit.setCharacteristicList(CharacteristicTransformer.listDtoToEntity(characteristicProductDTOList));
         }
 
         return ProduitTransformer.entityToDto(produitRepository.save(produit));
