@@ -229,4 +229,21 @@ public class Produit {
         this.photoPrincipale = photoPrincipale;
     }
 
+
+    @Override
+    public String toString() {
+        return "Produit{" +
+                "referenceProduit='" + referenceProduit + '\'' +
+                ", dateAjout=" + dateAjout +
+                ", nom='" + nom + '\'' +
+                ", description='" + description + '\'' +
+                ", prixHT=" + prixHT +
+                ", categories=" + categories +
+                ", photoPrincipale=" + photoPrincipale +
+                ", photos=" + photos +
+                ", avisClients=" + avisClients +
+                ", categoriesSupprime=" + categoriesSupprime +
+                ", characteristicList=" + characteristicList +
+                '}';
+    }
 }

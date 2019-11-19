@@ -144,4 +144,15 @@ public class Categorie {
     public void setIdCategorie(int idCategorie) {
         this.idCategorie = idCategorie;
     }
+
+    @Override
+    public String toString() {
+        return "Categorie{" +
+                "idCategorie=" + idCategorie +
+                ", nomCategorie='" + nomCategorie + '\'' +
+                ", borneGauche=" + borneGauche +
+                ", borneDroit=" + borneDroit +
+                ", level=" + level +
+                '}';
+    }
 }

@@ -79,4 +79,15 @@ public class AvisClient {
     public Produit getProduit() {
         return produit;
     }
+
+    @Override
+    public String toString() {
+        return "AvisClient{" +
+                "id=" + id +
+                ", date=" + date +
+                ", description='" + description + '\'' +
+                ", note=" + note +
+                ", produit=" + produit.getReferenceProduit() +
+                '}';
+    }
 }
