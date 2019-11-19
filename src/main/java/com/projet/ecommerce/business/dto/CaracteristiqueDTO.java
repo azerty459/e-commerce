@@ -1,5 +1,7 @@
 package com.projet.ecommerce.business.dto;
 
+import java.util.Objects;
+
 public class CaracteristiqueDTO {
 
     private TypeCaracteristiqueDTO typeCaracteristique;
@@ -24,4 +26,6 @@ public class CaracteristiqueDTO {
     public void setValeur(String valeur) {
         this.valeur = valeur;
     }
+
+
 }

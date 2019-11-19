@@ -1,9 +1,12 @@
 package com.projet.ecommerce.business.impl;
 
 import com.projet.ecommerce.business.IProduitBusiness;
+import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
 import com.projet.ecommerce.business.dto.ProduitDTO;
+import com.projet.ecommerce.business.dto.transformer.CaracteristiqueTransformer;
 import com.projet.ecommerce.business.dto.transformer.ProduitTransformer;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
+import com.projet.ecommerce.persistance.entity.Caracteristique;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Photo;
 import com.projet.ecommerce.persistance.entity.Produit;
@@ -19,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.projet.ecommerce.utilitaire.Utilitaire.mergeObjects;
 
@@ -50,7 +54,8 @@ public class ProduitBusiness implements IProduitBusiness {
      */
     @Override
     // FIXME à remplacer par un DTO
-    public ProduitDTO add(String referenceProduit, String nom, String description, float prixHT, List<Integer> categoriesProduit) {
+    public ProduitDTO add(String referenceProduit, String nom, String description, float prixHT,
+                          List<Integer> categoriesProduit, List<CaracteristiqueDTO> caracteristiqueDTOS) {
         if (referenceProduit.isEmpty() && nom.isEmpty()) {
             GraphQLCustomException graphQLCustomException = new GraphQLCustomException("Erreur dans l'ajout du produit (la référence, le nom et le prixHT ne peut être null)");
             graphQLCustomException.ajouterExtension("Référence", referenceProduit);
@@ -76,6 +81,12 @@ public class ProduitBusiness implements IProduitBusiness {
                         .map(categorieList::add);
             }
         }
+
+        if (caracteristiqueDTOS != null) {
+            caracteristiqueDTOS = caracteristiqueDTOS.stream().distinct().collect(Collectors.toList());
+            produit.setCaracteristiques(CaracteristiqueTransformer.dtoToEntities(caracteristiqueDTOS));
+        }
+
         produit.setCategories(categorieList);
         return ProduitTransformer.entityToDto(produitRepository.save(produit));
     }
