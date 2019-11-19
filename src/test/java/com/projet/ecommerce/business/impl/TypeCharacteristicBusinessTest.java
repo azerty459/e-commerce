@@ -1,18 +1,15 @@
 package com.projet.ecommerce.business.impl;
 
-import com.projet.ecommerce.persistance.entity.TypeCharacteristic;
-import com.projet.ecommerce.persistance.repository.TypeCharacteristicRepository;
+import com.projet.ecommerce.persistance.repository.ITypeCharacteristicRepository;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import static org.junit.Assert.*;
 
 @SpringBootTest
 public class TypeCharacteristicBusinessTest {
 
     @Mock
-    TypeCharacteristicRepository typeCharacteristicRepository;
+    ITypeCharacteristicRepository ITypeCharacteristicRepository;
 
     @Test
     public void getAll() {

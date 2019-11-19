@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
  */
 
 @Repository
-public interface CharacteristicRepository extends CrudRepository<Characteristic, String> {
+public interface ICharacteristicRepository extends CrudRepository<Characteristic, String> {
 
 }

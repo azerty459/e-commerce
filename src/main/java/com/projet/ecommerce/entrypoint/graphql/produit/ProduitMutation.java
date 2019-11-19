@@ -2,7 +2,9 @@ package com.projet.ecommerce.entrypoint.graphql.produit;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.projet.ecommerce.business.IProduitBusiness;
+import com.projet.ecommerce.business.dto.CharacteristicDTO;
 import com.projet.ecommerce.persistance.entity.Produit;
+import com.sun.tools.javac.util.List;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.idl.TypeRuntimeWiring;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +23,9 @@ public class ProduitMutation {
 
         builder.dataFetcher("addProduit", (DataFetchingEnvironment environment) -> {
                     double prixHT = environment.getArgument("prixHT");
-                    return produitBusiness.add(environment.getArgument("ref"), environment.getArgument("nom"), environment.getArgument("description"), (float) prixHT, environment.getArgument("nouvelleCat"));
+                    //Add a list of characteristic
+                    List<CharacteristicDTO> characteristicDTO = environment.getArgument("newCharacteristic");
+                    return produitBusiness.add(environment.getArgument("ref"), environment.getArgument("nom"), environment.getArgument("description"), (float) prixHT, environment.getArgument("nouvelleCat"), characteristicDTO);
                 }
         );
 

@@ -11,7 +11,7 @@ import java.util.List;
  */
 
 @Repository
-public interface TypeCharacteristicRepository extends CrudRepository<TypeCharacteristic, Integer> {
+public interface ITypeCharacteristicRepository extends CrudRepository<TypeCharacteristic, Integer> {
 
     @Override
     List<TypeCharacteristic> findAll();
