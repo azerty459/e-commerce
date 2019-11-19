@@ -89,7 +89,7 @@ public class ProduitTransformer {
         produit.setNom(produitDTO.getNom());
         produit.setDescription(produitDTO.getDescription());
         produit.setPrixHT(produitDTO.getPrixHT());
-        produit.setPhotos(new ArrayList<>(PhotoTransformer.dtoToEntity(produitDTO.getPhotos())));
+        produit.setPhotos(new ArrayList<>(PhotoTransformer.dtoToEntityCollection(produitDTO.getPhotos())));
         produit.setCategories(new ArrayList<>(CategorieTransformer.dtoToEntity(produitDTO.getCategories())));
         produit.setPhotoPrincipale(PhotoTransformer.dtoToEntity(produitDTO.getPhotoPrincipale()));
         return produit;

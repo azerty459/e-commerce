@@ -59,7 +59,7 @@ public class PhotoTransformerTests {
         photoDTOList.add(PHOTO_DTO1);
         photoDTOList.add(PHOTO_DTO2);
 
-        List<Photo> photoList = new ArrayList<>(PhotoTransformer.dtoToEntity(photoDTOList));
+        List<Photo> photoList = new ArrayList<>(PhotoTransformer.dtoToEntityCollection(photoDTOList));
 
         Assert.assertNotNull(photoList);
         Assert.assertEquals(photoList.get(0).getUrl(), photoDTOList.get(0).getUrl());

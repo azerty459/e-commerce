@@ -18,7 +18,7 @@ public class PhotoTransformer {
      * @param photoDTOCollection Une collection d'objets PhotoDTO
      * @return une collection d'objets Photo
      */
-    public static Collection<Photo> dtoToEntity(Collection<PhotoDTO> photoDTOCollection) {
+    public static Collection<Photo> dtoToEntityCollection(Collection<PhotoDTO> photoDTOCollection) {
         List<Photo> photoList = new ArrayList<>();
         for (PhotoDTO photoDTO : photoDTOCollection) {
             photoList.add(dtoToEntity(photoDTO));
