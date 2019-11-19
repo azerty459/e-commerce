@@ -57,6 +57,14 @@ public class Produit {
     )
     private List<Categorie> categoriesSupprime;
 
+    @OneToMany(
+            mappedBy = "caracteristiquePk.produit",
+            cascade ={CascadeType.MERGE, CascadeType.REMOVE},
+            fetch = FetchType.LAZY
+    )
+    private List<Caracteristique> caracteristiques;
+
+
     /**
      * Retourne la référence du produit.
      *
@@ -210,4 +218,11 @@ public class Produit {
         this.photoPrincipale = photoPrincipale;
     }
 
+    public List<Caracteristique> getCaracteristiques() {
+        return caracteristiques;
+    }
+
+    public void setCaracteristiques(List<Caracteristique> caracteristiques) {
+        this.caracteristiques = caracteristiques;
+    }
 }
