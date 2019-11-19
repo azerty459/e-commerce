@@ -1,5 +1,6 @@
 package com.projet.ecommerce.business.dto;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -42,6 +43,8 @@ public class ProduitDTO {
      * La photo pricnipale
      */
     private PhotoDTO photoPrincipale;
+
+    private List<CaracteristiqueDTO> caracterisriques;
 
     /**
      * Obtenir la référence du produit
@@ -168,4 +171,13 @@ public class ProduitDTO {
     public void setPhotoPrincipale(PhotoDTO photoPrincipale) {
         this.photoPrincipale = photoPrincipale;
     }
+
+    public List<CaracteristiqueDTO> getCaracterisriques() {
+        return caracterisriques;
+    }
+
+    public void setCaracteristiques(List<CaracteristiqueDTO> caracterisriques) {
+        this.caracterisriques = caracterisriques;
+    }
+
 }
