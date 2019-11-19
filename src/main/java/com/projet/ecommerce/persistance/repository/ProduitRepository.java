@@ -1,5 +1,6 @@
 package com.projet.ecommerce.persistance.repository;
 
+import com.projet.ecommerce.business.dto.ProduitCriteriaDTO;
 import com.projet.ecommerce.persistance.entity.Produit;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -8,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Interface permettant de communiquer avec la base de données pour la table Produit.
