@@ -84,12 +84,22 @@ public class PhotoBusinessTests {
      */
     @Test
     public void testUploadNormal() {
+        Produit p = new Produit();
+        p.setReferenceProduit("REF");
+        LocalDateTime date = LocalDateTime.now();
+        p.setDateAjout(date);
+        p.setPrixHT(44);
+        p.setNom("NOM PRODUIT");
+        List<Photo> arrayPhotos = new ArrayList<>();
+        p.setPhotos(arrayPhotos);
         // Construction du fichier
         String name = "file.jpeg";
         String originalFileName = "file.jpeg";
         byte[] content = "Juste des données au pif".getBytes();
         String contentType = "image/jpeg";
         MultipartFile mpf = new MockMultipartFile(name, originalFileName, contentType, content);
+
+        Mockito.when(produitRepository.findById(Mockito.any())).thenReturn(Optional.of(p));
 
         // Test du 1ier if
         try {
