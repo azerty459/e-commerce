@@ -15,107 +15,62 @@ import java.util.List;
 @SpringBootTest
 public class UtilisateurTransformerTests {
 
-    private static final Utilisateur UTILISATEUR;
-
-    private static final UtilisateurDTO UTILISATEUR_DTO;
-
-    private static final Role ROLE;
-
-    private static final RoleDTO ROLE_DTO;
-
-    static {
-        ROLE = new Role();
-        ROLE.setId(1);
-        ROLE.setNom("Utilisateur");
-
-        ROLE_DTO = new RoleDTO();
-        ROLE_DTO.setId(1);
-        ROLE_DTO.setNom("Utilisateur");
-
-        UTILISATEUR = new Utilisateur();
-        UTILISATEUR.setId(1);
-        UTILISATEUR.setEmail("test@gmail.com");
-        UTILISATEUR.setMdp("test");
-        UTILISATEUR.setPrenom("Toto");
-        UTILISATEUR.setNom("Test");
-
-        ArrayList<Role> roleArrayList = new ArrayList<>();
-        UTILISATEUR.setRole(ROLE);
-
-        ArrayList<Utilisateur> utilisateurArrayList = new ArrayList<>();
-        utilisateurArrayList.add(UTILISATEUR);
-        ROLE.setUtilisateurs(utilisateurArrayList);
-
-        UTILISATEUR_DTO = new UtilisateurDTO();
-        UTILISATEUR_DTO.setId(1);
-        UTILISATEUR_DTO.setEmail("test@gmail.com");
-        UTILISATEUR_DTO.setMdp("test");
-        UTILISATEUR_DTO.setPrenom("Toto");
-        UTILISATEUR_DTO.setNom("Test");
-
-
-        UTILISATEUR_DTO.setRole(ROLE_DTO);
-    }
-
     @Test
     public void singleDtoToEntity() {
-        Utilisateur utilisateur = UtilisateurTransformer.dtoToEntity(UTILISATEUR_DTO);
+        UtilisateurDTO utilisateurDTO = buildUtilisateurDTO(1);
+        Utilisateur utilisateur = UtilisateurTransformer.dtoToEntity(utilisateurDTO);
         Assert.assertNotNull(utilisateur);
 
-        Assert.assertEquals(utilisateur.getMdp(), UTILISATEUR_DTO.getMdp());
-        Assert.assertEquals(utilisateur.getEmail(), UTILISATEUR_DTO.getEmail());
-        Assert.assertEquals(utilisateur.getId(), UTILISATEUR_DTO.getId());
-        Assert.assertEquals(utilisateur.getNom(), UTILISATEUR_DTO.getNom());
-        Assert.assertEquals(utilisateur.getPrenom(), UTILISATEUR_DTO.getPrenom());
-        Assert.assertEquals(utilisateur.getRole(), 1);
+        Assert.assertEquals(utilisateur.getMdp(), utilisateurDTO.getMdp());
+        Assert.assertEquals(utilisateur.getEmail(), utilisateurDTO.getEmail());
+        Assert.assertEquals(utilisateur.getId(), utilisateurDTO.getId());
+        Assert.assertEquals(utilisateur.getNom(), utilisateurDTO.getNom());
+        Assert.assertEquals(utilisateur.getPrenom(), utilisateurDTO.getPrenom());
+        Assert.assertEquals(utilisateur.getRole().getId(), utilisateurDTO.getRole().getId());
 
         Role role = utilisateur.getRole();
-        RoleDTO roleDTO = UTILISATEUR_DTO.getRole();
+        RoleDTO roleDTO = buildRoleDto(utilisateurDTO);
         Assert.assertEquals(role.getId(), roleDTO.getId());
         Assert.assertEquals(role.getNom(), roleDTO.getNom());
     }
 
     @Test
     public void singleEntityToDto() {
-        UtilisateurDTO utilisateurDTO = UtilisateurTransformer.entityToDto(UTILISATEUR);
+        Utilisateur utilisateur = buildUtilisateur(1);
+        UtilisateurDTO utilisateurDTO = UtilisateurTransformer.entityToDto(utilisateur);
         Assert.assertNotNull(utilisateurDTO);
 
-        Assert.assertEquals(UTILISATEUR.getMdp(), utilisateurDTO.getMdp());
-        Assert.assertEquals(UTILISATEUR.getEmail(), utilisateurDTO.getEmail());
-        Assert.assertEquals(UTILISATEUR.getId(), utilisateurDTO.getId());
-        Assert.assertEquals(UTILISATEUR.getNom(), utilisateurDTO.getNom());
-        Assert.assertEquals(UTILISATEUR.getPrenom(), utilisateurDTO.getPrenom());
-        Assert.assertEquals(1, utilisateurDTO.getRole());
+        Assert.assertEquals(utilisateur.getMdp(), utilisateurDTO.getMdp());
+        Assert.assertEquals(utilisateur.getEmail(), utilisateurDTO.getEmail());
+        Assert.assertEquals(utilisateur.getId(), utilisateurDTO.getId());
+        Assert.assertEquals(utilisateur.getNom(), utilisateurDTO.getNom());
+        Assert.assertEquals(utilisateur.getPrenom(), utilisateurDTO.getPrenom());
+        Assert.assertEquals(utilisateur.getRole().getId(), utilisateurDTO.getRole().getId());
 
         RoleDTO roleDTO = utilisateurDTO.getRole();
-        Role role = UTILISATEUR.getRole();
+        Role role = buildRole(utilisateur);
         Assert.assertEquals(roleDTO.getId(), role.getId());
         Assert.assertEquals(roleDTO.getNom(), role.getNom());
     }
 
     @Test
     public void severalDtoToEntity() {
-        UtilisateurDTO utilisateurDTO2 = new UtilisateurDTO();
-        utilisateurDTO2.setId(2);
-        utilisateurDTO2.setEmail("test2@gmail.com");
-        utilisateurDTO2.setMdp("test2");
-        utilisateurDTO2.setPrenom("Toto2");
-        utilisateurDTO2.setNom("Test2");
+        UtilisateurDTO utilisateurDTO = buildUtilisateurDTO(1);
+        UtilisateurDTO utilisateurDTO2 = buildUtilisateurDTO(2);
 
-        Collection<UtilisateurDTO> utilisateurDTOList = new ArrayList<>();
-        utilisateurDTOList.add(UTILISATEUR_DTO);
+        List<UtilisateurDTO> utilisateurDTOList = new ArrayList<>();
+        utilisateurDTOList.add(utilisateurDTO);
         utilisateurDTOList.add(utilisateurDTO2);
 
         List<Utilisateur> utilisateurList = new ArrayList<>(UtilisateurTransformer.dtoToEntity(utilisateurDTOList));
 
         Assert.assertNotNull(utilisateurList);
 
-        Assert.assertEquals(utilisateurList.get(0).getMdp(), UTILISATEUR_DTO.getMdp());
-        Assert.assertEquals(utilisateurList.get(0).getEmail(), UTILISATEUR_DTO.getEmail());
-        Assert.assertEquals(utilisateurList.get(0).getId(), UTILISATEUR_DTO.getId());
-        Assert.assertEquals(utilisateurList.get(0).getNom(), UTILISATEUR_DTO.getNom());
-        Assert.assertEquals(utilisateurList.get(0).getPrenom(), UTILISATEUR_DTO.getPrenom());
-        Assert.assertEquals(1, utilisateurList.get(0).getRole());
+        Assert.assertEquals(utilisateurList.get(0).getMdp(), utilisateurDTO.getMdp());
+        Assert.assertEquals(utilisateurList.get(0).getEmail(), utilisateurDTO.getEmail());
+        Assert.assertEquals(utilisateurList.get(0).getId(), utilisateurDTO.getId());
+        Assert.assertEquals(utilisateurList.get(0).getNom(), utilisateurDTO.getNom());
+        Assert.assertEquals(utilisateurList.get(0).getPrenom(), utilisateurDTO.getPrenom());
 
 
         Assert.assertEquals(utilisateurList.get(1).getMdp(), utilisateurDTO2.getMdp());
@@ -123,33 +78,26 @@ public class UtilisateurTransformerTests {
         Assert.assertEquals(utilisateurList.get(1).getId(), utilisateurDTO2.getId());
         Assert.assertEquals(utilisateurList.get(1).getNom(), utilisateurDTO2.getNom());
         Assert.assertEquals(utilisateurList.get(1).getPrenom(), utilisateurDTO2.getPrenom());
-        Assert.assertEquals(0, utilisateurList.get(1).getRole());
     }
 
     @Test
     public void severalEntityToDto() {
-        Utilisateur utilisateur2 = new Utilisateur();
-        utilisateur2.setId(2);
-        utilisateur2.setEmail("test2@gmail.com");
-        utilisateur2.setMdp("test2");
-        utilisateur2.setPrenom("Toto2");
-        utilisateur2.setNom("Test2");
-        utilisateur2.setRole(new Role());
+        Utilisateur utilisateur = buildUtilisateur(1);
+        Utilisateur utilisateur2 = buildUtilisateur(2);
 
-        Collection<Utilisateur> utilisateurArrayList = new ArrayList<>();
-        utilisateurArrayList.add(UTILISATEUR);
+        List<Utilisateur> utilisateurArrayList = new ArrayList<>();
+        utilisateurArrayList.add(utilisateur);
         utilisateurArrayList.add(utilisateur2);
 
         List<UtilisateurDTO> utilisateurDTOList = new ArrayList<>(UtilisateurTransformer.entityToDto(utilisateurArrayList));
 
         Assert.assertNotNull(utilisateurDTOList);
 
-        Assert.assertEquals(utilisateurDTOList.get(0).getMdp(), UTILISATEUR.getMdp());
-        Assert.assertEquals(utilisateurDTOList.get(0).getEmail(), UTILISATEUR.getEmail());
-        Assert.assertEquals(utilisateurDTOList.get(0).getId(), UTILISATEUR.getId());
-        Assert.assertEquals(utilisateurDTOList.get(0).getNom(), UTILISATEUR.getNom());
-        Assert.assertEquals(utilisateurDTOList.get(0).getPrenom(), UTILISATEUR.getPrenom());
-        Assert.assertEquals(1, utilisateurDTOList.get(0).getRole());
+        Assert.assertEquals(utilisateurDTOList.get(0).getMdp(), utilisateur.getMdp());
+        Assert.assertEquals(utilisateurDTOList.get(0).getEmail(), utilisateur.getEmail());
+        Assert.assertEquals(utilisateurDTOList.get(0).getId(), utilisateur.getId());
+        Assert.assertEquals(utilisateurDTOList.get(0).getNom(), utilisateur.getNom());
+        Assert.assertEquals(utilisateurDTOList.get(0).getPrenom(), utilisateur.getPrenom());
 
 
         Assert.assertEquals(utilisateurDTOList.get(1).getMdp(), utilisateur2.getMdp());
@@ -157,6 +105,48 @@ public class UtilisateurTransformerTests {
         Assert.assertEquals(utilisateurDTOList.get(1).getId(), utilisateur2.getId());
         Assert.assertEquals(utilisateurDTOList.get(1).getNom(), utilisateur2.getNom());
         Assert.assertEquals(utilisateurDTOList.get(1).getPrenom(), utilisateur2.getPrenom());
-        Assert.assertEquals(0, utilisateurDTOList.get(1).getRole());
+    }
+
+    //Builders
+
+    public Role buildRole(Utilisateur utilisateur) {
+        Role role = new Role();
+        int id = utilisateur.getId();
+        role.setId(id);
+        role.setNom("Role_name "+id);
+        role.setUtilisateurs(new ArrayList<>());
+        List<Utilisateur> utilisateurList = new ArrayList<>();
+        utilisateurList.add(utilisateur);
+        role.setUtilisateurs(utilisateurList);
+        return role;
+    }
+
+    public RoleDTO buildRoleDto(UtilisateurDTO utilisateurDTO) {
+        RoleDTO roleDTO = new RoleDTO();
+        int id = utilisateurDTO.getId();
+        roleDTO.setNom("Role_name "+id);
+        return roleDTO;
+    }
+
+    public Utilisateur buildUtilisateur(int id) {
+        Utilisateur utilisateur = new Utilisateur();
+        utilisateur.setId(id);
+        utilisateur.setNom("User_name "+id);
+        utilisateur.setPrenom("User_lastName "+id);
+        utilisateur.setEmail("User_email "+id);
+        utilisateur.setMdp("User_secret "+id);
+        utilisateur.setRole(buildRole(utilisateur));
+        return utilisateur;
+    }
+
+    public UtilisateurDTO buildUtilisateurDTO(int id) {
+        UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
+        utilisateurDTO.setId(id);
+        utilisateurDTO.setNom("User_name "+id);
+        utilisateurDTO.setPrenom("User_lastName "+id);
+        utilisateurDTO.setEmail("User_email "+id);
+        utilisateurDTO.setMdp("User_secret "+id);
+        utilisateurDTO.setRole(buildRoleDto(utilisateurDTO));
+        return utilisateurDTO;
     }
 }
