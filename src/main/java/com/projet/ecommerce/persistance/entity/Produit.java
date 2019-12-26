@@ -55,7 +55,13 @@ public class Produit {
             joinColumns = {@JoinColumn(name = "reference_produit")},
             inverseJoinColumns = {@JoinColumn(name = "id_categorie")}
     )
+
+
+
     private List<Categorie> categoriesSupprime;
+
+    @OneToMany(fetch = FetchType.LAZY,cascade={CascadeType.ALL})
+    private List<Caracteristique> caracteristiques ;
 
     /**
      * Retourne la référence du produit.
@@ -83,6 +89,7 @@ public class Produit {
     public String getDescription() {
         return description;
     }
+
 
     /**
      * Remplace la description du produit par celle-ci mit en paramètre.
@@ -210,4 +217,35 @@ public class Produit {
         this.photoPrincipale = photoPrincipale;
     }
 
+    public List<Caracteristique> getCaracteristiques() {
+        return caracteristiques;
+    }
+
+    public void setCaracteristiques(List<Caracteristique> caracteristiques) {
+        this.caracteristiques = caracteristiques;
+    }
+
+
+    public void addCaracteristique (Caracteristique caracteristique){
+        if (caracteristique != null)
+        caracteristiques.add(caracteristique);
+    }
+
+
+    @Override
+    public String toString() {
+        return "Produit{" +
+                "referenceProduit='" + referenceProduit + '\'' +
+                ", dateAjout=" + dateAjout +
+                ", nom='" + nom + '\'' +
+                ", description='" + description + '\'' +
+                ", prixHT=" + prixHT +
+                ", categories=" + categories +
+                ", photoPrincipale=" + photoPrincipale +
+                ", photos=" + photos +
+                ", avisClients=" + avisClients +
+                ", categoriesSupprime=" + categoriesSupprime +
+                ", caracteristiques=" + caracteristiques +
+                '}';
+    }
 }

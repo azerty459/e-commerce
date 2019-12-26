@@ -1,20 +1,16 @@
 package com.projet.ecommerce.business.dto.transformer;
 
+import com.projet.ecommerce.business.dto.CaracteristiqueDTO;
 import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.business.dto.PhotoDTO;
 import com.projet.ecommerce.business.dto.ProduitDTO;
-import com.projet.ecommerce.persistance.entity.Categorie;
-import com.projet.ecommerce.persistance.entity.Photo;
-import com.projet.ecommerce.persistance.entity.Produit;
+import com.projet.ecommerce.persistance.entity.*;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @SpringBootTest
 public class ProduitTransformerTests {
@@ -95,6 +91,7 @@ public class ProduitTransformerTests {
         Photo photo = buildPhoto();
         produit.setPhotoPrincipale(photo);
         produit.setPhotos(Collections.singletonList(photo));
+        produit.setCaracteristiques(Collections.singletonList(buildCaracteristique()));
 
         return produit;
     }
@@ -114,6 +111,14 @@ public class ProduitTransformerTests {
         return photo;
     }
 
+    @NotNull
+    private static Caracteristique buildCaracteristique() {
+        Caracteristique caracteristique = new Caracteristique();
+        caracteristique.setCaracteristiqueID(new CaracteristiqueID("A05A01",1));
+        caracteristique.setValeur("30");
+        return caracteristique;
+    }
+
     // ------------------------- DTO -------------------------
 
     @NotNull
@@ -128,6 +133,7 @@ public class ProduitTransformerTests {
         PhotoDTO photoDTO = buildPhotoDTO();
         produitDto.setPhotoPrincipale(photoDTO);
         produitDto.setPhotos(Collections.singletonList(photoDTO));
+        produitDto.setCaracteristiques(Collections.singletonList(buildCaracteristiqueDTO()));
 
         return produitDto;
     }
@@ -150,5 +156,14 @@ public class ProduitTransformerTests {
         photoDTO.setIdPhoto(1);
         photoDTO.setUrl("test");
         return photoDTO;
+    }
+
+
+    @NotNull
+    private static CaracteristiqueDTO buildCaracteristiqueDTO() {
+        CaracteristiqueDTO caracteristiqueDTO = new CaracteristiqueDTO();
+        caracteristiqueDTO.setCaracteristiqueID(new CaracteristiqueID("A05A01",1));
+        caracteristiqueDTO.setValeur("30");
+        return caracteristiqueDTO;
     }
 }

@@ -30,4 +30,21 @@ public class TypeCaracteristique {
     public void setLibelle(String libelle) {
         this.libelle = libelle;
     }
+
+    public TypeCaracteristique() {
+    }
+
+    public TypeCaracteristique(Integer id_type_caracteristique, String libelle) {
+        this.id_type_caracteristique=id_type_caracteristique;
+        this.libelle  =libelle;
+    }
+
+
+    @Override
+    public String toString() {
+        return "TypeCaracteristique{" +
+                "id_type_caracteristique=" + id_type_caracteristique +
+                ", libelle='" + libelle + '\'' +
+                '}';
+    }
 }

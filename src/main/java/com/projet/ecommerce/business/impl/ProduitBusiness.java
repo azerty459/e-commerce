@@ -4,6 +4,7 @@ import com.projet.ecommerce.business.IProduitBusiness;
 import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.business.dto.transformer.ProduitTransformer;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
+import com.projet.ecommerce.persistance.entity.Caracteristique;
 import com.projet.ecommerce.persistance.entity.Categorie;
 import com.projet.ecommerce.persistance.entity.Photo;
 import com.projet.ecommerce.persistance.entity.Produit;
@@ -118,6 +119,36 @@ public class ProduitBusiness implements IProduitBusiness {
         // On retourne le produit final et on le transforme en DTO
         return ProduitTransformer.entityToDto(produitRepository.save(produitFinal));
     }
+
+    /**
+     * Ajoute une caracteristique à un produit
+     *
+     * @param caracteristique la caracteristique a ajouter
+     * @return le produit modifié
+     */
+    private ProduitDTO addCaracteristique(Produit produit, Caracteristique caracteristique) {
+
+        if (produit == null || caracteristique == null) return null;
+        Optional<Produit> optionalProduit = produitRepository.findById(produit.getReferenceProduit());
+        if (!optionalProduit.isPresent()) {
+            throw new GraphQLCustomException("Le produit recherché n'existe pas.");
+        }
+        Produit retourProduit = optionalProduit.get();
+        retourProduit.addCaracteristique(caracteristique);
+        return ProduitTransformer.entityToDto(produitRepository.save(retourProduit));
+
+
+    }
+
+    /**
+     * Retourne le produit correspondant à la référence
+     * @param produit
+     * @return le produit
+     */
+    public ProduitDTO getByReferenceProduit(Produit produit) {
+        return ProduitTransformer.entityToDto(produitRepository.findById(produit.getReferenceProduit()).orElse(null));
+    }
+
 
     /**
      * Remplace la liste de photo par une nouvelle liste contenant l'ensemble des données des photos.

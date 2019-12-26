@@ -2,9 +2,7 @@ package com.projet.ecommerce.business.impl;
 
 import com.projet.ecommerce.business.dto.ProduitDTO;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
-import com.projet.ecommerce.persistance.entity.Categorie;
-import com.projet.ecommerce.persistance.entity.Photo;
-import com.projet.ecommerce.persistance.entity.Produit;
+import com.projet.ecommerce.persistance.entity.*;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import com.projet.ecommerce.persistance.repository.PhotoRepository;
 import com.projet.ecommerce.persistance.repository.ProduitRepository;
@@ -225,7 +223,23 @@ public class ProduitBusinessTests {
         Assert.assertEquals(produit.getReferenceProduit(), retour.getRef());
 
         Mockito.verify(produitRepository, Mockito.times(2)).findAll();
+        System.out.println(produitList);
     }
+
+    @Test
+    public void addCaracteristiqueToProduit() {
+        Produit produitTest = buildProduit();
+        Caracteristique caracteristique = buildCaracteristique();
+
+        Mockito.when(produitRepository.findById(produitTest.getReferenceProduit())).thenReturn(Optional.of(produitTest));
+        Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produitTest);
+
+        produitTest.addCaracteristique(caracteristique);
+        produitBusiness.update(produitTest);
+        Assert.assertEquals(produitBusiness.getByReferenceProduit(produitTest).getCaracteristiques().size(), 1);
+        System.out.println(produitTest);
+    }
+
 
     @Test
     public void getAllByRefAndCatAndName() {
@@ -265,15 +279,26 @@ public class ProduitBusinessTests {
         Assert.assertEquals(produit.getReferenceProduit(), retour.getRef());
     }
 
+
+    @NotNull
+    private Caracteristique buildCaracteristique() {
+        Caracteristique caracteristique = new Caracteristique();
+        caracteristique.setCaracteristiqueID(new CaracteristiqueID("A05A01", 1));
+        caracteristique.setValeur("30");
+        return caracteristique;
+    }
+
     @NotNull
     private Produit buildProduit() {
         Produit produit = new Produit();
         produit.setReferenceProduit("A05A01");
         produit.setPrixHT(2.1f);
-        produit.setDescription("Un livre");
+        produit.setDescription("Un livre de Test");
         produit.setNom("Livre1");
         produit.setPhotos(new ArrayList<>());
         produit.setCategories(new ArrayList<>());
+        //add caracteristiques
+        produit.setCaracteristiques(new ArrayList<>());
         return produit;
     }
 

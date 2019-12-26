@@ -11,32 +11,19 @@ import javax.persistence.*;
 @Table(name = "caracteristique")
 public class Caracteristique {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_caracteristique;
+    @EmbeddedId
+    private CaracteristiqueID caracteristiqueID;
 
-    @Column(name = "type_id")
-    private int id_type ;
-
-    @Column(name = "valeur")
     private String valeur;
 
-
-    public int getId_caracteristique() {
-        return id_caracteristique;
+    public Caracteristique() {
     }
 
-    public void setId_caracteristique(int id_caracteristique) {
-        this.id_caracteristique = id_caracteristique;
+    public Caracteristique(CaracteristiqueID caracteristiqueID, String valeur) {
+        this.caracteristiqueID = caracteristiqueID;
+        this.valeur = valeur;
     }
 
-    public int getId_type() {
-        return id_type;
-    }
-
-    public void setId_type(int id_type) {
-        this.id_type = id_type;
-    }
 
     public String getValeur() {
         return valeur;
@@ -44,5 +31,22 @@ public class Caracteristique {
 
     public void setValeur(String valeur) {
         this.valeur = valeur;
+    }
+
+    public CaracteristiqueID getCaracteristiqueID() {
+        return caracteristiqueID;
+    }
+
+    public void setCaracteristiqueID(CaracteristiqueID caracteristiqueID) {
+        this.caracteristiqueID = caracteristiqueID;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Caracteristique{" +
+                "caracteristiqueID=" + caracteristiqueID +
+                ", valeur='" + valeur + '\'' +
+                '}';
     }
 }

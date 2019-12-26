@@ -1,5 +1,7 @@
 package com.projet.ecommerce.business.dto;
 
+import com.projet.ecommerce.persistance.entity.Caracteristique;
+
 import java.util.List;
 
 /**
@@ -48,6 +50,34 @@ public class ProduitDTO {
      *
      * @return la référence du produit
      */
+
+
+    /**
+     * list de caracteriqtiques du produit
+     */
+    private List<CaracteristiqueDTO> caracteristiques;
+
+
+    /***
+     * Obtenir la liste des caracteristiques du produit
+     * @return list des caracteristiques du produits
+     */
+
+    public List<CaracteristiqueDTO> getCaracteristiques() {
+        return caracteristiques;
+    }
+
+    public void setCaracteristiques(List<CaracteristiqueDTO> caracteristiquesDTO) {
+        this.caracteristiques = caracteristiques;
+    }
+
+
+    public void addCaracteristique(CaracteristiqueDTO caracteristiqueDTO){
+        if (caracteristiqueDTO != null)
+        caracteristiques.add(caracteristiqueDTO);
+
+    }
+
     public String getRef() {
         return ref;
     }
@@ -167,5 +197,20 @@ public class ProduitDTO {
      */
     public void setPhotoPrincipale(PhotoDTO photoPrincipale) {
         this.photoPrincipale = photoPrincipale;
+    }
+
+
+    @Override
+    public String toString() {
+        return "ProduitDTO{" +
+                "ref='" + ref + '\'' +
+                ", nom='" + nom + '\'' +
+                ", description='" + description + '\'' +
+                ", prixHT=" + prixHT +
+                ", categories=" + categories +
+                ", photos=" + photos +
+                ", photoPrincipale=" + photoPrincipale +
+                ", caracteristiques=" + caracteristiques +
+                '}';
     }
 }

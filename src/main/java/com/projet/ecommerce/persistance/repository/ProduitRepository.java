@@ -21,6 +21,8 @@ public interface ProduitRepository extends PagingAndSortingRepository<Produit, S
 
     Collection<Produit> findByNomContainingIgnoreCase(String nom);
 
+    Produit findByReferenceProduit(String referenceProduit);
+
     Page<Produit> findByNomContainingIgnoreCase(Pageable pageable, String nom);
 
     Page<Produit> findByNomContainingIgnoreCaseAndCategories_borneGaucheGreaterThanEqualAndCategories_borneDroitLessThanEqual(Pageable pageable, String nom, int borneGauche, int borneDroite);

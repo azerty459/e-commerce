@@ -1,5 +1,7 @@
 package com.projet.ecommerce.persistance.repository;
 
+import com.projet.ecommerce.persistance.entity.Caracteristique;
+import com.projet.ecommerce.persistance.entity.CaracteristiqueID;
 import com.projet.ecommerce.persistance.entity.Produit;
 import org.junit.Assert;
 import org.junit.Test;
@@ -10,7 +12,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -31,6 +36,11 @@ public class ProduitRepositoryTests {
         TEMP_INSERT.setPrixHT(8.7f);
         TEMP_INSERT.setDescription("joli produit");
 
+        Caracteristique caracteristique = new Caracteristique(new CaracteristiqueID("A05A87", 1), "30");
+        List<Caracteristique> listCaracteristique = new ArrayList<>();
+        listCaracteristique.add(caracteristique);
+        TEMP_INSERT.setCaracteristiques(listCaracteristique);
+
         TEMP_DELETE.setReferenceProduit("A05A88");
         TEMP_DELETE.setPrixHT(11.7f);
         TEMP_DELETE.setDescription("produit");
@@ -49,9 +59,11 @@ public class ProduitRepositoryTests {
 
     @Test
     public void insertProduit() {
+        System.out.println(TEMP_INSERT);
         Assert.assertNotNull(produitRepository.save(TEMP_INSERT));
         Produit temp = produitRepository.findById(TEMP_INSERT.getReferenceProduit()).orElse(null);
         Assert.assertNotNull(temp);
+        System.out.println(temp);
     }
 
     @Test
@@ -99,4 +111,34 @@ public class ProduitRepositoryTests {
         produitRepository.delete(TEMP_DELETE);
         Assert.assertFalse(produitRepository.findById(TEMP_DELETE.getReferenceProduit()).isPresent());
     }
+
+    /**
+     * change la caracteristique "broché" en passant de 30 à 300 pages
+     */
+    @Test
+    public void updateCaracteristiqueOfProduct() {
+        produitRepository.save(TEMP_INSERT);
+        Produit temp = produitRepository.findById(TEMP_INSERT.getReferenceProduit()).orElse(null);
+        temp.getCaracteristiques().get(0).setValeur("300");
+        produitRepository.save(temp);
+        Optional<Produit> produit = produitRepository.findById(TEMP_INSERT.getReferenceProduit());
+        Assert.assertEquals(produit.get().getCaracteristiques().get(0).getValeur(),"300");
+
+
+    }
+
+    /**
+     * Ajout caracteristiques deja existant impossible
+     */
+    @Test
+    public void addCaracteristiqueDejaPresenteShouldReturnError(){
+        produitRepository.save(TEMP_INSERT);
+        Produit temp = produitRepository.findById(TEMP_INSERT.getReferenceProduit()).orElse(null);
+        temp.getCaracteristiques().add(temp.getCaracteristiques().get(0)) ;
+        produitRepository.save(temp);
+
+
+
+    }
+
 }
