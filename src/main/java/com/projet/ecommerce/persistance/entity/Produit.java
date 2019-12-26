@@ -227,8 +227,13 @@ public class Produit {
 
 
     public void addCaracteristique (Caracteristique caracteristique){
-        if (caracteristique != null)
+        if (caracteristique != null && (!isCaracteristiqueDejaPresent(caracteristique.getCaracteristiqueID().getType_id())))
         caracteristiques.add(caracteristique);
+    }
+
+    private boolean isCaracteristiqueDejaPresent(Integer type_id) {
+       return caracteristiques.stream()
+               .anyMatch(caracteristique-> caracteristique.getCaracteristiqueID().getType_id().equals(type_id));
     }
 
 

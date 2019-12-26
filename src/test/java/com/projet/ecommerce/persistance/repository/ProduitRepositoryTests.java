@@ -122,21 +122,26 @@ public class ProduitRepositoryTests {
         temp.getCaracteristiques().get(0).setValeur("300");
         produitRepository.save(temp);
         Optional<Produit> produit = produitRepository.findById(TEMP_INSERT.getReferenceProduit());
-        Assert.assertEquals(produit.get().getCaracteristiques().get(0).getValeur(),"300");
+        Assert.assertEquals(produit.get().getCaracteristiques().get(0).getValeur(), "300");
 
 
     }
 
     /**
      * Ajout caracteristiques deja existant impossible
+     * ajout d'une caracteristique deja present : non insertion
+     * ajout caracteristique non présent : insertion
      */
     @Test
-    public void addCaracteristiqueDejaPresenteShouldReturnError(){
+    public void addCaracteristiqueDejaPresenteShouldReturnError() {
         produitRepository.save(TEMP_INSERT);
         Produit temp = produitRepository.findById(TEMP_INSERT.getReferenceProduit()).orElse(null);
-        temp.getCaracteristiques().add(temp.getCaracteristiques().get(0)) ;
-        produitRepository.save(temp);
-
+        temp.addCaracteristique(temp.getCaracteristiques().get(0));
+        Produit produitRetour = produitRepository.save(temp);
+        Assert.assertEquals(produitRetour.getCaracteristiques().size(), 1);
+        temp.addCaracteristique(new Caracteristique(new CaracteristiqueID(TEMP_INSERT.getReferenceProduit(), 3), "FRANCAIS"));
+        Assert.assertEquals(produitRetour.getCaracteristiques().size(), 2);
+        System.out.println(produitRetour.getCaracteristiques());
 
 
     }
