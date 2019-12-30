@@ -37,6 +37,13 @@ public class Categorie {
     )
     private List<Produit> produits;
 
+    public Categorie(Integer idCategorie) {
+        this.idCategorie = idCategorie;
+    }
+
+    public Categorie() {
+    }
+
     /**
      * Retourne le nom de la catégorie.
      *
@@ -143,5 +150,18 @@ public class Categorie {
      */
     public void setIdCategorie(int idCategorie) {
         this.idCategorie = idCategorie;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Categorie{" +
+                "idCategorie=" + idCategorie +
+                ", nomCategorie='" + nomCategorie + '\'' +
+                ", borneGauche=" + borneGauche +
+                ", borneDroit=" + borneDroit +
+                ", level=" + level +
+                ", produits=" + produits +
+                '}';
     }
 }

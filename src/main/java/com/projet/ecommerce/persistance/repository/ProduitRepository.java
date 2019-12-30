@@ -16,6 +16,7 @@ import java.util.Collection;
 @Repository
 public interface ProduitRepository extends PagingAndSortingRepository<Produit, String>, ProduitRepositoryCustom {
 
+
     @Override
     Collection<Produit> findAll();
 
