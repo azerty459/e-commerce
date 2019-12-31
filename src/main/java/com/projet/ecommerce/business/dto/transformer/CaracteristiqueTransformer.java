@@ -40,6 +40,7 @@ public class CaracteristiqueTransformer {
     public static Collection<CaracteristiqueDTO> entityToDto(List<Caracteristique> caracteristiqueList) {
         List<CaracteristiqueDTO> caracteristiqueDTOList = new ArrayList<>();
         for (Caracteristique caracteristique : caracteristiqueList) {
+            System.out.println("Carcateristique :"+caracteristique);
             caracteristiqueDTOList.add(entityToDto(caracteristique));
         }
 

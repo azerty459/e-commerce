@@ -59,11 +59,11 @@ public class ProduitRepositoryTests {
 
     @Test
     public void insertProduit() {
-        System.out.println(TEMP_INSERT);
+        System.out.println("Before insert :"+TEMP_INSERT);
         Assert.assertNotNull(produitRepository.save(TEMP_INSERT));
         Produit temp = produitRepository.findById(TEMP_INSERT.getReferenceProduit()).orElse(null);
         Assert.assertNotNull(temp);
-        System.out.println(temp);
+        System.out.println("After insert :"+temp);
     }
 
     @Test
@@ -74,6 +74,7 @@ public class ProduitRepositoryTests {
 
         produitRepository.save(TEMP_INSERT);
         produitCollection = produitRepository.findAll();
+        System.out.println(produitCollection);
         Assert.assertEquals(1, produitCollection.size());
     }
 

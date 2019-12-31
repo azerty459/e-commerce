@@ -230,14 +230,16 @@ public class ProduitBusinessTests {
     public void addCaracteristiqueToProduit() {
         Produit produitTest = buildProduit();
         Caracteristique caracteristique = buildCaracteristique();
-
+        System.out.println(produitTest);
+        System.out.println(caracteristique);
+        produitTest.addCaracteristique(caracteristique);
+        System.out.println("Apres add" + produitTest);
         Mockito.when(produitRepository.findById(produitTest.getReferenceProduit())).thenReturn(Optional.of(produitTest));
         Mockito.when(produitRepository.save(Mockito.any())).thenReturn(produitTest);
 
-        produitTest.addCaracteristique(caracteristique);
-        produitBusiness.update(produitTest);
-        Assert.assertEquals(produitBusiness.getByReferenceProduit(produitTest).getCaracteristiques().size(), 1);
-        System.out.println(produitTest);
+        produitRepository.save(produitTest);
+        Assert.assertEquals(produitRepository.findById(produitTest.getReferenceProduit()).get().getCaracteristiques().size(), 1);
+        System.out.println("Produit test :" + produitTest);
     }
 
 

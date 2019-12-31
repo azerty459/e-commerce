@@ -68,7 +68,7 @@ public class ProduitDTO {
     }
 
     public void setCaracteristiques(List<CaracteristiqueDTO> caracteristiquesDTO) {
-        this.caracteristiques = caracteristiques;
+        this.caracteristiques = caracteristiquesDTO;
     }
 
 

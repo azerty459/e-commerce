@@ -14,6 +14,7 @@ public class Caracteristique {
     @EmbeddedId
     private CaracteristiqueID caracteristiqueID;
 
+    @Column(name = "valeur")
     private String valeur;
 
     public Caracteristique() {

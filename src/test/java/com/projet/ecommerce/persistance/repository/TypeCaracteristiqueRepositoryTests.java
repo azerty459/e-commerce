@@ -1,7 +1,6 @@
 package com.projet.ecommerce.persistance.repository;
 
-import com.projet.ecommerce.persistance.entity.AvisClient;
-import com.projet.ecommerce.persistance.entity.Produit;
+
 import com.projet.ecommerce.persistance.entity.TypeCaracteristique;
 import org.junit.Assert;
 import org.junit.Test;
@@ -11,9 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,6 +50,7 @@ public class TypeCaracteristiqueRepositoryTests {
     @Test
     public void updateType() {
         Optional<TypeCaracteristique> langue = typeCaracteristiqueRepository.findById(3);
+        System.out.println(langue);
         langue.get().setLibelle("Language");
         typeCaracteristiqueRepository.save(langue.get());
         Assert.assertEquals(typeCaracteristiqueRepository.findById(3).get().getLibelle(), "Language");

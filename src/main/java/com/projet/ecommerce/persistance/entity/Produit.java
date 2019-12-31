@@ -60,7 +60,7 @@ public class Produit {
 
     private List<Categorie> categoriesSupprime;
 
-    @OneToMany(fetch = FetchType.LAZY,cascade={CascadeType.ALL})
+    @OneToMany(mappedBy = "caracteristiqueID.reference_produit",fetch = FetchType.LAZY,cascade={CascadeType.ALL})
     private List<Caracteristique> caracteristiques ;
 
     /**

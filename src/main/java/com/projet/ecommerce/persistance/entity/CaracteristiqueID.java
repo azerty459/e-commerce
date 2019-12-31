@@ -2,6 +2,8 @@ package com.projet.ecommerce.persistance.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Embedded;
+import javax.persistence.Id;
 import java.io.Serializable;
 
 @Embeddable
