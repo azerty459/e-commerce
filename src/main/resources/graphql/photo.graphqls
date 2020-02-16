@@ -1,0 +1,16 @@
+input PhotoInput {
+    idPhoto: Int
+}
+
+type Photo {
+    id: Int!
+    nom: String!
+    url: String!
+}
+
+extend type Query {
+    photos(ref: String): [Photo]!
+}
+extend type Mutation {
+    deletePhoto(id: Int!): Boolean!
+}

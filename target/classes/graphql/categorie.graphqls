@@ -1,0 +1,27 @@
+input CategorieInput {
+    idCategorie: Int!
+    nomCategorie: String!
+}
+
+type Categorie {
+    id: Int!
+    nom: String!
+    level: Int!
+    chemin: [Categorie]
+    parent: Categorie
+    profondeur: Int!
+    sousCategories: [Categorie]!
+}
+
+type Query {
+    categories(id: Int, nom: String): [Categorie]!
+}
+
+type Mutation {
+    addCategorieParent(nom: String!): Categorie!
+    addCategorieEnfant(nom: String!, pere: Int): Categorie!
+    deleteCategorie(id: Int!): Boolean!
+    moveCategorie(idADeplacer: Int!, idNouveauParent: Int!): Boolean!
+    updateCategorie(id: Int!, nom: String!): Categorie
+    restoreCategorie(idNouveauParent: Int!): [Categorie]!
+}

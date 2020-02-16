@@ -1,0 +1,46 @@
+input UtilisateurAddInput {
+    email: String!
+    mdp: String!
+    role: RoleAddInput
+}
+
+input UtilisateurUpdateInput {
+    email: String!
+    mdp: String!
+    nom: String
+    prenom: String
+    role: RoleUpdateInput
+}
+
+input AuthData {
+      email: String!
+      password: String!
+}
+
+type Utilisateur {
+    id: Int!
+    email: String!
+    nom: String!
+    prenom: String!
+    role: Role
+}
+type Token {
+    token: String!
+    utilisateur: Utilisateur
+}
+type SigninPayload{
+    token: Token
+}
+
+extend type Query {
+    utilisateurs(id: Int, email: String, nom: String, prenom: String, role: String): [Utilisateur]!
+
+}
+
+extend type Mutation {
+    isLogged(token: String): Boolean!
+    addUtilisateur(utilisateur: UtilisateurAddInput!): Utilisateur!
+    updateUtilisateur(utilisateur: UtilisateurUpdateInput!): Utilisateur!
+    deleteUtilisateur(email: String, id: Int): Boolean!
+    signinUtilisateur(auth: AuthData): SigninPayload
+}
