@@ -19,6 +19,8 @@ public class LibelleRepositoryCustomImpl implements LibelleRepositoryCustom {
     @Autowired
     private EntityManager entityManager;
 
+
+    //TODO
     @Override
     public Collection<Libelle> findByNomIgnoringCase(String nom) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
