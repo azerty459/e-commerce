@@ -200,7 +200,6 @@ public class CategorieSupprimeBusinessTests {
     public void saveInCategorieSupprimeNull() {
         Categorie categorie1 = null;
         CategorieSupprime categorieSupprime1 = new CategorieSupprime();
-        Mockito.when(categorieSupprimeRepository.save(Mockito.any())).thenReturn(categorieSupprime1);
         boolean retour1 = categorieSupprimeBusiness.saveInCategorieSupprime(categorie1);
         Assert.assertFalse(retour1);
     }

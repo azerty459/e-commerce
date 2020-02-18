@@ -30,7 +30,7 @@ public class Utilisateur {
     @Column(name = "prenom")
     private String prenom;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_role")
     private Role role;
 

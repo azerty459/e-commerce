@@ -1,5 +1,6 @@
 package com.projet.ecommerce.integration;
 
+import com.projet.ecommerce.business.dto.CategorieDTO;
 import com.projet.ecommerce.business.impl.CategorieBusiness;
 import com.projet.ecommerce.business.impl.CategorieSupprimeBusiness;
 import com.projet.ecommerce.entrypoint.graphql.GraphQLCustomException;
@@ -8,8 +9,10 @@ import com.projet.ecommerce.persistance.entity.CategorieSupprime;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import com.projet.ecommerce.persistance.repository.CategorieSupprimeRepository;
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -23,6 +26,7 @@ import java.util.Collection;
 @SpringBootTest
 @ActiveProfiles("test")
 @Transactional
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CategorieRestaurationTests {
 
     static {
@@ -124,13 +128,14 @@ public class CategorieRestaurationTests {
 
     @Test
     public void addSameNom() {
+        CategorieDTO firstParent = categorieBusiness.addParent("nom");
         categorieBusiness.addParent("nom");
         categorieBusiness.addParent("nom");
         categorieBusiness.addParent("nom");
-        categorieBusiness.addParent("nom");
-        categorieBusiness.addEnfant("nom", 1);
-        categorieBusiness.addEnfant("nom", 1);
-        categorieBusiness.addEnfant("nom", 1);
+        Collection<Categorie> all = categorieRepository.findAll();
+        categorieBusiness.addEnfant("nom", firstParent.getId());
+        categorieBusiness.addEnfant("nom", firstParent.getId());
+        categorieBusiness.addEnfant("nom", firstParent.getId());
         Collection<Categorie> categories = categorieRepository.findAll();
         Assert.assertEquals(7, categories.size());
 

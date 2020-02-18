@@ -33,6 +33,7 @@ public class PhotoTransformer {
      * @return un objet Photo
      */
     public static Photo dtoToEntity(PhotoDTO photoDTO) {
+        if (photoDTO == null) return null;
         Photo photo = new Photo();
         photo.setUrl(photoDTO.getUrl());
         photo.setIdPhoto(photoDTO.getId());
@@ -49,9 +50,7 @@ public class PhotoTransformer {
     public static Collection<PhotoDTO> entityToDto(Collection<Photo> photoCollection) {
         List<PhotoDTO> photoDTOList = new ArrayList<>();
         for (Photo photo : photoCollection) {
-            if (photo.getIdPhoto() != 0) {
                 photoDTOList.add(entityToDto(photo));
-            }
         }
         return photoDTOList;
     }

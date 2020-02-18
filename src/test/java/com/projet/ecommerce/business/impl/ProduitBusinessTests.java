@@ -301,7 +301,8 @@ public class ProduitBusinessTests {
         produitList.add(produit);
 
         // Permets de tester si la méthode retourne une List avec une référence
-        Mockito.when(produitRepositoryCustom.findAllWithCriteria(Mockito.any(), Mockito.any())).thenReturn(produitList);
+        //XXX -why?
+        Mockito.when(produitRepository.findAllWithCriteria(Mockito.any(), Mockito.any())).thenReturn(produitList);
         Mockito.verify(produitRepositoryCustom, Mockito.times(1)).findAllWithCriteria(Mockito.any(), Mockito.any());
         List<ProduitDTO> produitDTOList = produitBusiness.getAll("ref", null, null);
         Assert.assertEquals(produitDTOList.size(), 1);

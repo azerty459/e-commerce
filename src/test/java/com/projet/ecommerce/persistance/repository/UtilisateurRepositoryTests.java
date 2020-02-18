@@ -141,7 +141,7 @@ public class UtilisateurRepositoryTests {
         Assert.assertEquals(utilisateur.getNom(), TEMP_UPDATE.getNom());
 
         // On modifie le rôle
-        utilisateur.setNom("Fondateur");
+        utilisateur.getRole().setNom("Fondateur");
         // On sauvegarde les modifications
         Utilisateur utilisateurRetour = utilisateurRepository.save(utilisateur);
         // On regarde si les modifications à étaient prises en compte

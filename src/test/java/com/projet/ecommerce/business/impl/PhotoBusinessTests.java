@@ -58,7 +58,6 @@ public class PhotoBusinessTests {
      */
     @Test
     public void testUploadFichierVide() {
-
         // Construction du fichier (test du premier if)
         Path path = Paths.get("path/qui/nexiste/pas");
         String name = "file.jpeg";
@@ -71,6 +70,7 @@ public class PhotoBusinessTests {
         }
         String contentType = "image/jpeg";
         MultipartFile mpf = new MockMultipartFile(name, originalFileName, contentType, content);
+        //XXX - assert.fail() dans le catch ?
         try {
             Assert.assertFalse(photoBusiness.upload(mpf, "hhh"));
         } catch (Exception e) {
@@ -84,13 +84,23 @@ public class PhotoBusinessTests {
      */
     @Test
     public void testUploadNormal() {
+        // Création du produit auquel on veut ajouter une image
+        Produit p = new Produit();
+        p.setReferenceProduit("REF");
+        LocalDateTime date = LocalDateTime.now();
+        p.setDateAjout(date);
+        p.setPrixHT(44);
+        p.setNom("NOM PRODUIT");
+        List<Photo> arrayPhotos = new ArrayList<>();
+        p.setPhotos(arrayPhotos);
+
         // Construction du fichier
         String name = "file.jpeg";
         String originalFileName = "file.jpeg";
         byte[] content = "Juste des données au pif".getBytes();
         String contentType = "image/jpeg";
         MultipartFile mpf = new MockMultipartFile(name, originalFileName, contentType, content);
-
+        Mockito.when(produitRepository.findById(Mockito.any())).thenReturn(Optional.of(p));
         // Test du 1ier if
         try {
             Assert.assertTrue(photoBusiness.upload(mpf, "hello"));

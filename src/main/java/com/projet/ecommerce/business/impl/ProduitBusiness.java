@@ -101,6 +101,9 @@ public class ProduitBusiness implements IProduitBusiness {
         Produit retourProduit = produitOptional.get();
 
         produit.setCategories(new ArrayList<>(completeCategoriesData(produit.getCategories())));
+        if (produit.getPhotos() != null) {
+            produit.setPhotos(new ArrayList<>(completePhotosData(produit.getPhotos())));
+        }
         if (produit.getPhotoPrincipale() != null && produit.getPhotoPrincipale().getIdPhoto() != 0) {
             produit.setPhotoPrincipale(completePhotoPrincipaleData(produit.getPhotoPrincipale()));
         }
