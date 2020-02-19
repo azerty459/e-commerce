@@ -406,12 +406,28 @@ public class CategorieBusinessTests {
 
         Map<Categorie, Collection<Categorie>> resultat;
         resultat = categorieBusiness.construireAssociationEnfantsChemins(categories);
+        Collection<Categorie> categories1 = resultat.get(cat1);
 
         // Tests
-        Assert.assertEquals(resultat.get(cat1), "");
-        Assert.assertEquals(resultat.get(cat2), "Transport");
-        Assert.assertEquals(resultat.get(cat3), "Transport > Aérien");
+        Assert.assertEquals("", cheminToString(resultat.get(cat1)));
+        Assert.assertEquals( "Transport", cheminToString(resultat.get(cat2)));
+        Assert.assertEquals("Transport > Aérien", cheminToString(resultat.get(cat3)));
 
+    }
+
+    private String cheminToString(Collection<Categorie> collection) {
+        Iterator<Categorie> iterator = collection.iterator();
+        StringBuilder stringBuilder = new StringBuilder("");
+        while (iterator.hasNext()) {
+            Categorie categorie = iterator.next();
+            if (stringBuilder.length()==0)
+            {
+                stringBuilder.append(categorie.getNomCategorie());
+            } else {
+                stringBuilder.insert(0, categorie.getNomCategorie() + " > ");
+            }
+        }
+        return stringBuilder.toString();
     }
 
 

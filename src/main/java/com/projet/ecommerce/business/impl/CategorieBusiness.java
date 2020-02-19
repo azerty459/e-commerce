@@ -93,10 +93,7 @@ public class CategorieBusiness implements ICategorieBusiness {
         Collection<Categorie> parents = categorieRepository.findParents(categoriesPourParents);
 
         // Classer cette collection pour mettre chaque parents en face de chaque catégorie de départ
-        HashMap<Categorie, Collection<Categorie>> associationsEnfantsChemins;
-        associationsEnfantsChemins = associer(categories, parents);
-
-        return associationsEnfantsChemins;
+        return associer(categories, parents);
     }
 
     /**
@@ -151,7 +148,7 @@ public class CategorieBusiness implements ICategorieBusiness {
 
         while (it.hasNext()) {
             Categorie p = it.next();
-            if (enfant != null && p.getLevel() == enfant.getLevel() - 1) {
+            if (p.getLevel() == enfant.getLevel() - 1) {
                 // On est à un niveau au-dessus dans la hiérarchie des catégories
                 // On recherche la borne gauche inférieure la plus proche de celle de l'enfant
                 if (p.getBorneGauche() < enfant.getBorneGauche()) {
