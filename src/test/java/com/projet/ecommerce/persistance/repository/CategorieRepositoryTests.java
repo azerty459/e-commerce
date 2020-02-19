@@ -59,7 +59,7 @@ public class CategorieRepositoryTests {
         test.setBorneGauche(1);
         test.setLevel(1);
 
-        categorieRepository.save(test);
+        idCategorie = categorieRepository.save(test).getIdCategorie();
         categorieRepository.ecarterBornes(1, 4);
         Optional<Categorie> res = categorieRepository.findById(idCategorie);
 
