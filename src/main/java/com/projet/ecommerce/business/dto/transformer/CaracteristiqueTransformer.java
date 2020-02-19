@@ -14,7 +14,7 @@ public class CaracteristiqueTransformer {
     //XXX - une caracteristique necessite un produit (non null) sinon renvoit null - correct?
     public static Caracteristique dtoToEntity(CaracteristiqueDTO caracteristiqueDto, Produit produit)
     {
-        if (produit == null) return null;
+        if (caracteristiqueDto==null || produit == null) return null;
         Caracteristique caracteristique = new Caracteristique();
         caracteristique.setProduit(produit);
         caracteristique.setLibelle(LibelleTransformer.dtoToEntity(caracteristiqueDto.getLibelle()));
@@ -24,6 +24,7 @@ public class CaracteristiqueTransformer {
 
     public static CaracteristiqueDTO entityToDto(Caracteristique caracteristique)
     {
+        if (caracteristique == null) return null;
         CaracteristiqueDTO caracteristiqueDto = new CaracteristiqueDTO();
         caracteristiqueDto.setLibelle(LibelleTransformer.entityToDto(caracteristique.getLibelle()));
         caracteristiqueDto.setValeur(caracteristique.getValeur());
@@ -32,10 +33,12 @@ public class CaracteristiqueTransformer {
 
     //XXX - why use of ArrayList necessary here?
     public static Collection<Caracteristique> dtoToEntity(Collection<CaracteristiqueDTO> caracteristiqueDtos, Produit produit) {
+        if (caracteristiqueDtos == null || produit == null) return null;
         return caracteristiqueDtos.stream().map(d->dtoToEntity(d, produit)).collect(Collectors.toCollection(ArrayList::new));
     }
 
     public static Collection<CaracteristiqueDTO> entityToDto(Collection<Caracteristique> caracteristiques) {
+        if (caracteristiques==null) return null;
         return caracteristiques.stream().map(l->entityToDto(l)).collect(Collectors.toCollection(ArrayList::new));
     }
 }

@@ -2,6 +2,7 @@ package com.projet.ecommerce.persistance.entity;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -149,5 +150,10 @@ public class Produit {
 
     public void setCaracteristiques(List<Caracteristique> caracteristiques) {
         this.caracteristiques = caracteristiques;
-    }    
+    }
+
+    public void addCategories(Categorie categorie) {
+        if (this.categories == null) this.categories = new ArrayList<>();
+        this.categories.add(categorie);
+    }
 }

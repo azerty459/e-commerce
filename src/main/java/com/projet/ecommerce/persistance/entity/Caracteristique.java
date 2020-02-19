@@ -27,6 +27,10 @@ public class Caracteristique {
     @MapsId("idLibelle")
     private Libelle libelle;
 
+    public Caracteristique() {
+        this.id = new CaracteristiqueID();
+    }
+
     //XXX - pas de setter pour caracteristiqueId car en fonction du produit et du libellé - correct ?
     public CaracteristiqueID getId() {
         return id;

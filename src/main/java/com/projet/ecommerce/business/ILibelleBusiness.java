@@ -17,7 +17,7 @@ import com.projet.ecommerce.business.dto.LibelleDTO;
 public interface ILibelleBusiness {
     LibelleDTO add(String nom);
     LibelleDTO get(int idLibelle);
-    Collection<LibelleDTO> getAll(@Nullable String motCle);
+    Collection<LibelleDTO> getAll(String motCle);
     LibelleDTO update(int idLibelleExistant, String nouveauNom);
     void delete(int idLibelle);
 }

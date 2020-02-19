@@ -44,7 +44,7 @@ public class ProduitDTO {
      */
     private PhotoDTO photoPrincipale;
 
-    //XXX - nom plus court serait il plus approprié ?
+
     private Collection<CaracteristiqueDTO> caracteristiques;
 
     /**

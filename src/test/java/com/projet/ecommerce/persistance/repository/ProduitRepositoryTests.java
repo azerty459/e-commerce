@@ -18,10 +18,11 @@ import java.util.Collection;
 @Transactional
 public class ProduitRepositoryTests {
 
-    private static final Produit TEMP_INSERT = new Produit();
-    private static final Produit TEMP_DELETE = new Produit();
-    private static final Produit TEMP_UPDATE = new Produit();
-    private static final Produit TEMP_GET = new Produit();
+    //TODO - eventuellement rechanger ceci en private
+    public static final Produit TEMP_INSERT = new Produit();
+    public static final Produit TEMP_DELETE = new Produit();
+    public static final Produit TEMP_UPDATE = new Produit();
+    public static final Produit TEMP_GET = new Produit();
 
     static {
         //Permet d'écraser la config application.properties par application-test.properties
