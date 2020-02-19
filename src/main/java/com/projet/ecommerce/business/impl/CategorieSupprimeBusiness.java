@@ -25,7 +25,7 @@ public class CategorieSupprimeBusiness implements ICategorieSupprimeBusiness {
     /**
      * Constant permettant un décalage des bornes maximum
      */
-    public static final int decalageBorne = +1000000;
+    private static final int decalageBorne = +1000000;
 
     @Autowired
     private CategorieRepository categorieRepository;

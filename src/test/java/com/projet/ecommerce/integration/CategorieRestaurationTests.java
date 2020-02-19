@@ -44,9 +44,6 @@ public class CategorieRestaurationTests {
     @Autowired
     private CategorieSupprimeRepository categorieSupprimeRepository;
 
-    @Autowired
-    EntityManager entityManager;
-
     @Test
     public void addMoveSwapAndRestore() {
         // AJOUT PARENT
