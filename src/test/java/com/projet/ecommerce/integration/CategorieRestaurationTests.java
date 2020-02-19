@@ -9,16 +9,15 @@ import com.projet.ecommerce.persistance.entity.CategorieSupprime;
 import com.projet.ecommerce.persistance.repository.CategorieRepository;
 import com.projet.ecommerce.persistance.repository.CategorieSupprimeRepository;
 import org.junit.Assert;
-import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -26,7 +25,7 @@ import java.util.Collection;
 @SpringBootTest
 @ActiveProfiles("test")
 @Transactional
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+//@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CategorieRestaurationTests {
 
     static {
@@ -45,10 +44,11 @@ public class CategorieRestaurationTests {
     @Autowired
     private CategorieSupprimeRepository categorieSupprimeRepository;
 
+    @Autowired
+    EntityManager entityManager;
 
     @Test
     public void addMoveSwapAndRestore() {
-
         // AJOUT PARENT
         categorieBusiness.addParent("cat parent");
         Categorie catParent = new Categorie();

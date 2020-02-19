@@ -45,6 +45,8 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
             "SET c.borneGauche = c.borneGauche - :depl, c.borneDroit = c.borneDroit - :depl " +
             "WHERE c.borneGauche >= :depl";
 
+    private static final String SQL_GET_ALL_CATEGORIE = "SELECT c FROM Categorie AS c";
+
     @Autowired
     private EntityManager entityManager;
 
@@ -180,12 +182,17 @@ public class CategorieRepositoryCustomImpl implements CategorieRepositoryCustom 
     }
 
     private void refreshEveryCategories() {
-        int i = 1;
-        Categorie categorie = entityManager.find(Categorie.class, i);
-        while (categorie != null) {
-            entityManager.refresh(categorie);
-            i = i + 1;
-            categorie = entityManager.find(Categorie.class, i);
+//        int i = 1;
+//        Categorie categorie = entityManager.find(Categorie.class, i);
+//        while (categorie != null) {
+//            entityManager.refresh(categorie);
+//            i = i + 1;
+//            categorie = entityManager.find(Categorie.class, i);
+//        }
+        TypedQuery<Categorie> query = entityManager.createQuery(SQL_GET_ALL_CATEGORIE, Categorie.class);
+        List<Categorie> resultList = query.getResultList();
+        for (Categorie c : resultList) {
+            entityManager.refresh(c);
         }
     }
 }
